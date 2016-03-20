@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="hidden-xs">
+            <a href="/Company/Create">Create Page</a>
+        </li>
+        <li class="hidden-xs">
+            <a href="/CreateAd">Create Ad</a>
+        </li>
+        @*<li style="padding:0px">
+            <a  href="#"><img alt="member" class="img-circle" style="height:18px;padding:0px" src="/Images/profile.jpg"></a>
+        </li>*@
+        <li class="hidden-xs">
+            <a href="/User/Index/@User.Identity.GetUserId()">Hello @Html.Action("GetUserEmail", "Shared")</a>
+            @*@Html.ActionLink("Hello " + Html.Action("GetUserEmail","Shared") + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+        </li>
+        <li class="hidden-xs"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        
+    @*<li class="pull-right">
+            
+            <a class="right-sidebar-toggle">
+                <i class="fa fa-tasks"></i>
+            </a>
+        </li>*@
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="hidden-xs">
+            <a data-bind="click:loginBtn">Create Ad</a>
+        </li>
+        <li class="hidden-xs" data-bind="click:loginBtn"><a> Login &nbsp; Register</a></li>
+        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
+       
+         @*<li class="pull-right">
+            <a class="right-sidebar-toggle">
+                <i class="fa fa-tasks"></i>
+            </a>
+        </li>*@
+    </ul>
+}

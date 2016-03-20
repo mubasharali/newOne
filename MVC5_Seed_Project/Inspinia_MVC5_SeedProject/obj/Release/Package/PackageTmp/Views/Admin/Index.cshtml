@@ -1,0 +1,240 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Index</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Ad</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Tags:</h2>
+            <select class="demo-default" data-bind="options: availableOptions,
+                       value: selectedOption,
+                       optionsCaption: 'Choose ...'"></select>
+            <input type="number" data-bind="value:daysAgo" />
+            <button class="btn btn-xs" data-bind="click:submitDate">Submit</button>
+            @*<p>Showing Tags <span data-bind="visible:showUpdatedTag()"> updated </span> <span data-bind="visible:!showUpdatedTag()"> added </span> <span data-bind="text:daysAgo"></span> days ago</p>*@
+            <div data-bind="foreach:showTags">
+                <div data-bind="visible:!isTagEditing()">
+                    <h3 data-bind="text:name"></h3>
+                    <p data-bind="text:info"></p>
+                    <span data-bind="visible:updatedInfo()">
+                        <b>Updated Info:</b><p data-bind="text:updatedInfo"></p>
+                        <button data-bind="click:approvetag">Approve</button>
+                        <button data-bind="click:rejecttag">Reject</button>
+                    </span>
+                    <button class="btn btn-sm" data-bind="click:editTag">edit</button>
+                    <button class="btn btn-sm" data-bind="click:$parent.deleteTag">Delete</button>
+                </div>
+                <div data-bind="visible:isTagEditing()">
+                   Name: <input type="text" class="form-control" data-bind="value:name" />
+                   Info: <textarea class="msgTextArea form-control" data-bind="value:info, jqAutoresize: {}"></textarea>
+                   Updated Info: <textarea class="msgTextArea form-control" data-bind="value:updatedInfo, jqAutoresize: {}"></textarea> <button data-bind="click:updateTag">Update</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script>
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.name = ko.observable(data.name);
+            self.id = data.id;
+            self.info = ko.observable(data.info);
+            self.time = data.time;
+            self.createdBy = data.createdBy;
+            self.createdByName = data.createdByName;
+            self.updatedTime = data.updatedTime;
+            self.updatedBy = data.updatedBy;
+            self.updatedInfo = ko.observable( data.updatedInfo);
+            self.isTagEditing = ko.observable(false);
+            self.editTag = function () {
+                self.isTagEditing(true);
+            }
+            
+            self.approvetag = function (tag) {
+                $.ajax({
+                    url: '/api/Tag/ApproveTag?id=' + tag.id,
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        self.info(self.updatedInfo());
+                        self.updatedInfo(null);
+                    },
+                    error: function () {
+                        toastr.error("Unable to approve tag. Please try again", "Error");
+                    },
+                });
+            }
+            self.rejecttag = function (tag) {
+                $.ajax({
+                    url: '/api/Tag/RejectTag?id=' + tag.id,
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        self.updatedInfo("");
+                    },
+                    error: function () {
+                        toastr.error("Unable to approve tag. Please try again", "Error");
+                    },
+                });
+            }
+            self.updateTag = function (tag) {
+                console.log(tag.info());
+                console.log(tag.updatedInfo());
+                if (tag.info()) {
+                    tag.info().trim();
+                }
+                if (tag.updatedInfo()) {
+                    tag.updatedInfo().trim();
+                }
+                
+                var comment = {
+                    Id: tag.id,
+                    name: tag.name(),
+                    info: tag.info(),
+                    updatedInfo: tag.updatedInfo(),
+                    time: tag.time,
+                    updatedTime: tag.updatedTime,
+                    createdBy: tag.createdBy,
+                    updatedBy: tag.updatedBy,
+                };
+                console.log(comment);
+                $.ajax({
+                    url: '/api/Tag/UpdateTagAdmin',
+                    dataType: "json",
+                    type: 'POST',
+                    data: ko.toJSON(comment),
+                    success: function (data) {
+                        self.isTagEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("Unable to update tag. Please try again", "Error");
+                    },
+                    
+                });
+                return true;
+            }
+
+        }
+        function loadRecentAddedTags() {
+            
+        }
+        function ViewModel() {
+            SearchingLocation();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+            self.submitDate = function () {
+                self.loadTags();
+            }
+            self.selectedOption = ko.observable("reported");
+            self.availableOptions = ["added", "updated", "reported"];
+            self.daysAgo = ko.observable(10);
+            self.showTags = ko.observableArray();
+            self.showUpdatedTagBtn = function () {
+                self.showUpdatedTag(!self.showUpdatedTag());
+            }
+            self.deleteTag = function (tag) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Tag!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Tag/DeleteTag?id=' + tag.id,
+                        dataType: "json",
+                        type: 'POST',
+                        success: function (data) {
+                            self.showTags.remove(tag);
+                            swal("Deleted!", "Tag has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        },
+                    });
+                });
+            }
+            self.loadTags = function () {
+                if (self.selectedOption() == "updated") {
+                    url_address = '/api/Tag/RecentUpdatedTags?daysAgo=' + self.daysAgo();
+                } else if (self.selectedOption() == "added") {
+                    url_address = '/api/Tag/RecentAddedTags?daysAgo=' + self.daysAgo();
+                }
+                else if (self.selectedOption() == "reported") {
+                    url_address = '/api/Tag/ReportedTags?daysAgo=' + self.daysAgo();
+                }
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new Tag(item); });
+                        self.showTags(mappedads);
+                    },
+                    error: function () {
+                        toastr.error("Unable to load tags. Please try again", "Error");
+                    },
+                });
+            };
+
+            self.loadTags();
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel());
+        });
+    </script>
+}
+
+

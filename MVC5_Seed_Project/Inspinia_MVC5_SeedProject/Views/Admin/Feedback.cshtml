@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Feedback";
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-6">
+            
+            <h3>Feedback</h3>
+            <div data-bind="foreach:showFeedbacks">
+                    <h2 data-bind="text:type"></h2>
+                    <div data-bind="text:description"></div>
+                    <a data-bind="attr:{href:'/User/Index/' + givenById},text:givenByName"></a>
+                    <button data-bind="click:$parent.deleteBrandBtn">Delete</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script>
+
+        function Feedback(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.time = data.time;
+            self.givenById = data.givenById;
+            self.givenByName = data.givenByName;
+            self.type = data.type;
+            self.description = data.description;
+            
+        };
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            self.showFeedbacks = ko.observableArray();
+            self.deleteBrandBtn = function (brand) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Admin/deleteFeedback?id=' + brand.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showFeedbacks.remove(brand);
+                            swal("Deleted!" + " feedback has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+
+            }
+            self.loadBrands = function () {
+                $.ajax({
+                    url: '/api/Admin/GetFeedbacks',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        var mobad = $.map(data, function (item) { return new Feedback(item); });
+                        self.showFeedbacks(mobad);
+                    },
+                    error: function () {
+                        toastr.error("failed to load", "Error!");
+                    }
+                });
+            }
+
+            self.loadBrands();
+
+            return self;
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $(function () {
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel);
+        });
+
+    </script>
+}

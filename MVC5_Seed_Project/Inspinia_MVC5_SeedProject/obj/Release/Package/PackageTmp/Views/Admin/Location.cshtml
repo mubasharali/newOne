@@ -1,0 +1,339 @@
+﻿@{
+    ViewBag.Title = "Location";
+}
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>List of Ad</h5>
+                    <div class="ibox-tools">
+                        @*any link*@
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <input type="text" data-bind="value:daysAgo" />
+                    <input type="submit" data-bind="click:submitBtn" />
+                    <h3>Cities</h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>
+                                City
+                            </th>
+                            <th>
+                                Added By
+                            </th>
+                            <th>
+                                Added on
+                            </th>
+                            <th>
+                                Latest Updated by
+                            </th>
+                            <th>
+                                Latest Updated on
+                            </th>
+                            <th>
+                                Edit
+                            </th>
+                            <th>
+                                Delete    
+                            </th>
+                        </tr>
+                        <tbody data-bind="foreach:showCities">
+                            <tr>
+                                <td data-bind="visible:!isCityEditing(),text:cityName"> </td>
+                                <td data-bind="visible:isCityEditing()">
+                                    <input type="text" data-bind="value:cityName" />
+                                </td>
+                                <td data-bind="text:addedByName"> </td>
+                                <td data-bind="text:addedOn"></td>
+                                <td data-bind="text:updatedByName"></td>
+                                <td data-bind="text:updatedOn"></td>
+                                <td data-bind="visible:!isCityEditing()">
+                                    <button data-bind="click:editCityBtn">Edit</button>
+                                </td>
+                                <td data-bind="visible:isCityEditing()">
+                                    <button data-bind="click:updateCity">Update</button>
+                                </td>
+                                <td data-bind="click:$parent.deleteCity">Delete</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h3>Famous Places</h3>
+                    <table class="table table-striped">
+                        <tr>
+                            <td>Place name</td>
+                            <th>
+                                City
+                            </th>
+                            <th>
+                                Added By
+                            </th>
+                            <th>
+                                Added on
+                            </th>
+                            <th>
+                                Latest Updated by
+                            </th>
+                            <th>
+                                Latest Updated on
+                            </th>
+                            <th>
+                                Edit
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                        <tbody data-bind="foreach:showPopularPlaces">
+                            <tr>
+                                <td data-bind="visible:!isPPEditing(),text:name"></td>
+                                <td data-bind="visible:isPPEditing()">
+                                    <input type="text" data-bind="value:name" />
+                                </td>
+                                <td data-bind="text:cityName"></td>
+                                <td data-bind="text:addedByName"></td>
+                                <td data-bind="text:addedOn"></td>
+                                <td data-bind="text:updatedByName"></td>
+                                <td data-bind="text:updatedOn"></td>
+                                <td data-bind=" visible:!isPPEditing(),click:editPPBtn">Edit</td>
+                                <td data-bind="visible:isPPEditing()"><button data-bind="click:updatePP">Update</button></td>
+                                <td data-bind="click:$parent.deletePP">Delete</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script>
+
+        function City(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.cityName = ko.observable(data.cityName);
+            self.addedOn = data.addedOn;
+            self.addedBy = data.addedBy;
+            self.addedByName = data.addedByName;
+            self.updatedBy = data.updatedBy;
+            self.updatedByName = data.updatedByName;
+            self.isCityEditing = ko.observable(false);
+            self.updatedOn = data.updatedOn;
+
+            self.editCityBtn = function () {
+                self.isCityEditing(true);
+            }
+            self.updateCity = function (city) {
+                $.ajax({
+                    url: '/api/Location/UpdateCity',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(city),
+                    success: function (data) {
+                        self.isCityEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update city", "Error!");
+                    }
+                });
+                
+            }
+        };
+        function PopularPlace(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id,
+            self.cityId = data.cityId,
+            self.cityName = data.cityName;
+            self.name = ko.observable(data.name),
+            self.addedOn = data.addedOn,
+            self.addedByName = data.addedByName;
+            self.updatedBy = data.updatedBy;
+            self.updatedByName = data.updatedByName;
+            self.addedBy = data.addedBy,
+            self.updatedOn = data.updatedOn;
+            self.isPPEditing = ko.observable(false);
+            self.editPPBtn = function () {
+                self.isPPEditing(true);
+            }
+            self.updatePP = function (pp) {
+                $.ajax({
+                    url: '/api/Location/UpdatePopularPlace',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(pp),
+                    success: function (data) {
+                        self.isPPEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update Famous Place", "Error!");
+                    }
+                });
+            }
+        };
+        function ViewModel() {
+            ChatViewModel();
+            AccountViewModel();
+            SearchingLocation();
+            var self = this;
+            self.daysAgo = ko.observable("5");
+            self.submitBtn = function () {
+                self.loadCities();
+                self.loadPP();
+            }
+            self.showCities = ko.observableArray();
+            self.showPopularPlaces = ko.observableArray();
+
+            self.deleteCity = function (city) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    
+                        url = '/api/Location/DeleteCity?id=' + city.id;
+                    
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showCities.remove(city);
+                            swal("Deleted!", city.cityName() + " City has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.deletePP = function (brand) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    
+                    url = '/api/Location/DeletePopularPlace?id=' + brand.id;
+                    
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showPopularPlaces.remove(brand);
+                            swal("Deleted!", brand.name() + " City has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+
+            }
+
+
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCitiesWithTime?daysAgo=' + self.daysAgo(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        var mobad = $.map(data, function (item) { return new City(item); });
+                        self.showCities(mobad);
+                    },
+                    error: function () {
+                        toastr.error("failed to load cities", "Error!");
+                    }
+                });
+            }
+            self.loadPP = function () {
+                $.ajax({
+                    url: '/api/Location/GetPPWithTime?daysAgo=' + self.daysAgo() ,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        var mobad = $.map(data, function (item) { return new PopularPlace(item); });
+                        self.showPopularPlaces(mobad);
+                    },
+                    error: function () {
+                        toastr.error("failed to load", "Error!");
+                    }
+                });
+            }
+
+            self.loadCities();
+            self.loadPP();
+
+            return self;
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $(function () {
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel);
+            $.connection.hub.start().done();
+        });
+
+    </script>
+}

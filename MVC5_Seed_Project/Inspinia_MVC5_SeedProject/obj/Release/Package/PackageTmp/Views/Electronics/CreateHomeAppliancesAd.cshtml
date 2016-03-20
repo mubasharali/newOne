@@ -1,0 +1,422 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Ad
+
+@{
+   
+    ViewBag.Title = "Create Home Appliances Ad";
+}
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <a class="btn btn-info btn-xs pull-right " href="../CreateAd">Post ad in another category</a>
+                    <h5>Create Ad</h5>
+                </div>
+                <div class="ibox-content">
+
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            
+                            @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
+
+                            <br />
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            Help
+        </div>
+    </div>
+</div>
+
+
+
+@section Styles {
+    <style type="text/css">
+        .selectize-control.repositories .selectize-dropdown > div {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .selectize-control.repositories .selectize-dropdown .by {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+            .selectize-control.repositories .selectize-dropdown .by::before {
+                content: 'by ';
+            }
+
+        .selectize-control.repositories .selectize-dropdown .name {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .selectize-control.repositories .selectize-dropdown .title {
+            display: block;
+        }
+
+        .selectize-control.repositories .selectize-dropdown .description {
+            font-size: 12px;
+            display: block;
+            color: #a0a0a0;
+            white-space: nowrap;
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .selectize-control.repositories .selectize-dropdown .meta {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 10px;
+        }
+
+            .selectize-control.repositories .selectize-dropdown .meta li {
+                margin: 0;
+                padding: 0;
+                display: inline;
+                margin-right: 10px;
+            }
+
+                .selectize-control.repositories .selectize-dropdown .meta li span {
+                    font-weight: bold;
+                }
+
+        .selectize-control.repositories::before {
+            -moz-transition: opacity 0.2s;
+            -webkit-transition: opacity 0.2s;
+            transition: opacity 0.2s;
+            content: ' ';
+            z-index: 2;
+            position: absolute;
+            display: block;
+            top: 12px;
+            right: 34px;
+            width: 16px;
+            height: 16px;
+            background: url(/Images/spinner.gif);
+            background-size: 16px 16px;
+            opacity: 0;
+        }
+
+        .selectize-control.repositories.loading::before {
+            opacity: 0.4;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+            background-size: 16px 16px;
+            margin: 0 3px 0 0;
+        }
+
+            .icon.fork {
+                background-image: url(images/repo-fork.png);
+            }
+
+            .icon.source {
+                background-image: url(images/repo-source.png);
+            }
+    </style>
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
+    @Styles.Render("~/scripts/selectizeStyles")
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/iCheck")
+    @Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/autosize")
+    <script type="text/javascript">
+
+        function ViewModel() {
+            var self = this;
+            self.conditionChecked = ko.observable(false);
+            self.typeValue = ko.observable("sell");
+            self.selectedVal = ko.observable();
+            self.selectedVal.subscribe(function (val) {
+                if (val == "fixedPrice") {
+                    self.isAllowBidingChecked(false);
+                    self.isFixPriceChecked(true);
+                }
+                else {
+                    self.isAllowBidingChecked(true);
+                    self.isFixPriceChecked(false);
+                }
+            });
+            self.availableBrands = ko.observableArray();
+            self.selectedBrand = ko.observable();
+            self.selectedModel = ko.observable();
+            var sub = self.selectedBrand.subscribe(function (value) {
+                self.loadModels();
+            })
+            self.isAllowBidingChecked = ko.observable(false);
+            self.isFixPriceChecked = ko.observable(false);
+
+            self.loadBrands = function () {
+                $.ajax({
+                    url: '/api/Electronic/GetBrands',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableBrands.push(item) });
+                        $('#select-brand').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 29,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Brands.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.availableModels = ko.observableArray();
+            self.selectedModel = ko.observable();
+            self.loadModels = function () {
+                self.availableModels.removeAll();
+                $.ajax({
+                    url: '/api/Electronic/GetModels?brand=' + self.selectedBrand(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableModels.push(item) });
+                        $('#select-model').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 29,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Models.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadBrands();
+
+            //location
+            self.availableCities = ko.observableArray();
+            self.selectedCity = ko.observable();
+            self.availablePopularPlaces = ko.observableArray();
+            self.selectedPopularPlace = ko.observable();
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        $('#select-city').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlaces = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        $('#select-popularPlace').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadCities();
+            var sub = self.selectedCity.subscribe(function (value) {
+                self.loadPopularPlaces();
+            })
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+            init: function (element, valueAccessor) {
+                //initialize icheck to the element
+                $(element).iCheck({
+                    radioClass: 'iradio_square-green'
+                });
+                $(element).on('ifChecked', function (event) {
+                    var observable = valueAccessor();
+                    observable.checked(event.target.defaultValue); //assigning selected value
+                });
+            }
+        };
+
+        $(document).ready(function () {
+            ko.applyBindings(new ViewModel);
+
+            Selectize.define('inputMaxlength', function (options) {
+                var self = this;
+                this.setup = (function () {
+                    var original = self.setup;
+                    return function () {
+                        original.apply(this, arguments);
+                        this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                    };
+                })();
+            });
+            $('#select-tag').selectize({
+                valueField: 'name',
+                labelField: 'name',
+                searchField: 'name',
+                options: [],
+                maxItems: 4,
+                create: true,
+                render: {
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="title">' +
+                                '<span class="name">' + escape(item.name) + '</span>' +
+
+                            '</span>' +
+                            '<span class="description">' + escape(item.info) + '</span>' +
+                            '<ul class="meta">' +
+                                '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                            '</ul>' +
+                        '</div>';
+                    }
+                },
+                load: function (query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                        type: 'POST',
+                        error: function () {
+                            callback();
+                        },
+                        success: function (res) {
+                            callback(res.slice(0, 10));
+                        }
+                    });
+                }
+            });
+            $('#select-color').selectize({
+                create: true,
+                plugins: ['inputMaxlength'],
+                inputMaxlength: 19,
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+            });
+            $('#select-sims').selectize({
+                sortField: {
+                    field: 'text',
+                    direction: 'asc'
+                },
+            });
+            $("#form").validate({
+                ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+                rules: {
+                    title: {
+                        required: true,
+                        maxlength: 50,
+                        minlength: 15
+                    },
+                    company: {
+                        required: true,
+                        maxlength: 15
+                    },
+                    model: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    description: {
+                        required: true,
+                        minlength: 25,
+                        maxlength: 1000
+                    },
+                    color: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    price: {
+                        number: true
+                    },
+                    abc: {
+                        required: true
+                    }
+                }
+            });
+            $('.i-check').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+        });
+    </script>
+}
+

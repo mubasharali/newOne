@@ -1,0 +1,387 @@
+﻿@{
+    ViewBag.Title = "Models";
+}
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 data-bind="text:selectedOption"> </h2>
+            <select class="demo-default" data-bind="options: availableOptions,
+                       value: selectedOption,
+                       optionsCaption: 'Choose ...'"></select>
+            <input type="text" data-bind="value:daysAgo" />
+            <input type="submit" data-bind="click:submitBtn" />
+            <p> It is mendatory to submit after changing option</p>
+            <h3>Brands</h3>
+            <div data-bind="foreach:showBrands">
+                <div data-bind="visible:!isBrandEditing()">
+                    <div data-bind="text:brand"></div>
+                    <div data-bind="text:time"></div>
+                    <div data-bind="text:addedByName"> </div><button data-bind="visible:!status(),click:function(){ return approve($data,$parent.selectedOption())}">Approve</button>
+                    <button data-bind="click:editBrandBtn">Edit</button>
+                    <button data-bind="click:$parent.deleteBrandBtn">Delete</button>
+                </div>
+                <div data-bind="visible:isBrandEditing()">
+                    <input type="text" data-bind="value:brand" />
+                    <input type="submit" data-bind="click:function(){ return updateBrand($data,$parent.selectedOption())}" />
+                </div>
+            </div>
+            <h3>Models</h3>
+            <div data-bind="foreach:showModels">
+                <div data-bind="visible:!isModelEditing()">
+                    <span data-bind="text:model"></span>
+                    (<span data-bind="text:brand"></span> )
+
+                    <div data-bind="text:time"></div>
+                    <div data-bind="text:addedByName"></div>
+                    <button data-bind="visible:!status(),click: function(){ return approve($data,$parent.selectedOption())}">Approve</button>
+                    <button data-bind="click:editModelBtn">Edit</button>
+                    <button data-bind="click:$parent.deleteModelBtn">Delete</button>
+                </div>
+                <div data-bind="visible:isModelEditing()">
+                    <input type="text" data-bind="value:model" />
+                    <input type="submit" data-bind="click:function(){ return updateModel($data,$parent.selectedOption())}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script>
+        
+        function Brand(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.brand = ko.observable( data.brand);
+            self.time = data.time;
+            self.addedById = data.addedById;
+            self.addedByName = data.addedByName;
+            self.status = ko.observable(true);
+            if (data.status == "p") {
+                self.status(false);
+            }
+            
+
+            self.isBrandEditing = ko.observable(false);
+            self.editBrandBtn = function () {
+                self.isBrandEditing(true);
+            }
+            self.approve = function (brand, selectedOption) {
+                if (selectedOption == "Mobiles") {
+                    var url = "/api/Admin/ApproveMobileBrand?id=" + brand.id;
+                } else if (selectedOption == "Laptops") {
+                    url = "/api/Admin/ApproveLaptopBrand?id=" + brand.id;
+                } else if (selectedOption == "Cars") {
+                    url = "/api/Admin/ApproveCarBrand?id=" + brand.id;
+                } else if (selectedOption == "Bikes") {
+                    url = "/api/Admin/ApproveBikeBrand?id=" + brand.id;
+                }
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, approve it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.status(true);
+                            swal("Approved!", "success");
+                        },
+                        error: function () {
+                            swal("please refresh page and try again", "error");
+                        }
+                    });
+                });
+                
+            }
+            self.updateBrand = function (brand, selectedOption) {
+                brand.addedBy = brand.addedById;
+                var updateUrl = "";
+                if (selectedOption == "Mobiles") {
+                    updateUrl = '/api/Electronic/UpdateMobileBrand';
+                } else if (selectedOption == "Laptops") {
+                    updateUrl = '/api/Electronic/UpdateLaptopBrand';
+                } else if (selectedOption == "Cars") {
+                    updateUrl = '/api/Vehicle/UpdateCarBrand';
+                } else if (selectedOption == "Bikes") {
+                    updateUrl = '/api/Vehicle/UpdateBikeBrand';
+                }
+                    $.ajax({
+                        url: updateUrl,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(brand),
+                        success: function (data) {
+                            self.isBrandEditing(false);
+                        },
+                        error: function () {
+                            toastr.error("failed to update brand", "Error!");
+                        }
+                    });
+            }
+        };
+        function Model(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id,
+            self.brand = data.brand,
+            self.model = ko.observable(data.model),
+            self.time = data.time,
+            self.addedById = data.addedById,
+            self.addedByName = data.addedByName
+            self.brandId = data.brandId;
+            self.isModelEditing = ko.observable(false);
+            self.editModelBtn = function () {
+                self.isModelEditing(true);
+            }
+            self.status = ko.observable(true);
+            if (data.status == "p") {
+                self.status(false);
+            }
+            self.approve = function (brand,selectedOption) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, approve it!",
+                    closeOnConfirm: false
+                }, function () {
+                    if (selectedOption == "Mobiles") {
+                        var url = '/api/Admin/ApproveMobileModel?id=' + brand.id;
+                    } else if(selectedOption == "Laptops") {
+                        url = '/api/Admin/ApproveLaptopModel?id=' + brand.id;
+                    } else if (selectedOption == "Cars") {
+                        url = '/api/Admin/ApproveCarModel?id=' + brand.id;
+                    } else if (selectedOption == "Bikes") {
+                        url = '/api/Admin/ApproveBikeModel?id=' + brand.id;
+                    }
+
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.status(true);
+                            swal("Approved!" , "success");
+                        },
+                        error: function () {
+                            swal("please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.updateModel = function (model, selectedOption) {
+                var updateUrl = "";
+                if (selectedOption == "Mobiles") {
+                    updateUrl = '/api/Electronic/UpdateMobileModel';
+                }else if(selectedOption == "Laptops"){
+                    updateUrl = '/api/Electronic/UpdateLaptopModel';
+                }else if(selectedOption == "Cars"){
+                    updateUrl = '/api/Vehicle/UpdateCarModel';
+                } else if (selectedOption == "Bikes") {
+                    updateUrl = '/api/Vehicle/UpdateBikeModel';
+                }
+                    $.ajax({
+                        url: updateUrl,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(model),
+                        success: function (data) {
+                            self.isModelEditing(false);
+                        },
+                        error: function () {
+                            toastr.error("failed to update model", "Error!");
+                        }
+                    });
+            }
+        };
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            self.daysAgo = ko.observable("5");
+            self.submitBtn = function () {
+                self.loadBrands();
+                self.loadModels();
+            }
+            self.showBrands = ko.observableArray();
+            self.showModels = ko.observableArray();
+            self.availableOptions = ["Mobiles", "Laptops","Cars","Bikes"];
+            self.selectedOption = ko.observable("Mobiles");
+            
+            self.deleteModelBtn = function (model) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    if (self.selectedOption() == "Mobiles") {
+                        url = '/api/Electronic/DeleteMobileModel?id=' + model.id;
+                    } else if (self.selectedOption() == "Laptops") {
+                        url = '/api/Electronic/DeleteLaptopModel?id=' + model.id;
+                    } else if (self.selectedOption() == "Cars") {
+                        url = '/api/Vehicle/DeleteCarModel?id=' + model.id;
+                    } else if (self.selectedOption() == "Bikes") {
+                        url = '/api/Vehicle/DeleteBikeModel?id=' + model.id;
+                    }
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showModels.remove(model);
+                            swal("Deleted!",model.model()+ " model has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.deleteBrandBtn = function (brand) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    if (self.selectedOption() == "Mobiles") {
+                        url = '/api/Electronic/DeleteMobileBrand?id=' + brand.id;
+                    } else if (self.selectedOption() == "Laptops") {
+                        url = '/api/Electronic/DeleteLaptopBrand?id=' + brand.id;
+                    } else if (self.selectedOption() == "Cars") {
+                        url = '/api/Vehicle/DeleteCarBrand?id=' + brand.id;
+                    } else if (self.selectedOption() == "Bikes") {
+                        url = '/api/Vehicle/DeleteBikeBrand?id=' + brand.id;
+                    }
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showBrands.remove(brand);
+                            swal("Deleted!", brand.brand() + " brand has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+                
+            }
+            
+            
+            self.loadModels = function () {
+                $.ajax({
+                    url: '/api/Electronic/GetModelsWithTime?daysAgo=' + self.daysAgo() + '&MobileOrLaptop=' + self.selectedOption(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        self.showModels.removeAll();
+                        var mobad = $.map(data, function (item) { return new Model(item); });
+                        self.showModels(mobad);
+                    },
+                    error: function () {
+                        toastr.error("failed to models load", "Error!");
+                    }
+                });
+            }
+            self.loadBrands = function () {
+                $.ajax({
+                    url: '/api/Electronic/GetBrandsWithTime?daysAgo=' + self.daysAgo() + '&MobileOrLaptop=' + self.selectedOption(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        self.showBrands.removeAll();
+                        var mobad = $.map(data, function (item) { return new Brand(item); });
+                        self.showBrands(mobad);
+                    },
+                    error: function () {
+                        toastr.error("failed to load", "Error!");
+                    }
+                });
+            }
+            
+            self.loadModels();
+            self.loadBrands();
+           
+            return self;
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $(function () {
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel);
+        });
+
+    </script>
+}

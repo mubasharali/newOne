@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="815ee3eabea747c5bd662a6f75d487f4" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.Ad" Width="1.5" PointX="68.25" PointY="46.625" />
+        <EntityTypeShape EntityType="Model.AdImage" Width="1.5" PointX="71.375" PointY="45.875" />
+        <EntityTypeShape EntityType="Model.AdsLocation" Width="1.5" PointX="55.5" PointY="59.75" />
+        <EntityTypeShape EntityType="Model.AdTag" Width="1.5" PointX="63" PointY="49.625" />
+        <EntityTypeShape EntityType="Model.Answer" Width="1.5" PointX="8" PointY="120.375" />
+        <EntityTypeShape EntityType="Model.AnswerReply" Width="1.5" PointX="5.75" PointY="124.75" />
+        <EntityTypeShape EntityType="Model.AnswerReplyVote" Width="1.5" PointX="8.75" PointY="125" />
+        <EntityTypeShape EntityType="Model.AnswerVote" Width="1.5" PointX="11" PointY="120.75" />
+        <EntityTypeShape EntityType="Model.AspNetRole" Width="1.5" PointX="0.75" PointY="49.5" />
+        <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="3" PointY="59.875" />
+        <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="40" />
+        <EntityTypeShape EntityType="Model.Bid" Width="1.5" PointX="62.5" PointY="51.75" />
+        <EntityTypeShape EntityType="Model.Chat" Width="1.5" PointX="4.5" PointY="35.875" />
+        <EntityTypeShape EntityType="Model.Comment" Width="1.5" PointX="62" PointY="57.125" />
+        <EntityTypeShape EntityType="Model.CommentReply" Width="1.5" PointX="62.375" PointY="61.25" />
+        <EntityTypeShape EntityType="Model.CommentReplyVote" Width="1.5" PointX="58.875" PointY="61.375" />
+        <EntityTypeShape EntityType="Model.CommentVote" Width="1.5" PointX="58.75" PointY="57.375" />
+        <EntityTypeShape EntityType="Model.FollowQuestion" Width="1.5" PointX="2.875" PointY="112.375" />
+        <EntityTypeShape EntityType="Model.FollowTag" Width="1.5" PointX="29.875" PointY="71.125" />
+        <EntityTypeShape EntityType="Model.Friend" PointX="8.25" PointY="50.625" Width="1.5" />
+        <EntityTypeShape EntityType="Model.LaptopAd" Width="1.5" PointX="73.375" PointY="50.875" />
+        <EntityTypeShape EntityType="Model.LaptopBrand" Width="1.5" PointX="79.25" PointY="50.875" />
+        <EntityTypeShape EntityType="Model.LaptopModel" Width="1.5" PointX="76.25" PointY="50.75" />
+        <EntityTypeShape EntityType="Model.Mobile" Width="1.5" PointX="83.5" PointY="46.75" />
+        <EntityTypeShape EntityType="Model.MobileAd" Width="1.5" PointX="80" PointY="46.5" />
+        <EntityTypeShape EntityType="Model.MobileModel" Width="1.5" PointX="81.625" PointY="46.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.popularPlace" Width="1.5" PointX="23.375" PointY="58.5" />
+        <EntityTypeShape EntityType="Model.Question" Width="1.5" PointX="7.75" PointY="114.75" />
+        <EntityTypeShape EntityType="Model.QuestionReply" Width="1.5" PointX="13.625" PointY="116.25" />
+        <EntityTypeShape EntityType="Model.QuestionReplyVote" Width="1.5" PointX="8.25" PointY="111" />
+        <EntityTypeShape EntityType="Model.QuestionTag" Width="1.5" PointX="11.375" PointY="109" />
+        <EntityTypeShape EntityType="Model.QuestionVote" Width="1.5" PointX="11.625" PointY="113.375" />
+        <EntityTypeShape EntityType="Model.Reported" Width="1.5" PointX="64.25" PointY="46" />
+        <EntityTypeShape EntityType="Model.ReportedQuestion" Width="1.5" PointX="2.25" PointY="119.875" />
+        <EntityTypeShape EntityType="Model.ReportedTag" Width="1.5" PointX="39.625" PointY="69.375" />
+        <EntityTypeShape EntityType="Model.Tag" Width="1.5" PointX="34.25" PointY="73.375" />
+        <AssociationConnector Association="Model.FK_AdImage_ToTable" />
+        <AssociationConnector Association="Model.FK_AdsLocation_ToTable" />
+        <AssociationConnector Association="Model.FK_AdTag_ToTable" />
+        <AssociationConnector Association="Model.FK_Bid_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Comment_ToTable" />
+        <AssociationConnector Association="Model.FK_LaptopAds_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileAds_ToTable" />
+        <AssociationConnector Association="Model.FK_Reported_ToTable" />
+        <AssociationConnector Association="Model.FK_AdsLocation_ToTable_2" />
+        <AssociationConnector Association="Model.FK_AdTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Answer_ToTable" />
+        <AssociationConnector Association="Model.FK_AnswerReply_ToTable" />
+        <AssociationConnector Association="Model.FK_AnswerVote_ToTable" />
+        <AssociationConnector Association="Model.FK_AnswerReplyVote_ToTable" />
+        <AssociationConnector Association="Model.FK_CommentReply_ToTable" />
+        <AssociationConnector Association="Model.FK_CommentVote_ToTable" />
+        <AssociationConnector Association="Model.FK_CommentReplyVote_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowTag_ToTable" />
+        <AssociationConnector Association="Model.FK_LaptopAds_ToTable_1" />
+        <AssociationConnector Association="Model.FK_LaptopModel_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileModel_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileAds_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionReply_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionVote_ToTable" />
+        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionReplyVote_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionTag_ToTable" />
+        <AssociationConnector Association="Model.FK_ReportedTag_ToTable" />
+        <EntityTypeShape EntityType="Model.City" Width="1.5" PointX="26.875" PointY="58.375" />
+        <AssociationConnector Association="Model.FK_AdsLocation_ToTable_1" />
+        <AssociationConnector Association="Model.FK_popularPlace_ToTable" />
+        <EntityTypeShape EntityType="Model.SaveAd" Width="1.5" PointX="61.5" PointY="47" />
+        <AssociationConnector Association="Model.FK_SaveAd_ToTable" />
+        <EntityTypeShape EntityType="Model.CompanyAnswerReply" Width="1.5" PointX="51" PointY="95.375" />
+        <EntityTypeShape EntityType="Model.CompanyImage" Width="1.5" PointX="41" PointY="96.5" />
+        <EntityTypeShape EntityType="Model.CompanyOffice" Width="1.5" PointX="40.25" PointY="80.875" />
+        <EntityTypeShape EntityType="Model.CompanyQuestion" Width="1.5" PointX="47.25" PointY="93.375" />
+        <EntityTypeShape EntityType="Model.FollowCompany" Width="1.5" PointX="44.625" PointY="82.875" />
+        <EntityTypeShape EntityType="Model.Review" Width="1.5" PointX="47.25" PointY="83.625" />
+        <EntityTypeShape EntityType="Model.ReviewReply" Width="1.5" PointX="49.125" PointY="82.75" />
+        <EntityTypeShape EntityType="Model.ReviewVote" Width="1.5" PointX="50" PointY="85.625" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable_2" />
+        <AssociationConnector Association="Model.FK_CompanyReviewReply_ToTable" />
+        <AssociationConnector Association="Model.FK_ReviewVote_ToTable" />
+        <EntityTypeShape EntityType="Model.CompanyAnswer" Width="1.5" PointX="49.25" PointY="95.5" />
+        <AssociationConnector Association="Model.FK_CompanyAnswer_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyAnswerReply_ToTable" />
+        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="3" PointY="43.25" />
+        <AssociationConnector Association="Model.FK_Ad_ToTable" />
+        <AssociationConnector Association="Model.FK_Answer_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AnswerReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AnswerReplyVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AnswerVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="Model.FK_Bid_ToTable" />
+        <AssociationConnector Association="Model.FK_Chat_ToTable" />
+        <AssociationConnector Association="Model.FK_Chat_ToTable_1" />
+        <AssociationConnector Association="Model.FK_City_ToTable" />
+        <AssociationConnector Association="Model.FK_City_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Comment_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CommentReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CommentReplyVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CommentVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyAnswer_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyAnswerReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyReviewReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowCompany_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Friend_ToTable" />
+        <AssociationConnector Association="Model.FK_Friend_ToTable_1" />
+        <AssociationConnector Association="Model.FK_LaptopBrand_ToTable" />
+        <AssociationConnector Association="Model.FK_LaptopModel_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Mobile_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileModel_ToTable_1" />
+        <AssociationConnector Association="Model.FK_popularPlace_ToTable_1" />
+        <AssociationConnector Association="Model.FK_popularPlace_ToTable_2" />
+        <AssociationConnector Association="Model.FK_Question_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionReplyVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Reported_ToTable_1" />
+        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_ReportedTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Review_ToTable_1" />
+        <AssociationConnector Association="Model.FK_SaveAd_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Tag_ToTable" />
+        <AssociationConnector Association="Model.FK_Tag_ToTable_1" />
+        <AssociationConnector Association="Model.AspNetUserRoles" />
+        <EntityTypeShape EntityType="Model.CompanyTag" Width="1.5" PointX="45.625" PointY="79.25" />
+        <AssociationConnector Association="Model.FK_CompanyTag_ToTable_1" />
+        <EntityTypeShape EntityType="Model.CompanyAd" Width="1.5" PointX="57.25" PointY="77.625" />
+        <AssociationConnector Association="Model.FK_CompanyAd_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyAd_ToTable_2" />
+        <EntityTypeShape EntityType="Model.Company" Width="1.5" PointX="42.125" PointY="73.125" />
+        <AssociationConnector Association="Model.FK_Company_ToTable" />
+        <AssociationConnector Association="Model.FK_Company_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Company_ToTable_2" />
+        <AssociationConnector Association="Model.FK_CompanyAd_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CompanyOffice_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_CompanyTag_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowCompany_ToTable" />
+        <AssociationConnector Association="Model.FK_Image_ToTable" />
+        <AssociationConnector Association="Model.FK_Review_ToTable" />
+        <AssociationConnector Association="Model.FK_ReviewVote_ToTable_1" />
+        <EntityTypeShape EntityType="Model.JobAd" Width="1.5" PointX="72.875" PointY="47.875" />
+        <AssociationConnector Association="Model.FK_JobAd_ToTable" />
+        <EntityTypeShape EntityType="Model.CarAd" Width="1.5" PointX="73.125" PointY="57.625" />
+        <EntityTypeShape EntityType="Model.CarBrand" Width="1.5" PointX="75.875" PointY="58.5" />
+        <EntityTypeShape EntityType="Model.CarModel" Width="1.5" PointX="78.25" PointY="57.75" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable" />
+        <AssociationConnector Association="Model.FK_CarBrand_ToTable" />
+        <AssociationConnector Association="Model.FK_CarModel_ToTable" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable_2" />
+        <AssociationConnector Association="Model.FK_CarModel_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable_1" />
+        <EntityTypeShape EntityType="Model.BikeAd" Width="1.5" PointX="53.5" PointY="47.625" />
+        <EntityTypeShape EntityType="Model.BikeBrand" Width="1.5" PointX="49.25" PointY="47.875" />
+        <EntityTypeShape EntityType="Model.BikeModel" Width="1.5" PointX="51.25" PointY="47.75" />
+        <AssociationConnector Association="Model.FK_BikeAd_ToTable" />
+        <AssociationConnector Association="Model.FK_BikeBrand_ToTable" />
+        <AssociationConnector Association="Model.FK_BikeModel_ToTable" />
+        <AssociationConnector Association="Model.FK_Table_ToTable" />
+        <AssociationConnector Association="Model.FK_BikeAd_ToTable_1" />
+        <AssociationConnector Association="Model.FK_BikeAd_ToTable_2" />
+        <EntityTypeShape EntityType="Model.House" Width="1.5" PointX="70.5" PointY="52.875" />
+        <AssociationConnector Association="Model.FK_House_ToTable" />
+        <EntityTypeShape EntityType="Model.Camera" Width="1.5" PointX="70.5" PointY="43.125" />
+        <AssociationConnector Association="Model.FK_Camera_ToTable" />
+        <EntityTypeShape EntityType="Model.JobSkill" Width="1.5" PointX="74.625" PointY="48.75" />
+        <EntityTypeShape EntityType="Model.Skill" Width="1.5" PointX="76.5" PointY="48.5" />
+        <AssociationConnector Association="Model.FK_JobSkill_ToTable" />
+        <AssociationConnector Association="Model.FK_JobSkill_ToTable_1" />
+        <EntityTypeShape EntityType="Model.Feedback" Width="1.5" PointX="5.25" PointY="49.875" />
+        <AssociationConnector Association="Model.FK_Feedback_ToTable" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,241 @@
+﻿
+@{
+    Layout = "/Views/Shared/_Layout_Without_Signalr.cshtml";
+    ViewBag.Title = "Home_Appliances";
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Home Appliances</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("List", "Index")
+            </li>
+            <li class="active">
+                <strong>Details</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-3">
+
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Tags</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <input type="text" class="form-control" id="select-tag" placeholder="search Tags" />
+                    <div >
+                        <div data-bind="foreach:showTags">
+                            <p data-bind="text:name"></p>
+                        </div>
+                    </div>
+                    <input type="checkbox">Mobile accessories
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-9" id="adsBinding">
+
+            
+        </div>
+        <div class="col-md-3">
+
+        </div>
+
+    </div>
+    
+</div>
+@section Styles {
+    <style type="text/css">
+        .selectize-control.repositories .selectize-dropdown > div {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .selectize-control.repositories .selectize-dropdown .by {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+            .selectize-control.repositories .selectize-dropdown .by::before {
+                content: 'by ';
+            }
+
+        .selectize-control.repositories .selectize-dropdown .name {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .selectize-control.repositories .selectize-dropdown .title {
+            display: block;
+        }
+
+        .selectize-control.repositories .selectize-dropdown .description {
+            font-size: 12px;
+            display: block;
+            color: #a0a0a0;
+            white-space: nowrap;
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .selectize-control.repositories .selectize-dropdown .meta {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 10px;
+        }
+
+            .selectize-control.repositories .selectize-dropdown .meta li {
+                margin: 0;
+                padding: 0;
+                display: inline;
+                margin-right: 10px;
+            }
+
+                .selectize-control.repositories .selectize-dropdown .meta li span {
+                    font-weight: bold;
+                }
+
+        .selectize-control.repositories::before {
+            -moz-transition: opacity 0.2s;
+            -webkit-transition: opacity 0.2s;
+            transition: opacity 0.2s;
+            content: ' ';
+            z-index: 2;
+            position: absolute;
+            display: block;
+            top: 12px;
+            right: 34px;
+            width: 16px;
+            height: 16px;
+            background: url(/Images/spinner.gif);
+            background-size: 16px 16px;
+            opacity: 0;
+        }
+
+        .selectize-control.repositories.loading::before {
+            opacity: 0.4;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+            background-size: 16px 16px;
+            margin: 0 3px 0 0;
+        }
+
+            .icon.fork {
+                background-image: url(images/repo-fork.png);
+            }
+
+            .icon.source {
+                background-image: url(images/repo-source.png);
+            }
+    </style>
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/scripts/selectizeStyles")
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/autosize")
+    <script type="text/javascript">
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.info = data.info;
+            self.followers = data.followers;
+        }
+        function ViewModel() {
+            var self = this;
+            self.loadTags = function () {
+                $.ajax({
+                    url: '/api/Tags/LoadFamousTags?category=Home_Appliances',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+                        self.showTags(tags);
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Tags.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $(document).ready(function () {
+            ko.applyBindings(new ViewModel);
+
+            $('#select-tag').selectize({
+                valueField: 'name',
+                labelField: 'name',
+                searchField: 'name',
+                options: [],
+                maxItems: 4,
+                create: true,
+                render: {
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="title">' +
+                                '<span class="name">' + escape(item.name) + '</span>' +
+
+                            '</span>' +
+                            '<span class="description">' + escape(item.info) + '</span>' +
+                            '<ul class="meta">' +
+                                '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                            '</ul>' +
+                        '</div>';
+                    }
+                },
+                load: function (query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                        type: 'POST',
+                        error: function () {
+                            callback();
+                        },
+                        success: function (res) {
+                            callback(res.slice(0, 10));
+                        }
+                    });
+                }
+            });
+            
+        });
+    </script>
+}
+

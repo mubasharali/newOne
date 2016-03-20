@@ -1,0 +1,351 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Index</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Tag</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<input type="hidden" id="tagId" value="@ViewBag.tagId" />
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="ibox">
+                <div >
+                    <div data-bind="with:showTag()">
+                        <div class="ibox-title">
+                            <h2>
+                                <span data-bind="text:name"></span> <span style="font-size: 12px; color: #b4b6b8">
+                                    <a style="font-size: 12px; color: #b4b6b8">
+                                        <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id)},text:followText"></a>
+                                        (<span data-bind="text:followers"></span> followers )
+                                        <h6 class="pull-right">
+                                            <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+                                        </h6>
+                                </span>
+                            </h2>
+                        </div>
+                        <div class="ibox-content">
+                            <div data-bind="visible:!isEditing()">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <dl>
+
+
+                                            <dt>Info: <button class="btn btn-white btn-xs" data-bind="click:editTag">Improve tag</button> </dt>
+                                            <dd data-bind="text:info"> </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <dt>Created by:</dt>
+                                        <dd><a data-bind="attr:{href:createdByLink}"><span data-bind="text:createdByName"></span></a></dd>
+                                        <dt>Created:</dt>
+                                        <dd data-bind="text:time"></dd>
+                                        <dt>Latest Updated by:</dt>
+                                        <dd><a data-bind="attr:{href:updatedByLink}"><span data-bind="text:updatedByName"></span></a></dd>
+                                        <dt>Latest Updated:</dt>
+                                        <dd data-bind="text:updatedTime"></dd>
+                                    </div>
+                                </div>
+                            </div>
+                            <div data-bind="visible:isEditing()">
+                                <h5>Improve Info</h5>
+                                <textarea class="msgTextArea form-control" placeholder="Improve tag.." data-bind="value:info, jqAutoresize: {}"></textarea>
+                                @*<span data-bind="visible:info().length > 800 && info().length < 1000">
+                                    You can Enter only <span data-bind="text:999 - info().length"></span> more characters.
+                                </span>*@
+                                <button class="btn btn-xs btn-success pull-right" data-bind="click:updateTag">Update</button>
+                            </div>
+                            <div class="row m-t-sm">
+                                <div class="col-lg-12">
+                                    <div class="panel blank-panel">
+                                        <div class="panel-heading">
+                                            <div class="panel-options">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active"><a href="#tab-1" data-toggle="tab">Ads</a></li>
+                                                    <li class=""><a href="#tab-2" data-toggle="tab">Questions</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab-1">
+                                                    <div data-bind="foreach:showAds">
+                                                        <div class="feed-activity-list">
+
+                                                            <div class="vote-item">
+                                                                @*<div class="vote-actions">
+                                                                    <button type="button" class="btn btn-default m-r-sm" data-bind="text:questionVoteCount"></button>
+                                                                </div>*@
+
+                                                                <a data-bind="attr:{href:adDetailLink}"> <div class="vote-title" style="font-size:small" data-bind="text:title"></div></a>
+                                                                <div class="vote-info">
+                                                                    <i class="fa fa-comment"></i> <a> <span></span> WishList</a>
+                                                                    <i class="fa fa-eye"></i> <a> <span data-bind="text:views"></span> Views</a>
+                                                                    <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                                </div>
+                                                            </div>
+                                                            @*<div class=" profile-content" style="border:2px">
+                                                                <h4><a data-bind="attr:{href:adDetailLink}"> <strong data-bind="text:title"></strong></a></h4>
+                                                                
+                                                            </div>*@
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-pane" id="tab-2">
+                                                    
+                                                    <div data-bind="foreach:showQuestions">
+                                                        <div class="vote-item">
+                                                            <div class="vote-actions">
+                                                                <button type="button" class="btn btn-default m-r-sm" data-bind="text:questionVoteCount"></button>
+                                                            </div>
+                                                            
+                                                            <a data-bind="attr:{href:questionDetailLink}"> <div class="vote-title" style="font-size:small" data-bind="text:title"></div></a>
+                                                            <div class="vote-info">
+                                                                <i class="fa fa-comment"></i> <a > <span data-bind="text:answers"></span> Answers</a>
+                                                                <i class="fa fa-eye"></i> <a> <span data-bind="text:views"></span> Views</a> 
+                                                                <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+}
+
+
+@section Scripts{
+@Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+@Scripts.Render("~/plugins/autosize")
+
+    <script>
+        function Ad(data) {
+            var self = this;
+            data = data || {};
+            self.title = data.title;
+            self.id = data.id;
+            self.views = data.views;
+            self.wishlist = data.wishlist;
+            self.time =getTimeAgo( data.time);
+            self.adDetailLink = '/Electronics/Details/' + self.id;
+        }
+        function Question(data) {
+            var self = this;
+            data = data || {};
+            self.title = data.title;
+            self.id = data.id;
+            self.views = data.views;
+            self.answers = data.answers;
+            self.time = getTimeAgo(data.time);
+            self.questionDetailLink = '/Forum/Details/' + self.id;
+            self.questionVoteUpCount = data.questionVoteUpCount || 0;
+            self.questionVoteDownCount = data.questionVoteDownCount || 0;
+            self.questionVoteCount = self.questionVoteUpCount - self.questionVoteDownCount;
+        }
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.info = ko.observable( data.info);
+            self.createdByName = data.createdByName;
+            self.createdById = data.createdById;
+            self.time = getTimeAgo( data.time);
+            self.exectTime = data.time;
+            self.loginUserId = data.loginUserId;
+
+            self.isReported = ko.observable(data.isReported);
+            self.reportedCount = ko.observable(data.reportedCount);
+
+            self.updatedTime = ko.observable( getTimeAgo( data.updatedTime));
+            self.updatedByName = ko.observable( data.updatedByName);
+            self.updatedById = ko.observable(data.updatedById);
+            self.createdByLink = '/User/Index/' + self.createdById;
+            self.updatedByLink = '/User/Index/' + self.updatedById();
+            self.isEditing = ko.observable(false);
+            self.followers = ko.observable( data.followers || 0);
+            self.isFollowed = ko.observable(false);
+            self.followText = ko.observable("Follow");
+            if (data.isFollowed) {
+                self.followText("UnFollow");
+                self.isFollowed(true);
+            }
+            self.editTag = function () {
+                self.isEditing(true);
+            }
+            self.report = function () {
+                if (self.loginUserId) {
+                    $.ajax({
+                        url: '/api/Tag/reportTag?id=' + self.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.isReported(true);
+                            self.reportedCount(data);
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    })
+                } else {
+                    toastr.info("You must be login to report this ad", "Na na!");
+                }
+            }
+            self.updateTag = function (questionId) {
+                var obj = {
+                    Id: self.id,
+                    name: self.name,
+                    info: self.info(),
+                    time: self.exectTime,
+                    createdBy: self.createdById,
+
+                }
+                if (self.info()!= null && self.info().trim() != "") {
+                    $.ajax({
+                        url: '/api/Tag/updateTag',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(obj),
+                        success: function (data) {
+                            self.updatedById(data.updatedById);
+                            self.updatedByName(data.updatedByName);
+                            self.updatedTime( getTimeAgo( data.updatedTime));
+                            self.isEditing(false);
+                        },
+                        error: function () {
+                            toastr.error("failed to update tag.Refresh page and try gain", "Error!");
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You can't post empty. If you want to cancel, just leave this page", "Sorry!");
+                }
+            }
+            self.follow = function (questionId) {
+                if (self.loginUserId) {
+                    $.ajax({
+                        url: '/api/Tag/Follow?tagId=' + questionId,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.followText(data.status);
+                            self.followers(data.count);
+                            if (data.status == "Follow") {
+                                self.isFollowed(false);
+                            } else { self.isFollowed(true); }
+                        },
+                        error: function (xhr, status, error) {
+                            toastr.error("Please refresh page and try again", "Error!");
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You are not login", "Oops!");
+                }
+            }
+
+            //self.questionsTaged = data.questionSTaged;
+            //self.adsTaged = data.adsTaged;
+
+            self.showQuestions = ko.observableArray();
+            self.showAds = ko.observableArray();
+            if (data.questions != null) {
+                var mappedads = $.map(data.questions, function (item) { return new Question(item); });
+                self.showQuestions(mappedads);
+            }
+            if (data.ads != null) {
+                var mappedads = $.map(data.ads, function (item) { return new Ad(item); });
+                self.showAds(mappedads);
+            }
+        }
+        function viewModel() {
+            var self = this;
+            self.showTag = ko.observableArray();
+            self.loadTag = function () {
+                var adId = $("#tagId").val();
+                url_address = '/api/Tag/GetTag/' + adId;
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'GET'
+                })
+                .done(function (data) {
+                    var mappedads = new Tag(data);
+                    self.showTag(mappedads);
+                })
+                .fail(function () {
+                    toastr.error("Unable to load data. Please refresh page and try again", "Error");
+                });
+
+            }
+
+            self.loadTag();
+            return self;
+        }
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel);
+        });
+    </script>
+    }

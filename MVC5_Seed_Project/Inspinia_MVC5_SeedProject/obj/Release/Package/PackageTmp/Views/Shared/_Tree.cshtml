@@ -1,0 +1,66 @@
+﻿
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Categories</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <input type="text" class="form-control" id="treeSearch" placeholder="search categories" />
+                    <div id="navigation">
+                        <ul>
+                            <li>
+                                <a href="#">Electronics</a>
+                                <ul>
+                                    <li>
+                                        <a href="#">Mobiles</a>
+                                        <ul data-bind="foreach:showCompanies">
+                                            <li>
+                                                <a data-bind="text:companyName"></a>
+                                                <ul data-bind="foreach:showModels">
+                                                    <li data-bind="text:modelName"></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Laptops</a>
+                                        <ul data-bind="foreach:showLaptopBrands">
+                                            <li>
+                                                <a data-bind="text:companyName"></a>
+                                                <ul data-bind="foreach:showModels">
+                                                    <li data-bind="text:modelName"></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Vehicles</a>
+                                <ul>
+                                    <li>
+                                        <a href="#">Cars</a>
+                                        <ul data-bind="foreach:showCarBrands">
+                                            <li>
+                                                <a data-bind="text:companyName"></a>
+                                                <ul data-bind="foreach:showModels">
+                                                    <li data-bind="text:modelName"></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+

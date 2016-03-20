@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>jQuery.Autosize</id>
+    <version>1.18.12</version>
+    <title>jQuery Autosize</title>
+    <authors>Jack Moore</authors>
+    <owners>Jack Moore</owners>
+    <licenseUrl>http://opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://www.jacklmoore.com/autosize</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A plugin to enable automatic height for textarea elements.</description>
+    <releaseNotes>Replace window.jQuery with jQuery. Fixes #176.</releaseNotes>
+    <language>en-US</language>
+    <tags>jQuery autosize textarea</tags>
+    <dependencies>
+      <dependency id="jQuery" version="1.8" />
+    </dependencies>
+  </metadata>
+</package>

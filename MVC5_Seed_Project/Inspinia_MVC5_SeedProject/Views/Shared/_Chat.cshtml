@@ -1,0 +1,74 @@
+﻿<style>
+    #showChat {
+        height: 100px;
+       // border: 1px solid black;
+        overflow: scroll;
+    }
+</style>
+
+<div id="chatViewModel">
+
+    <div class="small-chat-box fadeInRight animated">
+
+        <div class="heading" draggable="true">
+            <small class="chat-date" >
+                <span data-bind="visible:sendMessageTo(),text:sendMessgeToName"></span>
+                <span data-bind="visible:!sendMessageTo()">Chat Box</span>
+            </small>
+        </div>
+
+        <div id="showChat" class="content" data-bind="foreach:showChat">
+            <div data-bind="if:message.length > 0">
+                <div data-bind="visible:sentFrom != loginUserId1">
+                    <div class="left">
+                        <div data-bind="attr:{'id':id}">
+                            @*sent from<div data-bind="text:sentFrom"></div>
+                        loginUserID<div data-bind="text:loginUserId1"></div>*@
+                            <div class="author-name">
+                                <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
+
+                                </small>
+                            </div>
+                            <div class="chat-message active" data-bind="text:message">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-bind="visible: sentFrom == loginUserId1">
+                    <div class="right">
+                        <div data-bind="attr:{'id':id}">
+                            @*sent from<div data-bind="text:sentFrom"></div>
+                        loginUserID<div data-bind="text:loginUserId1"></div>*@
+                            <div class="author-name">
+                                <span data-bind="text:sentToName"></span>                                <small data-bind="text:timeAgo" class="chat-date">
+
+                                </small>
+                            </div>
+                            <div class="chat-message " data-bind="text:message">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ko scrollToEnd: showChat --><!-- /ko -->
+        <div class="form-chat">
+            <div class="input-group input-group-sm">
+                <input type="text" data-bind="value:newMessage,valueUpdate:'afterkeydown',event:{keyup:checkMsgEnter}" class="form-control"> <span class="input-group-btn">
+                    <button class="btn btn-primary" data-bind="click:sendMessage" type="button">
+                        Send
+                    </button>
+                </span>
+            </div>
+        </div>
+
+    </div>
+    <div id="small-chat">
+
+        @*<span class="badge badge-warning pull-right">5</span>*@
+        <a class="open-small-chat">
+            <i class="fa fa-comments"></i>
+
+        </a>
+    </div>
+</div>

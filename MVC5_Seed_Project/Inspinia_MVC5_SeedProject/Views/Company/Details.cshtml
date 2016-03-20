@@ -1,0 +1,1745 @@
+﻿@{
+    ViewBag.Title = ViewBag.title;
+}
+<input type="hidden" id="companyId" value="@ViewBag.companyId" />
+
+
+<style>
+    .carouselContainer {
+        overflow: visible;
+        //height:350px;
+    }
+
+        .carouselContainer img {
+            // height: 350px;
+            height: auto;
+            width: 100%;
+        }
+</style>
+<style>
+    table {
+        background-color: #cde;
+        padding: 1em;
+        border-radius: 0.5em;
+    }
+
+        table th {
+            text-align: left;
+        }
+
+            table th:last-child {
+                min-width: 130px;
+            }
+
+    .starRating span {
+        width: 24px;
+        height: 24px;
+        background-image: url(/Images/others/stars.png);
+        display: inline-block;
+        cursor: pointer;
+        background-position: -24px 0;
+    }
+
+        .starRating span.chosen {
+            background-position: 0 0;
+        }
+        .starRatingDisabled span {
+        width: 24px;
+        height: 24px;
+        background-image: url(/Images/others/stars.png);
+        display: inline-block;
+        cursor: pointer;
+        background-position: -24px 0;
+    }
+
+        .starRatingDisabled span.chosen {
+            background-position: 0 0;
+        }
+    .starRating:hover span {
+        background-position: -24px 0;
+    }
+
+        .starRating:hover span.hoverChosen {
+            background-position: 0 0;
+        }
+</style>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+
+        <div class="col-md-9" id="adsBinding">
+            
+            <div data-bind="visible:!showPage()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="foreach: showPage">
+                <div data-bind="visible:$parent.error()" class="alert alert-success">
+                    <strong>Error! </strong><span data-bind="text:$parent.error"></span>
+                </div>
+                <div data-bind="visible:statusError" class="alert alert-success">
+                    <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
+                </div>
+                <div class="row">
+                    <div class="ibox product-detail">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div data-bind="visible:!isPageEditing()" class="pull-left profile-image" style="margin-right:12px">
+                                    <img class="m-b-md" data-bind="attr:{src:logoLink}" />
+                                    @*<img class="m-b-md" data-bind="visible:logoExtension,attr:{src:'/Images/Company/' + id + '/logo' + logoExtension}"  />*@
+                                    <button data-bind="visible:loginUserId == createdBy" class="btn btn-white btn-xs" type="button" style="margin-top:-5px;" onclick="chooseFile();">upload logo</button>
+                                </div>
+                                <form action="/Company/uploadLogo" method="post" enctype="multipart/form-data" style="height:0px;overflow:hidden">
+                                    <input type="file" id="fileInput" name="fileInput" onchange="newImage()" />
+                                    <input type="hidden" name="id" data-bind="value:id" />
+                                    <input type="submit" />
+                                </form>
+
+                                <div data-bind="visible:!isPageEditing()">
+                                    <span data-bind="visible:loginUserId != createdBy">
+                                        <a data-bind="click: function(){return deletePage(id)},visible:isAdmin()" class="btn btn-white btn-xs pull-right "> Delete</a>
+                                    </span>
+                                    <span data-bind="visible:loginUserId == createdBy">
+                                        <a data-bind="click: function(){return deletePage(id)}" class="btn btn-white btn-xs pull-right "> Delete</a><a data-bind="click: function(){return editPage(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                    </span>
+                                    <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
+                                    <p data-bind="text:shortAbout"></p>
+                                    <span class="disableRating" data-bind="starRating:rating"></span> (<span data-bind="text:showReviews().length"></span>)
+
+                                </div>
+                                <div data-bind="visible:isPageEditing()">
+                                    Company Name:<input type="text" placeholder="Company Name" class="form-control" data-bind="value:title" required />
+                                    one line description:<input type="text" class="form-control" placeholder="One line description of company" data-bind="value:shortAbout" required />
+                                    tags:
+                                    <input id="select-tag" data-bind="value:inputTags" class="repositories" placeholder="Pick tags..." />
+                                    <button class="btn btn-primary" data-bind="click:updatePage">Update</button>
+                                </div>
+                                <div>
+
+                                </div>
+                                <br /><br />
+
+                            </div>
+                            <div class="row">
+                                <br />
+                                <div class="tabs-container">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#Overview">Overview</a></li>
+                                        <li class=""><a data-toggle="tab" href="#reviews">Reviews (<span data-bind="text:showReviews().length"></span>)</a></li>
+                                        <li class=""><a data-toggle="tab" href="#ActiveAds">Active Ads (<span data-bind="text:activeAds().length"></span>) </a></li>
+
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div id="Overview" class="tab-pane active">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <h3>Tags:</h3>
+                                                    <ul @*class="tag-list"*@ data-bind="foreach:showTags" style="padding: 0">
+                                                        <li class="btn btn-white btn-xs"><a target="_blank" data-bind="attr:{href:link}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                                    </ul>
+                                                    <h2>About</h2>
+                                                    <span data-bind="visible:loginUserId == createdBy">
+                                                        <a data-bind="click:editLongAboutBtn" class="btn btn-white btn-xs "> Edit</a>
+                                                    </span>
+                                                    <div data-bind="visible:!isLongAboutEditing(),text:longAbout"></div>
+                                                    <div data-bind="visible:isLongAboutEditing()">
+                                                        <div class="col-sm-12">
+                                                            Details:<textarea class="msgTextArea form-control" placeholder="Add company Details.." data-bind="jqAutoresize: {},value:longAbout"></textarea>
+                                                            <br /><button class="btn btn-primary pull-right" data-bind="click:updateLongAbout">Update</button>
+                                                        </div>
+                                                    </div>
+                                                    @*<div class="row">
+                                                    <div data-bind="text:longAbout,visible:!isLongAboutEditing()">
+                                                        <span data-bind="visible:loginUserId == createdBy">
+                                                            <a data-bind="click: editLongAboutBtn" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                        </span>
+                                                        <span data-bind="visible:!longAbout">Add detials about your company</span>
+                                                    </div>
+
+                                                </div>*@
+                                                    <h2>Location</h2>
+                                                    <h3>HeadOffice</h3>
+                                                    <div data-bind="visible:!isMainBranchEditing()">
+                                                        <span data-bind="visible:loginUserId == createdBy">
+                                                            <a data-bind="click: function(){return editLocation(id)},visible:cityName()" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                            <a data-bind="click: function(){return editLocation(id)},visible:!cityName()" class="btn btn-white btn-xs "> Add Head office location</a>
+                                                        </span>
+                                                        <span data-bind="if:exectLocation">
+                                                            <span data-bind="text:exectLocation"></span>,
+                                                        </span>
+                                                        <span data-bind="if:popularPlace">
+                                                            <span data-bind="text:popularPlace"></span>,
+                                                        </span>
+                                                        <span data-bind="text:cityName"></span>
+                                                        <h4 data-bind="if:cityName">Contact Info</h4>
+                                                        <div data-bind="if:contactNo1">
+                                                            <span data-bind="text:contactNo1"></span>
+                                                        </div>
+                                                        <div data-bind="if:contactNo2">
+                                                            <span data-bind="text:contactNo2"></span>
+                                                        </div>
+                                                        <h5 data-bind="if:friendlySince">Established since <span data-bind="text:friendlySince"></span></h5>
+                                                    </div>
+                                                    <div data-bind="visible:isMainBranchEditing()">
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">City</label>
+                                                                <div class="col-md-10">
+                                                                    <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedcityName,
+                       optionsCaption: 'Choose City...'"></select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div data-bind="with:selectedcityName">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Famous Place</label>
+                                                                    <div class="col-md-10">
+                                                                        <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedpopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div data-bind="with:selectedpopularPlace">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Exect location</label>
+                                                                    <div class="col-md-10">
+                                                                        <input type="text" class="form-control" data-bind="value:$parent.exectLocation" name="exectLocation" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <h4>Contact Info</h4>
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">Contact No 1</label>
+                                                                <div class="col-md-10">
+                                                                    <input type="text" class="form-control" data-bind="value:contactNo1" />
+                                                                </div>
+                                                            </div>
+                                                        </div><br />
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">Contact No 2</label>
+                                                                <div class="col-md-10">
+                                                                    <input type="text" class="form-control" data-bind="value:contactNo2" />
+                                                                </div>
+                                                            </div>
+                                                        </div><br />
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">Company is established since</label>
+                                                                <div class="col-md-10">
+                                                                    <input type="date" class="form-control" data-bind="value:since" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-danger col-md-offset-2" data-bind="click:updateMainBranchLocation">Submit</button>
+                                                    </div>
+                                                    @*<p data-bind="text:longAbout"></p>
+                                                facebook link, tw , website*@
+
+                                                    <span data-bind="visible:loginUserId == createdBy">
+                                                        <a data-bind="click: function(){return addNewBranch()}" class="btn btn-white btn-xs pull-right"> Add new Branch</a>
+                                                    </span>
+                                                    <hr />
+                                                    <h3 data-bind="visible:showBranches().length>0">Comany Network</h3>
+                                                    <div data-bind="visible:isAddingNewBranch()">
+                                                        <h4>Location</h4>
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">City</label>
+                                                                <div class="col-md-10">
+                                                                    <select id="select-city1" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: BcityName,
+                       optionsCaption: 'Choose City...'"></select>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div data-bind="with:BcityName">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Famous Place</label>
+                                                                    <div class="col-md-10">
+                                                                        <select id="select-popularPlace1" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.BpopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div data-bind="with:BpopularPlace">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Exect location</label>
+                                                                    <div class="col-md-10">
+                                                                        <input type="text" class="form-control" data-bind="value:$parent.BexectLocation" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div><br />
+                                                        <h4>Contact Info</h4>
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">Contact No 1</label>
+                                                                <div class="col-md-10">
+                                                                    <input type="text" class="form-control" data-bind="value:BcontactNo1" />
+                                                                </div>
+                                                            </div>
+                                                        </div><br />
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">Contact No 2</label>
+                                                                <div class="col-md-10">
+                                                                    <input type="text" class="form-control" data-bind="value:BcontactNo2" />
+                                                                </div>
+                                                            </div>
+                                                        </div><br />
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-2">Branch is established since</label>
+                                                                <div class="col-md-10">
+                                                                    <input type="date" class="form-control" data-bind="value:Bsince" name="since" />
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <button class="btn btn-danger col-md-offset-2" data-bind="click:saveNewBranch">Submit</button>
+                                                    </div>
+                                                    <div data-bind="foreach:showBranches">
+                                                        <div data-bind="visible:!isBranchEditing()">
+                                                            <hr />
+                                                            <span data-bind="visible:$parent.loginUserId == $parent.createdBy">
+                                                                <a data-bind="click:  $parent.deleteBranch" class="btn btn-white btn-xs pull-right"> Delete</a>
+                                                                <a data-bind="click: function(){return editBranch($index)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                            </span>
+
+                                                            <h4>Location</h4>
+                                                            <span data-bind="if:exectLocation">
+                                                                <span data-bind="text:exectLocation"></span>,
+                                                            </span>
+                                                            <span data-bind="if:popularPlace1">
+                                                                <span data-bind="text:popularPlace1"></span>,
+                                                            </span>
+                                                            <span data-bind="text:city"></span>
+                                                            <h4>Contact Info</h4>
+                                                            <div data-bind="if:contactNo1">
+                                                                <span data-bind="text:contactNo1"></span>
+                                                            </div>
+                                                            <div data-bind="if:contactNo2">
+                                                                <span data-bind="text:contactNo2"></span>
+                                                            </div>
+                                                            <h5 data-bind="if:friendlySince">Established since <span data-bind="text:friendlySince"></span></h5>
+                                                        </div>
+                                                        <div data-bind="visible:isBranchEditing()">
+                                                            <h4>Location</h4>
+                                                            <div class="row">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">City</label>
+                                                                    <div class="col-md-10">
+                                                                        <select class="demo-default select-city2" data-bind="options: availableCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div data-bind="with:selectedCity">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-2">Famous Place</label>
+                                                                        <div class="col-md-10">
+                                                                            <select id="select-popularPlace2" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedPP,
+                       optionsCaption: 'Choose Famous place...'"></select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div data-bind="with:selectedPP">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label col-md-2">Exect location</label>
+                                                                        <div class="col-md-10">
+                                                                            <input type="text" class="form-control" data-bind="value:$parent.exectLocation" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <h4>Contact Information</h4>
+                                                            <div class="row">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Contact No 1</label>
+                                                                    <div class="col-md-10">
+                                                                        <input type="text" class="form-control" data-bind="value:contactNo1" />
+                                                                    </div>
+                                                                </div>
+                                                            </div><br />
+                                                            <div class="row">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Contact No 2</label>
+                                                                    <div class="col-md-10">
+                                                                        <input type="text" class="form-control" data-bind="value:contactNo2" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-2">Branch is established since</label>
+                                                                </div>
+                                                                <div class="col-md-10">
+                                                                    <input type="date" class="form-control" data-bind="value:since" />
+                                                                </div>
+                                                            </div>
+
+                                                            <button class="btn btn-danger col-md-offset-2" data-bind="click:function(){return updateBranch($data,$parent.id)}">Submit</button>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="reviews" class="tab-pane">
+                                            <div class="panel-body">
+                                                <h2>Reviews</h2>
+                                                <div class="btn btn-xs btn-white" data-bind="click:addReviewBtn,visible:!isAddingReview()">Add review</div>
+                                                <div data-bind="visible:isAddingReview()">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class="col-md-2">Rate:</div>
+                                                            <div class="col-md-10"><div data-bind="starRating:newRating"></div></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class="control-label col-md-2">Description</div>
+                                                            <div class="col-md-10">
+                                                                <textarea class="msgTextArea form-control" placeholder="Add review Details.." data-bind="jqAutoresize: {},value:reviewDescription"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div><br />
+                                                    <button data-style="expand-left" class="ladda-button  btn btn-danger col-sm-offset-2" data-bind="click:submitReviewBtn">Submit</button>
+                                                    <br />
+                                                </div>
+                                                <div data-bind="foreach:showReviews">
+                                                    <div data-bind="visible:!isReviewEditing()">
+                                                        <hr />
+                                                        <div data-bind="visible:reviewedBy == $parent.loginUserId"><span data-bind="click:$parent.deleteReview" class="btn btn-xs btn-white pull-right">Delete</span> <span data-bind="click:editReviewBtn" class="btn btn-xs btn-white pull-right">Edit</span> </div>
+                                                        <div class="disableRating" data-bind="starRating:rating"></div>
+                                                        <div data-bind="text:reviewDescription"></div>
+                                                        <div style="margin-left:0" class="vote-info">
+                                                            <a data-bind="click:function(){return voteReview(id,$parent.loginUserId,true)}">
+                                                                <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-thumbs-up"> </i>
+                                                                <span data-bind="text:voteUpCount"></span>
+                                                            </a>
+                                                            <a data-bind="click:function(){return voteReview(id,$parent.loginUserId,false)}">
+                                                                <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
+                                                                <span data-bind="text:voteDownCount"></span>
+                                                            </a>
+                                                            <span class="btn btn-xs btn-white" data-bind="click:reviewReplyBtn">Reply</span>
+                                                            <i class="fa fa-user"></i> <a data-bind="attr:{href:'/User/Index/'+reviewedBy},text:reviewedByName"></a>
+                                                            <i class="fa fa-clock-o"></i> <span data-bind="text:friendlyTime"></span>
+
+                                                        </div>
+                                                        <div data-bind="visible:isAddingReviewReply()">
+                                                            <div style="margin-left:45px" class="vote">
+                                                                <textarea class="msgTextArea form-control" placeholder="Reply.." data-bind="valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.loginUserId,replyDescription.length,data,event)}},value:replyDescription"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div data-bind="foreach:showReviewReplies">
+                                                            <div data-bind="visible:!isReviewReplyEditing()">
+                                                                <div class="vote">
+                                                                    <p class="vote-title" style="font-size:small;font-weight:300" data-bind="text:description"></p>
+                                                                    <div data-bind="visible:postedBy == $parents[1].loginUserId"><span data-bind="click:$parent.deleteReviewReply" class="btn btn-xs btn-white pull-right">Delete</span> <span data-bind="click:editReviewReplyBtn" class="btn btn-xs btn-white pull-right">Edit</span> </div>
+
+                                                                    <div class="vote-info">
+
+                                                                        <i class="fa fa-user"></i> <a data-bind="attr:{href:'/User/Index/'+postedBy},text:postedByName"></a>
+                                                                        <i class="fa fa-clock-o"></i> <span data-bind="text:friendlyTime"></span>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div data-bind="visible:isReviewReplyEditing()">
+                                                                <div style="margin-left:45px" class="vote">
+                                                                    <textarea class="msgTextArea form-control" placeholder="Reply.." data-bind="valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter1(description.length,data,$parent.id,event)}},value:description"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div data-bind="visible:isReviewEditing()">
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <div class="col-md-2">Rate:</div>
+                                                                <div class="col-md-10"><div data-bind="starRating:rating"></div></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group">
+                                                                <div class="control-label col-md-2">Description</div>
+                                                                <div class="col-md-10">
+                                                                    <textarea class="msgTextArea form-control" placeholder="Add review Details.." data-bind="jqAutoresize: {},value:reviewDescription"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div><br />
+                                                        <button data-style="expand-left" class="ladda-button  btn btn-danger col-sm-offset-2" data-bind="click: function(){ return updateReview($data,$parent.id)} ">Update</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ActiveAds" class="tab-pane">
+
+                                            <div class="panel-body" data-bind="foreach:activeAds">
+                                                @Html.Partial("/Views/Shared/_AdListView1.cshtml")
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-9">
+
+                                </div>
+                            </div>
+                            @*<div class="col-sm-3 hidden-xs hidden-sm" >this is 3</div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="col-md-3">
+            <div class="">
+                
+            </div>
+        </div>
+        </div>
+        
+
+    </div>
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+@Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/plugins/laddaStyles")
+@Styles.Render("~/plugins/toastrStyles")
+@*@Styles.Render("~/plugins/summernoteStyles")*@
+<link href="~/Content/myStyles.css" rel="stylesheet" />
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/sweetAlert")
+@Scripts.Render("~/plugins/ladda")
+@Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/truncate")
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/ConvertToSlug.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+<script src="~/Scripts/app/IsAdmin.js"></script>
+    <script>
+        
+        var myCompanyId = $("#companyId").val();
+        
+        function Branch(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.cityId =ko.observable( data.cityId );
+            self.cityName = ko.observable(data.cityName);
+            self.city = ko.observable(data.cityName);
+            self.popularPlaceId = ko.observable(data.popularPlaceId);
+            self.popularPlace = ko.observable(data.popularPlace || "");
+            self.popularPlace1 = ko.observable(data.popularPlace || "");
+            self.exectLocation =ko.observable( data.exectLocation || "");
+            self.since = ko.observable(data.since);
+            if (self.since() != null) {
+                self.since(self.since().split("T")[0]);
+            }
+            self.friendlySince = ko.observable(getTimeAgo(data.since || ""));
+            self.contactNo1 = ko.observable(data.contactNo1);
+            self.contactNo2 = ko.observable(data.contactNo2);
+
+            self.selectedCity = ko.observable(data.cityName || "");
+            self.selectedPP = ko.observable(data.popularPlace || "");
+
+            self.isBranchEditing = ko.observable(false);
+            self.editBranch = function (index) {
+                self.loadCities(index());
+                self.isBranchEditing(true);
+            }
+
+            self.updateBranch = function (branch, companyId) {
+                var aaaa = {id: branch.id, companyId: companyId, since: branch.since(), contactNo1: branch.contactNo1(), contactNo2: branch.contactNo2() };
+                $.ajax({
+                    url: '/api/Company/OfficeBranch?city=' + branch.selectedCity() + '&popularPlace=' + branch.selectedPP() + '&exectLocation=' + branch.exectLocation() + '&SaveOrUpdate=Update',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(aaaa),
+                    success: function (data) {
+                        self.isBranchEditing(false);
+                        self.city(self.selectedCity());
+                        self.popularPlace1(self.selectedPP());
+                    },
+                    error: function () {
+                        toastr.error("failed to update Info. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+
+            self.availableCities = ko.observableArray();
+            self.availablePopularPlaces = ko.observableArray();
+
+            self.since.subscribe(function (value) {
+                self.friendlySince(getTimeAgo(self.since()));
+            });
+            self.selectedCity.subscribe(function (value) {
+                self.loadPopularPlaces();
+            });
+            self.loadCities = function (index) {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        //self.availableCities.removeAll();
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        self.selectedCity(self.cityName());
+                        console.log(self.availableCities());
+                        //var ad = $('.select-city2')[index];
+                        //console.log(ad);
+                        var ad = $('.select-city2');
+                        ad.selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlaces = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        self.selectedPP(self.popularPlace());
+                        $('#select-popularPlace2').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+        }
+        //var imageUrls = [];
+        //function adImages(data, adId, imagesCount) {
+        //    var self = this;
+        //    data = data || {};
+        //    self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
+        //    imageUrls.push(self.link);
+        //}
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.info = data.info || "";
+            self.followers = data.followers || 0;
+            self.link = '/Tag/' + self.id + '/' + convertToSlug(self.name);
+        };
+        function ReviewReply(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.description = ko.observable(data.description);
+            self.time = data.time;
+            self.friendlyTime = getTimeAgo( data.time);
+            self.postedBy = data.postedBy;
+            self.postedByName = data.postedByName;
+            self.isReviewReplyEditing = ko.observable(false);
+            self.editReviewReplyBtn = function () {
+                self.isReviewReplyEditing(true);
+            }
+            self.checkEnter1 = function ( length, d,reviewId, e) {
+                if (length < 500) {
+                    if (e.keyCode == 13) {
+                        self.updateReviewReply(d,reviewId);
+                    }
+                }
+                else {
+                    self.description(self.description().slice(0, -1));
+                    toastr.info("You have reached the limit");
+                }
+            }
+            self.updateReviewReply = function (data, reviewId) {
+                data.reviewId = reviewId;
+                $.ajax({
+                    url: '/api/Company/UpdateReviewReply/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        self.isReviewReplyEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+        }
+        function Review(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.rating = ko.observable(data.rating);
+            self.reviewDescription = ko.observable(data.reviewDescription);
+            self.reviewedBy = data.reviewedBy;
+            self.reviewedByName = data.reviewedByName;
+            self.time = data.time;
+            self.isReviewEditing = ko.observable(false);
+            self.friendlyTime = getTimeAgo(data.time);
+            self.editReviewBtn = function () {
+                self.isReviewEditing(true);
+            }
+            self.showReviewReplies = ko.observableArray();
+            if (data.reviewReplies) {
+                var branch = $.map(data.reviewReplies, function (item) { return new ReviewReply(item); });
+                self.showReviewReplies(branch);
+            }
+            self.deleteReviewReply = function (data) {
+                $.ajax({
+                    url: '/api/Company/DeleteReviewReply?id=' + data.id ,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data1) {
+                        self.showReviewReplies.remove(data);
+                    },
+                    error: function () {
+                        toastr.error("failed to delete Reply.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.isAddingReviewReply = ko.observable(false);
+            self.reviewReplyBtn = function () {
+                self.isAddingReviewReply(!self.isAddingReviewReply());
+            }
+            self.replyDescription = ko.observable();
+            self.checkEnter = function (loginUserId, length, d, e) {
+                if (loginUserId) {
+                    if (length < 500) {
+                        if (e.keyCode == 13) {
+                            self.addReviewReply(d);
+                        }
+                    }
+                    else {
+                        self.replyDescription(self.replyDescription().slice(0, -1));
+                        toastr.info("You have reached the limit");
+                    }
+                }
+                else {
+                    loginBtn();
+                }
+            }
+            self.addReviewReply = function (data) {
+                data.reviewId = data.id;
+                data.description = data.replyDescription();
+                $.ajax({
+                    url: '/api/Company/AddReviewReply/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        self.isAddingReviewReply(false);
+                        self.replyDescription("");
+                        self.showReviewReplies.push(new ReviewReply(data1));
+                    },
+                    error: function () {
+                        toastr.error("failed to post Reply.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.voteUpCount = ko.observable(data.voteUpCount || 0);
+            self.voteDownCount = ko.observable(data.voteDownCount || 0);
+            self.isUp = ko.observable(data.isUp || false);
+            self.isDown = ko.observable( data.isDown || false);
+            self.voteReview = function (id, loginUserId, isUp) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Company/LikeReview?id=' + id + '&isup=' + isUp,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteUpCount(data.voteUpCount);
+                            self.voteDownCount(data.voteDownCount);
+                            if (isUp) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    loginBtn();
+                }
+            }
+
+
+            self.updateReview = function (data, companyId) {
+                data.companyId = companyId;
+                var loading = $('.ladda-button').ladda();
+                loading.ladda('start');
+                data.description = data.reviewDescription();
+                $.ajax({
+                    url: '/api/Company/UpdateReview/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        loading.ladda('stop');
+                        self.isReviewEditing(false);
+                    },
+                    error: function () {
+                        loading.ladda('stop');
+                        toastr.error("failed to add Review.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+        }
+        function CompanyPage(data) {
+            var self = this;
+            self.activeAds = ko.observableArray();
+            //slick
+            //self.images = ko.observableArray(imageUrls);
+            self.options = {};
+            //self.imageIndex = ko.observable(1);
+            self.showReviews = ko.observableArray();
+            data = data || {};
+            self.inputTags = ko.observable();
+            self.reviewDescription = ko.observable();
+            self.newRating = ko.observable();
+            self.rating = ko.observable(0);
+            if (data.activeAds) {
+                var branch = $.map(data.activeAds, function (item) { return new Ad(item); });
+                self.activeAds(branch);
+            }
+            if (data.reviews) {
+                var average = 0;
+                var branch = $.map(data.reviews, function (item) { return new Review(item); });
+                self.showReviews(branch);
+                $.each((self.showReviews()) ,function (index, value) {
+                    average = average + value.rating();
+                });
+                self.rating( average / self.showReviews().length );
+            }
+            self.isAddingReview = ko.observable(false);
+            self.addReviewBtn = function () {
+                if (!self.loginUserId) {
+                    loginBtn();
+                    return;
+                }
+                var isalreadybid = false;
+                $.each((self.showReviews()), function (i, item) {
+                    if (item.reviewedBy == self.loginUserId) {
+                        isalreadybid = true;
+                    }
+                });
+                if (isalreadybid) {
+                    toastr.info("You cannot post multiple reviews. Just edit your previous review", "Wait!");
+                    return;
+                }
+
+
+                self.isAddingReview(true);
+            }
+
+            self.deleteReview = function (data) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this review!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Company/DeleteReview?id=' + data.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                       // data: ko.toJSON(data.id),
+                        success: function (data1) {
+                            self.showReviews.remove(data);
+                            swal("Deleted!", "Your Review has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.submitReviewBtn = function (data) {
+                var loading = $('.ladda-button').ladda();
+                loading.ladda('start');
+                data.companyId = self.id;
+                data.rating = self.newRating();
+                data.description = data.reviewDescription();
+                $.ajax({
+                    url: '/api/Company/AddReview/',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(data),
+                    success: function (data1) {
+                        loading.ladda('stop');
+                        self.isAddingReview(false);
+                        self.showReviews.push(new Review(data1));
+                    },
+                    error: function () {
+                        loading.ladda('stop');
+                        toastr.error("failed to add Review.Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.showTags = ko.observableArray();
+            if (data.tags) {
+                var branch = $.map(data.tags, function (item) { return new Tag(item); });
+                self.showTags(branch);
+                //$.each((data.tags), function (i, item) { self.showTags.push(item) });
+            }
+
+            self.title = ko.observable( data.title);
+            self.shortAbout = ko.observable(data.shortAbout);
+            self.longAbout = ko.observable(data.longAbout);
+            self.contactNo1 = ko.observable(data.contactNo1);
+            self.contactNo2 = ko.observable(data.contactNo2);
+            self.email = ko.observable(data.email);
+            self.fblink = ko.observable(data.fblink);
+            self.websitelink = ko.observable(data.websitelink);
+            self.twlink = ko.observable(data.twlink);
+            self.owner = ko.observable(data.owner);
+
+            self.createdByName = data.createdByName;
+            self.createdBy = data.createdById;
+            self.id = data.id;
+            self.since = ko.observable( data.since );
+            self.friendlySince = ko.observable(getTimeAgo(data.since || ""));
+            self.time = data.time;
+            self.friendlyTime = getTimeAgo(data.time);
+            self.loginUserId = data.loginUserId || "";
+            self.logoLink = '/Images/Company/default_logo.png';
+            if (data.logoExtension) {
+                self.logoLink = $.cookie("AWSURL") + $.cookie("AWSCompanyFolder") + self.id + "/logo"  +data.logoExtension;
+            }
+            self.cityId = data.cityId;
+            self.cityName = ko.observable(data.cityName);
+            self.selectedcityName = ko.observable();
+            self.popularPlaceId = data.popularPlaceId;
+            self.popularPlace = ko.observable(data.popularPlaceName || "");
+            self.selectedpopularPlace = ko.observable("");
+            self.exectLocation =ko.observable( data.exectLocation || "");
+            self.category = data.category;
+            self.showBranches = ko.observableArray(); // for branches
+            
+            self.BcityName = ko.observable("");
+            self.BpopularPlace = ko.observable("");
+            self.BexectLocation = ko.observable('');
+            self.Bsince = ko.observable();
+            self.BcontactNo1 = ko.observable();
+            self.BcontactNo2 = ko.observable();
+
+
+            self.isLongAboutEditing = ko.observable(false);
+            self.editLongAboutBtn = function () {
+                self.isLongAboutEditing(true);
+            }
+
+            self.isAddingNewBranch = ko.observable(false);
+            self.addNewBranch = function () {
+                self.isAddingNewBranch(true);
+                console.log(self.availableCities());
+                self.loadCitiesB();
+                
+            }
+            self.since.subscribe(function (value) {
+                self.friendlySince(getTimeAgo(self.since()));
+            });
+            self.saveNewBranch = function (branch) {
+                if (!branch.BcityName()) {
+                    toastr.info("Please enter city name");
+                    return;
+                }
+                if (!branch.BpopularPlace()) {
+                    toastr.info("Please enter a famous place near this branch");
+                    return;
+                }
+                if (!branch.BcontactNo1()) {
+                    if (!branch.BcontactNo2()) {
+                        toastr.info("Please provide atleast one contact number");
+                        return;
+                    }
+                }
+                
+                var aaaa = {companyId:self.id, since:branch.Bsince(), contactNo1: branch.BcontactNo1(), contactNo2: branch.BcontactNo2() };
+                $.ajax({
+                    url: '/api/Company/OfficeBranch?city=' + branch.BcityName() + '&popularPlace=' + branch.BpopularPlace() + '&exectLocation=' + branch.BexectLocation() + '&SaveOrUpdate=Save',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(aaaa),
+                    success: function (data) {
+                        self.isAddingNewBranch(false);
+                        self.showBranches.push(new Branch(data));
+                    },
+                    error: function () {
+                        toastr.error("failed to update Info. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.isReported = ko.observable(data.isReported);
+            self.isSaved = ko.observable(data.isSaved);
+            self.reportedCount = ko.observable(data.reportedCount);
+           // self.showImages = ko.observable();
+            self.views = data.views;
+            self.savedCount = ko.observable(data.savedCount);
+            self.statusError = "";
+            self.isVisible = true;
+            self.status = data.status;
+            if (data.status == "p") {
+                self.statusError = "This page will be visible to public once it is approved by admin";
+                if (self.loginUserId != self.postedById) {
+                    self.isVisible = false;
+                }
+            }
+            self.deleteBranch = function (branch) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Info!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Company/DeleteBranch/' + branch.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showBranches.remove(branch);
+                            swal("Deleted!", "This Branch has been deleted.", "success");
+                        },
+                        error: function () {
+                            toastr.error("failed to delete comany Branch. Please refresh page and try again", "Error!");
+                        }
+                    });
+                });
+            }
+            self.isPageEditing = ko.observable(false);
+            self.isMainBranchEditing = ko.observable(false);
+
+            //location
+            self.availableCities = ko.observableArray();
+            self.availablePopularPlaces = ko.observableArray();
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        self.availableCities.removeAll();
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        self.selectedcityName(self.cityName());
+                        console.log(self.selectedcityName());
+                        $('#select-city').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlaces = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedcityName(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        self.selectedpopularPlace(self.popularPlace());
+                        $('#select-popularPlace').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadCitiesB = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        self.availableCities.removeAll();
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        $('#select-city1').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlacesB = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.BcityName(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        $('#select-popularPlace1').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            
+            var sub = self.selectedcityName.subscribe(function (value) {
+                self.loadPopularPlaces();
+            });
+            var sub = self.BcityName.subscribe(function (value) {
+                self.loadPopularPlacesB();
+            });
+            if (data.branches != null) {
+                var branch = $.map(data.branches, function (item) { return new Branch(item); });
+                self.showBranches(branch);
+            }
+            
+            if (data.adTags != null) {
+                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+                self.showTags(tags);
+            }
+
+            
+            
+            //if (data.adImages) {
+            //    var imagesCount = 1;
+            //    var img = $.map(data.adImages, function (item, ia) { return new adImages(item, data.id, imagesCount++); });
+            //    self.showImages(img);
+            //}
+            self.editLocation = function () {
+                self.loadCities();
+                self.isMainBranchEditing(true);
+            }
+            self.updateLongAbout = function (page) {
+                $.ajax({
+                    url: '/api/Company/UpdateLongAbout',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(page),
+                    success: function (data) {
+                        
+                        self.isLongAboutEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update Info", "Error!");
+                    }
+                });
+            }
+            self.updatePage = function (page) {
+                $.ajax({
+                    url: '/api/Company/UpdatePage?tags=' + self.inputTags(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(page),
+                    success: function (data) {
+                        self.showTags.removeAll();
+                        if (data != -1) {
+                            $.each((data), function (i, item) { self.showTags.push(item.name) });
+                        }
+                        self.isPageEditing(false);
+                        self.isLongAboutEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update Info", "Error!");
+                    }
+                });
+            }
+            self.updateMainBranchLocation = function (page) {
+                if (!self.selectedcityName()) {
+                    toastr.info("Please provide city", "Wait");
+                    return;
+                }
+                if (!self.selectedpopularPlace()) {
+                    toastr.info("Please enter a famous place near this branch");
+                    return;
+                }
+                if (!self.contactNo1()) {
+                    if (!self.contactNo2()) {
+                        toastr.info("Please provide atleast one contact number");
+                        return;
+                    }
+                }
+                $.ajax({
+                    url: '/api/Company/HeadOfficeLocation?city=' + self.selectedcityName() + '&popularPlace=' + self.selectedpopularPlace() + '&exectLocation=' + self.exectLocation(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data:  ko.toJSON(page),
+                    success: function (data) {
+                        self.isMainBranchEditing(false);
+                        self.cityName(self.selectedcityName());
+                        self.popularPlace(self.selectedpopularPlace());
+                    },
+                    error: function () {
+                        toastr.error("failed to update Info", "Error!");
+                    }
+                });
+            }
+            self.saveAd = function (ad) {
+                $.ajax({
+                    url: '/api/User/SaveAd/' + ad.id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.savedCount(data.count);
+                        if (data.text == "Deleted") {
+                            self.isSaved(false);
+
+                        } else {
+                            self.isSaved(true);
+                        }
+                    },
+                    error: function () {
+                        toastr.error("failed to Save Ad. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+            self.editPage = function (id) {
+                self.isPageEditing(true);
+                $('#select-tag').selectize({
+                    valueField: 'name',
+                    labelField: 'name',
+                    searchField: 'name',
+                   // options: [],
+                    maxItems: 6,
+                    create: true,
+                    render: {
+                        option: function (item, escape) {
+                            return '<div>' +
+                                '<span class="title">' +
+                                    '<span class="name">' + escape(item.name) + '</span>' +
+
+                                '</span>' +
+                                '<span class="description">' + escape(item.info) + '</span>' +
+                                '<ul class="meta">' +
+                                    '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                    '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                                '</ul>' +
+                            '</div>';
+                        }
+                    },
+                    load: function (query, callback) {
+                        if (!query.length) return callback();
+                        $.ajax({
+                            url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                            type: 'POST',
+                            error: function () {
+                                callback();
+                            },
+                            success: function (res) {
+                                callback(res.slice(0, 10));
+                            }
+                        });
+                    }
+                });
+                var selectize_tags = $("#select-tag")[0].selectize;
+                $.each((self.showTags()), function (i, item) {
+                    selectize_tags.addOption({
+                        text: item,
+                        value: item,
+                        name: item,
+                    });
+                    selectize_tags.addItem(item);
+                });
+                //selectize_tags.addOption({
+                //    text: 'Technology',
+                //    value: 'technology',
+                //    name: 'technology',
+                //});
+                //selectize_tags.addItem('technology')
+            }
+            self.deletePage = function (id) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Ad!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Electronic/DeleteAd/' + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            swal("Deleted!", "Your Ad has been deleted.", "success");
+                            window.location.href = "/User/Index/" + self.loginUserId;
+                        },
+                        error: function () {
+                            toastr.error("failed to delete Ad. Please refresh page and try again", "Error!");
+                        }
+                    });
+                });
+            }
+            self.deleteComment = function (id) {
+                $.ajax({
+                    url: '/api/Comment/DeleteComment/' + id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    // data: ko.toJSON(id),
+                    success: function (data) {
+                        self.showComment.remove(function (item) {
+                            return item.id == id;
+                        });
+                    },
+                    error: function () {
+                        toastr.error("failed to delete comment", "Error!");
+                    }
+                });
+            }
+
+            self.checkEnter = function (d, e) {
+                if (e.keyCode == 13) {
+                    self.addcomment();
+                }
+            }
+            //self.commentsHub.client.appendCommentToMe = function (com) {
+            //    self.showComment.push(new comment(com));
+            //    self.newComment('');
+            //}
+            self.newComment = ko.observable();
+            self.addcomment = function () {
+                if (self.loginUserId) {
+                    var com = new comment();
+                    com.adId = self.id;
+                    com.description(self.newComment());
+                    com.description(com.description().slice(0, -1));
+                    if (com.description() != null && com.description().trim() != "") {
+                        com.time = new Date($.now());
+                        com.description = com.description().slice(0, -1);
+                        //self.commentsHub.server.addComment(com).fail(function (err) { toastr.error("failed to post comment ", "Error!"); });
+                        $.ajax({
+                            url: '/api/Comment/PostComment',
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            data: ko.toJSON(com),
+                            success: function (data) {
+                                self.showComment.push(new comment(data));
+                                self.newComment('');
+                            },
+                            error: function (jqXHR, status, thrownError) {
+                                toastr.error("failed to post comment", "Error");
+                            }
+                        });
+                    }
+                } else {
+                    //show modal
+                    toastr.info("You must be login to post comment", "Oops!");
+                }
+            }
+
+        }
+        function Report() {
+            var self = this;
+            self.selectedVal = ko.observable("spam");
+            self.reportText = "";
+            self.report = function () {
+                if ($("#loginUserId").val()) {
+                    var data = {
+                        adId: myAdId,
+                        details: self.reportText,
+                        type: self.selectedVal(),
+                    };
+                    $.ajax({
+                        url: '/api/Electronic/reportAd',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(data),
+                        success: function (data) {
+                            $("#report").modal('hide');
+                            toastr.info("Our team can contact you for details", "Thanks for feedback!");
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                            $("#report").modal('hide');
+                        }
+                    })
+                } else {
+                    loginBtn();
+                }
+            }
+        }
+        function viewModel() {
+            var self = this;
+            SearchingLocation();
+           // treeModel();
+            AccountViewModel();
+            ChatViewModel();
+            Report();
+            //initillizing hub
+           // self.commentsHub = $.connection.adComments;
+            self.showPage = ko.observable();
+            self.error = ko.observable();
+            self.loadPage = function () {
+                var companyId = myCompanyId;
+                url_address = '/api/Company/GetPage/' + companyId;
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'GET'
+                })
+                .done(function (data) {
+                    var mappedads = $.map(data, function (item) { return new CompanyPage(item); });
+                    $("#FirstLoading").css({ "display": "block" });
+                    self.showPage(mappedads);
+                    loadAdmin();
+                })
+                .fail(function () {
+                    self.error("This Business Page has been deleted or is unavailable.");
+                });
+            }
+
+            self.loadPage();
+            return self;
+        }
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        //function Answer(text) {
+        //    var self = this;
+        //    self.text = text;
+        //    self.points = ko.observable(0);
+        //    self.points.subscribe(function () {
+        //        console.log(self.points());
+        //    })
+        //}
+
+        //function SurveyViewModel() {
+        //    var answers = ['a', 'b'];
+        //    this.answers = $.map(answers, function (text) { return new Answer(text) });
+        //}
+        
+       
+
+        ko.bindingHandlers.starRating = {
+            init: function (element, valueAccessor) {
+               
+                
+                // Handle mouse events on the stars
+                if ($(element).hasClass("disableRating")) {
+                    $(element).addClass("starRatingDisabled");
+                    for (var i = 0; i < 5; i++)
+                        $("<span>").appendTo(element);
+                } else {
+                    $(element).addClass("starRating");
+                    for (var i = 0; i < 5; i++)
+                        $("<span>").appendTo(element);
+                    $("span", element).each(function (index) {
+                        $(this).hover(
+                            function () { $(this).prevAll().add(this).addClass("hoverChosen") },
+                            function () { $(this).prevAll().add(this).removeClass("hoverChosen") }
+                        ).click(function () {
+                            var observable = valueAccessor();  // Get the associated observable
+                            observable(index + 1);               // Write the new rating to it
+                        });
+                    });
+                }
+            },
+            update: function (element, valueAccessor) {
+                // Give the first x stars the "chosen" class, where x <= rating
+                 var observable = valueAccessor();
+              //  var observable = ko.observable(2);
+                $("span", element).each(function (index) {
+                    $(this).toggleClass("chosen", index < observable());
+                });
+            }
+        };
+
+
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        Selectize.define('inputMaxlength', function (options) {
+            var self = this;
+            this.setup = (function () {
+                var original = self.setup;
+                return function () {
+                    original.apply(this, arguments);
+                    this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                };
+            })();
+        });
+        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+            init: function (element, valueAccessor) {
+                //initialize icheck to the element
+                $(element).iCheck({
+                    radioClass: 'iradio_square-green'
+                });
+                $(element).on('ifChecked', function (event) {
+                    var observable = valueAccessor();
+                    observable.checked(event.target.defaultValue); //assigning selected value
+                });
+            }
+        };
+        //ko.bindingHandlers.slick = (function () {
+        //    var createImageDiv = function (imgUrl) {
+
+        //        $a = $('<a>');
+        //        $a.attr('href', imgUrl);
+        //        //$a.attr('data-gallery', '#blueimp-gallery');
+        //        $a.attr('target', '_blank');
+        //        $div = $('<div>');
+        //        $image = $('<img>');
+        //        $image.attr('src', imgUrl);
+        //        // $div.append($image);
+        //        $a.append($image);
+        //        $div.append($a);
+        //        return $div;
+        //    };
+
+        //    // Initializes the carousel
+        //    var init = function (element, valueAccessor, allBindingsAccessor) {
+        //        // Clears the div
+        //        $(element).empty();
+        //        // Creates the inner divs with images
+        //        var images = ko.unwrap(valueAccessor());
+        //        if (images) {
+        //            images.forEach(function (imgUrl) {
+        //                $(element).append(createImageDiv(imgUrl));
+        //            });
+        //        }
+
+        //        // try to recover slickOptions
+        //        var options = allBindingsAccessor().slickOptions || {};
+
+        //        // Initialize slick on the div, with provided options
+        //        $(element).slick(options);
+
+        //        //handle disposal, if KO removes the element
+        //        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+        //            $(element).slick('unslick');
+        //        });
+
+        //        // check if there is slickIndex
+        //        var slickIndex = allBindingsAccessor().slickIndex;
+        //        if (slickIndex) {
+        //            $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+        //        }
+        //        // If it's obervable, subscribe to its changes
+        //        if (ko.isObservable(slickIndex)) {
+        //            slickIndex.subscribe(function (idx) {
+        //                $(element).slick('slickGoTo', idx);
+        //            });
+        //        }
+        //        // It if's writable observable, update when slick current index changes
+        //        if (ko.isWritableObservable(slickIndex)) {
+        //            $(element).on('afterChange', function (evt, slick, pos) {
+        //                slickIndex(pos);
+        //            })
+        //        }
+
+        //        // Check if the array of images is an observable array
+        //        var imagesArray = valueAccessor();
+        //        // If it's observable array, subscribe to changes
+        //        if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+        //            imagesArray.subscribe(function (changes) {
+        //                console.log(changes);
+        //                if (changes) {
+        //                    changes.forEach(function (change) {
+        //                        if (change.status == 'added') {
+        //                            // Add new img div at index
+        //                            var imgDiv = createImageDiv(change.value)[0];
+        //                            var index = change.index;
+        //                            var slideCount = $(element).slick('getSlick').slideCount;
+        //                            // if the index is out of range (which can happen
+        //                            // with push, and splice), include at the end
+        //                            var addBefore = true;
+        //                            if (index >= slideCount) {
+        //                                index = slideCount - 1;
+        //                                addBefore = false;
+        //                            }
+        //                            $(element).slick('slickAdd', imgDiv, index, addBefore);
+        //                        } else if (change.status == 'deleted') {
+        //                            // delete img div at index
+        //                            $(element).slick('slickRemove', change.index);
+        //                        }
+        //                    });
+        //                }
+        //            }, null, 'arrayChange');
+        //        } // if observable array
+        //    }
+
+        //    //update the control when the view model changes
+        //    var update = function (element, valueAccessor) {
+        //        var images = ko.unwrap(valueAccessor());
+        //        // Do something to update the content
+        //        console.log('update');
+        //    }
+
+        //    return { init: init, update: update };
+        //})();
+        function chooseFile() {
+            $("#fileInput").click();
+        }
+        function newImage() {
+            $("#fileInput").closest("form").submit();
+        }
+        $(function () {
+            //$('.summernote').summernote();
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel());
+            $.connection.hub.start().done();
+        });
+
+    </script>
+}

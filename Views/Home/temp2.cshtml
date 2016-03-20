@@ -1,0 +1,101 @@
+﻿<div id="vm1">
+    <button data-toggle="modal" data-target="#report">click kro</button>
+
+    <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <i class="fa fa-flag modal-icon"></i>
+                    <h4 class="modal-title">Report Ad</h4>
+                    <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 ">
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind=" checked: selectedVal " name="report" value="duplicate" required /> Ad is duplicate
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
+                                </label>
+                            </div>
+                        </div>
+                        <label>Addational details:</label>
+                        <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {}"></textarea>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                    <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="vm2">
+    <div data-bind="text:sample"></div>
+</div>
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Content/plugins/jsTree")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+@Scripts.Render("~/plugins/timeago")
+@Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/knockout")
+@Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/jsTree")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/plugins/sweetAlert")
+<script src="~/Scripts/_Comments.js"></script>
+    <script>
+        function VM1() {
+            var self = this;
+            self.selectedVal = "spam";
+            self.report = function () {
+                alert(self.selectedVal);
+            }
+        }
+        function VM2() {
+            var self = this;
+            self.sample = "irfan watoo";
+        }
+        $(function () {
+            ko.applyBindings(new VM1, document.getElementById('vm1'));
+           ko.applyBindings(new VM2, document.getElementById('vm2'));
+           
+        });
+
+    </script>
+}
+
+
+
+

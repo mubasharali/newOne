@@ -1,0 +1,83 @@
+﻿
+
+<div class="form-group">
+    <label class="control-label">Title <span class="req">*</span></label>
+    <div class="">
+        <input type="text" class="form-control" name="title" value="@Model.title" />
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label">Description<span class="req">*</span></label>
+    <div class="">
+        <textarea class="form-control msgTextArea"  data-bind="jqAutoresize: {}" rows="4" name="description">@Model.description</textarea>
+    </div>
+</div>
+
+    <div class="control-group">
+        <label class="control-label " for="select-repo">Tags <br /><small class="text-navy">optional</small></label>
+        <div class="">
+            <input id="select-tag" name="tags" class="repositories" placeholder="Pick tags..." />
+        </div>
+    </div>
+
+
+
+<hr />
+
+<div class="row">
+    <h2>Location details</h2>
+    <div class="form-group">
+        <label class="control-label col-md-2">City</label>
+        <div class="col-md-10">
+            <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
+
+        </div>
+    </div>
+    <div data-bind="with:selectedCity">
+        <div class="form-group">
+            <label class="control-label col-md-2">Famous Place</label>
+            <div class="col-md-10">
+                <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options: $parent.availablePopularPlaces,
+                       value: $parent.selectedPopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div data-bind="with:selectedPopularPlace">
+                <div class="form-group">
+                    <label class="control-label col-md-2">Exect location</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" name="exectLocation" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div data-bind="visible:showCompanies().length > 0">
+    <hr />
+    <h2>Choose</h2><br />
+    <div class="form-group">
+        <label class="control-label col-md-2">Post ad using</label>
+        <div class="col-md-10">
+            <div data-bind="foreach:showCompanies">
+                <div class="radio">
+                    <label>
+                        <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: $parent.postAdUsing },value:$data,attr:{id:$data}" name="postAdUsing" required /> <span data-bind="text:$data"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="radio">
+                <label>
+                    <input class="radio i-checks" type="radio" id="on" data-bind="iCheck: { checked: postAdUsing }" name="postAdUsing" required /> Using My Individual Account
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

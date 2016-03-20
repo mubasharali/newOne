@@ -1,0 +1,273 @@
+﻿@{
+    ViewBag.Title = "Buy and sell " + ViewBag.subcategory;
+}
+
+
+
+<style>
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+        /apply max-padding or default image;
+    }
+
+    .carouselContainer img {
+        // height: 350px;
+        width: 250px;
+        height: 250px;
+    }
+
+    .showAds .ibox {
+        height: 420px;
+    }
+</style>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <input type="hidden" id="category" value="@ViewBag.category" />
+    <input id="subcategory" type="hidden" value="@ViewBag.subcategory" />
+    <div class="row">
+        <div class="col-sm-4 col-md-3 col-lg-3">
+            @*<div class="">
+                
+                <div class="ibox-title"><h5> search by tags</h5></div>
+                <div class="ibox-content"><input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." /></div>
+                <div class="ibox-title"><h5> search by Price</h5></div>
+                <div id="ionrange_1"></div>
+                @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
+            </div>*@
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Search Filters</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    @if (ViewBag.category == "Animals")
+                    {
+                        <h5>Search by Category</h5>
+                        <select class="form-control" data-bind="options: availableCategories,
+                       value: selectedCategory,
+                       optionsCaption: 'Select category'"></select>
+                        <hr />
+                    }
+                    <h5> search by tags</h5>
+                    <input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." />
+                    <hr />
+                    <h5> search by Price</h5>
+                    <div id="ionrange_1"></div>
+
+                </div>
+            </div>
+            @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
+        </div>
+        <div class="col-sm-8 col-md-9 col-lg-7">
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                @if (ViewBag.subcategory == "commerical-vehicles")
+                {
+                                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Vehicles&subcategory=commerical-vehicles')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell your Commerical Vehicle</a>
+                }
+                else if (ViewBag.subcategory == "vehicles-for-rent")
+                {
+                                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Vehicles&subcategory=vehicles-for-rent')}" data-style="expand-left" class=" pull-right btn btn-danger">Add your vehicle for rent</a>
+                }
+                else if (ViewBag.subcategory == "other-vehicles")
+                {
+                                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Vehicles&subcategory=other-vehicles')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell your Vehicle</a>
+                }
+                else if (ViewBag.subcategory == "spare-parts")
+                {
+                                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Vehicles&subcategory=spare-parts')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell Spare parts</a>
+                }
+                else if (ViewBag.subcategory == "TV-DVD-Multimedia")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=TV-DVD-Multimedia')}" data-style="expand-left" class="pull-right btn btn-danger">Sell TV-DVD-Multimedia</a>
+                }
+                else if (ViewBag.subcategory == "Games")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=Games')}" data-style="expand-left" class="pull-right btn btn-danger">Sell Games</a>
+                }
+                else if (ViewBag.subcategory == "Home-Appliances")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=Home-Appliances')}" data-style="expand-left" class="pull-right btn btn-danger">Sell Home Appliances</a>
+                }
+                else if (ViewBag.subcategory == "Other-Electronics")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Electronics&subcategory=Other-Electronics')}" data-style="expand-left" class="pull-right btn btn-danger">Sell Electronics</a>
+                }
+                else if (ViewBag.subcategory == "Animals")
+                {
+                    <a data-bind="click:function(){ return createAd('/Home/Create?category=Animals')}" data-style="expand-left" class="pull-right btn btn-danger">Post your ad</a>
+                }
+                <span data-bind="text:showAds().length"> </span> results found<br />
+                @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Laptop/Computer Accessories </span> <span data-bind="visible:!laptopAccessories()">Laptops/Computers</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
+                    <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
+
+                    <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
+                        with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+                    </span>
+                    <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                        <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                        <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+                    </span>
+                    <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>*@
+                <div data-bind="foreach:showAds">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 hidden-md hidden-sm hidden-xs"> </div>
+    </div>
+</div>
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+   <link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/plugins/ionRange")
+
+    <script src="~/Scripts/app/SearchAds.js"></script>
+    <script src="~/Scripts/app/slick-knockout-binding.js"></script>
+    <script src="~/Scripts/app/CreateAlert.js"></script>
+    <script src="~/Scripts/app/_AdListView.js"></script>
+    <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+<script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    <script>
+
+        function viewModel() {
+            SearchingLocation();
+            CreateAlert();
+            TreeViewModel(); //in searchads.js
+            RefreshSearch();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $("#ionrange_1").ionRangeSlider({
+            min: 0,
+            max: 50000,
+            type: 'double',
+            prefix: "Rs",
+            maxPostfix: "+",
+            prettify: false,
+            hasGrid: true
+        });
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            var length = $(window).width();
+            if (length < 786) { //770
+                $(".collapse-link").click();
+            }
+            ko.applyBindings(new viewModel);
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

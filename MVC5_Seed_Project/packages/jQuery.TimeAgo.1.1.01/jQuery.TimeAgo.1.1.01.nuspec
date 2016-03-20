@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>jQuery.TimeAgo</id>
+    <version>1.1.01</version>
+    <title>jQuery TimeAgo</title>
+    <authors>Ryan McGeary</authors>
+    <owners>Ryan McGeary</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://timeago.yarp.com/</projectUrl>
+    <iconUrl>http://timeago.yarp.com/clock.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Timeago is a jQuery plugin that makes it easy to support automatically updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").</description>
+    <releaseNotes>Added update function</releaseNotes>
+    <language>en-US</language>
+    <tags>jQuery timeago plugin</tags>
+    <dependencies>
+      <dependency id="jQuery" version="1.2.3" />
+    </dependencies>
+  </metadata>
+</package>

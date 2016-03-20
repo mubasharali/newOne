@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="815ee3eabea747c5bd662a6f75d487f4" Name="Diagram1" ZoomLevel="94">
+        <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.Ad" Width="1.5" PointX="68.25" PointY="46.625" />
+        <EntityTypeShape EntityType="Model.AdImage" Width="1.5" PointX="71.375" PointY="45.875" />
+        <EntityTypeShape EntityType="Model.AdsLocation" Width="1.5" PointX="55.5" PointY="59.75" />
+        <EntityTypeShape EntityType="Model.AdTag" Width="1.5" PointX="63" PointY="49.625" />
+        <EntityTypeShape EntityType="Model.AdView" Width="1.5" PointX="61.5" PointY="44.875" />
+        <EntityTypeShape EntityType="Model.Answer" Width="1.5" PointX="8" PointY="120.375" />
+        <EntityTypeShape EntityType="Model.AnswerReply" Width="1.5" PointX="5.75" PointY="124.75" />
+        <EntityTypeShape EntityType="Model.AnswerReplyVote" Width="1.5" PointX="8.75" PointY="125" />
+        <EntityTypeShape EntityType="Model.AnswerVote" Width="1.5" PointX="11" PointY="120.75" />
+        <EntityTypeShape EntityType="Model.AspNetRole" Width="1.5" PointX="0.75" PointY="49.5" />
+        <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="60.125" />
+        <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="40" />
+        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="6" PointY="44.375" />
+        <EntityTypeShape EntityType="Model.Bid" Width="1.5" PointX="62.5" PointY="51.75" />
+        <EntityTypeShape EntityType="Model.CarAd" Width="1.5" PointX="72.75" PointY="60.125" />
+        <EntityTypeShape EntityType="Model.CarBrand" Width="1.5" PointX="77.75" PointY="60.125" />
+        <EntityTypeShape EntityType="Model.CarModel" Width="1.5" PointX="75.5" PointY="60" />
+        <EntityTypeShape EntityType="Model.Chat" Width="1.5" PointX="4.5" PointY="35.875" />
+        <EntityTypeShape EntityType="Model.Comment" Width="1.5" PointX="62" PointY="57.125" />
+        <EntityTypeShape EntityType="Model.CommentReply" Width="1.5" PointX="62.375" PointY="61.25" />
+        <EntityTypeShape EntityType="Model.CommentReplyVote" Width="1.5" PointX="58.875" PointY="61.375" />
+        <EntityTypeShape EntityType="Model.CommentVote" Width="1.5" PointX="58.75" PointY="57.375" />
+        <EntityTypeShape EntityType="Model.FollowQuestion" Width="1.5" PointX="2.875" PointY="112.375" />
+        <EntityTypeShape EntityType="Model.FollowTag" Width="1.5" PointX="29.875" PointY="71.125" />
+        <EntityTypeShape EntityType="Model.Friend" Width="1.5" PointX="0.875" PointY="53" />
+        <EntityTypeShape EntityType="Model.LaptopAd" Width="1.5" PointX="73.375" PointY="50.75" />
+        <EntityTypeShape EntityType="Model.LaptopBrand" Width="1.5" PointX="79.25" PointY="50.875" />
+        <EntityTypeShape EntityType="Model.LaptopModel" Width="1.5" PointX="76.25" PointY="50.625" />
+        <EntityTypeShape EntityType="Model.Mobile" Width="1.5" PointX="81.125" PointY="47.625" />
+        <EntityTypeShape EntityType="Model.MobileAd" Width="1.5" PointX="75.375" PointY="47.5" />
+        <EntityTypeShape EntityType="Model.MobileModel" Width="1.5" PointX="78.375" PointY="46.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.popularPlace" Width="1.5" PointX="23.375" PointY="58.5" />
+        <EntityTypeShape EntityType="Model.Question" Width="1.5" PointX="7.75" PointY="114.75" />
+        <EntityTypeShape EntityType="Model.QuestionReply" Width="1.5" PointX="13.625" PointY="116.25" />
+        <EntityTypeShape EntityType="Model.QuestionReplyVote" Width="1.5" PointX="8.25" PointY="111" />
+        <EntityTypeShape EntityType="Model.QuestionTag" Width="1.5" PointX="11.375" PointY="109" />
+        <EntityTypeShape EntityType="Model.QuestionView" Width="1.5" PointX="1.125" PointY="114.875" />
+        <EntityTypeShape EntityType="Model.QuestionVote" Width="1.5" PointX="11.625" PointY="113.375" />
+        <EntityTypeShape EntityType="Model.Reported" Width="1.5" PointX="64.25" PointY="46" />
+        <EntityTypeShape EntityType="Model.ReportedQuestion" Width="1.5" PointX="2.25" PointY="119.875" />
+        <EntityTypeShape EntityType="Model.ReportedTag" Width="1.5" PointX="39.625" PointY="69.375" />
+        <EntityTypeShape EntityType="Model.Tag" Width="1.5" PointX="34.25" PointY="73.375" />
+        <AssociationConnector Association="Model.FK_Ad_ToTable" />
+        <AssociationConnector Association="Model.FK_AdImage_ToTable" />
+        <AssociationConnector Association="Model.FK_AdsLocation_ToTable" />
+        <AssociationConnector Association="Model.FK_AdTag_ToTable" />
+        <AssociationConnector Association="Model.FK_AdView_ToTable" />
+        <AssociationConnector Association="Model.FK_Bid_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable" />
+        <AssociationConnector Association="Model.FK_Comment_ToTable" />
+        <AssociationConnector Association="Model.FK_LaptopAds_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileAds_ToTable" />
+        <AssociationConnector Association="Model.FK_Reported_ToTable" />
+        <AssociationConnector Association="Model.FK_AdsLocation_ToTable_2" />
+        <AssociationConnector Association="Model.FK_AdTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AdView_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Answer_ToTable" />
+        <AssociationConnector Association="Model.FK_Answer_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AnswerReply_ToTable" />
+        <AssociationConnector Association="Model.FK_AnswerVote_ToTable" />
+        <AssociationConnector Association="Model.FK_AnswerReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AnswerReplyVote_ToTable" />
+        <AssociationConnector Association="Model.FK_AnswerReplyVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_AnswerVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="Model.FK_Bid_ToTable" />
+        <AssociationConnector Association="Model.FK_Chat_ToTable" />
+        <AssociationConnector Association="Model.FK_Chat_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Comment_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CommentReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CommentReplyVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CommentVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_FollowTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Friend_ToTable" />
+        <AssociationConnector Association="Model.FK_Friend_ToTable_1" />
+        <AssociationConnector Association="Model.FK_LaptopBrand_ToTable" />
+        <AssociationConnector Association="Model.FK_LaptopModel_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Mobile_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileModel_ToTable_1" />
+        <AssociationConnector Association="Model.FK_popularPlace_ToTable_1" />
+        <AssociationConnector Association="Model.FK_popularPlace_ToTable_2" />
+        <AssociationConnector Association="Model.FK_Question_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionReply_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionReplyVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionView_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionVote_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Reported_ToTable_1" />
+        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable_1" />
+        <AssociationConnector Association="Model.FK_ReportedTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_Tag_ToTable" />
+        <AssociationConnector Association="Model.FK_Tag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CarAd_ToTable_1" />
+        <AssociationConnector Association="Model.FK_CarModels_ToTable" />
+        <AssociationConnector Association="Model.FK_CommentReply_ToTable" />
+        <AssociationConnector Association="Model.FK_CommentVote_ToTable" />
+        <AssociationConnector Association="Model.FK_CommentReplyVote_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_FollowTag_ToTable" />
+        <AssociationConnector Association="Model.FK_LaptopAds_ToTable_1" />
+        <AssociationConnector Association="Model.FK_LaptopModel_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileModel_ToTable" />
+        <AssociationConnector Association="Model.FK_MobileAds_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionReply_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionTag_ToTable_1" />
+        <AssociationConnector Association="Model.FK_QuestionView_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionVote_ToTable" />
+        <AssociationConnector Association="Model.FK_ReportedQuestion_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionReplyVote_ToTable" />
+        <AssociationConnector Association="Model.FK_QuestionTag_ToTable" />
+        <AssociationConnector Association="Model.FK_ReportedTag_ToTable" />
+        <AssociationConnector Association="Model.AspNetUserRoles" />
+        <EntityTypeShape EntityType="Model.City" Width="1.5" PointX="26.875" PointY="58.375" />
+        <AssociationConnector Association="Model.FK_AdsLocation_ToTable_1" />
+        <AssociationConnector Association="Model.FK_City_ToTable" />
+        <AssociationConnector Association="Model.FK_City_ToTable_1" />
+        <AssociationConnector Association="Model.FK_popularPlace_ToTable" />
+        <EntityTypeShape EntityType="Model.SaveAd" Width="1.5" PointX="61.5" PointY="47" />
+        <AssociationConnector Association="Model.FK_SaveAd_ToTable" />
+        <AssociationConnector Association="Model.FK_SaveAd_ToTable_1" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

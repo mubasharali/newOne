@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "landingPage";
+}
+<h2>Landing page</h2>
+
+<a href="/Account/MyAccount">My Account</a>
+
+
+        @section Styles{
+            @Styles.Render("~/plugins/toastrStyles")
+        }
+        @section Scripts{
+            @Scripts.Render("~/plugins/toastr")
+            @Scripts.Render("~/plugins/timeago")
+            @Scripts.Render("~/plugins/autosize")
+            @Scripts.Render("~/plugins/knockout")
+
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+            <script>
+                
+                function getTimeAgo(varDate) {
+                    if (varDate) {
+                        return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+                    }
+                    else {
+                        return '';
+                    }
+                }
+                ko.bindingHandlers.scrollToEnd = {
+                    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        ko.utils.unwrapObservable(valueAccessor());
+                        var scroller = element.previousSibling.previousSibling;
+                        scroller.scrollTop = scroller.scrollHeight;
+                    }
+                };
+                ko.virtualElements.allowedBindings.scrollToEnd = true;
+                $(function () {
+                    AccountViewModel();
+                    var model = new ChatViewModel();
+                   // ko.applyBindings(new AccountViewModel(), document.getElementById("AccountViewModel"));
+                   // ko.applyBindings(model, document.getElementById("chatViewModel"));
+
+                    ko.applyBindings(model);
+                    //var conn = $.connection.chatHub;
+                    $.connection.hub.start().done(function () {
+                        
+                    });
+                        //.done(function () {
+                        //model.init();
+                    //})
+                });
+            </script>
+        }

@@ -1,0 +1,48 @@
+﻿<div id="stuff" data-bind="foreach: stuff">
+    <div data-bind="text: $data"></div>
+</div>
+<!-- ko scrollToEnd: stuff --><!-- /ko -->
+<input type="text" data-bind="value:newMsg" />
+<button data-bind="click:addMsg">add</button>
+<style>
+    #stuff {
+        height: 100px;
+        border: 1px solid black;
+        overflow: scroll;
+    }
+</style>
+@section Scripts{
+@Scripts.Render("~/plugins/knockout")
+<script>
+    function ViewModel(id, name) {
+        var self = this;
+        self.stuff = ko.observableArray([]);
+        self.onlineUsers = ko.observableArray([]);
+        self.newMsg = ko.observable();
+        self.addMsg = function () {
+            self.stuff.push(self.newMsg());
+        }
+    }
+    var vm = new ViewModel();
+
+    ko.bindingHandlers.scrollToEnd = {
+        update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+            ko.utils.unwrapObservable(valueAccessor());
+            var scroller = element.previousSibling.previousSibling;
+            scroller.scrollTop = scroller.scrollHeight;
+        }
+    };
+    ko.virtualElements.allowedBindings.scrollToEnd = true;
+
+    ko.applyBindings(vm);
+
+
+    //setInterval(newDataCometh, 1000);
+
+    //function newDataCometh() {
+    //    var newData = (Math.random() * 100000 + 10000).toString(36); // just random gibberish
+    //    vm.stuff.push(newData);
+    //}
+</script>
+
+    }

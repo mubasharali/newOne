@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = "Find Jobs|Full time Part time Jobs|Work from home";
+}
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-4 col-md-3 col-lg-3">
+            <div class="">
+                <div id="advanceSearch" class="ibox">
+                    <div class="ibox-title">
+                        <h5>Search Filters</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <h5>Search by Job Category</h5>
+                        <select id="select-category1" class="demo-default" data-bind="options: availableCategories,
+                       value: selectedCategory,
+                       optionsCaption: 'Select category...'"></select>
+                        <hr />
+                        <h5>Search by Skills</h5>
+                        <input id="select-skill" data-bind="value:skills" class="repositories" placeholder="e.g,Data Entry, Web development..." />
+                        <hr />
+                        <h5>Search by tags</h5>
+                        <input id="select-tag" data-bind="value:tags" class="repositories" placeholder="e.g,Home tuition, online jobs..." />
+                        <hr />
+                        <h5>Search by salary</h5>
+                        <div id="ionrange_1"></div>
+                        <hr />
+                        <h5>Search by Gender</h5>
+                        @*<label> <input data-bind="checked:gender" type="checkbox" value="male"> Male </label>
+                        <label> <input data-bind="checked:gender" type="checkbox" value="female"> Female </label>
+                        <label> <input data-bind="checked:gender" type="checkbox" value="does not matter"> Does not matter </label>*@
+                        <div class="">
+                            <label><input class="radio i-checks" type="radio" data-bind="checked:gender " value="m" /> Male</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: gender " value="f" /> Female</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: gender " value="d" /> Does not matter</label>
+                        </div>
+                        <hr />
+                        <h5>Search by Salary type</h5>
+                        <div class="">
+                            <label><input class="radio i-checks" type="radio" data-bind="checked:salaryType " value="h" /> Per hour</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: salaryType " value="d" /> Per day</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked:salaryType " value="m" /> Per month</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: salaryType " value="y" /> Per year</label>
+                        </div>
+                        <hr />
+                        <h5>Search by qualification</h5>
+                        @*<select id="select-qualification" class="demo-default" data-bind="options: availableQualifications,
+                       value: selectedQualification,
+                       optionsCaption: 'Choose category...'"></select>*@
+                        <input id="select-qualification" class="repositories" data-bind="value:selectedQualification" placeholder="e.g, BS Software Engineering" />
+                        <hr />
+                        <h5>Search by Exprience</h5>
+                        <select id="select-exprience" class="demo-default" data-bind="options: availableExpriences,
+                       value: selectedExprience,
+                       optionsCaption: 'Choose exprience...'"></select>
+                        <hr />
+                        <h5>Search by Career Level</h5>
+                        <select id="select-careerLevel" class="demo-default" data-bind="options: careerLevels,
+                       value: selectedCareerLevel,
+                       optionsCaption: 'Choose career level...'"></select>
+                        <hr />
+                        <h5>Search by Job type</h5>
+                        <select id="select-jobtype" class="demo-default" data-bind="options: availableJobTypes,
+                       value: selectedJobType,
+                       optionsCaption: 'Choose Job type...'"></select>
+                        <hr />
+                        <h5>Search by last date to apply</h5>
+                        <input type="date" class="form-control" data-bind="value:selectedLastDateToApply" />
+                        <hr />
+                        <h5>Search by Seats</h5>
+                        <div id="ionrange_seats"></div>
+                        <hr />
+                        <h5>Search by Shift</h5>
+                        <div class="">
+                            <label><input class="radio i-checks" type="radio" data-bind="checked:shift " value="m" /> Morning</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: shift " value="e" /> Evening</label>
+                            <label><input class="radio i-checks" type="radio" data-bind="checked: shift " value="n" /> Not confirmed</label>
+                        </div>
+                    </div>
+                    
+                </div>
+                @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-7 col-lg-7">
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                <span data-bind="visible:loginUserId() != 'Visitor'">
+                    <a data-bind="click:function(){ return createAd('/Jobs/Create')}" data-style="expand-left" class=" pull-right btn btn-danger">Create Job Ad</a>
+                </span>
+                <span data-bind="visible:loginUserId() == 'Visitor'">
+                    <a data-bind="click:function(){ return createAd('/Jobs/Create')}" class="pull-right btn btn-danger">Create Job Ad</a>
+                </span>
+                <span data-bind="text:showAds().length"> </span> results found<br />
+                @*<b>Summary:</b> 
+                <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
+
+                <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
+                    with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+                </span>
+                <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                    <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                    <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+                </span>
+                <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>*@
+                
+                <div data-bind="foreach:showAds">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-2 hidden-sm hidden-xs"></div>
+    </div>
+</div>
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/plugins/ionRange")
+    <script src="~/Scripts/app/JobsSearch.js"></script>
+    <script src="~/Scripts/app/slick-knockout-binding.js"></script>
+    <script src="~/Scripts/app/CreateAlert.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+<script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script>
+        var loadResults;
+
+        function viewModel() {
+            SearchingLocation();
+            CreateAlert();
+            ChatViewModel();
+            AccountViewModel();
+            JobsViewModel();
+            var self = this;
+          //  self.showAds = ko.observableArray();
+          //  RefreshSearch(self);
+            
+             
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        
+        
+      // search by title
+        $('#select-title').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $('#select-skill').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 6,
+            create: true,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Job/SearchSkills?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $(function () {
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (w < 786) {
+              //  $("#advanceSearch").closest('.collapse-link').click();
+                $('.collapse-link').click();
+            }
+
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            ko.applyBindings(new viewModel);
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

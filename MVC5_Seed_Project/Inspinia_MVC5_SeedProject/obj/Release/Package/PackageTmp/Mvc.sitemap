@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Home" controller="Home" action="Index">
+    <mvcSiteMapNode title="Category" controller="Home" action="Index" preservedRouteParameters="category" key="category">
+      <mvcSiteMapNode title="Subcategory" controller="Home" action="Index"  preservedRouteParameters="category,subcategory" key="subcategory">
+        <mvcSiteMapNode title="Lower Category" controller="Home" action="Index"  preservedRouteParameters="category,subcategory,lowercategory" key="lowercategory">
+          <mvcSiteMapNode title="Lower Category1" controller="Home" action="Index"  preservedRouteParameters="category,subcategory,lowercategory,lowercategory1" key="lowercategory1">
+            <mvcSiteMapNode title="Title" controller="Home" action="Index"  preservedRouteParameters="category,subcategory,lowercategory,lowercategory1,id,ignore" key="titleid"/>
+          </mvcSiteMapNode>
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+    <mvcSiteMapNode title="About" controller="Home" action="About"/>
+  </mvcSiteMapNode>
+  
+</mvcSiteMap>

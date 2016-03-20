@@ -1,0 +1,282 @@
+﻿@{
+    ViewBag.Title = "Buy and sell Mobile phones|Buy second hand mobiles";
+}
+
+@*<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Mobiles</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("List", "Index")
+            </li>
+            <li class="active">
+                <strong>Mobiles</strong>
+            </li>
+        </ol>
+    </div>
+</div>*@
+
+@*<style>
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+        /apply max-padding or default image;
+    }
+
+    .carouselContainer img {
+        // height: 350px;
+        width: 250px;
+        height: 250px;
+    }
+    .showAds .ibox {
+        height: 420px;
+    }
+</style>*@
+<div id="search">@ViewBag.search</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <div class="ibox">
+                <div class="ibox-title"><h5>Search Filters</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <label> <input data-bind="checked:mobileAccessories" type="checkbox">Mobile accessories </label>
+                    <hr />
+                    <h5>Search by Brand/Model</h5>
+                    @Html.Partial("/Views/Electronics/_TreeMobile.cshtml")
+                    <hr />
+                    <h5> search by tags</h5>
+                    <input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." />
+                    <hr />
+                    <h5> search by Price</h5>
+                    <div id="ionrange_1"></div>
+                    
+                </div>
+            </div>
+            @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
+        </div>
+        <div class="col-sm-9 col-md-9 col-lg-7">
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                <a data-bind="visible:!mobileAccessories(),click:function(){ return createAd('/MobilesTablets/Create')}" data-style="expand-left" class="pull-right btn btn-danger">Create Mobile Ad</a>
+                <a data-bind="visible:mobileAccessories(),click:function(){ return createAd('/MobilesTablets/CreateMobileAccessoriesAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Create Mobile Accessories Ad</a>
+                <span data-bind="text:showAds().length"> </span> results found<br />
+                <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:mobileAccessories()"> Mobile Accessories </span> <span data-bind="visible:!mobileAccessories()">Mobiles</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
+                <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
+
+                <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
+                    with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+                </span>
+                <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                    <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                    <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+                </span>
+                <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
+                <div @*class="row showAds"*@ data-bind="foreach:showAds">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    @*<div class="col-md-4 col-sm-6 col-lg-3">
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+
+                            <div class="product-imitation">
+                                <div class="carouselContainer">
+                                    <span id="gallery" data-gallery=""
+                                          data-bind="slick: images,
+                slickOptions: { initialSlide:0},
+                slickIndex: imageIndex">
+                                    </span>
+                                    <div data-bind="visible:images().length == 0"><h2><br /><br /><br /><br /> No Images<br /><br /><br /><br /><br /></h2></div>
+                                </div>
+                            </div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    <span data-bind="if:!isBidingAllowed">
+                                        <span data-bind="if:price">
+                                            <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                        </span>
+                                        <span data-bind="if:!price">Price on contact</span>
+                                    </span>
+                                    <span data-bind="if:isBidingAllowed">
+                                        <span data-bind="if:price">
+                                            <span data-bind="if:highestBid() == '-Infinity'">
+                                                <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                            </span>
+                                            <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                            </span>
+                                        </span>
+                                        <span data-bind="if:!price">
+                                            <span data-bind="if:highestBid() == '-Infinity'">
+                                                No Bit yet
+                                            </span>
+                                            <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <small class="text-muted">Mobile</small>
+                                <a href="#" class="product-name" data-bind="text:title,attr:{href:link}"> </a>
+
+
+
+                                <div class="small m-t-xs" data-bind="foreach:showTags">
+                                    <a target="_blank" data-bind="attr:{href:'/Tag/'+name}"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></a>
+                                </div>
+                                <div class="m-t text-righ">
+
+                                    <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                </div>
+            </div>
+        </div>
+        @*<div class="col-lg-3"></div>*@
+    </div>
+</div>
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+<link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
+@Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+@Scripts.Render("~/plugins/ionRange")
+@Scripts.Render("~/plugins/truncate")
+    <script src="~/Scripts/app/MobileTree.js"></script>
+    
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/CreateAlert.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+<script src="~/Scripts/app/GetLoginUserId.js"></script>
+<script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    <script>
+       
+
+        function viewModel() {
+            
+            SearchingLocation();
+            TreeViewModel();
+            RefreshSearch();
+            AccountViewModel();
+            ChatViewModel();
+            CreateAlert();
+            var self = this;
+
+            return self;
+        }
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        
+        
+        $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel);
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (w < 786) {
+                $('.collapse-link').click();
+            }
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

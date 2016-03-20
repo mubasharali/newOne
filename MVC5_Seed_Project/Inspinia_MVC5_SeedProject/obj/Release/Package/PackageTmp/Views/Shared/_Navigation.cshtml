@@ -1,0 +1,149 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" style="display:none" id="side-menu">
+            <li class="nav-header hidden-lg hidden-md hidden-sm">
+                @if (Request.IsAuthenticated) { 
+                <div class="dropdown profile-element">
+                    @*<span> no image extension
+                        <img alt="image" class="img-circle" src="/Images/Users/@User.Identity.GetUserId()" />
+                    </span>*@
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="/User/Index/@User.Identity.GetUserId()">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">@Html.Action("GetUserEmail","Shared")</strong>
+                            </span> <span class="text-muted text-xs block">options <b class="caret"></b></span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li>
+                            <a href="/Search">Search Ads</a>
+                        </li>
+                        <li>
+                            <a href="/CreateAd">Create Ad</a>
+                        </li>
+                        <li>
+                            <a href="/Company/Create">Create Page</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="/User/Index/@User.Identity.GetUserId()">Profile</a>
+                        </li>
+                        <li>
+                            <a href="/User/Profile/@User.Identity.GetUserId()">Edit Profile</a>
+                        </li>
+                        <li>
+                            <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                        </li>
+                    </ul>
+                </div>
+                }
+                else
+                {
+                    <div class="dropdown profile-element">
+                        <a class="btn" data-bind="click:loginBtn" >Login</a>
+                    </div>
+                }
+                @*<div class="logo-element">
+                    ABC
+                </div>*@
+            </li>
+            <li class="@Html.IsSelected(controller: "MobilesTablets")">
+                <a href="@Url.Action("Index", "MobilesTablets")"><i class="fa fa-mobile fa-2x"></i> <span class="nav-label">Mobiles, Tablets</span> </a>
+            </li>
+            <li @*class="@Html.IsSelected(controller: "Electronics")"*@ >
+                <a href="@Url.Action("Index", "Electronics")"><i class="fa fa-tv"></i> <span class="nav-label">Electronics, Appliances</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "ComputersLaptops")"><a href="@Url.Action("ComputersLaptops", "Electronics")"><i class="fa fa-laptop"></i>Computers </a></li>
+                    <li class="@Html.IsSelected(action: "Camera")"><a href="@Url.Action("Cameras", "Electronics")"><i class="fa fa-camera"></i>Camera</a></li>
+                    <li class="@Html.IsSelected(action: "tv")"><a href="@Url.Action("tv", "Electronics")"><i class="fa fa-play"></i>TV-DVD-Multimedia</a></li>
+                    <li class="@Html.IsSelected(action: "games")"><a href="@Url.Action("games", "Electronics")"><i class="fa fa-gamepad"></i>Games</a></li>
+                    <li class="@Html.IsSelected(action: "homeappliances")"><a href="@Url.Action("homeappliances", "Electronics")"><i class="fa fa-television"></i>Home Appliances</a></li>
+                    <li class="@Html.IsSelected(action: "otherelectronics")"><a href="@Url.Action("otherelectronics", "Electronics")"><i class="fa fa-bolt"></i>other electronics</a></li>
+                </ul>
+            </li>
+            @*<li class="@Html.IsSelected(controller: "Business")">
+                <a href="@Url.Action("Index", "Business")"><i class="fa fa-briefcase"></i> <span class="nav-label">Business</span> </a> contains tags of softwares and other technolgy products
+            </li>*@
+            
+            <li class="@Html.IsSelected(controller: "Vehicles")">
+                <a href="@Url.Action("Index", "Vehicles")"><i class="fa fa-car"></i> <span class="nav-label">Vehicles</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Cars","Vehicles")"><i class="fa fa-car"></i> Cars</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Bikes", "Vehicles")"><i class="fa fa-motorcycle"></i>Bikes</a></li>
+                    <li class="@Html.IsSelected(action: "CommericalVehicles")"><a href="@Url.Action("CommericalVehicles", "Vehicles")"><i class="fa fa-truck"></i>Commerical Vehicles</a></li>
+                    <li class="@Html.IsSelected(action: "VehiclesForRent")"><a href="@Url.Action("VehiclesForRent", "Vehicles")"><i class="fa fa-money"></i>Vehicles For Rent</a></li>
+                    <li class="@Html.IsSelected(action: "OtherVehicles")"><a href="@Url.Action("OtherVehicles", "Vehicles")"><i class="fa fa-ship"></i>Other Vehicles</a></li>
+                    <li class="@Html.IsSelected(action: "SpareParts")"><a href="@Url.Action("SpareParts", "Vehicles")"><i class="fa fa-sitemap"></i>Spare parts</a></li>
+                </ul>
+            </li>
+            
+            <li class="@Html.IsSelected(controller: "Jobs")">
+                <a href="@Url.Action("Index", "Jobs")"><i class="fa fa-suitcase"></i> <span class="nav-label">Jobs</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "RealEstate")">
+                <a href="@Url.Action("Index", "RealEstate")"><i class="fa fa-home"></i> <span class="nav-label">RealEstate</span> </a>
+            </li>
+            <li class="@Html.IsSelected(action: "Pets-Animals")">
+                <a href="@Url.Action("Animals", "Vehicles")"><i class="fa fa-paw"></i> <span class="nav-label">Pets & Animals</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "Services")">
+                <a href="@Url.Action("Index", "Services")"><i class="fa fa-cogs"></i> <span class="nav-label">Services</span> </a>
+            </li>
+            @*<li class="@Html.IsSelected(controller: "Study")">
+                <a href="@Url.Action("Index", "Study")"><i class="fa fa-mortar-board"></i> <span class="nav-label">Study</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Mobiles","Electronics")"> Courses & classes</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")">Books & Magazines</a></li>
+                    @*<li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")">Lost Found</a></li> course type classroom evening distance online see course subjects from totaljobs http://learningzone.totaljobs.com/
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
+                </ul>
+            </li>*@
+            @*<li class="@Html.IsSelected(controller: "Community")">
+                <a href="@Url.Action("Index", "Community")"><i class="fa fa-comment"></i> <span class="nav-label">Community</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Mobiles","Electronics")"> Announcements</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"> Volunteers</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")">Lost Found</a></li> @*tickets and vouchers
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
+                </ul>
+            </li>*@
+            @*<li class="@Html.IsSelected(controller: "Vehicles")">
+                <a href="@Url.Action("Index", "Vehicles")"><i class="fa fa-group"></i> <span class="nav-label">Life Style</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Watches</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Clothes</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Footware</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Jewellery</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"> Baby Products</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"> Health and beauty</a></li>
+                    <li class="@Html.IsSelected(action: "Watches")"><a href="@Url.Action("Watches", "Electronics")">Furniture</a></li>
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
+                </ul>
+            </li>*@
+            @*<li class="@Html.IsSelected(controller: "Entertainment")">
+                <a href="@Url.Action("Index", "Entertainment")"><i class="fa fa-futbol-o"></i> <span class="nav-label">Entertainment</span></a> @*or fa-bullhorn, sports, fa-weixin for community
+            </li>
+            <li class="@Html.IsSelected(controller: "Matrimonal")">
+                <a href="@Url.Action("Index", "Matrimonal")"><i class="fa fa-heart-o"></i> <span class="nav-label">Matrimonal</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Brides")"><a href="@Url.Action("Brides", "Matrimonal")"> Brides</a></li>
+                    <li class="@Html.IsSelected(action: "Grooms")"><a href="@Url.Action("Grooms", "Matrimonal")">Grooms</a></li>
+                    <li class="@Html.IsSelected(action: "marriage-arrangements")"><a href="@Url.Action("marriage-arrangements", "Matrimonal")"> Marriage Arrangements</a></li>
+                </ul>
+            </li>*@
+            <li class="@Html.IsSelected(controller: "Forum")">
+                <a href="@Url.Action("Index", "Forum")"><i class="fa fa-question"></i> <span class="nav-label">Help (Forum)</span></a>
+            </li>
+            @*<li class="@Html.IsSelected(controller: "Forum")">
+                <a href="@Url.Action("Index", "Forum")"><i class="fa fa-comment-o"></i> <span class="nav-label">Help (Forum)</span><span class="fa arrow"></span> </a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Cars")"><a href="@Url.Action("Mobiles","Electronics")"><i class="fa fa-laptop"></i> Matrimonal</a></li>
+                    <li class="@Html.IsSelected(action: "Bikes")"><a href="@Url.Action("Laptops", "Electronics")"><i class="fa fa-laptop"></i> Baby Products</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"> Clothes</a></li>
+                    <li class="@Html.IsSelected(action: "Computers")"><a href="@Url.Action("Computers", "Electronics")"> Child Adaption</a></li>
+                    <li class="@Html.IsSelected(action: "Others")"><a href="@Url.Action("Others", "Electronics")">Others</a></li>
+                </ul>
+            </li>*@
+        </ul>
+    </div>
+</nav>

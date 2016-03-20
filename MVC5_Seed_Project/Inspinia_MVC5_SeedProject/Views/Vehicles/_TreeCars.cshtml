@@ -1,0 +1,17 @@
+﻿
+
+        <input type="text" class="form-control" id="treeSearch" placeholder="search brand/model" />
+        <div id="navigation">
+            <ul data-bind="foreach:showCompanies">
+                <li data-bind="visible:companyName">
+                    <a data-bind="text:companyName"></a>
+                    <ul data-bind="foreach:showModels">
+                        <li data-bind="text:modelName"></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+   
+
+
+

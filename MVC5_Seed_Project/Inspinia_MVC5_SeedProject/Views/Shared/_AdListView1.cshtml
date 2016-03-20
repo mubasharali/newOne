@@ -1,0 +1,106 @@
+﻿@using Inspinia_MVC5_SeedProject.CodeTemplates
+<div class="row">
+    <div class="ibox">
+        <div class="ibox-content1 product-box">
+            <div class="media">
+                <div class="pull-left hidden-xs">
+                    <div class="product-imitation">
+                        <div class="carouselContainer">
+                            <span id="gallery" data-gallery=""
+                                  data-bind="slick: images,
+                slickOptions: { initialSlide:0,dots:false, autoplay:true,autoplaySpeed: 1000,infinite: false,speed: 1000,fade: true,},
+                slickIndex: imageIndex">
+                            </span>
+                            <div data-bind="visible:images().length == 0"><h2><br /><br /><br /><br /> No Images<br /><br /><br /><br /><br /></h2></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <div class="product-desc">
+                        <span class="product-price">
+                            <span data-bind="if:!isBidingAllowed">
+                                <span data-bind="if:price">
+                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                </span>
+                                <span data-bind="if:!price">Price on contact</span>
+                            </span>
+                            <span data-bind="if:isBidingAllowed">
+                                <span data-bind="if:price">
+                                    <span data-bind="if:highestBid() == '-Infinity'">
+                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                    </span>
+                                    <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                    </span>
+                                </span>
+                                <span data-bind="if:!price">
+                                    <span data-bind="if:highestBid() == '-Infinity'">
+                                        No Bit yet
+                                    </span>
+                                    <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                        <a class="product-name" data-bind="text:title,attr:{href:link}"> </a>
+
+                        <div class="small m-t-xs" data-bind="foreach:showTags">
+                            <a target="_blank" data-bind="attr:{href:link},text:name" class="btn btn-xs btn-white"> </a>
+                        </div><br />
+                        <div data-bind="truncatedText: description, maxTextLength: 150"></div><br />
+                        <div class="pull-right"><i class="fa fa-clock-o"></i> <span data-bind="text:time"></span></div>
+                        <div class="" data-bind="with:adLocation">
+                            <span data-bind="with:cityName">@*<i class="fa fa-ballon"></i>*@ <b>From:</b></span>
+                            <span data-bind="if:popularPlace">
+                                <span data-bind="text:popularPlace"></span>,
+                            </span>
+                            <span data-bind="text:cityName"></span>
+                        </div>
+
+                        <div class="m-t text-righ">
+
+                            <a data-bind="attr:{href:'/Details/' + id + '/' + title}" class="btn btn-xs btn-outline btn-primary">Open <i class="fa fa-long-arrow-right"></i> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+        width: 250px !important;
+        height: 250px;
+        /apply max-padding or default image;
+    }
+
+    .carouselContainer img {
+        // height: 350px;
+        width: 250px !important;
+        height: 250px;
+    }
+
+    .showAds .ibox {
+        height: 420px;
+    }
+
+    .product-price {
+        top: 0px;
+    }
+</style>

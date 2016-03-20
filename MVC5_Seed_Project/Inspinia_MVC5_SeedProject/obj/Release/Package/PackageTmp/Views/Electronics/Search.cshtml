@@ -1,0 +1,168 @@
+﻿@*@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Ad>*@
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Search</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Ad</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>List of Ad</h5>
+					<div class="ibox-tools">
+						@*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+					</div>
+                </div>
+                <div class="ibox-content">
+                    <span id="category">@ViewBag.category</span>
+                    <span id="subcategory">@ViewBag.subcategory</span>
+                    <span id="lowcategory">@ViewBag.lowcategory</span>
+                    <span id="title">@ViewBag.title</span>
+                    @*<input type="hidden" id="category" value="@ViewBag.category" />
+                    <input type="hidden" id="subcateogry" value="@ViewBag.subcategory" />
+                    <input type="hidden" id="lowcategory" value="@ViewBag.lowcategory" />
+                    <input type="hidden" id="title" value="@ViewBag.title" />*@
+
+                    <div data-bind="foreach: showAds">
+                        Title: <span data-bind="text: title"></span>
+                        description: <span data-bind="text: description"></span>
+                        postedby:<span data-bind="text: postedByName"></span>
+                        <div data-bind="foreach: showMobileAd">
+                            Company: <span data-bind="text: company"></span>
+                            Model: <span data-bind="text:model"></span>
+                            color: <span data-bind="text: color"></span>
+                            price: <span data-bind="text: price"></span>
+                            <span data-bind="text: isNegotiable"></span>
+                            Condition: <span data-bind="text: isNew"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+ </div>
+@section Styles {
+    @Styles.Render("~/Content/plugins/jsTree")
+}
+@section Scripts{
+    @Scripts.Render("~/plugins/jsTree")
+@Scripts.Render("~/plugins/knockout")
+    <script>
+
+        function mobilead(data) {
+            var self = this;
+            data = data || {};
+            self.color = data.color;
+            self.price = data.price;
+            self.company = data.company;
+            self.model = data.model;
+            if (data.isNew) {
+                self.isNew = 'New';
+            } else {
+                self.isNew = 'used';
+            }
+            if (data.isNegotiable) {
+                self.isNegotiable = 'Negotiable';
+            } else {
+                self.isNegotiable = '<strike>Negotiable</strike>';
+            }
+        }
+        function ad(data) {
+            var self = this;
+            data = data || {};
+            self.title = data.title;
+            self.description = data.description;
+            self.postedByName = data.postedByName;
+            self.postMobile = ko.observableArray();
+            if (data.mobilead) {
+                var mobad = $.map(data.mobilead, function (item) { return new mobilead(item); });
+                self.showMobileAd = mobad;
+            }
+            // self.mobilead(data.mobilead);
+        };
+
+
+        function viewModel() {
+            var self = this;
+            self.showAds = ko.observableArray();
+            var category = $("#cateogory").val();
+            var subcategory = $("#subcategory").val();
+            var lowcategory = $("#lowcategory").val();
+            var title = $("#title").val();
+            category = "Electronics";
+            subcategory = "Mobiles";
+            lowcategory = "htc";
+            title = "abc";
+           // var url_address = '/api/Electronic?category=' + category + '&subcategory=' + subcategory + '&lowcategory=' + lowcategory + '&title=' + title;
+            self.loadad = function () {
+                $.ajax({
+                    url: '/api/Electronic/search',
+                    data:{category:category,subcategory:subcategory,lowcategory:lowcategory,title:title},
+                    dataType: "json",
+                    type: 'GET',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new ad(item); });
+                        self.showAds(mappedads);
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        var responseText = jQuery.parseJSON(jqXHR.responseText);
+                        //console.log(responseText);
+                    }
+                })
+            }
+            self.loadTree = function () {
+                $.ajax({
+                    url: '/api/Electronic/GetMobileTree',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        var dat = $.map(data, function (item) { return new treeNode(item) });
+                        self.partTypes(dat);
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to laod tree", "Error");
+                    }
+                });
+            }
+            self.loadad();
+            self.loadTree();
+            return self;
+        }
+        ko.applyBindings(new viewModel());
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

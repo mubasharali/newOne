@@ -1,0 +1,601 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Ad
+@using Inspinia_MVC5_SeedProject.CodeTemplates;
+@{
+
+    ViewBag.Title = "Edit Bike Ad";
+}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Edit Bike Ad</h5>
+                </div>
+                <div class="ibox-content">
+                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
+                        <h2>Add Images</h2>
+                        <div id="dropzonePreview" class="dz-default dz-message">
+                        </div>
+                    </form>
+                    <br />
+                    @using (Html.BeginForm("EditBikeAd", "Vehicles", FormMethod.Post, new { id = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="files" id="fileNames" />
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            <div id="mobileId">
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Select Brand</label>
+                                <div class="col-md-10">
+                                    <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
+                       value: selectedBrand,
+                       optionsCaption: 'Choose brand...'"></select>
+
+                                </div>
+                            </div>
+                            <div data-bind="with:selectedBrand">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Select Model</label>
+                                    <div class="col-md-10">
+                                        <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
+                       value: $parent.selectedModel,
+                       optionsCaption: 'Choose model...'"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Year </label>
+                                <div class="col-md-10">
+                                    <select id="select-year" class="demo-default" name="year" data-bind="options: availableYears,
+                        value: selectedYear,
+                       optionsCaption: 'Choose year...'"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">KM Driven</label>
+                                <div class="col-md-10">
+                                    <div class="input-group m-b">
+                                        <input type="number" id="kmDriven" class="form-control" name="kmDriven" /><span class="input-group-addon">Km</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Number of owners</label>
+                                <div class="col-md-10">
+                                    <select id="select-noOfOwners" data-bind="value:noOfOwners" name="noOfOwners" placeholder="choose number of owners">
+                                        <option value="">Choose number of owners</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Registered City</label>
+                                <div class="col-md-10">
+                                    <select id="select-registeredCity" class="demo-default" name="registeredCity" data-bind="options: availableCities,
+                       value: selectedRegisteredCity,
+                       optionsCaption: 'Choose register city...'"></select>
+                                </div>
+                            </div>
+                            
+                            @Html.Partial("~/Views/Shared/_EditAd_Most.cshtml")
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" data-bind="click:submitClicked" value="Update" class="btn btn-primary" />
+                                    @Html.ActionLink("Cancel", "Details", "Electronics", new { id = Model.Id, title = ElectronicsController.URLFriendly(Model.title) }, new { @class = "btn btn-white" })
+                                    @*<a href="/Details/@Model.Id/@ElectronicsController.URLFriendly(@Model.title) " class="btn btn-white">Cancel</a>*@
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Styles {
+
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
+    @Styles.Render("~/Content/plugins/dropzone/dropZoneStyles")
+    @Styles.Render("~/bundles/tagStyles")
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/iCheck")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/dropZone")
+    <script src="~/Scripts/app/_CreateAd.js"></script>
+    <script type="text/javascript">
+
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            UserCompanies_CreateAd(self);
+            self.submitClicked = function () {
+                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                window.btn_clicked = true;
+                $("#form").submit();
+            }
+            self.conditionChecked = ko.observable(false);
+            self.typeValue = ko.observable("sell");
+            self.selectedVal = ko.observable();
+            self.selectedVal.subscribe(function (val) {
+                if (val == "fixedPrice") {
+                    self.isAllowBidingChecked(false);
+                    self.isFixPriceChecked(true);
+                }
+                else {
+                    self.isAllowBidingChecked(true);
+                    self.isFixPriceChecked(false);
+                }
+            });
+
+            self.availableYears = ko.observableArray();
+            self.loadYears = function () {
+                var firstYear = 1960;
+                var currentYear = new Date().getFullYear();
+                for (var x = firstYear; x <= currentYear; x++) {
+                    self.availableYears.push(x);
+                }
+            }
+            self.loadYears();
+            self.selectedYear = ko.observable();
+            self.selectedRegisteredCity = ko.observable();
+            self.noOfOwners = ko.observable();
+
+            self.availableBrands = ko.observableArray();
+            self.selectedBrand = ko.observable();
+            self.availableModels = ko.observableArray();
+            self.selectedModel = ko.observable();
+            self.availableCities = ko.observableArray();
+            self.selectedCity = ko.observable();
+            self.availablePopularPlaces = ko.observableArray();
+            self.selectedPopularPlace = ko.observable();
+            self.mobileId = "";
+            self.selectedBrandOriginal = "";
+            self.selectedModelOriginal = "";
+            self.selectedCityOriginal = "";
+            self.selectedPopularPlaceOriginal = "";
+            self.exectLocation = "";
+            self.selectedTags = [];
+            var sub = self.selectedBrand.subscribe(function (value) {
+                self.loadModels();
+            })
+            self.isAllowBidingChecked = ko.observable(false);
+            self.isFixPriceChecked = ko.observable(false);
+
+            self.loadAd = function () {
+                $.ajax({
+                    url: '/api/Electronic/GetAd/' + $("#adId").val(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    //type: 'POST',
+                    success: function (data) {
+
+
+                        //for company
+                        if (data.companyName) {
+                            var comid = $("#" + data.companyName);
+                            comid.iCheck('check');
+                            self.postAdUsing(data.companyName);
+                            $('.i-check').iCheck({
+                                checkboxClass: 'icheckbox_square-green',
+                                radioClass: 'iradio_square-green',
+                            });
+                            // $("#Netsol Technologies Limited").iCheck('check');
+                        } else {
+                            $("#on").iCheck('check');
+                            self.postAdUsing("on");
+                        }
+
+                        self.selectedYear(data.bikead.year);
+                        $("#kmDriven").val(data.bikead.kmDriven);
+                        $("#engineCapacity").val(data.bikead.engineCapacity);
+                        self.noOfOwners(data.bikead.noOfOwnwers);
+                        self.selectedRegisteredCity(data.bikead.registeredCity);
+
+                        var tags = data.adTags;
+                        $.each((tags), function (i, item) { self.selectedTags.push(item.name) });
+                        self.exectLocation = data.location.exectLocation;
+                        self.selectedCity(data.location.cityName);
+                        self.selectedCityOriginal = data.location.cityName;
+                        if (data.type == true) {
+                            $("#sell").iCheck('check');
+                        } else if (data.type == false) {
+                            $("#buy").iCheck('check');
+                        }
+                        if (data.isNegotiable == 'b') {
+                            self.selectedVal("fixedPrice");
+                            $("#allowBiding").iCheck('check');
+                        } else if (data.isNegotiable == 'n') {
+                            $("#fixedPrice").iCheck('check');
+                        } else if (data.isNegotiable == 'y') {
+                            $("#fixedPrice").iCheck('check');
+                            $("#isNegotiable").iCheck('check');
+                        }
+                        if (data.condition == 'u') {
+                            $('#used').iCheck('check');
+                            self.conditionChecked("used");
+
+                        } else if (data.condition == 'b') {
+                            $('#unboxed').iCheck('check');
+                            self.conditionChecked("unboxed");
+                        } else if (data.condition == 'n') {
+                            $('#new').iCheck('check');
+                            self.conditionChecked("new");
+
+                        }
+                        self.mobileId = data.laptopad.id;
+                        self.selectedModel(data.bikead.model);
+                        self.selectedModelOriginal = data.bikead.model;
+                        self.selectedBrand(data.bikead.brand);
+                        self.selectedBrandOriginal = self.selectedBrand();
+
+                        self.selectedPopularPlaceOriginal = data.location.popularPlace;
+
+                        self.selectedCityOriginal = self.selectedCity();
+                        $('#select-year').selectize();
+                        $('#select-noOfOwners').selectize();
+                        $('#select-registeredCity').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                        $('#select-brand').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 29,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                        $('#select-city').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                        $('#select-tag').selectize({
+                            valueField: 'name',
+                            labelField: 'name',
+                            searchField: 'name',
+                            maxItems: 6,
+                            create: true,
+                            render: {
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="title">' +
+                                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                                        '</span>' +
+                                        '<span class="description">' + escape(item.info) + '</span>' +
+                                        '<ul class="meta">' +
+                                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                                        '</ul>' +
+                                    '</div>';
+                                }
+                            },
+                            load: function (query, callback) {
+                                if (!query.length) return callback();
+                                $.ajax({
+                                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                                    type: 'POST',
+                                    error: function () {
+                                        callback();
+                                    },
+                                    success: function (res) {
+                                        callback(res.slice(0, 10));
+                                    }
+                                });
+                            }
+                        });
+                        var selectize_tags = $("#select-tag")[0].selectize;
+                        $.each((self.selectedTags), function (i, item) {
+                            selectize_tags.addOption({
+                                text: item,
+                                value: item,
+                                name: item,
+                            });
+                            selectize_tags.addItem(item);
+                        });
+                        if (self.selectedBrandOriginal == self.selectedBrand()) {
+                            self.selectedModel(self.selectedModelOriginal);
+                        }
+                        if (self.selectedCityOriginal == self.selectedCity()) {
+                            self.selectedPopularPlace(self.selectedPopularPlaceOriginal);
+                        }
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load data. Please refresh page and try again", "Error");
+                    }
+                });
+            }
+
+            self.loadBrands = function () {
+                $.ajax({
+                    url: '/api/Vehicle/GetBrands',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableBrands.push(item) });
+
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Brands.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+
+            self.loadModels = function () {
+                self.availableModels.removeAll();
+                $.ajax({
+                    url: '/api/Vehicle/GetModels?brand=' + self.selectedBrand(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableModels.push(item) });
+                        if (self.selectedBrandOriginal == self.selectedBrand()) {
+                            self.selectedModel(self.selectedModelOriginal);
+                        }
+                        $('#select-model').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 29,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Models.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+
+            //location
+
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlaces = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        if (self.selectedCityOriginal == self.selectedCity()) {
+                            self.selectedPopularPlace(self.selectedPopularPlaceOriginal);
+                        }
+                        $('#select-popularPlace').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+
+            var sub = self.selectedCity.subscribe(function (value) {
+                self.loadPopularPlaces();
+            })
+            self.loadCities();
+            self.loadBrands();
+
+            self.loadAd();
+
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+            init: function (element, valueAccessor) {
+                //initialize icheck to the element
+                $(element).iCheck({
+                    radioClass: 'iradio_square-green'
+                });
+                $(element).on('ifChecked', function (event) {
+                    var observable = valueAccessor();
+                    observable.checked(event.target.defaultValue); //assigning selected value
+                });
+            }
+        };
+
+
+        var adId = $("#adId").val();
+        function Images(data, i) {
+            var self = this;
+            data = data || {};
+            self.name = adId + "_" + i + data.extension;
+            self.size = data.size;
+        }
+        var images = [];
+        var myDropzone1;
+        var loadImages = function () {
+            $.ajax({
+                url: '/api/Electronic/getAdImages?id=' + adId,
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                type: 'GET',
+                success: function (data) {
+                    var i = 1;
+                    var mappedads = $.map(data, function (item) { return new Images(item, i++); });
+                    images = mappedads;
+
+                    if (images) {
+                        for (i = 0; i < images.length; i++) {
+                            // images[i].name = $.trim(images[i].name);
+                            myDropzone1.options.addedfile.call(myDropzone1, images[i]);
+                            myDropzone1.options.thumbnail.call(myDropzone1, images[i], $.cookie("AWSURL") + $.cookie("AWSFolderName") + images[i].name);
+                        }
+                    }
+                },
+                error: function (jqXHR, status, thrownError) {
+                    toastr.error("failed to load images.Please refresh page", "Error");
+                }
+            });
+        }
+
+        loadImages();
+        var fileList = [];
+        ko.bindingHandlers.dropzone = {
+            init: function (element, valueAccessor) {
+                var value = ko.unwrap(valueAccessor());
+
+                var options = {
+                    maxFileSize: 15,
+                    uploadMultiple: true,
+                    parallelUploads: 100,
+                    maxFiles: 30,
+                    addRemoveLinks: false,
+                    acceptedFiles: ".jpeg,.jpg,.png,.gif",
+                    init: function () {
+                        var myDropzone = this;
+                        myDropzone1 = this;
+                        this.on("success", function (file, serverFileName) {
+                            fileList = [];
+                            i = 1;
+                            var abc = $.map(serverFileName, function (item) { return (item); });
+                            $.each(abc, function (index, value) {
+                                fileList[i] = { "fileName": value, "fileId": i++ };
+                            })
+                        });
+                        if (images) {
+                            for (i = 0; i < images.length; i++) {
+                                myDropzone.emit("addedfile", images[i]);
+                                myDropzone.emit("thumbnail", images[i], "/Images/Ads/");
+                                myDropzone.emit("complete", images[i]);
+                            }
+                        }
+                    }
+                };
+
+                $.extend(options, value);
+
+                $(element).addClass('dropzone');
+                new Dropzone(element, options);
+            }
+        };
+
+
+
+        $(document).ready(function () {
+            ko.applyBindings(new ViewModel);
+
+            Selectize.define('inputMaxlength', function (options) {
+                var self = this;
+                this.setup = (function () {
+                    var original = self.setup;
+                    return function () {
+                        original.apply(this, arguments);
+                        this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                    };
+                })();
+            });
+
+            $("#form").validate({
+                ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+                rules: {
+                    title: {
+                        required: true,
+                        maxlength: 50,
+                        minlength: 15
+                    },
+                    company: {
+                        required: true,
+                        maxlength: 15
+                    },
+                    model: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    description: {
+                        required: true,
+                        minlength: 25,
+                        maxlength: 1000
+                    },
+                    color: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    price: {
+                        number: true
+                    },
+                    abc: {
+                        required: true
+                    }
+                }
+            });
+            $('.i-check').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+        });
+    </script>
+}
+

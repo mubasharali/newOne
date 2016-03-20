@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ChatJS</id>
+    <version>2.0.22</version>
+    <authors>André Pena</authors>
+    <owners>André Pena</owners>
+    <projectUrl>http://www.chatjs.net/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ChtJS is a chat component for ASP.NET. It uses SignalR for client/server communication and several jQuery plugins for UI</description>
+    <summary>Add Facebook style chatting to your ASP.NET application</summary>
+    <language>en-US</language>
+    <tags>aspnet chat facebook</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Microsoft.AspNet.SignalR" version="2.0.3" />
+        <dependency id="jQuery" version="2.1.0" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

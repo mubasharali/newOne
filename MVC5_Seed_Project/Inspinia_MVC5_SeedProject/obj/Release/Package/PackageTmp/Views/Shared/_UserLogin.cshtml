@@ -1,0 +1,160 @@
+﻿<div id="AccountViewModel">
+    <div class="modal inmodal fade" id="inputEmail" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @*<i class="fa fa-laptop modal-icon"></i>*@
+                    <h4 class="modal-title brand-style">dealkar.pk</h4>
+                    <small class="font-bold">Wait na kar, deal kar!</small>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"><label>Enter Email</label> <input type="email" name="email" data-bind="value:email,valueUpdate:'afterkeydown',event:{keyup:checkEnterEmail}" placeholder="Enter your email" class="form-control"></div>
+                    <p class="req" data-bind="text:loginError"></p>
+                    <section id="externalLogins">
+                        @*@Html.Action("RemoveAccountList","Account")*@
+                        @Html.Partial("../Account/_ExternalLoginsListPartial", new Inspinia_MVC5_SeedProject.Models.ExternalLoginViewModel { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <div data-bind="visible:!isUserLoginLoading()">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-bind="click:submitEmail" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div data-bind="visible:isUserLoginLoading()">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal inmodal fade" id="newUser" tabindex="-1" data-backdrop="static" data-keyboard="false" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @*<i class="fa fa-laptop modal-icon"></i>*@
+                    <h4 class="modal-title brand-style">dealkar.pk</h4>
+                    <small class="font-bold">Wait na kar, deal kar!</small>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"><label>Enter Password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterNewPassword}" placeholder="Enter Password" class="form-control"></div>
+                    <div class="form-group"><label>Confirm Password</label> <input type="password" data-bind="value:confirmPassword,hasFocus:hasConfirmPasswordFocus,valueUpdate:'afterkeydown',event:{keyup:checkEnterConfirmPassword}" placeholder="Again Enter your Password" class="form-control"></div>
+                    <p class="req" data-bind="text:loginError"></p>
+                </div>
+                <div class="modal-footer">
+                    <div data-bind="visible:!isUserLoginLoading()">
+                        @*<button type="button" class="btn btn-white" data-bind="click:registerOnEmail">Do it later</button>*@
+                        <button type="button" data-bind="click:registerNewUser" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div data-bind="visible:isUserLoginLoading()">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal fade" id="inputName" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @*<i class="fa fa-laptop modal-icon"></i>*@
+                    <h4 class="modal-title">Thank You for joining <span class="brand-style">dealkar.pk</span> !</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"><label>Your good name please</label> <input type="text" data-bind="value:UserName,valueUpdate:'afterkeydown',event:{keyup:checkEnterName}" placeholder="Enter your Name" class="form-control"></div>
+                    <p class="req" data-bind="text:loginError"></p>
+                </div>
+                <div class="modal-footer">
+                    <div data-bind="visible:!isUserLoginLoading()">
+                        @*<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>*@
+                        <button type="button" data-bind="click:submitName" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div data-bind="visible:isUserLoginLoading()">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal fade" id="oldUser" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @*<i class="fa fa-laptop modal-icon"></i>*@
+                    <h4 class="modal-title">Welcome Back <span data-bind="text:UserName"></span> !</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"><label><span data-bind="visible:!isPasswordSaved()">Create </span> <span data-bind="visible:isPasswordSaved()">Enter </span>  password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterPassword}" placeholder="Password" class="form-control"></div>
+                    <p class="req" data-bind="text:loginError"></p>
+                </div>
+                <div class="modal-footer">
+                    <div data-bind="visible:!isUserLoginLoading()">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                        <button type="button" data-bind="click:checkLoginUserPassword" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div data-bind="visible:isUserLoginLoading()">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal fade" id="EmailSent" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content animated ">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>*@
+                    @*<i class="fa fa-laptop modal-icon"></i>*@
+                    <h4 class="modal-title">Confirm your Email Address!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>An Email is sent at your email address. Click on the link in that email.</p>
+                </div>
+                <div class="modal-footer">
+                    <div data-bind="visible:!isUserLoginLoading()">
+                        @*<button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>*@
+                        <button type="button" data-bind="click:reloadPage" class="btn btn-primary">OK! Got it!</button>
+                    </div>
+                    <div data-bind="visible:isUserLoginLoading()">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

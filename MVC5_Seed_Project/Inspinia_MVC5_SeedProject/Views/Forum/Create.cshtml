@@ -1,0 +1,253 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Question
+@{
+    ViewBag.Title = "Ask Question|Start a discussion";
+}
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="ibox">
+                <div class="ibox-title">Ask Question or Start a discussion</div>
+                <div class="ibox-content">
+                    <form id="form" method="post" action="/Forum/create">
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Select category <span class="req">*</span> </label>
+                                <div class="col-md-10">
+                                    <select class="form-control" name="category" form="form">
+                                        <option value="Mobiles">Mobiles & Tablets</option>
+                                        <option value="Laptops">Laptops & Computers</option>
+                                        <option value="Electronics">Electronics & Appliances</option>
+                                        <option value="Study">Study</option>
+                                        <option value="RealEstate">Real Estate</option>
+                                        <option value="Services">Services</option>
+                                        <option value="Animals">Animals</option>
+                                        <option value="Jobs">Jobs</option>
+                                        <option value="Vehicles">Vehicles</option>
+                                        <option value="Community">Community</option>
+                                        <option value="LifeStyle">LifeStyle</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Matrimonal">Matrimonal</option>
+                                        <option value="Business">Business</option>
+                                        <option value="About Website">About Website</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Title<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="title" />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Description<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control" rows="7" name="description"></textarea>
+                                </div>
+                            </div>
+                        </div><br />
+                        <div class="row">
+                            <div class="control-group">
+                                <label class="control-label col-md-2" for="select-repo">Tags:</label>
+                                <div class="col-md-10">
+                                    <input id="select-tag" name="tags" class="repositories" placeholder="Pick a tag..." />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group col-md-offset-2">
+                            <input type="submit" class="btn btn-info" />
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ @section Styles {
+<style type="text/css">
+    .selectize-control.repositories .selectize-dropdown > div {
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .selectize-control.repositories .selectize-dropdown .by {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+
+        .selectize-control.repositories .selectize-dropdown .by::before {
+            content: 'by ';
+        }
+
+    .selectize-control.repositories .selectize-dropdown .name {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    .selectize-control.repositories .selectize-dropdown .title {
+        display: block;
+    }
+
+    .selectize-control.repositories .selectize-dropdown .description {
+        font-size: 12px;
+        display: block;
+        color: #a0a0a0;
+        white-space: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .selectize-control.repositories .selectize-dropdown .meta {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 10px;
+    }
+
+        .selectize-control.repositories .selectize-dropdown .meta li {
+            margin: 0;
+            padding: 0;
+            display: inline;
+            margin-right: 10px;
+        }
+
+            .selectize-control.repositories .selectize-dropdown .meta li span {
+                font-weight: bold;
+            }
+
+    .selectize-control.repositories::before {
+        -moz-transition: opacity 0.2s;
+        -webkit-transition: opacity 0.2s;
+        transition: opacity 0.2s;
+        content: ' ';
+        z-index: 2;
+        position: absolute;
+        display: block;
+        top: 12px;
+        right: 34px;
+        width: 16px;
+        height: 16px;
+        background: url(/Images/spinner.gif);
+        background-size: 16px 16px;
+        opacity: 0;
+    }
+
+    .selectize-control.repositories.loading::before {
+        opacity: 0.4;
+    }
+
+    .icon {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        background-size: 16px 16px;
+        margin: 0 3px 0 0;
+    }
+
+        .icon.fork {
+            background-image: url(images/repo-fork.png);
+        }
+
+        .icon.source {
+            background-image: url(images/repo-source.png);
+        }
+</style>
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
+    <link href="~/Scripts/plugins/selectize/selectize.css" rel="stylesheet" />
+}
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/plugins/toastr")
+    <script src="~/Scripts/plugins/selectize/selectize.min.js"></script>
+    <script type="text/javascript">
+        function viewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+        }
+        $(document).ready(function () {
+            ko.applyBindings(new viewModel());
+            $.connection.hub.start().done();
+            //$('#select-category').selectize({
+            //    inputMaxlength: 29,
+            //    options: ['Electronics'],
+            //    sortField: {
+            //        field: 'text',
+            //        direction: 'asc'
+            //    },
+
+            //});
+
+            $('#select-tag').selectize({
+                valueField: 'name',
+                labelField: 'name',
+                searchField: 'name',
+                options: [],
+                create: true,
+                maxItems: 6,
+                render: {
+                    option: function (item, escape) {
+                        return '<div>' +
+                            '<span class="title">' +
+                                '<span class="name">' + escape(item.name) + '</span>' +
+                                
+                            '</span>' +
+                            '<span class="description">' + escape(item.info) + '</span>' +
+                            '<ul class="meta">' +
+                                '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                            '</ul>' +
+                        '</div>';
+                    }
+                },
+                load: function (query, callback) {
+                    if (!query.length) return callback();
+                    $.ajax({
+                        url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                        type: 'POST',
+                        error: function () {
+                            callback();
+                        },
+                        success: function (res) {
+                            callback(res.slice(0, 10));
+                        }
+                    });
+                }
+            });
+            
+            //$('#select-category').selectize.addOption({ text: 'electronics' });
+            $("#form").validate({
+                rules: {
+                    title: {
+                        required: true,
+                        maxlength: 100,
+                        minlength: 10
+                    },
+                    description: {
+                        required: true,
+                        minlength: 20,
+                        maxlength: 1000
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+

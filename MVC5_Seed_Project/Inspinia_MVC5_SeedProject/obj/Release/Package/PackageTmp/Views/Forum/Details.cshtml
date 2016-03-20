@@ -1,0 +1,907 @@
+﻿@{
+    ViewBag.Title = ViewBag.title;
+}
+<input type="hidden" id="questionId" value="@ViewBag.questionId" />
+<input type="hidden" id="currentPage" value="@HttpContext.Current.Request.Url.AbsolutePath" />
+
+
+<div class="wrapper wrapper-content animated fadeInUp">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-9">
+            <div class="ibox">
+                <div data-bind="visible:!showQuestions()">@Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")</div>
+                <div id="FirstLoading" style="display:none" data-bind="foreach: showQuestions">
+                    <div class="ibox-content" data-bind="attr:{'id':id}">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <span data-bind="visible:postedById != loginUserId">
+                                    <span data-bind="visible:isAdmin()">
+                                        <a data-bind="click:deleteQuestion" class="btn btn-white btn-xs pull-right">Delete</a>
+                                    </span>
+                                </span>
+                                    <a data-bind="visible:postedById==loginUserId,click:deleteQuestion" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="visible:postedById==loginUserId,attr:{href:'/Forum/Edit/' + id}" class="btn btn-white btn-xs pull-right">Edit</a>
+                                <div class="vote-item">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="vote-actions">
+                                                <a data-bind="click:function(){ return questionVoteUp(id,loginUserId,true) }">
+                                                    <i class="fa fa-chevron-up" data-bind="style:{color: isliked()? 'red' : 'gray'}"> </i>
+                                                </a>
+                                                <div data-bind="text:voteCount"></div>
+                                                <a data-bind="click:function(){ return questionVoteUp(id,loginUserId,false) }">
+                                                    <i class="fa fa-chevron-down" data-bind="style:{color: isunliked()? 'red' : 'gray'}"> </i>
+                                                </a>
+                                            </div>
+                                            <a data-bind="text:title" class="vote-title"></a>
+                                            <p data-bind="text:description"></p>
+                                            <div >
+                                                <ul class="tag-list" data-bind="foreach:showTags" >
+                                                    <li><a target="_blank" data-bind="attr:{href:tagURL}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                                </ul>
+                                            </div>
+                                            <br /><br />
+                                            <div class="vote-info">
+                                                <a data-bind="click:toggleQuestionReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
+                                                <i class="fa fa-eye"></i> <a><span data-bind="text:views"></span>  Views</a>
+                                                <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id,loginUserId)},text:followText"></a>
+                                                <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"><i class="fa fa-flag"></i></span> <a><span data-bind="text:reportedCount()"></span> Report</a></span>
+
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-2 ">
+                                            <div class="vote-icon">
+                                                <i class="fa fa-css3"> </i>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                    <div style="margin-left:30px;" data-bind="foreach:showQuestionReplies">
+                                        
+                                        <div class="vote-item" style="padding:0px;padding-left:0" data-bind="visible:!isEditQuestionReply()">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p class="vote-title" style="font-size:small;font-weight:300; margin-left:0px" data-bind="text:description()"></p>
+                                                    <div class="vote-info" style="margin-left:0px">
+                                                        <a data-bind="click:function(){return voteQuestionReply(id,$parent.loginUserId,true)}">
+                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-thumbs-up"> </i>
+                                                            <span data-bind="text:voteUpCount"></span>
+                                                        </a>
+                                                        <a data-bind="click:function(){return voteQuestionReply(id,$parent.loginUserId,false)}">
+                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
+                                                            <span data-bind="text:voteDownCount"></span>
+                                                        </a>
+                                                            <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                            <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                            <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a> <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
+
+</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span data-bind="visible:isEditQuestionReply">
+                                            <textarea class="msgTextArea form-control" placeholder="update comment.." data-bind="hasFocus:isEditQuestionReplyFocus,value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:function(d,e){return checkEnter3($parent.id,description().length,d,e)}}"></textarea>
+                                            <span data-bind="visible:description().length > 400 && description().length < 500">
+                                                You can Enter only <span data-bind="text:499 - description().length"></span> more characters.
+                                            </span>
+                                        </span>
+                                    </div>
+                                    @*<a data-bind="click:toggleQuestionReply">Reply</a>*@
+                                    <div style="margin-left:30px" data-bind="visible:isQuestionReplyVisible">
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isQuestionReplyFocused,value:newQuestionReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}"></textarea>
+                                        <span data-bind="visible:newQuestionReply().length > 400 && newQuestionReply().length < 500">
+                                            You can Enter only <span data-bind="text:499 - newQuestionReply().length"></span> more characters.
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                    </div>
+
+                            </div>
+
+                            
+                        <h2>Answers</h2>
+                        <div class="row m-t-sm">
+                            <div data-bind="foreach:showAnswers">
+                                <div class="vote-item" data-bind="visible:!isAnswerEditing()">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <small data-bind="if: postedById === $parent.loginUserId" class="pull-right"><a data-bind="click:$parent.deleteAnswer" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="click:function(){return editAnswer($parent.id)}" class="btn btn-white btn-xs pull-right">Edit</a></small>
+                                            <div class="vote-actions">
+                                                <a data-bind="click:function(){return voteAnswer(id,$parent.loginUserId,true)}">
+                                                    <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-chevron-up"> </i>
+                                                </a>
+                                                <div data-bind="text:voteCount"></div>
+                                                <a data-bind="click:function(){return voteAnswer(id,$parent.loginUserId,false)}">
+                                                    <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-chevron-down"> </i>
+                                                </a>
+                                            </div>
+                                            <p data-bind="text:description"></p>
+                                            <div class="vote-info">
+                                                <a data-bind="click:toggleAnswerReply" class="btn btn-xs btn-white"><i class="fa fa-reply"></i> Reply </a>
+                                                <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div style="margin-left:40px;" data-bind="foreach:showAnswerReplies">
+                                        <div class="vote-item" style="margin:0px;padding:0px" data-bind="visible:!isAnswerReplyEditing()">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    
+                                                    <p class="vote-title" style="font-size:small;font-weight:300;margin-left:0" data-bind="text:description"></p>
+                                                    <div style="margin-left:0" class="vote-info">
+                                                        <a data-bind="click:function(){return voteAnswerReply(id,$parents[1].loginUserId,true)}">
+                                                            <i data-bind="style:{color: isUp()? 'red' : 'gray'}" class="fa fa-thumbs-up"> </i>
+                                                            <span data-bind="text:voteUpCount"></span>
+                                                        </a>
+                                                        <a data-bind="click:function(){return voteAnswerReply(id,$parents[1].loginUserId,false)}">
+                                                            <i data-bind="style:{color: isDown()? 'red' : 'gray'}" class="fa fa-thumbs-down"> </i>
+                                                            <span data-bind="text:voteDownCount"></span>
+                                                        </a>
+                                                        <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                        <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                        <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a>-<a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div data-bind="visible:isAnswerReplyEditing()">
+                                            <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.id,data,event)}}"></textarea>
+                                            <span data-bind="visible:description().length > 400 && description().length < 500">
+                                                You can Enter only <span data-bind="text:499 - description().length"></span> more characters.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div style="margin-left:40px;" data-bind="visible:isAnswerReplyVisible()">
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
+                                        <span data-bind="visible:newAnswerReply().length > 400 && newAnswerReply().length < 500">
+                                            You can Enter only <span data-bind="text:499 - newAnswerReply().length"></span> more characters.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div data-bind="visible:isAnswerEditing()">
+                                    <div style="margin:10px">
+                                        <textarea class="msgTextArea form-control" data-bind="value:description, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return editAnswerKeyUp(data,event)}}"></textarea>
+                                        <span data-bind="visible:description().length > 900 && description().length <= 1000">
+                                            You can Enter only <span data-bind="text:1000 - description().length"></span> more characters.
+                                        </span>
+                                        <button class="btn btn-info pull-right" data-bind="click:function(){return updateAnswer($parent.id)}">Update</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin:10px">
+                                <div class="col-sm-12">
+                                    <h5>Post answer</h5>
+                                    <textarea class="msgTextArea form-control" placeholder="Write Answer.." name="answer" data-bind="value:newAnswer, valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return answerKeyUp(newAnswer().length,data,event)}}"></textarea>
+                                    <span data-bind="visible:newAnswer().length > 900 && newAnswer().length <= 1000">
+                                        You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
+                                    </span>
+                                    <div style="margin:6px">
+                                        <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            
+
+
+
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+@Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/sweetAlert")
+<script src="~/Scripts/app/friendlyURL.js"></script>
+<script src="~/Scripts/app/IsAdmin.js"></script>
+    <script>
+        function AnswerReply(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.postedById = data.postedById;
+            self.postedByName = data.postedByName;
+            self.postedByLink = '/User/Index/' + self.postedById;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.description = ko.observable(data.description);
+            self.isAnswerReplyEditing = ko.observable(false);
+
+            self.isUp = ko.observable(data.isUp);
+            self.isDown = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount || 0);
+            self.voteDownCount = ko.observable(data.voteDownCount || 0),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.voteAnswerReply = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteAnswerReply?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteUpCount(data.voteUpCount);
+                            self.voteDownCount(data.voteDownCount);
+                            self.voteCount(data.voteUpCount - data.voteDownCount);
+                            if (isup) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+
+            self.editAnswerReply = function () {
+                self.isAnswerReplyEditing(true);
+            }
+            self.checkEnter = function (answerId, d, e) {
+                if (self.description().length < 500) {
+                    if (e.keyCode == 13) {
+                        self.updateAnswerReply(answerId);
+                    }
+                } else {
+                    self.description( self.description().slice(0, -1));
+                    toastr.info("You reached the limit");
+                }
+            }
+            self.updateAnswerReply = function (answerId) {
+                var reply = new AnswerReply();
+                reply.id = self.id;
+                reply.answerId = answerId;
+                reply.description(self.description());
+                reply.time = self.exectTime;
+                reply.postedBy = self.postedById;
+                if (reply.description() != null && reply.description().trim() != "") {
+                    $.ajax({
+                        url: '/api/Forum/UpdateAnswerReply',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(reply),
+                        success: function (data) {
+                            self.isAnswerReplyEditing(false);
+                        },
+                        error: function () {
+                            toastr.error("failed to update comment.Refresh page and try again", "Error!");
+                        }
+                    })
+                } else {
+                    toastr.info("You cannot post empty comment", "Are you drunk?");
+                }
+            }
+        }
+        function Answer(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.isAnswerEditing = ko.observable(false);
+            self.postedById = data.postedById;
+            self.postedByName = data.postedByName;
+            self.postedByLink = '/User/Index/' + self.postedById;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.description =ko.observable( data.description);
+            self.showAnswerReplies = ko.observableArray();
+            self.isAnswerReplyVisible = ko.observable(false);
+            self.isAnswerReplyFocused = ko.observable(false);
+
+
+            self.isUp = ko.observable(data.isUp);
+            self.isDown = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount || 0);
+            self.voteDownCount = ko.observable(data.voteDownCount || 0),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.voteAnswer = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteAnswer?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteCount(data.voteUpCount - data.voteDownCount);
+                            if (isup) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+
+            if (data.answerReplies) {
+                var reply = $.map(data.answerReplies, function (item) { return new AnswerReply(item) });
+                self.showAnswerReplies(reply);
+            }
+            self.toggleAnswerReply = function () {
+                
+                if (!self.isAnswerReplyVisible()) {
+                    self.isAnswerReplyVisible(true);
+                    self.isAnswerReplyFocused(true);
+                }
+                else{
+                    self.isAnswerReplyVisible(false);
+                }
+            }
+            self.checkEnter2 = function (loginUserId,id,d, e) {
+                if (loginUserId) {
+                    if (self.newAnswerReply().length < 500) {
+                        if (e.keyCode == 13) {
+                            self.addAnswerReply(loginUserId, id);
+                        }
+                    } else {
+                        self.newAnswerReply( self.newAnswerReply().slice(0, -1));
+                        toastr.info("You have reached the limit!");
+                    }
+                } else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+            //delete answer reply
+            self.deleteAnswerReply = function (reply) {
+                $.ajax({
+                    url: '/api/Forum/DeleteAnswerReply/' + reply.id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.showAnswerReplies.remove(reply);
+                    },
+                    error: function () {
+                        toastr.error("failed to delete reply", "Error!");
+                    }
+                });
+            }
+            //edit answer
+            self.editAnswerKeyUp = function (d, e) {
+                if (self.description().length > 1000) {
+                    self.description(self.description().slice(0, -1));
+                    toastr.info("You reached the limit", "Sorry!");
+                }
+            }
+            self.editAnswer = function () {
+                self.isAnswerEditing(true);
+            }
+            self.updateAnswer = function (questionId) {
+                var ans = new Answer();
+                ans.id = self.id;
+                ans.questionId = questionId;
+                ans.time = self.exectTime;
+                ans.description(self.description());
+                ans.postedBy = self.postedById;
+                if (ans.description() != null && ans.description().trim() != "") {
+                    $.ajax({
+                        url: '/api/Forum/UpdateAnswer',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(ans),
+                        success: function (data) {
+                            self.isAnswerEditing(false);
+                        },
+                        error: function () {
+                            toastr.error("failed to update comment.Refresh page and try again", "Error!");
+                        }
+                    })
+                } else {
+                    toastr.info("Your answer must not be empty", "Are you drunk?");
+                }
+            }
+            self.newAnswerReply = ko.observable('');
+            self.addAnswerReply = function (loginUserId,id) {
+                    var reply = new AnswerReply();
+                    reply.answerId = id;
+                    reply.description (self.newAnswerReply());
+                    reply.time = new Date($.now());
+                    if (loginUserId) {
+                        if (reply.description() != null && reply.description().trim() != "") {
+                            $.ajax({
+                                url: '/api/Forum/PostAnswerReply',
+                                dataType: "json",
+                                contentType: "application/json",
+                                cache: false,
+                                type: 'POST',
+                                data: ko.toJSON(reply),
+                                success: function (data) {
+                                    self.showAnswerReplies.push(new AnswerReply(data));
+                                    self.newAnswerReply('');
+                                },
+                                error: function () {
+                                    toastr.error("failed to post comment", "Error!");
+                                }
+                            })
+                        }
+                        else {
+                            toastr.info("You cannot post empty reply","Sorry!")
+                        }
+                    }
+                    else {
+                        $("#inputEmail").modal('show');
+                    }
+            }
+        }
+        function QuestionReply(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.postedById = data.postedById;
+            self.postedByName = data.postedByName;
+            self.postedByLink = '/User/Index/' + self.postedById;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.description = ko.observable(data.description);
+            
+            self.isUp = ko.observable(data.isUp);
+            self.isDown = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount || 0);
+            self.voteDownCount = ko.observable(data.voteDownCount || 0),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.voteQuestionReply = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteQuestionReply?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteUpCount(data.voteUpCount);
+                            self.voteDownCount(data.voteDownCount);
+                            self.voteCount(data.voteUpCount - data.voteDownCount);
+                            if (isup) {
+                                self.isUp(true);
+                                self.isDown(false);
+                            } else {
+                                self.isUp(false);
+                                self.isDown(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+            //edit question reply
+            self.isEditQuestionReply = ko.observable(false);
+            self.isEditQuestionReplyFocus = ko.observable(false);
+            self.editQuestionReply = function () {
+                self.isEditQuestionReply(true);
+                self.isEditQuestionReplyFocus(true);
+            }
+            self.checkEnter3 = function (questionId, length, d, e) {
+                if (length < 500) {
+                    if (e.keyCode == 13) {
+                        self.updateQuestionReply(questionId);
+                    }
+                }
+                else {
+                    self.description(self.description().slice(0, -1));
+                    toastr.info("You have reached the limit");
+                }
+            }
+            self.updateQuestionReply = function (questionId) {
+                var reply = new QuestionReply();
+                reply.questionId = questionId;
+                reply.description( self.description());
+                reply.time = self.exectTime;
+                reply.postedBy = self.postedById;
+                reply.id = self.id;
+                if (reply.description() != null && reply.description().trim() != "") {
+                    $.ajax({
+                        url: '/api/Forum/updateQuestionReply',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(reply),
+                        success: function (data) {
+                            self.isEditQuestionReply(false);
+                        },
+                        error: function () {
+                            toastr.error("failed to update comment.Refresh page and try gain", "Error!");
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You can't post empty comment", "Sorry!");
+                }
+            }
+        }
+        
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.tagURL = '/Tag/' + self.id + '/' + convertToSlug(self.name);
+        };
+        function Question(data) {
+            var self = this;
+            data = data || {};
+            self.title = data.title;
+            self.description = ko.observable( data.description);
+            self.postedByName = data.postedByName;
+            self.postedById = data.postedById;
+            self.postedByLink = '/User/Index/' + self.postedById;
+            self.id = data.id;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.loginUserId = data.islogin || "";
+            self.showQuestionReplies = ko.observableArray();
+            self.showAnswers = ko.observableArray();
+            self.isQuestionReplyVisible = ko.observable(false);
+            self.isQuestionReplyFocused = ko.observable(false);
+            self.views = ko.observable(data.views);
+            self.isFollowed = ko.observable(false);
+            self.followText = ko.observable("Follow");
+            self.showTags = ko.observableArray();
+            if (data.questionTags) {
+                var reply = $.map(data.questionTags, function (item) { return new Tag(item) });
+                self.showTags(reply);
+            }
+            if (data.isFollowed) {
+                self.followText("UnFollow");
+                self.isFollowed(true);
+            }
+            self.deleteQuestion = function (question) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this !",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Forum/DeleteQuestion/' + question.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            swal("Deleted!", "Question has been deleted.", "success");
+                            window.location.href = "/Forum";
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.follow = function (questionId, loginUserId) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/Follow?questionId=' + questionId,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.followText(data);
+                            if (data == "Follow") {
+                                self.isFollowed(false);
+                            } else { self.isFollowed(true);}
+                        },
+                        error: function (xhr, status, error) {
+                            toastr.error("Please refresh page and try again", "Error!");
+                        }
+                    });
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+
+            self.isliked = ko.observable(data.isUp);
+            self.isunliked = ko.observable(data.isDown);
+            self.voteUpCount = ko.observable(data.voteUpCount || 0);
+            self.voteDownCount = ko.observable(data.voteDownCount || 0),
+            self.voteCount = ko.observable(self.voteUpCount() - self.voteDownCount()),
+            self.questionVoteUp = function (id, loginUserId, isup) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/VoteQuestion?id=' + id + '&isup=' + isup,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.voteCount(data.voteCount);
+                            if (isup) {
+                                self.isliked(true);
+                                self.isunliked(false);
+                            } else {
+                                self.isliked(false);
+                                self.isunliked(true);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    });
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+
+
+            if (data.questionReplies) {
+                var reply = $.map(data.questionReplies, function (item) { return new QuestionReply(item) });
+                self.showQuestionReplies(reply);
+            }
+            if (data.answers) {
+                var ans = $.map(data.answers, function (item) { return new Answer(item) });
+                self.showAnswers(ans);
+            }
+            self.toggleQuestionReply = function () {
+                if (!self.isQuestionReplyVisible()) {
+                    self.isQuestionReplyVisible(true);
+                    self.isQuestionReplyFocused(true);
+                }
+                else {
+                    self.isQuestionReplyVisible(false);
+                }
+            }
+            self.checkEnter1 = function (d, e) {
+                if (self.loginUserId) {
+                    if (self.newQuestionReply().length < 500) {
+                        if (e.keyCode == 13) {
+                            self.addQuestionReply();
+                        }
+                    } else {
+                        self.newQuestionReply(self.newQuestionReply().slice(0, -1));
+                        toastr.info("You reached the limit");
+                    }
+                } else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+            
+            //reported
+            self.isReported = ko.observable(data.isReported);
+            self.reportedCount = ko.observable(data.reportedCount);
+            self.report = function (id, loginUserId) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Forum/reportQuestion?id=' + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.isReported(true);
+                            self.reportedCount(data);
+                        },
+                        error: function (xhr, status, error) {
+                            if (xhr.responseText == "" || xhr.responseText == null) {
+                                toastr.error("Please refresh page and try again","Error");
+                            }
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    })
+                } else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+            //delete answer
+            self.deleteAnswer = function (reply) {
+                $.ajax({
+                    url: '/api/Forum/DeleteAnswer/' + reply.id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.showAnswers.remove(reply);
+                    },
+                    error: function () {
+                        toastr.error("failed to delete Answer.Refresh page and try again", "Error!");
+                    }
+                });
+            }
+            //delete question reply
+            self.deleteQuestionReply = function (reply) {
+                $.ajax({
+                    url: '/api/Forum/DeleteQuestionReply/' + reply.id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.showQuestionReplies.remove(reply);
+                    },
+                    error: function () {
+                        toastr.error("failed to delete comment.Refresh page and try again", "Error!");
+                    }
+                });
+            }
+            //add question reply
+            self.newQuestionReply = ko.observable('');
+            self.addQuestionReply = function () {
+                if (self.loginUserId) {
+                    var reply = new QuestionReply();
+                    reply.questionId = self.id;
+                    reply.description (self.newQuestionReply());
+                    reply.time = new Date($.now());
+                    if (reply.description() != null && reply.description().trim() != "") {
+                        $.ajax({
+                            url: '/api/Forum/PostQuestionReply',
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            data: ko.toJSON(reply),
+                            success: function (data) {
+                                self.showQuestionReplies.push(new QuestionReply(data));
+                                self.newQuestionReply('');
+                            },
+                            error: function () {
+                                toastr.error("failed to post comment", "Error!");
+                            }
+                        })
+                    }
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+            
+            self.newAnswer = ko.observable('');
+            self.answerKeyUp = function (length, d, e) {
+                if (self.loginUserId) {
+                    if (length > 1000) {
+                        self.newAnswer(self.newAnswer().slice(0, -1));
+                        toastr.info("You reached the limit","Sorry!");
+                    }
+                } else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+            self.addAnswer = function () {
+                if (self.loginUserId) {
+                    var answer = new Answer();
+                    answer.questionId = self.id;
+                    answer.description ( self.newAnswer());
+                    answer.time = new Date($.now());
+                    if (answer.description() != null && answer.description().trim() != "") {
+                        $.ajax({
+                            url: '/api/Forum/PostAnswer',
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            data: ko.toJSON(answer),
+                            success: function (data) {
+                                self.showAnswers.push(new Answer(data));
+                                self.newAnswer('');
+                            },
+                            error: function () {
+                                toastr.error("failed to post Answer", "Error!");
+                            }
+                        })
+                    }
+                }
+                else {
+                    $("#inputEmail").modal('show');
+                }
+            }
+        }
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            self.showQuestions = ko.observableArray();
+            self.loadQuestion = function () {
+                var questionId = $("#questionId").val();
+                url_address = '/api/Forum/GetQuestion/' + questionId;
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'GET'
+                })
+                .done(function (data) {
+                    var mappedads = $.map(data, function (item) { return new Question(item); });
+                    self.showQuestions(mappedads);
+                    $("#FirstLoading").css({ "display": "block" });
+                    loadAdmin();
+                })
+                .fail(function () {
+                    toastr.error("Unable to load data. Please try again", "Error");
+                });
+            }
+
+            self.loadQuestion();
+            return self;
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel());
+            $.connection.hub.start().done(function () {
+                //model.init();
+            });
+        });
+
+    </script>
+}

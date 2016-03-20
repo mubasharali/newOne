@@ -1,0 +1,384 @@
+﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Company>
+
+@{
+    ViewBag.Title = "Search Companies in Pakistan";
+}
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <br /> <br /><br />
+        <div class="col-sm-6">
+
+            <div class="control-group form-horizontal">
+
+                <label class="control-label col-sm-5" for="select-repo">What are you looking for <br /><small class="text-navy hidden-xs">pick tags</small></label>
+                <div class="col-sm-7 ">
+                    <input id="select-tag" data-bind="value:tags" class="repositories" placeholder="e.g, Cars, Jobs, ups, washing mechine.." />
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-sm-6">
+
+            <div class="control-group form-horizontal">
+
+                <label class="control-label col-sm-5" for="select-repo">Search by name </label>
+                <div class="col-sm-7">
+                    <input id="select-company" data-bind="value:title" class=" form-control" placeholder="Enter company name" />
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="row">
+        <br /> <br /><br />
+        <div data-bind="foreach:showAds">
+            <div class="col-md-4 col-sm-6">
+                <div class="contact-box">
+                    <a data-bind="attr:{href:link}" >
+                        <div class="col-sm-4">
+                            <div class="text-center">
+                                <img alt="logo" class="img-circle m-t-xs img-responsive" data-bind="attr:{src:logoLink}">
+                                @*<div data-bind="text:shortabout" class="m-t-xs font-bold"></div>*@
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <h3><strong data-bind="text:title"></strong></h3>
+                            <span data-bind="visible:city">
+                                <p><i class="fa fa-map-marker"></i> <span data-bind="text:city"></span></p>
+                                <address>
+                                    <strong data-bind="text:shortabout"></strong><br>
+                                    <span data-bind="text:exectLocation"></span> <br>
+                                    <span data-bind="text:popularPlace"></span><br>
+                                    <abbr title="Phone">P:</abbr><span data-bind="text:contactNo1"></span>
+                                </address>
+                            </span>
+                            <div data-bind="foreach:showTags"><span data-bind="text:name"></span></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/bundles/tagStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/slick")
+
+    <script>
+        function convertToSlug(Text) {
+            return Text
+                .toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-')
+            ;
+        }
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+        }
+        function Company(data) {
+            var self = this;
+            data = data || {};
+            self.title = data.title;
+            self.shortabout = data.shortabout;
+            self.postedByName = data.postedByName;
+            self.postedById = data.postedById;
+            self.id = data.id;
+            self.link = "/CompanyPage/" + self.id + '/' + convertToSlug(self.title);
+            self.logoLink = '/Images/Company/default_logo.png';
+            if (data.logoExtension) {
+                self.logoLink = $.cookie("AWSURL") + $.cookie("AWSCompanyFolder") + self.id + "/logo" + data.logoExtension;
+            }
+            self.city = data.city;
+            self.popularPlace = data.popularPlace;
+            self.exectLocation = data.exectLocation;
+            self.contactNo1 = data.contactNo1;
+            self.contactNo2 = data.contactNo2;
+            self.showTags = ko.observableArray();
+
+           
+            if (data.adTags != null) {
+                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+                self.showTags(tags);
+            }
+           
+            
+        }
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            self.showAds = ko.observableArray();
+            self.tags = ko.observable();
+            self.title = ko.observable();
+            self.title.subscribe(function () {
+                self.loadad();
+            })
+            self.tags.subscribe(function () {
+                console.log( self.tags());
+                self.loadad();
+            })
+            self.loadad = function () {
+                url_address = '/api/Company/SearchCompanies?title=' + self.title() + '&tags=' + self.tags();
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new Company(item); });
+                        self.showAds(mappedads);
+
+                    },
+                    error: function () {
+                        toastr.error("Unable to load data. Please try again", "Error");
+                    }
+                });
+            }
+            self.loadad();
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.slick = (function () {
+            var createImageDiv = function (imgUrl) {
+
+                $a = $('<a>');
+                $a.attr('href', imgUrl);
+                //$a.attr('data-gallery', '#blueimp-gallery');
+                $a.attr('target', '_blank');
+                $div = $('<div>');
+                $image = $('<img>');
+                $image.attr('src', imgUrl);
+                // $div.append($image);
+                $a.append($image);
+                $div.append($a);
+                return $div;
+            };
+
+            // Initializes the carousel
+            var init = function (element, valueAccessor, allBindingsAccessor) {
+                // Clears the div
+                $(element).empty();
+                // Creates the inner divs with images
+                var images = ko.unwrap(valueAccessor());
+                if (images) {
+                    images.forEach(function (imgUrl) {
+                        $(element).append(createImageDiv(imgUrl));
+                    });
+                }
+
+                // try to recover slickOptions
+                var options = allBindingsAccessor().slickOptions || {};
+
+                // Initialize slick on the div, with provided options
+                $(element).slick(options);
+
+                //handle disposal, if KO removes the element
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).slick('unslick');
+                });
+
+                // check if there is slickIndex
+                var slickIndex = allBindingsAccessor().slickIndex;
+                if (slickIndex) {
+                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+                }
+                // If it's obervable, subscribe to its changes
+                if (ko.isObservable(slickIndex)) {
+                    slickIndex.subscribe(function (idx) {
+                        $(element).slick('slickGoTo', idx);
+                    });
+                }
+                // It if's writable observable, update when slick current index changes
+                if (ko.isWritableObservable(slickIndex)) {
+                    $(element).on('afterChange', function (evt, slick, pos) {
+                        slickIndex(pos);
+                    })
+                }
+
+                // Check if the array of images is an observable array
+                var imagesArray = valueAccessor();
+                // If it's observable array, subscribe to changes
+                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+                    imagesArray.subscribe(function (changes) {
+                        console.log(changes);
+                        if (changes) {
+                            changes.forEach(function (change) {
+                                if (change.status == 'added') {
+                                    // Add new img div at index
+                                    var imgDiv = createImageDiv(change.value)[0];
+                                    var index = change.index;
+                                    var slideCount = $(element).slick('getSlick').slideCount;
+                                    // if the index is out of range (which can happen
+                                    // with push, and splice), include at the end
+                                    var addBefore = true;
+                                    if (index >= slideCount) {
+                                        index = slideCount - 1;
+                                        addBefore = false;
+                                    }
+                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
+                                } else if (change.status == 'deleted') {
+                                    // delete img div at index
+                                    $(element).slick('slickRemove', change.index);
+                                }
+                            });
+                        }
+                    }, null, 'arrayChange');
+                } // if observable array
+            }
+
+            //update the control when the view model changes
+            var update = function (element, valueAccessor) {
+                var images = ko.unwrap(valueAccessor());
+                // Do something to update the content
+                console.log('update');
+            }
+
+            return { init: init, update: update };
+        })();
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            create: true,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times Used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        
+        //$('#select-company').selectize({
+        //    valueField: 'name',
+        //    labelField: 'name',
+        //    searchField: 'name',
+        //    options: [],
+        //    maxItems: 6,
+        //    create: true,
+        //    render: {
+        //        option: function (item, escape) {
+        //            return '<div>' +
+        //                '<span class="">' +
+        //                    '<span class="name">' + escape(item.name) + '</span>' +
+
+        //                '</span>' +
+        //            '</div>';
+        //        }
+        //    },
+        //    load: function (query, callback) {
+        //        if (!query.length) return callback();
+        //        $.ajax({
+        //            url: '/api/Company/SearchCompanies?s=' + encodeURIComponent(query),
+        //            type: 'POST',
+        //            error: function () {
+        //                callback();
+        //            },
+        //            success: function (res) {
+        //                callback(res.slice(0, 10));
+        //            }
+        //        });
+        //    }
+        //});
+        $(document).ready(function () {
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new ViewModel);
+            $.connection.hub.start().done();
+            $('.slick_demo_2').slick({
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                centerMode: true,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3,
+                            infinite: true,
+                            dots: true
+                        }
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        })
+
+    </script>
+}
+
+
+
+

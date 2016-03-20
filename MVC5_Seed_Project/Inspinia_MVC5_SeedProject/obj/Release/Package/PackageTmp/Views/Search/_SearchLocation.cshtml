@@ -1,0 +1,55 @@
+﻿<div class="modal inmodal fade" id="setLocation" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+
+                <small class="font-bold">Set your location</small>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label col-md-2">City</label>
+                    <div class="col-md-10" data-bind="visible:!_isSearchCityLoading()">
+                        <select id="searching-city" class="demo-default" data-bind="options: searchingCities,
+                       value: searchingCity,
+                       optionsCaption: 'Select City...'"></select>
+
+                    </div>
+                    <div class="col-md-10" data-bind="visible:_isSearchCityLoading()">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+                <div data-bind="with:searchingCity">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Famous Place <small class="text-navy"> optional</small></label>
+                        <div class="col-md-10" data-bind="visible:!_isSearchPPLoading()">
+                            <select id="searching-popularPlace" class="demo-default" data-bind="options:searchingPPs,
+                       value: searchingPP,
+                       optionsCaption: 'Choose Famous place...'"></select><br />
+                        </div>
+                        <div class="col-md-10" data-bind="visible:_isSearchPPLoading()">
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div><br />
+                        </div>
+                    </div>
+                </div> 
+                <span data-bind="visible:searchingCity"> Set location to: <b> <span data-bind="text:searchingPP"></span> <span data-bind="visible:searchingPP">,</span> </span><span data-bind="text:searchingCity"></span></b>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-bind="click:searchLocationBtn" class="btn btn-primary">Set Location</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,627 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.AspNetUser
+
+@{
+    ViewBag.Title = Model.Email ;
+}
+
+<input type="hidden" value="@ViewBag.id" id="userId" />
+
+
+<div class="wrapper wrapper-content animated fadeInRight" id="profile" >
+    <div data-bind="visible:!showProfile()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" data-bind="with:showProfile">
+        <div class="row m-b-lg m-t-lg">
+            <div class="col-sm-5">
+
+                <div class="profile-image">
+                    <a target="_blank" data-bind="attr:{href:dpLink}">
+                        <img data-bind="attr:{src:dpLink}" class="img-circle circle-border m-b-md" alt="profile">
+                    </a>
+                </div>
+                <div class="profile-info">
+                    <div class="">
+                        <div>
+                            <h2 class="no-margins" data-bind="text:name"></h2>(<span data-bind="text:isOnline"></span> @*<span data-bind="if:isOnline()"><i class="fa fa-circle text-navy"></i> online</span>
+                                <span data-bind="if:!isOnline()"><i class="fa fa-circle text-warning"></i> offline</span>*@)
+                            <br />
+                            <small>
+                                @*<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button>
+                                &nbsp;<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>*@
+
+                                <a class="btn btn-sm btn-default" data-bind="visible: loginUserId == id,attr:{href:'/User/Profile/'+ id}" style="margin-bottom:1px">Edit Profile</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <table class="table small m-b-xs">
+                    <tbody>
+                        <tr>
+                            <td>
+                                From:  <strong data-bind="text:city"></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Email: <span data-bind="visible:!hideEmail"> <strong data-bind="text:UserName"></strong></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                phone number:<span data-bind="visible:!hidePhoneNumber"> <strong data-bind="text:phoneNumber"></strong></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                Date of birth:<span data-bind="visible:!hideDateOfBirth"><strong data-bind="text:dateOfBirth"></strong> </span> &nbsp; Gender: <strong data-bind="text:gender"></strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-offset-1 col-sm-3">
+                @*<table class="table small m-b-xs">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>142</strong> Active ads
+                                </td>
+                                <td>
+                                    <strong>22</strong> Followers
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>61</strong> saved ads
+                                </td>
+                                <td>
+                                    <strong>54</strong> Pages
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>154</strong> Questions
+                                </td>
+                                <td>
+                                    <strong>32</strong> Answers
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>*@
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-3">
+                
+                <div class="ibox hidden-xs" >
+                    <div class="ibox-content">
+                        <h3>About <span data-bind="text:name"> </span></h3>
+                        <p data-bind="visible:!about">Apparently, this user prefers to keep an air of mystery about them.</p>
+                        <p class="small" data-bind="text:about">
+                            
+                        </p>
+                    </div>
+                </div>
+                <div class="ibox hidden-xs" data-bind="visible:loginUserId == id && showCompanies().length > 0">
+                    <div class="ibox-title"><h5>My Companies</h5></div>
+                    <div class="ibox-content">
+                        <div data-bind="foreach:showCompanies">
+                            <a data-bind="attr:{href:companyUrl}" class="btn btn-white set_es"><img style="width:26px" data-bind="attr:{src:logoLink }" /> <span data-bind="text:name"></span></a>
+                            @*<div class="media">
+                                <a data-bind="attr:{href:'/CompanyPage/' + id + '/' + name}" >
+                                    <div class="pull-left"> <img style="width:26px" data-bind="attr:{src:logoLink }" /> </div> 
+                                    <div class="media-body" data-bind="text:name"> </div>
+                                </a>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+                @*<div class="ibox hidden-xs">
+                    <div class="ibox-content">
+                        <h3>Followers and friends</h3>
+                        <p class="small">
+                            If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
+                            anything embarrassing
+                        </p>
+                        <div class="user-friends">
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a3.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a4.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a5.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a6.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a7.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a8.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
+                            <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="ibox hidden-xs" data-bind="visible:loginUserId == id">
+                    <div class="ibox-title"><h5>Manage Alerts</h5></div>
+                    <div class="ibox-content">
+                        <p data-bind="visible:followingTags().length>0">
+                            You are receiving notifications for following tags:
+                            @*<ul class="tag-list" data-bind="foreach:followingTags" style="padding:0">
+                                <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                            </ul>*@
+                            <div class="small m-t-xs" data-bind="foreach:followingTags">
+                                <a target="_blank" data-bind="attr:{href:'/Tag/' + name},text:name" class="btn btn-xs btn-white" > </a>
+                            </div><br />
+                        </p>
+                        @*<span data-bind="foreach:followingTags">
+                            <p>&nbsp;</p>
+                        </span>*@
+                        <p >Enter tags you want to follow and you will be notified when new ad containing your followed tags will be posted</p>
+                        <p > Note: If you are already following a tag then it will be unfollowed</p>
+                        <input id="select-tags-to-follow" data-bind="value:tagsToFollow" class="repositories" placeholder="Pick tags..." />
+                        <p data-bind="visible:tagsToFollow().length > 0">Follow tags <span data-bind="text:tagsToFollow"></span> and if already followed then unfollow</p>
+                        <button data-bind="click:followTagsBtn" class="btn btn-primary">Submit</button>
+                        <div data-bind="text:followSummary"></div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+
+            <div class="col-lg-7 col-sm-9">
+                <h4>Active ads (<span data-bind="text:activeads().length"></span>)</h4><hr />
+                <div data-bind="foreach:activeads">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                </div>
+                <div data-bind="visible:id == loginUserId">
+                    <h4>Saved ads (<span data-bind="text:savedads().length"></span>) </h4><hr />
+                    <div data-bind="foreach:savedads">
+                        @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    </div>
+
+                    <h4>Notifications (<span data-bind="text:notificationads().length"></span>) </h4><hr />
+
+                    <div data-bind="foreach:notificationads">
+                        @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+            @*<div class="ibox float-e-margins">
+                <div class="ibox-title  back-change">
+                    <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="#">Config option 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <p>
+                        Crop image
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="image-crop">
+                                <img src="~/Images/p3.jpg">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Preview image</h4>
+                            <div class="img-preview img-preview-sm"></div>
+                            <h4>&nbsp;</h4>
+                            <div class="btn-group">
+                                <form action="/User/saveProfilePic" method="post" id="setProfilePic" enctype="multipart/form-data">
+                                    <label title="Upload image file" for="inputImage" class="btn btn-primary">
+
+                                        <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
+                                        Upload new image
+                                        <input type="submit" style="visibility:hidden" />
+
+                                    </label>
+                                </form>
+                                <button id="setProfilePicBtn" class="btn btn-primary">Set as profile picture</button>
+                            </div>
+                            <h4>Other options</h4>
+                            <div class="btn-group">
+                                <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
+                                <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
+                                <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
+                                <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+
+@section Styles {
+
+@Styles.Render("~/plugins/imagecropperStyles")
+@Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/plugins/slickStyles")
+@Styles.Render("~/plugins/slickThemeStyles")
+@Styles.Render("~/plugins/toastrStyles")
+}
+
+
+
+@section Scripts{
+    
+@Scripts.Render("~/plugins/imagecropper")
+@Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/truncate")
+<script src="~/Scripts/jquery.timeago.js"></script>
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script>
+        function Company(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.logoLink = "/Images/Company/default_logo.png";
+            if (data.logoExtension) {
+                self.logoLink = $.cookie("AWSURL") + $.cookie("AWSCompanyFolder") + +self.id + "/logo" + data.logoExtension;
+            }
+            self.companyUrl = "/CompanyPage/" + self.id + "/" + convertToSlug( self.name);
+        }
+        function convertToSlug(Text) {
+            return Text
+                .toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-')
+            ;
+        }
+        function profile(data) {
+            var self = this;
+            data = data || {};
+
+            self.showCompanies = ko.observableArray();
+            if (data.companies) {
+                var tagsdata = $.map(data.companies, function (item) { return new Company(item); });
+                self.showCompanies(tagsdata);
+            }
+
+            self.tagsToFollow = ko.observable("");
+            self.followSummary = ko.observable();
+            self.followTagsBtn = function () {
+                if (self.tagsToFollow() == "") {
+                    toastr.info("Please Enter the tags");
+                    return;
+                }
+                self.followSummary("");
+                $.ajax({
+                    url: '/api/Tag/FollowTags?tags=' + self.tagsToFollow() + '&isUnfollowAllowed=' + true,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.followSummary("Done! Refresh page to see changes");
+                    },
+                    error: function () {
+                        toastr.error("Some error has occured. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+
+            self.savedads = ko.observableArray();
+            self.activeads = ko.observableArray();
+            self.notificationads = ko.observableArray();
+
+            self.id = data.Id;
+            self.followingTags = ko.observableArray();
+
+            
+
+            if (data.followingTags) {
+                var tagsdata = $.map(data.followingTags, function (item) { return new Tag(item); });
+                self.followingTags(tagsdata);
+            }
+            if (data.savedads) {
+                var adData = $.map(data.savedads, function (item) { return new Ad(item); });
+                self.savedads(adData);
+            }
+            if (data.activeads) {
+                var adData = $.map(data.activeads, function (item) { return new Ad(item); });
+                self.activeads(adData);
+            }
+            if (data.notificationads) {
+                var adData = $.map(data.notificationads, function (item) { return new Ad(item); });
+                self.notificationads(adData);
+            }
+
+            self.UserName = data.UserName;
+            self.city = data.city;
+            self.gender = data.gender;
+            self.dateOfBirth = "";
+            if (data.dateOfBirth != null) {
+                self.dateOfBirth = data.dateOfBirth.split("T")[0];
+            }
+            self.name = data.Email;
+            self.phoneNumber = data.phoneNumber;
+            self.hideEmail = data.hideEmail;
+            self.hidePhoneNumber = data.hidePhoneNumber;
+            self.hideDateOfBirth = data.hideDateOfBirth;
+            self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.id + data.dpExtension;
+            if (!data.dpExtension) {
+                self.dpLink = '/Images/Users/default.jpg';
+            }
+            self.about = data.about;
+            self.lastSeen = data.lastSeen;
+            self.reputation = data.reputation;
+            self.since = data.since;
+            self.isFriend = ko.observable(data.isFriend);
+            self.isFriendRequestSent = ko.observable(data.isFriendRequestSent);
+            self.addFriend = function (id) {
+                if (self.loginUserId) {
+                    if (self.isFriend()) {
+                        self.unFriend(id);
+                    } else {
+                        self.isFriend(true);
+                        $.ajax({
+                            url: '/api/User/AddFriend?id=' + id,
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            success: function (data) {
+                                //self.isFriend(true);
+                            },
+                            error: function () {
+                                self.isFriend(false);
+                                toastr.error("failed to add friend. Please refresh page and try again", "Error");
+                            }
+                        })
+                    }
+                } else {
+                    loginBtn();
+                }
+            }
+            self.follow = function (id) {
+
+            }
+            self.unFriend = function (id) {
+                self.isFriend(false);
+                $.ajax({
+                    url: '/api/User/UnFriend?id=' + id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        //self.isFriend(false);
+                    },
+                    error: function () {
+                        self.isFriend(true);
+                        toastr.error("failed to unFriend. Please refresh page and try again", "Error");
+                    }
+                })
+            }
+
+            self.sendMessage = function (id, name) {
+                sendMessageTo(id);
+                sendMessgeToName(name);
+                $(".open-small-chat").trigger('click');
+
+            }
+
+            self.loginUserId = data.loginUserId || "";
+            self.age = getAge(self.dateOfBirth);
+            self.isUserOnline = function (id) {
+
+            }
+            function getAge(dateString) {
+                var today = new Date();
+                var birthDate = new Date(dateString);
+                birthDate = new Date(Date.parse(birthDate, "MM/dd/yyyy"));
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+            self.calculateAge = function () {
+                self.dateOfBirth = new Date(self.dateOfBirth);
+                var today = new Date();
+                self.age = Math.floor((today - self.dateOfBirth) / (365.25 * 24 * 60 * 60 * 1000));
+            }
+            self.openProfile = function () {
+                var userId = $("#userId").val();
+                window.location.href = "/User/Profile/" + userId;
+            }
+        }
+        
+        function viewModel() {
+            SearchingLocation();
+            ChatViewModel();
+            AccountViewModel();
+            
+            var self = this;
+            self.followedTags = ko.observableArray();
+            self.showProfile = ko.observable();
+            
+            self.openProfile = function () {
+                var userId = $("#userId").val();
+                window.location.href = "/User/Profile/" + userId;
+            }
+            
+            //online users
+            //var userId = $("#userId").val();
+            //self.onlineUsersHub = $.connection.onlineUsers;
+            //self.onlineUsers = ko.observableArray();
+            //self.onlineUsersHub.client.showConnected = function (connectionId) {
+            //    var mape = $.map(connectionId, function (item) { return item });
+            //    self.onlineUsers(mape);
+            //    console.log("hi i am here");
+            //}
+            
+           
+
+            self.loadProfile = function () {
+                var userId = $("#userId").val();
+                $.ajax({
+                    url: '/api/User/GetUser/' + userId,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        self.showProfile(new profile(data));
+                        $("#FirstLoading").css({ "display": "block" });
+                        $('#select-tags-to-follow').selectize({
+                            valueField: 'name',
+                            labelField: 'name',
+                            searchField: 'name',
+                            options: [],
+                            maxItems: 20,
+                            render: {
+                                option: function (item, escape) {
+                                    return '<div>' +
+                                        '<span class="title">' +
+                                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                                        '</span>' +
+                                        '<span class="description">' + escape(item.info) + '</span>' +
+                                        '<ul class="meta">' +
+                                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                                        '</ul>' +
+                                    '</div>';
+                                }
+                            },
+                            load: function (query, callback) {
+                                if (!query.length) return callback();
+                                $.ajax({
+                                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                                    type: 'POST',
+                                    error: function () {
+                                        callback();
+                                    },
+                                    success: function (res) {
+                                        callback(res.slice(0, 10));
+                                    }
+                                });
+                            }
+                        });
+                    },
+                    error: function () {
+                        toastr.error("failed to load profile", "Error");
+                    }
+                })
+            }
+            self.loadProfile();
+            return self;
+        }
+        
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        $(function () {
+            
+           
+
+
+            $('#setProfilePicBtn').prop('disabled', true);
+            var $image = $(".image-crop > img")
+            $($image).cropper({
+                aspectRatio: 1.618,
+                preview: ".img-preview",
+                done: function (data) {
+                    //toastr.info("fone");
+                    $('#setProfilePicBtn').prop('disabled', false);
+                }
+            });
+
+            var $inputImage = $("#inputImage");
+            if (window.FileReader) {
+                $inputImage.change(function () {
+                    var fileReader = new FileReader(),
+                            files = this.files,
+                            file;
+
+                    if (!files.length) {
+                        return;
+                    }
+
+                    file = files[0];
+
+                    if (/^image\/\w+$/.test(file.type)) {
+                        fileReader.readAsDataURL(file);
+                        fileReader.onload = function () {
+                            $inputImage.val("");
+                            $image.cropper("reset", true).cropper("replace", this.result);
+                        };
+                    } else {
+                        showMessage("Please choose an image file.");
+                    }
+                });
+            } else {
+                $inputImage.addClass("hide");
+            }
+
+            $("#setProfilePicBtn").click(function () {
+                //window.open($image.cropper("getDataURL"));
+                $("#setProfilePic").submit();
+                toastr.info("Your profile picture is changed successfully! Please refresh page to see changes");
+            });
+
+            $("#zoomIn").click(function () {
+                $image.cropper("zoom", 0.1);
+            });
+
+            $("#zoomOut").click(function () {
+                $image.cropper("zoom", -0.1);
+            });
+
+            $("#rotateLeft").click(function () {
+                $image.cropper("rotate", 45);
+            });
+
+            $("#rotateRight").click(function () {
+                $image.cropper("rotate", -45);
+            });
+
+            $("#setDrag").click(function () {
+                $image.cropper("setDragMode", "crop");
+            });
+            $.connection.hub.start().done();
+            
+            ko.applyBindings(new viewModel());
+            
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,1173 @@
+﻿@{
+    ViewBag.Title = ViewBag.title;
+}
+<input type="hidden" id="adId" value="@ViewBag.adId" />
+<input type="hidden" id="currentPage" value="@HttpContext.Current.Request.Url.AbsolutePath" />
+
+
+
+<style>
+    .carouselContainer {
+        overflow: visible;
+        //height:350px;
+    }
+
+        .carouselContainer img {
+           // height: 350px;
+           height:auto;
+           width:100%;
+        }
+</style>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-3 hidden-sm hidden-xs">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- tempAds -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-5427185622945199"
+                 data-ad-slot="1030384265"
+                 data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        <div class="col-md-9">
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="showAd" style="display:none">
+                <div data-bind="visible:error()" class="alert alert-success">
+                    <strong>Error! </strong><span data-bind="text:error"></span>
+                </div>
+
+                <div data-bind="visible:!isLoading()">
+                    <div data-bind="with: showAds()">
+                        <div data-bind="visible:statusError" class="alert alert-success">
+                            <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
+                        </div>
+
+                        <div data-bind="visible:isVisible">
+                            <input type="hidden" id="loginUserId" data-bind="value:loginUserId" />
+
+                            <div data-bind="attr:{'id':id}">
+                                <div class="ibox product-detail">
+                                    <div class="ibox-content">
+
+                                        <div class="row">
+                                            <div class="lightBoxGallery">
+
+                                                <div class="col-md-5 col-sm-7">
+
+                                                    <div class="carouselContainer">
+                                                        <div><span data-bind="text:images().length"></span>  images attched</div>
+
+                                                        <div id="gallery" data-gallery=""
+                                                             data-bind="slick: images,
+                slickOptions: {dots:true, initialSlide:0,autoplay:true,autoplaySpeed: 1000,infinite: false,speed: 1000,fade: true,},
+                slickIndex: imageIndex">
+                                                        </div>
+                                                        <div data-bind="visible:images().length == 0">Display your banner ad here</div>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here</div>
+                                            </div>
+                                            <div class="col-md-7 col-sm-12">
+                                                <span data-bind="visible:(loginUserId != postedById ) ">
+                                                    <span data-bind="visible:isAdmin()">
+                                                        <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a>
+
+                                                    </span>
+                                                </span>
+                                                <span data-bind="visible:loginUserId == postedById">
+                                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                                </span>
+                                                <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
+                                                <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
+                                                    <li><a target="_blank" data-bind="attr:{href:tagLink}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                                </ul><br /><br />
+                                                <hr>
+                                                <span data-bind="visible:!showJob()">
+                                                    @*remove this*@
+                                                    <span data-bind="visible:loginUserId != postedById">
+                                                        <button data-bind="click:function(){ return sendMessage(postedById,postedByName)}" class="btn btn-primary pull-right">Chat with seller</button>
+                                                    </span>
+                                                    <h1 class="product-main-price">
+                                                        <span data-bind="if:!isBidingAllowed">
+                                                            <span data-bind="if:price">
+                                                                <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                                            </span>
+                                                            <span data-bind="if:!price">Price on contact</span>
+                                                        </span>
+                                                        <span data-bind="if:isBidingAllowed">
+                                                            <span data-bind="if:price">
+                                                                <span data-bind="if:highestBid() == '-Infinity'">
+                                                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                                                </span>
+                                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) Initial Bid = <span data-bind="text:price"></span> </small>
+                                                                </span>
+                                                            </span>
+                                                            <span data-bind="if:!price">
+                                                                <span data-bind="if:highestBid() == '-Infinity'">
+                                                                    No Bit yet
+                                                                </span>
+                                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </h1>
+                                                    <hr />
+                                                </span>
+                                                <div data-bind="with:showCameraAd">
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>Category:</dt>
+                                                        <dd data-bind="text:category"></dd>
+
+                                                        <dt data-bind="with:brand">Brand:</dt>
+                                                        <dd data-bind="text:brand"></dd>
+                                                    </dl>
+                                                </div>
+
+                                                <style>
+                                                    dt {
+                                                        float: left;
+                                                        clear: left;
+                                                        margin-right: 5px;
+                                                        font-weight: bold;
+                                                    }
+
+                                                    dd {
+                                                        margin-left: 0px;
+                                                    }
+                                                </style>
+
+                                                <div data-bind="visible:category == 'Animals'">
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>Category:</dt>
+                                                        <dd data-bind="text:subcategory"></dd>
+                                                    </dl>
+                                                </div>
+
+                                                <div data-bind="with:showMobileAd">
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>condition:</dt>
+                                                        <dd data-bind="text:$parent.condition"></dd>
+                                                        <dt>Tye:</dt>
+                                                        <dd data-bind="text:$parent.type"></dd>
+                                                        <dt data-bind="with:brand">Brand:</dt>
+                                                        <dd data-bind="text:brand"></dd>
+                                                        <dt data-bind="with:model">Model:</dt>
+                                                        <dd data-bind="text:model"></dd>
+                                                        <dt data-bind="with:color">color:</dt>
+                                                        <dd data-bind="text:color"></dd>
+                                                        <span data-bind="if:sims">
+                                                            <dt>Number of sims:</dt>
+                                                            <dd data-bind="text:sims"></dd>
+                                                        </span>
+
+                                                    </dl>
+                                                </div>
+                                                <div data-bind="with: showBikeAd">
+
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>Brand:</dt>
+                                                        <dd data-bind="text:brand"></dd>
+                                                        <dt>Model:</dt>
+                                                        <dd data-bind="text:model"></dd>
+                                                        <dt>condition:</dt>
+                                                        <dd data-bind="text:$parent.condition"></dd>
+                                                        <dt>Km Driven</dt>
+                                                        <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
+
+                                                        <dt>Year</dt>
+                                                        <dd data-bind="text:year"></dd>
+                                                        <dt>Number of owners</dt>
+                                                        <dd data-bind="text:noOfOwners"></dd>
+                                                        <dt>Registered City</dt>
+                                                        <dd data-bind="text:registeredCity"></dd>
+                                                    </dl>
+                                                </div>
+                                                <div data-bind="with: showCarAd">
+
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>Brand:</dt>
+                                                        <dd data-bind="text:brand"></dd>
+                                                        <dt>Model:</dt>
+                                                        <dd data-bind="text:model"></dd>
+                                                        <dt>color:</dt>
+                                                        <dd data-bind="text:color"></dd>
+                                                        <dt>condition:</dt>
+                                                        <dd data-bind="text:$parent.condition"></dd>
+                                                        <dt>Fuel type</dt>
+                                                        <dd data-bind="text:fuelType"></dd>
+                                                        <dt>Km Driven</dt>
+                                                        <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
+
+                                                        <dt>Year</dt>
+                                                        <dd data-bind="text:year"></dd>
+                                                        <dt>Number of owners</dt>
+                                                        <dd data-bind="text:noOfOwners"></dd>
+                                                        <dt>Registered City</dt>
+                                                        <dd data-bind="text:registeredCity"></dd>
+                                                        <dt>Transmission</dt>
+                                                        <dd data-bind="text:transmission"></dd>
+                                                        <dt>Assembly</dt>
+                                                        <dd data-bind="text:assembly"></dd>
+                                                        <dt>Engine Capacity</dt>
+                                                        <dd data-bind="if:engineCapacity"><span data-bind="text:engineCapacity"></span> cc</dd>
+
+                                                    </dl>
+                                                </div>
+                                                <div data-bind="with: showRealEstateAd">
+
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>Category:</dt>
+                                                        <dd data-bind="text:$parent.subcategory"></dd>
+                                                        <dt>Area:</dt>
+                                                        <dd data-bind="text:area"></dd>
+                                                        <dt>Bed rooms:</dt>
+                                                        <dd data-bind="text:bedroom"></dd>
+                                                        <dt>Bath room:</dt>
+                                                        <dd data-bind="text:bathroom"></dd>
+                                                        <dt>Floor</dt>
+                                                        <dd data-bind="text:floor"></dd>
+                                                    </dl>
+                                                </div>
+                                                <div data-bind="with: showJob">
+
+                                                    <dl class="dl-horizontal m-t-md small">
+                                                        <dt>Category:</dt>
+                                                        <dd data-bind="text:category"></dd>
+
+                                                        <dt>Seats:</dt>
+                                                        <dd data-bind="text:seats"></dd>
+                                                        <dt>Qualification:</dt>
+                                                        <dd data-bind="text:qualification"></dd>
+                                                        <dt>exprience:</dt>
+                                                        <dd data-bind="text:exprience"></dd>
+                                                        <dt>Career Level</dt>
+                                                        <dd data-bind="text:careerLevel"></dd>
+                                                        <dt>Last Date To Apply</dt>
+                                                        <dd data-bind="text:lastDateToApply"></dd>
+                                                        <dt>Salary</dt>
+                                                        <dd data-bind="text:$parent.price"></dd>
+                                                        <dt>Salary Type</dt>
+                                                        <dd data-bind="text:salaryType"></dd>
+                                                        <span @*data-bind="visible:!showSkills().length == 0"*@>
+                                                            <dt>Skills</dt>
+                                                            <dd><span data-bind="foreach:showSkills"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></span> </dd>
+                                                        </span>
+                                                        <dt>Gender</dt>
+                                                        <dd data-bind="text:$parent.gender"></dd>
+                                                        <dt>Job Type</dt>
+                                                        <dd data-bind="text:$parent.subcategory"></dd>
+                                                        <dt>Shift</dt>
+                                                        <dd data-bind="text:$parent.shift"></dd>
+                                                        @*<dt>Year</dt>
+                                                        <dd data-bind="text:year"></dd>
+                                                        <dt>Year</dt>
+                                                        <dd data-bind="text:year"></dd>
+                                                        <dt>Year</dt>
+                                                        <dd data-bind="text:year"></dd>*@
+                                                    </dl>
+                                                </div>
+                                                <h4>Details</h4>
+                                                <div data-bind="text:description" class="small text-muted">
+                                                </div>
+
+                                                <div data-bind="with:showLocation">
+                                                    <h5 data-bind="with:cityName">Location</h5>
+                                                    <span data-bind="if:exectLocation">
+                                                        <span data-bind="text:exectLocation"></span>,
+                                                    </span>
+                                                    <span data-bind="if:popularPlace">
+                                                        <span data-bind="text:popularPlace"></span>,
+                                                    </span>
+                                                    <span data-bind="text:cityName"></span>
+                                                </div>
+                                                <br />
+                                                <div class="text-right">
+                                                    <div class="btn-group">
+                                                        <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
+                                                        <a data-bind="visible:companyId, attr:{href:companyLink}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller  (<span data-bind="text:companyName"></span> )</a>
+
+                                                        <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="ibox-footer">
+                                        <span class="pull-right">
+                                            <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
+                                        </span>
+                                        Views (<span data-bind="text:views"></span>) -  wishlist (<span data-bind="text:savedCount"></span> ) - <span data-toggle="modal" data-target="#report"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+
+
+
+
+                                        <div data-bind="visible:isBidingAllowed">
+                                            <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
+
+                                            <h2>Bidings:</h2>
+                                            <div data-bind="visible:placeBid">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <label class="control-label col-sm-2">Bid amount</label>
+                                                        <div class="col-sm-8">
+                                                            <div class="input-group m-b">
+                                                                <span class="input-group-addon">Rs</span><input type="number" placeholder="place bid.." data-bind="value:newBidPrice" class="form-control" pattern="[0-9]*" name="price" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2"><button class="btn btn-success" data-bind="click:postBid">Submit</button></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <span data-bind="text:showBidings().length"></span> bidings
+                                            <ul class="sortable-list connectList agile-list" data-bind="foreach:showBidings">
+                                                <li class="success-element">
+                                                    <span data-bind="visible:!isEditing()">
+                                                        <a data-bind="attr:{href:postedByProfileLink}"><span data-bind="text:postedByName"></span></a>
+                                                        <strong class="col-xs-offset-3"> Rs <span data-bind="text:price"></span></strong>
+                                                        <div class="agile-detail">
+
+                                                            <div data-bind="visible:$parent.loginUserId==postedById">
+                                                                <a data-bind="click:$parent.deleteBid" class="pull-right btn btn-xs btn-white">Delete</a><a data-bind="click:editBidButton" class="pull-right btn btn-xs btn-white">Edit</a>
+                                                            </div>
+                                                            <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
+                                                        </div>
+                                                    </span>
+                                                    <span data-bind="visible:isEditing()">
+                                                        <div class="input-group m-b">
+                                                            <span class="input-group-addon">Rs</span><input type="number" data-bind="value:price" class="form-control" pattern="[0-9]*" name="price" required />
+                                                        </div>
+                                                        <button class="btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
+                                                    </span>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        @Html.Partial("~/Views/Shared/_Comments.cshtml")
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content animated ">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                            <i class="fa fa-flag modal-icon"></i>
+                                            <h4 class="modal-title">Report Ad</h4>
+                                            <small class="font-bold">Make sure you have provided right information or you can loose reputation</small>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 ">
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="duplicate" required /> Ad is duplicate
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="wrong_category" required /> Wrong category
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="Irrelevent_content" required /> Irrelevent content
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input class="radio i-checks" type="radio" data-bind="checked: selectedVal " name="report" value="spam" required /> Spam/Offensive content
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input class="radio i-checks" type="radio" data-bind="checked: selectedVal" name="report" value="fraud" required /> Fraud reason
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <label>Addational details:</label>
+                                                <textarea class="msgTextArea form-control" placeholder="Addational info.." data-bind="jqAutoresize: {},value:reportText"></textarea>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-white" data-dismiss="modal">I didn't mean to</button>
+                                            @*<span data-bind="text:$parent.id"></span>*@
+                                            @*<span data-bind="text:loginUserId"></span>*@
+                                            <button type="button" data-bind="click: function(){ return report()}" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    @*@Styles.Render("~/Content/plugins/jsTree")*@
+@Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    
+    @Scripts.Render("~/plugins/slick")
+    @*@Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/bundles/categoryTree")*@
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/plugins/sweetAlert")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/_Comments.js"></script>
+<script src="~/Scripts/app/IsAdmin.js"></script>
+    <script>
+        var myAdId = $("#adId").val();
+        function Biding(data) {
+            var self = this;
+            data = data || {};
+            self.postedById = data.postedById;
+            self.postedByName = data.postedByName;
+            self.postedByProfileLink = '/User/Index/' + self.postedById;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.id = data.id;
+            self.price = ko.observable( data.price);
+            self.isEditing = ko.observable(false);
+            self.editBidButton = function () {
+                self.isEditing(true);
+            }
+            self.updateBid = function (adId) {
+                self.time = self.exectTime;
+                self.postedBy = self.postedById;
+                self.adId = adId;
+                $.ajax({
+                    url: '/api/Electronic/UpdateBid',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(self),
+                    success: function (data) {
+                        self.isEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update Bid. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+        }
+        function RealEstate(data) {
+            var self = this;
+            data = data || {};
+            self.floor = data.floor;
+            self.bedroom = data.bedroom;
+            self.bathroom = data.bathroom;
+            self.area = data.area;
+        }
+        function CameraAd(data) {
+            var self = this;
+            data = data || {};
+            self.category = data.category;
+            self.brand = data.brand;
+        }
+        function CarAd(data) {
+            var self = this;
+            data = data || {};
+            self.fuelType = data.fuelType;
+            self.year = data.year;
+            self.condition = "";
+            if (data.condition == "n") {
+                self.condition = "New";
+            } else if (data.condition == "u") {
+                self.condition = "Used";
+            } else if (data.condition == "b") {
+                self.condition = "unBoxed";
+            }
+            self.color = data.color;
+            self.brand = data.brand;
+            self.model = data.model;
+            self.kmDriven = data.kmDriven;
+            self.noOfOwners = data.noOfOwners;
+            self.registeredCity = data.registeredCity;
+            self.transmission = '';
+            if (data.transmission == "M") {
+                self.transmission = "Manual";
+            } else if (data.transmission == "A") {
+                self.transmission = "Automatic";
+            } else if (data.transmission == "S") {
+                self.transmission = "Semi-Automatic";
+            }
+            self.assembly = "";
+            if (data.assembly == "L") {
+                self.assembly = "Local";
+            } else if (data.assembly == "I") {
+                self.assembly = "Imported";
+            }
+            self.engineCapacity = data.engineCapacity;
+        }
+        function BikeAd(data) {
+            var self = this;
+            data = data || {};
+            self.year = data.year;
+            //self.condition = "";
+            //if (data.condition == "n") {
+            //    self.condition = "New";
+            //} else if (data.condition == "u") {
+            //    self.condition = "Used";
+            //} else if (data.condition == "b") {
+            //    self.condition = "unBoxed";
+            //}
+            self.brand = data.brand;
+            self.model = data.model;
+            self.kmDriven = data.kmDriven;
+            self.noOfOwners = data.noOfOwners;
+            self.registeredCity = data.registeredCity;
+            
+        }
+        function JobAd(data) {
+            var self = this;
+            data = data || {};
+            self.seats = data.seats;
+            self.category = data.category;
+            self.qualification = data.qualification;
+            self.exprience = "";
+            if (data.exprience == "n") {
+                self.exprience = "Not required";
+            } else if (data.exprience == "f") {
+                self.exprience = "Fresh Graduate";
+            } else if (data.exprience != null && data.exprience.trim() != "") {
+                self.exprience = data.exprience + " year";
+            }
+            self.careerLevel = data.careerLevel;
+            self.lastDateToApply = "";
+            if (data.lastDateToApply != null) {
+                    self.lastDateToApply = data.lastDateToApply.split("T")[0];
+            }
+            self.salaryType = "";
+            if (data.salaryType == "d") {
+                self.salaryType = "per day";
+            }
+            else if (data.salaryType == "m") {
+                self.salaryType = "per month";
+            }
+            else if (data.salaryType == "y") {
+                self.salaryType = "per year";
+            }
+            else if (data.salaryType == "h") {
+                self.salaryType = "per hour";
+            }
+            self.showSkills = ko.observableArray();
+            if (data.skills.length > 0) {
+                var tags = $.map(data.skills, function (item) { return new Tag(item); });
+                self.showSkills(tags);
+                console.log(self.showSkills());
+            }
+        }
+
+        function mobilead(data) {
+            var self = this;
+            data = data || {};
+            self.color = data.color;
+            
+            self.sims = data.sims;
+            self.brand = data.brand;
+            self.model = data.model;
+        }
+        function Location(data) {
+            var self = this;
+            data = data || {};
+            self.cityId = data.cityId;
+            self.cityName = data.cityName;
+            self.popularPlaceId = data.popularPlaceId;
+            self.popularPlace = data.popularPlace;
+            self.exectLocation = data.exectLocation;
+        }
+        var imageUrls = [];
+        function adImages(data,adId,imagesCount) {
+            var self = this;
+            data = data || {};
+            self.link = $.cookie("AWSURL") + $.cookie("AWSFolderName") + adId + '_' + imagesCount + data.imageExtension;// also loop after _
+            imageUrls.push(self.link);
+        }
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.info = data.info || "";
+            self.followers = data.followers || 0;
+            self.tagLink = "/Tag/" + self.id + '/' + convertToSlug( data.name);
+        };
+        function convertToSlug(Text) {
+            return Text
+                .toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-')
+            ;
+        }
+        function ad(data,commentsHub) {
+            var self = this;
+            self.commentsHub = commentsHub;
+            //slick
+            self.images = ko.observableArray(imageUrls);
+            self.options = {};
+            self.imageIndex = ko.observable(1);
+            self.sendMessage = function (id, name) {
+                if (self.loginUserId) {
+                    sendMessageTo(id);
+                    sendMessgeToName(name);
+                    console.log("Message will be sent to : " + name);
+                    $(".open-small-chat").trigger('click');
+                } else {
+                    loginBtn();
+                }
+            }
+            data = data || {};
+       //     self.isAdmin = data.isAdmin;
+            self.title = data.title;
+
+            self.showRealEstateAd = ko.observable();
+            self.showCameraAd = ko.observable();
+            if (data.category == "RealEstate") {
+                self.showRealEstateAd(new RealEstate(data.realestatead));
+            }
+            if (data.subCategory == "Cameras" || data.subCategory == "CamerasAccessories") {
+                self.showCameraAd(new CameraAd(data.cameraad));
+            }
+            self.companyName = data.companyName;
+            self.companyId = data.companyId;
+            self.companyLink = "";
+            if (data.companyName) {
+                self.companyLink = '/CompanyPage/' + data.companyId + '/' + convertToSlug(data.companyName);
+            }
+            self.description = ko.observable( data.description);
+            self.postedByName = data.postedByName;
+            self.postedById = data.postedById;
+            self.id = data.id;
+            self.time = getTimeAgo(data.time);
+            self.loginUserId = data.islogin || "";
+            self.loginUserProfileLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.loginUserId + data.loginUserProfileExtension;
+            if (!data.loginUserProfileExtension) {
+                self.loginUserProfileLink = '/Images/Users/default.jpg';
+            }
+            self.showMobileAd = ko.observable();
+            self.showLocation = ko.observable();
+            self.showComment = ko.observableArray();
+            self.isReported = ko.observable(data.isReported);
+            self.isSaved = ko.observable(data.isSaved);
+            self.reportedCount = ko.observable(data.reportedCount);
+            self.showImages = ko.observable();
+            self.views = data.views;
+            self.savedCount = ko.observable( data.savedCount );
+            self.price = data.price || "";
+            self.newBidPrice = ko.observable();
+            
+            self.showCarAd = ko.observable();
+            self.showBikeAd = ko.observable();
+            self.statusError = "";
+            self.isVisible = true;
+            if (data.status == "p") {
+                self.statusError = "This ad will be visible to public once it is approved by admin";
+                if (self.loginUserId != self.postedById) {
+                    self.isVisible = false;
+                }
+            }
+            self.type = "";
+            if (data.type == true) {
+                self.type = "For Sale";
+            } else {
+                self.type = "Want to buy";
+            }
+            self.condition = "";
+            if (data.condition == "n") {
+                self.condition = "New";
+            } else if (data.condition == "u") {
+                self.condition = "Used";
+            } else if (data.condition == "b") {
+                self.condition = "unBoxed";
+            }
+
+            //-----------------------------------------------------------------------
+            //for job ad
+            self.category = data.category;
+            self.subcategory = data.subCategory;
+            self.showJob = ko.observable();
+            if (data.category == "Jobs") {    
+                self.showJob(new JobAd(data.jobAd));
+            }
+            if (data.subCategory == "Bikes") {
+                self.showBikeAd(new BikeAd(data.bikead));
+            }
+            self.gender = "";
+            if (data.isNegotiable == "m") {
+                self.gender = "Male";
+            } else if (data.isNegotiable == "f") {
+                self.gender = "Female";
+            } else if (data.isNegotiable == "d") {
+                self.gender = "Does not matter";
+            }
+            self.shift = "";
+            if (data.condition == "m") {
+                self.shift = "Morning";
+            } else if (data.condition == "e") {
+                self.shift = "Evening";
+            } else if (data.condition == "n") {
+                self.shift = "notConfirmed";
+            }
+            //-----------------------------------------------------------------------------
+            //biding
+            self.highestBid = ko.observable();
+            self.showBidings = ko.observableArray();
+            self.isBidingAllowed = false;
+            self.placeBid = ko.observable(false);
+            self.bidAmount = ko.observable();
+
+            self.showTags = ko.observableArray();
+            self.sellerProfile = "/User/Index/" + self.postedById;
+            self.placeBidButton = function () {
+                if (self.loginUserId) {
+                    var isalreadybid = false;
+                    $.each((self.showBidings()), function (i, item) {
+                        if (item.postedById == self.loginUserId) {
+                            isalreadybid = true;
+                        }
+                    });
+                    if (!isalreadybid) {
+                        self.placeBid(true);
+                    } else {
+                        toastr.info("You cannot post multiple bids on one ad. Just edit your previous bid", "Wait!");
+                    }
+                } else {
+                    loginBtn();
+                }
+            }
+            
+            self.deleteBid = function (bid) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Bid!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Electronic/DeleteBid/' + bid.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.showBidings.remove(bid);
+                            swal("Deleted!", "Your Bid has been deleted.", "success");
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.postBid = function () {
+                if (self.loginUserId) {
+
+                    var isalreadybid = false;
+                    $.each((self.showBidings()), function (i, item) {
+                        if (item.postedById == self.loginUserId) {
+                            isalreadybid = true;
+                        }
+                    });
+                    if (isalreadybid) {
+                        toastr.info("You cannot post multiple bids on one ad. Just edit your previous bid", "Wait!");
+                        return;
+                    }
+
+                    var bid = new Biding();
+                    bid.adId = self.id;
+                    bid.price = self.newBidPrice();
+                    bid.time = new Date($.now());
+                    if (bid.price >= 0) {
+                        $.ajax({
+                            url: '/api/Electronic/PostBid',
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            data: ko.toJSON(bid),
+                            success: function (data) {
+                                    self.showBidings.push(new Biding(data));
+                                    self.highestBid(Math.max.apply(Math, self.showBidings().map(function (o) { return o.price(); })));
+                                self.newBidPrice('');
+                                $(".sortable-list").sortable({
+                                    connectWith: ".connectList"
+                                }).disableSelection();
+                                self.placeBid(false);
+                            },
+                            error: function () {
+                                toastr.error("failed to Post Bid. Please refresh page and try again", "Error!");
+                            }
+                        });
+                    } else {
+                        toastr.info("Bid cannot be negative", "Are you drunk!");
+                    }
+                }
+                else {
+                    loginBtn();
+                }
+            }
+            self.isNegotiable = "";
+            if (data.isNegotiable == "b") {
+                self.isBidingAllowed = true;
+            } else if (data.isNegotiable == "y") {
+                self.isNegotiable = 'Negotiable';
+            } else if (data.isNegotiable == "n") {
+                self.isNegotiable = '<strike>Negotiable</strike>';
+            }
+            if(self.price == "") {
+                self.isNegotiable = "";
+            }
+            if (data.location != null) {
+                self.showLocation(new Location(data.location));
+            }
+            if (data.bid != null) {
+                var biding = $.map(data.bid, function (item) { return new Biding(item); });
+                self.highestBid ( Math.max.apply(Math, biding.map(function (o) { return o.price(); })));
+                self.showBidings(biding);
+            }
+            if (data.adTags != null) {
+                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+                self.showTags(tags);
+            }
+            if (data.subCategory == "Cars") {
+                self.showCarAd(new CarAd(data.carad));
+            }
+            if (data.mobilead.brand != null) {
+                self.showMobileAd ( new mobilead(data.mobilead));
+            }
+            if (data.laptopad.brand != null) {
+                self.showMobileAd ( new mobilead(data.laptopad));
+            }
+            //if (data.carad != "") {
+            //    var mobad = $.map(data.carad, function (item) { return new CarAd(item); });
+            //    self.showCarAd(mobad);
+            //}
+            if (data.comment) {
+                var cmt = $.map(data.comment, function (item) { return new comment(item); });
+                self.showComment(cmt);
+            }
+            if (data.adImages) {
+                var imagesCount = 1;
+                var img = $.map(data.adImages, function (item,ia) { return new adImages(item,data.id,imagesCount++); });
+                self.showImages(img);
+            }
+            self.saveAd = function (ad) {
+                if (self.loginUserId) {
+                    $.ajax({
+                        url: '/api/User/SaveAd/' + ad.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.savedCount(data.count);
+                            if (data.text == "Deleted") {
+                                self.isSaved(false);
+
+                            } else {
+                                self.isSaved(true);
+                            }
+                        },
+                        error: function () {
+                            toastr.error("failed to Save Ad. Please refresh page and try again", "Error!");
+                        }
+                    });
+                }
+                else {
+                    loginBtn();
+                }
+            }
+            self.editAd = function (id) {
+                 if (data.category == "MobileAccessories") {
+                    window.location.href = "/MobilesTablets/EditMobileAccessoriesAd/" + id;
+                }
+                else if (data.category == "Mobiles") {
+                    window.location.href = "/MobilesTablets/Edit/" + id;
+                }
+                else if (data.category == "Laptops") {
+                    window.location.href = "/Electronics/EditLaptopAd/" + id;
+                }
+                else if (data.category == "LaptopAccessories") {
+                    window.location.href = "/Electronics/EditLaptopAccessoriesAd/" + id;
+                }
+                else if(data.category == "Jobs") {
+                    window.location.href = "/Jobs/Edit/" + id;
+                }
+                else if (data.subCategory == "Cars") {
+                    window.location.href = "/Vehicles/EditCarAd/" + id;
+                }
+                else if (data.subCategory == "Bikes") {
+                    window.location.href = "/Vehicles/EditBikeAd/" + id;
+                }
+                else if (data.category == "RealEstate") {
+                    window.location.href = "/RealEstate/Edit/" + id;
+                }
+                else if (data.subCategory == "Cameras") {
+                    window.location.href = "/Electronics/EditCameraAd/" + id;
+                }
+                else if (data.subCategory == "CamerasAccessories") {
+                    window.location.href = "/Electronics/EditCameraAccessoriesAd/" + id;
+                }
+                else {
+                    window.location.href = "/Home/Edit/" + id;
+                }
+            }
+            self.deleteAd = function (id) {
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this Ad!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        url: '/api/Electronic/DeleteAd/' + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            swal("Deleted!", "Your Ad has been deleted.", "success");
+                            window.location.href = "/User/Index/"+self.loginUserId;
+                        },
+                        error: function () {
+                            swal("Error", "please refresh page and try again", "error");
+                        }
+                    });
+                });
+            }
+            self.deleteComment = function (id) {
+                $.ajax({
+                    url: '/api/Comment/DeleteComment/' + id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    // data: ko.toJSON(id),
+                    success: function (data) {
+                        self.showComment.remove(function (item) {
+                            return item.id == id;
+                        });
+                    },
+                    error: function () {
+                        toastr.error("failed to delete comment", "Error!");
+                    }
+                });
+            }
+            
+            self.checkEnter = function (d, e) {
+                if (self.loginUserId) {
+                    if (e.keyCode == 13) {
+                        self.addcomment();
+                    }
+                } else {
+                    loginBtn();
+                }
+            }
+            //self.commentsHub.client.appendCommentToMe = function (com) {
+            //    self.showComment.push(new comment(com));
+            //    self.newComment('');
+            //}
+            self.newComment = ko.observable();
+            self.addcomment = function () {
+                if (self.loginUserId) {
+                    var com = new comment();
+                    com.adId = self.id;
+                    com.description (self.newComment());
+                    //com.description(com.description().slice(0, -1));
+                    if (com.description() != null && com.description().trim() != "") {
+                        com.time = new Date($.now());
+                        com.description = com.description().slice(0, - 1);
+                        //self.commentsHub.server.addComment(com).fail(function (err) { toastr.error("failed to post comment ", "Error!"); });
+                        $.ajax({
+                            url: '/api/Comment/PostComment',
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'POST',
+                            data: ko.toJSON(com),
+                            success: function (data) {
+                                self.showComment.push(new comment(data));
+                                self.newComment('');
+                            },
+                            error: function (jqXHR, status, thrownError) {
+                                toastr.error("failed to post comment", "Error");
+                            }
+                        });
+                    }
+                } else {
+                    loginBtn();
+                }
+            }
+            
+        }
+        function Report() {
+            var self = this;
+            self.selectedVal = ko.observable("spam");
+            self.reportText = "";
+            self.report = function () {
+                if ($("#loginUserId").val()) {
+                    var data = {
+                        adId: myAdId,
+                        details: self.reportText,
+                        type: self.selectedVal(),
+                    };
+                    $.ajax({
+                        url: '/api/Electronic/reportAd',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(data),
+                        success: function (data) {
+                            $("#report").modal('hide');
+                            toastr.info("Our team can contact you for details", "Thanks for feedback!");
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                            $("#report").modal('hide');
+                        }
+                    })
+                } else {
+                    toastr.info("You must be login to report this ad", "Oops!");
+                    loginBtn();
+                }
+            }
+        }
+        
+        function viewModel() {
+            
+            var self = this;
+            self.isLoading = ko.observable(false);
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            Report();
+            //initillizing hub
+            self.commentsHub = $.connection.adComments;
+            self.showAds = ko.observable();
+            self.error = ko.observable();
+            self.loadad = function () {
+                self.isLoading(true);
+                var adId = myAdId;
+                url_address = '/api/Electronic/GetAd/' + adId;
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'GET'
+                })
+                .done(function (data) {
+                    self.isLoading(false);
+                    //var mappedads = $.map(data, function (item) { return new ad(item,self.commentsHub); });
+                    $("#showAd").css("display", "block");
+                    self.showAds(new ad(data));
+                   
+                    $(".sortable-list").sortable({
+                        connectWith: ".connectList"
+                    }).disableSelection();
+
+                    loadAdmin();
+
+
+                })
+                .fail(function () {
+                    self.isLoading(false);
+                    $("#showAd").css("display", "block");
+                    self.error ( "This ad has been deleted or is unavailable. " );
+                });
+            }
+            
+            self.loadad();
+            return self;
+        }
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+            init: function (element, valueAccessor) {
+                //initialize icheck to the element
+                $(element).iCheck({
+                    radioClass: 'iradio_square-green'
+                });
+                $(element).on('ifChecked', function (event) {
+                    var observable = valueAccessor();
+                    observable.checked(event.target.defaultValue); //assigning selected value
+                });
+            }
+        };
+        
+
+        $(function () {
+            
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel());
+            $.connection.hub.start().done();
+        });
+
+    </script>
+}

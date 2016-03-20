@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewBag.Title = "Feedback - contact us";
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Feedback or contact</h5>
+                </div>
+                <div class="ibox-content">
+
+                    @using (Html.BeginForm("Feedback", "Home", FormMethod.Post, new { id = "form" }))
+                    {
+                       
+
+                        <div class="form-horizontal">
+                           
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Select Feedback type<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <select id="select-brand" required class="demo-default form-control" name="brand" data-bind="options: availableOptions,
+                       value: selectedOption"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Description<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control msgTextArea" data-bind="jqAutoresize: {},value:description" rows="4" ></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group" data-bind="visible:!isLoading()">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" data-bind="click:submitClicked" value="Submit" class="btn btn-primary" />
+                                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
+                                </div>
+                            </div>
+                            <div data-bind="visible:isLoading()">
+                                <div class="sk-spinner sk-spinner-wave">
+                                    <div class="sk-rect1"></div>
+                                    <div class="sk-rect2"></div>
+                                    <div class="sk-rect3"></div>
+                                    <div class="sk-rect4"></div>
+                                    <div class="sk-rect5"></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
+    @Styles.Render("~/bundles/myStyles")
+@Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/sweetAlert")
+    <script type="text/javascript">
+
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            self.availableOptions = ["Appreciate", "Advertise on website", "Report error/bug", "How we can make it better for you"];
+            self.selectedOption = ko.observable();
+            self.isLoading = ko.observable(false);
+            //$('#select-brand').selectize({
+            //    create: true,
+            //    plugins: ['inputMaxlength'],
+            //    inputMaxlength: 29,
+            //    sortField: {
+            //        field: 'text',
+            //        direction: 'asc'
+            //    },
+            //});
+            self.description = ko.observable();
+            self.submitClicked = function () {
+               window.btn_clicked = true;
+                //  $("#form").submit();
+               var fb = {
+                   type: self.selectedOption(),
+                   description: self.description()
+               };
+               self.isLoading(true);
+               $.ajax({
+                   url: '/api/Location/SubmitFeedback',
+                   dataType: "json",
+                   contentType: "application/json",
+                   cache: false,
+                   type: 'POST',
+                   data: ko.toJSON(fb),
+                   success: function (data) {
+                       self.isLoading(false);
+                       swal({
+                           title: "Thank You!",
+                           text: "Your feedback has been submitted!",
+                           type: "success",
+                           showCancelButton: false,
+                           confirmButtonColor: "#DD6B55",
+                           confirmButtonText: "Ok, Go to home page",
+                           closeOnConfirm: false
+                       },
+                       function () {
+                           window.location.href = "/";
+                       });
+                   },
+                   error: function (jqXHR, status, thrownError) {
+                       self.isLoading(false);
+                       toastr.error("failed to submit feedback.Please refresh page and try again", "Error");
+                   }
+               });
+            }
+           
+            
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        Selectize.define('inputMaxlength', function (options) {
+            var self = this;
+            this.setup = (function () {
+                var original = self.setup;
+                return function () {
+                    original.apply(this, arguments);
+                    this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                };
+            })();
+        });
+        $(document).ready(function () {
+            ko.applyBindings(new ViewModel);
+            window.onbeforeunload = function (e) {
+                if (!window.btn_clicked) {
+                    e = e || window.event;
+                    if (e) {
+                        e.returnValue = 'Sure?';
+                    }
+                    return 'Sure?';
+                }
+            };
+            
+            $("#form").validate({
+                ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+                rules: {
+                    title: {
+                        required: true,
+                        maxlength: 50,
+                        minlength: 15
+                    },
+                    company: {
+                        required: true,
+                        maxlength: 15
+                    },
+                    model: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    description: {
+                        required: true,
+                        minlength: 25,
+                        maxlength: 1000
+                    },
+                    color: {
+                        required: true,
+                        maxlength: 20
+                    },
+                    price: {
+                        number: true
+                    }
+                }
+            });
+            
+
+        });
+    </script>
+}
+

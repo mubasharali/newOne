@@ -1,0 +1,443 @@
+﻿
+@{
+    ViewBag.Title = "???";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Mobiles</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("List", "Index")
+            </li>
+            <li class="active">
+                <strong>Mobiles</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<style>
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin:0px;
+        padding:0px;
+    }
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+        /apply max-padding or default image
+    }
+     .carouselContainer img {
+        // height: 350px;
+        /*height: auto;
+            width: 100%;*/
+        width: 250px;
+        height: 250px;
+    }
+</style>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-4 col-md-3 col-lg-2" >
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                   Tags
+                </div>
+                <div class="ibox-content">
+                    jakdljfalsdj
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-9 col-lg-10" data-bind="foreach:showAds">
+            <div @*class="col-md-4 col-sm-6 col-lg-3"*@>
+                <div class="ibox">
+                    <div class="ibox-content product-box">
+
+                        @*<div class="product-imitation" >
+                            <div class="carouselContainer">
+
+                                <span id="gallery" data-gallery=""
+                                     data-bind="slick: images,
+                slickOptions: { initialSlide:0},
+                slickIndex: imageIndex">
+                                </span>
+                                <div data-bind="visible:images().length == 0">Display your banner ad here Display your banner ad hereDisplay your banner ad hereDisplay your banner ad hereDisplay your banner ad here</div>
+                            </div>
+                        </div>*@
+                        <div class="product-desc">
+                            @*<span class="product-price">
+                                <span data-bind="if:!isBidingAllowed">
+                                    <span data-bind="if:price">
+                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                    </span>
+                                    <span data-bind="if:!price">Price on contact</span>
+                                </span>
+                                <span data-bind="if:isBidingAllowed">
+                                    <span data-bind="if:price">
+                                        <span data-bind="if:highestBid() == '-Infinity'">
+                                            <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                        </span>
+                                        <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                            <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                        </span>
+                                    </span>
+                                    <span data-bind="if:!price">
+                                        <span data-bind="if:highestBid() == '-Infinity'">
+                                            No Bit yet
+                                        </span>
+                                        <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                            <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                        </span>
+                                    </span>
+                                </span>
+                            </span>*@
+                            <a href="#" class="product-name" data-bind="text:title,attr:{href:link}"></a>
+                            <div class="small m-t-xs" data-bind="foreach:showTags">
+                                <span class="btn btn-xs btn-white" data-bind="text:name"></span>
+                            </div>
+                            @*<div class="m-t text-righ">
+
+                                <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                            </div>*@
+                            <div class="row">
+                                <span class="col-xs-4 fa fa-clock-o" style="word-wrap:break-word" data-bind="text:time"></span>
+                                <span class="col-xs-4 " style="word-wrap:break-word;text-align:center; margin: 0 auto;"><span class="fa fa-map-marker" data-bind="with:showLocation">
+    <span data-bind="if:popularPlace">
+        <span data-bind="text:popularPlace"></span>,
+    </span>
+    <span data-bind="text:cityName"></span>
+</span>
+                                </span>
+                                <span class="col-xs-4" style="word-wrap:break-word"> 
+                                    <span class="pull-right" >
+                                                                                         <span class="fa fa-user"></span>
+                                        <span data-bind="text:postedByName"></span>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-3"></div>
+    </div>
+ </div>
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Content/plugins/jsTree")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+<script src="~/Scripts/app/MobileTree.js"></script>
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+    <script>
+        function Tag(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+        }
+        function Bid(data) {
+            var self = this;
+            data = data || {};
+            self.price = data.price;
+        }
+        var imageUrls = [];
+        function adImages(data, adId, imagesCount) {
+            //var self = this;
+            //data = data || {};
+            //self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
+            //imageUrls.push(self.link);
+            return "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;
+            
+        }
+        function Location(data) {
+            var self = this;
+            data = data || {};
+            self.cityId = data.cityId;
+            self.cityName = data.cityName;
+            self.popularPlaceId = data.popularPlaceId;
+            self.popularPlace = data.popularPlace;
+            self.exectLocation = data.exectLocation;
+        }
+        function ad(data) {
+            var self = this;
+
+            //slick
+            // self.images = ko.observableArray(imageUrls);
+            self.images = ko.observable();
+            self.options = {};
+            self.imageIndex = ko.observable(1);
+
+            data = data || {};
+            self.title = data.title;
+            self.description = ko.observable(data.description);
+            self.postedByName = data.postedByName;
+            self.postedById = data.postedById;
+            self.id = data.id;
+            self.time = getTimeAgo(data.time);
+            self.loginUserId = data.islogin || "";
+            self.showMobileAd = ko.observableArray();
+            self.isReported = ko.observable(data.isReported);
+            self.reportedCount = ko.observable(data.reportedCount);
+            self.showImages = ko.observable();
+            self.views = data.views;
+            self.price = data.price || "";
+            self.link = "/MobilesTablets/Details/" + data.id;
+            
+            //biding
+            self.highestBid = ko.observable();
+            self.showBidings = ko.observableArray();
+            self.isBidingAllowed = false;
+            self.placeBid = ko.observable(false);
+            self.bidAmount = ko.observable();
+
+            self.showTags = ko.observableArray();
+            self.showLocation = ko.observable();
+            self.sellerProfile = function () {
+                window.location.href = "/User/Index/" + self.postedById;
+            }
+            if (data.location != null) {
+                self.showLocation(new Location(data.location));
+            }
+            if (data.isNegotiable == "b") {
+                self.isBidingAllowed = true;
+            } else if (data.isNegotiable == "y") {
+                self.isNegotiable = 'Negotiable';
+            } else if (data.isNegotiable == "n") {
+                self.isNegotiable = '<strike>Negotiable</strike>';
+            }
+            if (self.price == "") {
+                self.isNegotiable = "";
+            }
+            if (data.bid != null) {
+                var biding = $.map(data.bid, function (item) { return new Bid(item); });
+                self.highestBid(Math.max.apply(Math, data.bid.map(function (o) { return o.price; })));
+                //self.showBidings(biding);
+            }
+            if (data.adTags != null) {
+                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
+                self.showTags(tags);
+            }
+            if (data.adImages) {
+                var imagesCount = 1;
+                var img = $.map(data.adImages, function (item, ia) { return adImages(item, data.id, imagesCount++); });
+                self.showImages(img);
+                self.images(img);
+            }
+            self.report = function (id, loginUserId) {
+                if (loginUserId) {
+                    $.ajax({
+                        url: '/api/Electronic/reportAd?id=' + id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.isReported(true);
+                            self.reportedCount(data);
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    })
+                } else {
+                    toastr.info("You must be login to report this ad", "Na na!");
+                }
+            }
+        }
+        
+        function viewModel() {
+            var self = this;
+            self.brand = ko.observable("");
+            self.model = ko.observable("");
+            self.showAds = ko.observableArray();
+            self.loadad = function () {
+                url_address = '/api/Electronic/SearchMobileAds?brand=' + self.brand() + '&model=' + self.model();
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new ad(item); });
+                        self.showAds(mappedads);
+
+                    },
+                    error: function () {
+                        toastr.error("Unable to load data. Please try again", "Error");
+                    }
+                });
+            }
+            self.loadad();
+            ChatViewModel();
+            AccountViewModel();
+            return self;
+        }
+        //tree
+        
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        ko.bindingHandlers.slick = (function () {
+            var createImageDiv = function (imgUrl) {
+
+                $a = $('<a>');
+                $a.attr('href', imgUrl);
+                //$a.attr('data-gallery', '#blueimp-gallery');
+                $a.attr('target', '_blank');
+                $div = $('<div>');
+                $image = $('<img>');
+                $image.attr('src', imgUrl);
+                // $div.append($image);
+                $a.append($image);
+                $div.append($a);
+                return $div;
+            };
+
+            // Initializes the carousel
+            var init = function (element, valueAccessor, allBindingsAccessor) {
+                // Clears the div
+                $(element).empty();
+                // Creates the inner divs with images
+                var images = ko.unwrap(valueAccessor());
+                if (images) {
+                    images.forEach(function (imgUrl) {
+                        $(element).append(createImageDiv(imgUrl));
+                    });
+                }
+
+                // try to recover slickOptions
+                var options = allBindingsAccessor().slickOptions || {};
+
+                // Initialize slick on the div, with provided options
+                $(element).slick(options);
+
+                //handle disposal, if KO removes the element
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(element).slick('unslick');
+                });
+
+                // check if there is slickIndex
+                var slickIndex = allBindingsAccessor().slickIndex;
+                if (slickIndex) {
+                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+                }
+                // If it's obervable, subscribe to its changes
+                if (ko.isObservable(slickIndex)) {
+                    slickIndex.subscribe(function (idx) {
+                        $(element).slick('slickGoTo', idx);
+                    });
+                }
+                // It if's writable observable, update when slick current index changes
+                if (ko.isWritableObservable(slickIndex)) {
+                    $(element).on('afterChange', function (evt, slick, pos) {
+                        slickIndex(pos);
+                    })
+                }
+
+                // Check if the array of images is an observable array
+                var imagesArray = valueAccessor();
+                // If it's observable array, subscribe to changes
+                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+                    imagesArray.subscribe(function (changes) {
+                        console.log(changes);
+                        if (changes) {
+                            changes.forEach(function (change) {
+                                if (change.status == 'added') {
+                                    // Add new img div at index
+                                    var imgDiv = createImageDiv(change.value)[0];
+                                    var index = change.index;
+                                    var slideCount = $(element).slick('getSlick').slideCount;
+                                    // if the index is out of range (which can happen 
+                                    // with push, and splice), include at the end
+                                    var addBefore = true;
+                                    if (index >= slideCount) {
+                                        index = slideCount - 1;
+                                        addBefore = false;
+                                    }
+                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
+                                } else if (change.status == 'deleted') {
+                                    // delete img div at index
+                                    $(element).slick('slickRemove', change.index);
+                                }
+                            });
+                        }
+                    }, null, 'arrayChange');
+                } // if observable array
+            }
+
+            //update the control when the view model changes
+            var update = function (element, valueAccessor) {
+                var images = ko.unwrap(valueAccessor());
+                // Do something to update the content
+                console.log('update');
+            }
+
+            return { init: init, update: update };
+        })();
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            //$('.product-images').slick({
+            //    dots: true
+            //});
+           // ko.applyBindings(new viewModel, (document.getElementById('ads')));
+
+           // ko.applyBindings(new treeModel, document.getElementById('navigation'));
+            ko.applyBindings(new viewModel);
+            $.connection.hub.start().done();
+        });
+
+    </script>
+    }
+
+
+
+
+
+
+
+
+
+

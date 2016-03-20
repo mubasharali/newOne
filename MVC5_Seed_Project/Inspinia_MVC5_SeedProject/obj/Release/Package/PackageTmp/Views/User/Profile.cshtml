@@ -1,0 +1,620 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.AspNetUser
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@*<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Edit</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("List", "Index")
+            </li>
+            <li class="active">
+                <strong>Edit</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+			@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-primary"})
+        </div>
+    </div>
+</div>*@
+<input type="hidden" value="@ViewBag.userId" name="userId" id="userId" />
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div data-bind="visible:!showProfile()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div class="row" id="FirstLoading" style="display:none" data-bind="with:showProfile">
+        <div class="col-md-3 hidden-sm hidden-xs">
+        </div>
+        <div class="col-md-9 col-sm-12">
+            <div class="">
+                <img data-bind="attr:{src:dpLink}" width="200" height="200" class="img-circle circle-border m-b-md" alt="profile">
+            </div>
+            <div class="">
+                <button class="btn btn-white btn-xs" type="button" style="margin-top:-5px;" onclick="chooseFile();">upload profile pic</button>
+                <form action="/User/saveProfilePic" method="post" enctype="multipart/form-data" style="height:0px;overflow:hidden">
+                    <input type="hidden" value="@ViewBag.userId" name="userId" id="userId" />
+                    <input type="file" id="fileInput" name="image" onchange="newImage()">
+                    <input type="submit" />
+                </form>
+
+            </div>
+            @*<div class="ibox float-e-margins">
+                    <div class="ibox-title  back-change">
+                        <h5>Image cropper <small>http://fengyuanchen.github.io/cropper/</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li>
+                                    <a href="#">Config option 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <p>
+                            Crop image
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="image-crop">
+                                    <img src="~/Images/p3.jpg">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Preview image</h4>
+                                <div class="img-preview img-preview-sm"></div>
+                                <h4>&nbsp;</h4>
+                                <div class="btn-group">
+                                    <form action="/User/saveProfilePic" method="post" id="setProfilePic" enctype="multipart/form-data">
+                                        <label title="Upload image file" for="inputImage" class="btn btn-primary">
+
+                                            <input type="file" accept="image/*" name="file" id="inputImage" class="hide">
+                                            Upload new image
+                                            <input type="submit" style="visibility:hidden" />
+
+                                        </label>
+                                    </form>
+                                    <button id="setProfilePicBtn" class="btn btn-primary">Set as profile picture</button>
+                                </div>
+                                <h4>Other options</h4>
+                                <div class="btn-group">
+                                    <button class="btn btn-white" id="zoomIn" type="button">Zoom In</button>
+                                    <button class="btn btn-white" id="zoomOut" type="button">Zoom Out</button>
+                                    <button class="btn btn-white" id="rotateLeft" type="button">Rotate Left</button>
+                                    <button class="btn btn-white" id="rotateRight" type="button">Rotate Right</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Profile</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="project-list">
+
+                        <table class="table ">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Name
+                                    </td>
+                                    <td data-bind="visible: !isEmailEditing()"><span data-bind="text:email"></span></td>
+                                    <td data-bind="visible:isEmailEditing()">
+                                        <input type="text" data-bind="value:email" class="form-control" />
+                                    </td>
+                                    <td class="hidden-xs"><small>Everyone can see</small></td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isEmailEditing(),click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
+                                        <a data-bind="visible:!isEmailEditing(),click:editEmail" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td class="project-title" data-bind="visible:!isNameEditing()">
+                                        <a data-bind="text:UserName"></a>
+                                        <br>
+                                    </td>
+                                    <td data-bind="visible:isNameEditing()">
+                                        <input type="email" data-bind="value:UserName" class="form-control" />
+                                    </td>
+
+                                    <td class="hidden-xs" data-bind="visible:!isNameEditing()"><small data-bind="text:selectedSeeEmail()"></small></td>
+                                    <td class="hidden-xs" data-bind="visible:isNameEditing()">
+                                        <small>
+                                            <select class="form-control" data-bind="options: seeEmailOptions,
+                       value: selectedSeeEmail,
+                       "></select>
+                                        </small>
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a data-bind="click:updateProfile,visible:isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
+                                        <a data-bind="click:editName,visible:!isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="project-title">
+                                        phone number
+                                    </td>
+                                    <td data-bind="visible:!isPhoneEditing(),text:phoneNumber"></td>
+                                    <td data-bind="visible:isPhoneEditing()">
+                                        <input type="text" data-bind="value:phoneNumber" class="form-control" />
+                                    </td>
+                                    <td class="hidden-xs" data-bind="visible:!isPhoneEditing()">
+                                        <small data-bind="text:selectedSeePhone()"></small>
+                                    </td>
+                                    <td class="hidden-xs" data-bind="visible:isPhoneEditing()">
+                                        <small>
+                                            <select class="form-control" data-bind="options: seePhoneOptions,
+                       value: selectedSeePhone,
+                       "></select>
+                                        </small>
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isPhoneEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
+                                        <a data-bind="visible:!isPhoneEditing(), click:editPhone" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="project-title">
+                                        City
+                                    </td>
+                                    <td data-bind="visible:!isCityEditing(),text:city"></td>
+                                    <td data-bind="visible:isCityEditing()">
+                                        <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <small>Everyone can see</small>
+                                    </td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isCityEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
+                                        <a data-bind="visible:!isCityEditing(), click:editCity" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="project-title">
+                                        Date of birth
+                                    </td>
+                                    <td data-bind="visible:!isDateOfBirthEditing(),text:dateOfBirth"></td>
+                                    <td data-bind="visible:isDateOfBirthEditing()">
+                                        <input type="date" data-bind="value:dateOfBirth" class="form-control" />
+                                    </td>
+                                    <td class="hidden-xs" data-bind="visible:!isDateOfBirthEditing()">
+                                        <small data-bind="text:selectedSeeDateOfBirth()"></small>
+                                    </td>
+                                    <td class="hidden-xs" data-bind="visible:isDateOfBirthEditing()">
+                                        <small>
+                                            <select class="form-control" data-bind="options: seeDateOfBirthOptions,
+                       value: selectedSeeDateOfBirth,
+                       "></select>
+                                        </small>
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isDateOfBirthEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
+                                        <a data-bind="visible:!isDateOfBirthEditing(), click:editDateOfBirth" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="project-title">
+                                        Gender
+                                    </td>
+                                    <td data-bind="visible:!isGenderEditing(),text:gender()"></td>
+                                    <td data-bind="visible:isGenderEditing()">
+                                        <select class="form-control" data-bind="options: genderOptions,
+                       value: selectedGender,
+                       "></select>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <small>
+                                            Everyone can see
+                                        </small>
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isGenderEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
+                                        <a data-bind="visible:!isGenderEditing(), click:editGender" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="project-title">
+                                        About
+                                    </td>
+                                    <td data-bind="visible:!isAboutEditing(),text:about()"></td>
+                                    <td data-bind="visible:isAboutEditing()">
+                                        <textarea class="msgTextArea form-control" placeholder="Write about yourself.." data-bind="value:about, jqAutoresize: {}"></textarea>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <small>
+                                            Everyone can see
+                                        </small>
+
+                                    </td>
+                                    <td class="project-actions">
+                                        <a data-bind="visible:isAboutEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
+                                        <a data-bind="visible:!isAboutEditing(), click:editAbout" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+@Styles.Render("~/plugins/imagecropperStyles")
+@Styles.Render("~/scripts/selectizeStyles")
+}
+
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/knockout")
+@Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/slick")
+@Scripts.Render("~/plugins/imagecropper")
+    @*@Scripts.Render("~/bundles/categoryTree")*@
+    @Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/scripts/selectize")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+    <script>
+        function User(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.Id;
+            self.UserName = ko.observable( data.UserName);
+            self.city = ko.observable(data.city);
+            self.gender = ko.observable(data.gender || "");
+            self.selectedGender = ko.observable(self.gender());
+            self.dateOfBirth = ko.observable();
+            if (data.dateOfBirth != null) {
+                self.dateOfBirth(data.dateOfBirth.split("T")[0]);
+            }
+            self.hideDateOfBirth = ko.observable(data.hideDateOfBirth);
+            self.email = ko.observable( data.Email);
+            self.phoneNumber = ko.observable( data.phoneNumber);
+            self.hideEmail = ko.observable(data.hideEmail);
+            self.hidePhoneNumber = ko.observable(data.hidePhoneNumber);
+            self.dpLink = '/Images/Users/default.jpg';
+            if (data.dpExtension) {
+                self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.id + data.dpExtension;
+            }
+            
+            self.about = ko.observable(data.about);
+            self.reputation = ko.observable(data.reputation);
+            self.since = data.since;
+            //self.isOnline = ko.observable(data.isOnline);
+            self.loginUserId = data.loginUserId || "";
+
+            self.genderOptions = ["Male", "Female", "Its complicated"];
+
+            self.selectedSeeDateOfBirth = ko.observable();
+            self.seeDateOfBirthOptions = ["Everyone", "Only me"];
+            self.hideDateOfBirth = ko.observable(data.hideDateOfBirth);
+            if (self.hideDateOfBirth()) {
+                self.selectedSeeDateOfBirth("Only me");
+            } else if (self.hideDateOfBirth() == false) {
+                self.selectedSeeDateOfBirth("Everyone");
+            }
+            self.selectedSeeEmail = ko.observable();
+            self.seeEmailOptions = ["Everyone", "Only me"];
+            if (self.hideEmail()) {
+                self.selectedSeeEmail("Only me");
+            } else if (self.hideEmail() == false) {
+                self.selectedSeeEmail("Everyone");
+            }
+            self.seePhoneOptions = ['Everyone', "Only me"];
+            self.selectedSeePhone = ko.observable();
+            if (self.hidePhoneNumber() ) {
+                self.selectedSeePhone("Only me");
+            } else if (self.hidePhoneNumber() == false) {
+                self.selectedSeePhone("Everyone");
+            }
+            
+            self.isNameEditing = ko.observable(false);
+            self.editName = function () {
+                self.isNameEditing(true);
+            }
+            self.isEmailEditing = ko.observable(false);
+            self.editEmail = function () {
+                self.isEmailEditing(true);
+            }
+            self.isPhoneEditing = ko.observable(false);
+            self.editPhone = function () {
+                self.isPhoneEditing(true);
+            }
+            self.isCityEditing = ko.observable(false);
+            self.editCity = function () {
+                self.loadCities();
+                self.isCityEditing(true);
+            }
+            self.isDateOfBirthEditing = ko.observable(false);
+            self.editDateOfBirth = function () {
+                self.isDateOfBirthEditing(true);
+            }
+            self.isAboutEditing = ko.observable(false);
+            self.editAbout = function () {
+                self.isAboutEditing(true);
+            }
+            self.isGenderEditing = ko.observable(false);
+            self.editGender = function () {
+                self.selectedGender(self.gender());
+                self.isGenderEditing(true);
+                self.selectedGender(self.gender());
+            }
+            self.availableCities = ko.observableArray();
+            self.selectedCity = ko.observable();
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        self.availableCities.removeAll();
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        self.selectedCity(self.city());
+                        $('#select-city').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.selectedCity.subscribe(function () {
+                self.city(self.selectedCity());
+            })
+            self.updateProfile = function () {
+                if (self.selectedSeePhone() == "Everyone") {
+                    self.hidePhoneNumber(false);
+                } else if (self.selectedSeePhone() == "Only me") {
+                    self.hidePhoneNumber(true);
+                }
+                if (self.selectedSeeEmail() == "Everyone") {
+                    self.hideEmail(false);
+                } else if (self.selectedSeeEmail() == "Only me") {
+                    self.hideEmail(true);
+                }
+                if (self.selectedSeeDateOfBirth() == "Everyone") {
+                    self.hideDateOfBirth(false);
+                } else if (self.selectedSeeDateOfBirth() == "Only me") {
+                    self.hideDateOfBirth(true);
+                }
+                if (self.isGenderEditing()) {
+                    self.gender(self.selectedGender());
+                }
+                $.ajax({
+                    url: '/api/User/UpdateProfile',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    data: ko.toJSON(self),
+                    success: function (data) {
+                        self.isNameEditing(false);
+                        self.isEmailEditing(false);
+                        self.isPhoneEditing(false);
+                        self.isCityEditing(false);
+                        self.isDateOfBirthEditing(false);
+                        self.isGenderEditing(false);
+                        self.isAboutEditing(false);
+                    },
+                    error: function () {
+                        toastr.error("failed to update info. Please refresh page and try again", "Error!");
+                    }
+                });
+            }
+        }
+        function viewModel() {
+            SearchingLocation();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+            self.showProfile = ko.observable();
+            
+            //self.editName = function () {
+
+            //}
+            self.loadad = function () {
+                var userId = $("#userId").val();
+                url_address = '/api/User/GetUser/' + userId;
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'GET',
+                    success: function (data) {
+                        //var mappedads = $.map(data, function (item) { return new User(item); });
+                        self.showProfile(new User(data));
+                        $("#FirstLoading").css({ "display": "block" });
+                    },
+                    error: function () {
+                        toastr.error("Unable to load profile data. Please refresh page and try again", "Error");
+                    }
+                })
+            }
+
+            self.loadad();
+            return self;
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        Selectize.define('inputMaxlength', function (options) {
+            var self = this;
+            this.setup = (function () {
+                var original = self.setup;
+                return function () {
+                    original.apply(this, arguments);
+                    this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                };
+            })();
+        });
+        function chooseFile() {
+            $("#fileInput").click();
+        }
+        function newImage() {
+            $("#fileInput").closest("form").submit();
+        }
+        $(function () {
+            
+            ko.applyBindings(new viewModel);
+            $.connection.hub.start().done();
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            
+            //below is of cropper
+            $('#setProfilePicBtn').prop('disabled', true);
+            var $image = $(".image-crop > img")
+            $($image).cropper({
+                aspectRatio: 1.618,
+                preview: ".img-preview",
+                done: function (data) {
+                    //toastr.info("fone");
+                    $('#setProfilePicBtn').prop('disabled', false);
+                }
+            });
+
+            var $inputImage = $("#inputImage");
+            if (window.FileReader) {
+                $inputImage.change(function () {
+                    var fileReader = new FileReader(),
+                            files = this.files,
+                            file;
+
+                    if (!files.length) {
+                        return;
+                    }
+
+                    file = files[0];
+
+                    if (/^image\/\w+$/.test(file.type)) {
+                        fileReader.readAsDataURL(file);
+                        fileReader.onload = function () {
+                            $inputImage.val("");
+                            $image.cropper("reset", true).cropper("replace", this.result);
+                        };
+                    } else {
+                        showMessage("Please choose an image file.");
+                    }
+                });
+            } else {
+                $inputImage.addClass("hide");
+            }
+
+            $("#setProfilePicBtn").click(function () {
+                window.open($image.cropper("getDataURL"));
+                //$("#setProfilePic").submit();
+                $().cropper('getCroppedCanvas').toBlob(function (blob) {
+                    var formData = new FormData();
+
+                    formData.append('croppedImage', blob);
+
+                    $.ajax('/path/to/upload', {
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            console.log('Upload success');
+                        },
+                        error: function () {
+                            console.log('Upload error');
+                        }
+                    });
+                });
+                toastr.info("Your profile picture is changed successfully! Please refresh page to see changes");
+            });
+
+            $("#zoomIn").click(function () {
+                $image.cropper("zoom", 0.1);
+            });
+
+            $("#zoomOut").click(function () {
+                $image.cropper("zoom", -0.1);
+            });
+
+            $("#rotateLeft").click(function () {
+                $image.cropper("rotate", 45);
+            });
+
+            $("#rotateRight").click(function () {
+                $image.cropper("rotate", -45);
+            });
+
+            $("#setDrag").click(function () {
+                $image.cropper("setDragMode", "crop");
+            });
+        });
+    </script>
+}

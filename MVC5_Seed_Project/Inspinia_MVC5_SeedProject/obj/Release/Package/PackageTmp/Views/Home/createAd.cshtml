@@ -1,0 +1,215 @@
+﻿
+@{
+    ViewBag.Title = "createAd";
+}
+
+@*<h2>createAd</h2>
+choose category
+
+choose subcategory
+
+
+create electronic ad:
+@Html.RouteLink("link_text", "route_name", new { })*@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        
+        <div class="col-lg-4">
+            <div data-bind="visible:loading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!loading()">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div data-bind="visible:!categorySelected()">
+                            <h3>Select category</h3>
+                            <ul class="sortable-list connectList agile-list" data-bind="foreach:categoryList">
+                                <li data-bind="text:$data,click:$parent.categoryClicked" class="success-element">
+
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div data-bind="visible: categorySelected() && !subcategory()">
+                            <h3>Select subcategory </h3>
+                            <ul class="sortable-list connectList agile-list">
+                                <span data-bind="if:category() == 'Mobiles'">
+                                    <li class="success-element" data-bind="click:mobiles">Mobiles</li>
+                                    <li class="success-element" data-bind="click:mobileAccessories">Mobile Accessories</li>
+                                </span>
+                                <span data-bind="if:category() == 'Electronics'">
+                                    <li data-bind="click:laptops" class="warning-element">
+                                        Laptops / Computers
+                                    </li>
+                                    @*<li class="success-element">
+                                    watches
+                                </li>
+                                <li class="danger-element">
+                                    others
+                                </li>*@
+                                </span>
+                                <span data-bind="if:category() == 'Vehicles'">
+                                    <li data-bind="click:carsClicked" class="info-element">
+                                        Cars
+                                    </li>
+                                    <li data-bind="click:bikesClicked" class="info-element">Bikes, MotorCycle, Scooter</li>
+                                    <li data-bind="click:commericalVehiclesClicked" class="info-element">Commerical Vehicles</li>
+                                    <li data-bind="click:vehiclesForRentClicked" class="info-element">Vehicles for rent</li>
+                                    <li data-bind="click:otherVehiclesClicked" class="info-element">Other Vehicles</li>
+                                    <li data-bind="click:sparePartsClicked" class="info-element">Spare parts</li>
+                                </span>
+                            </ul>
+                            <button class="btn" data-bind="click:backButton">Back</button>
+                        </div>
+                        <div data-bind="visible:subcategory()">
+                            <h3>Select</h3>
+                            <ul class="agile-list sortable-list connectList ">
+                                <span data-bind="if:subcategory() == 'laptops'">
+                                    <li class="success-element" data-bind="click:laptopsClicked">Laptops / Computers</li>
+                                    <li class="success-element" data-bind="click:laptopAccessoriesClicked">Laptops / Computers Accessories</li>
+                                </span>
+                            </ul>
+                            <button class="btn" data-bind="click:backButtonUnderSubcategory">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+    @section Styles {
+
+        @Styles.Render("~/plugins/toastrStyles")
+    }
+
+    @section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+
+        @*@Scripts.Render("~/plugins/rickshaw")*@
+        <script type="text/javascript">
+            function ViewModel() {
+                SearchingLocation();
+                ChatViewModel();
+                AccountViewModel();
+                var self = this;
+                self.loading = ko.observable(false);
+
+                self.category = ko.observable();
+                self.subcategory = ko.observable();
+                self.categorySelected = ko.observable(false);
+                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles","Real Estate","Animals"];
+                self.categoryClicked = function (data) {
+                    self.categorySelected(true);
+                    self.category(data);
+                    if (self.category() == "Jobs" ) {
+                        self.loading(true);
+                        window.location.href = '/Jobs/Create';
+                    }
+                    if (self.category() == "Real Estate") {
+                        self.loading(true);
+                        window.location.href = '/Realestate/Create';
+                    }
+                    if (self.category() == "Animals") {
+                        self.loading(true);
+                        window.location.href = '/Home/Create?category=Animals';
+                    }
+                }
+                self.backButtonUnderSubcategory = function () {
+                    self.subcategory("");
+                }
+
+                self.mobiles = function () {
+                    self.loading(true);
+                    window.location.href = '/MobilesTablets/Create';
+                }
+                self.mobileAccessories = function () {
+                    self.loading(true);
+                    window.location.href = '/MobilesTablets/CreateMobileAccessoriesAd';
+                }
+                //electronics
+                self.laptops = function () {
+                    self.subcategory("laptops");
+                }
+                self.laptopsClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Electronics/CreateLaptopAd';
+                }
+                self.laptopAccessoriesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Electronics/CreateLaptopAccessoriesAd';
+                }
+                //vehicles
+                self.carsClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Vehicles/CreateCarAd';
+                }
+                self.bikesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Vehicles/CreateBikeAd';
+                }
+                self.commericalVehiclesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Vehicles&subcategory=commerical-vehicles';
+                }
+                self.vehiclesForRentClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Vehicles&subcategory=vehicles-for-rent';
+                }
+                self.otherVehiclesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Vehicles&subcategory=other-vehicles';
+                }
+                self.sparePartsClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Vehicles&subcategory=spare-parts';
+                }
+                self.backButton = function () {
+                    self.categorySelected(false);
+                }
+
+
+
+            }
+            
+
+            
+                $(document).ready(function () {
+                    ko.applyBindings(new ViewModel());
+                    $("#FirstLoading").css({ "display": "block" });
+                    $(".sortable-list").sortable({
+                        connectWith: ".connectList"
+                    }).disableSelection();
+                    $.connection.hub.start().done();
+
+                    //rickshaw
+                    //$('.animation_select').click(function () {
+                    //    $('#animation_box').removeAttr('class').attr('class', '');
+                    //    var animation = $(this).attr("data-animation");
+                    //    $('#animation_box').addClass('animated');
+                    //    $('#animation_box').addClass(animation);
+                    //    return false;
+                    //});
+
+                    //var graph2 = new Rickshaw.Graph({
+                    //    element: document.querySelector("#rickshaw_multi"),
+                    //    renderer: 'area',
+                    //    stroke: true,
+                    //    series: [{
+                    //        data: [{ x: 0, y: 2 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 4 }, { x: 4, y: 8 }],
+                    //        color: '#1ab394',
+                    //        stroke: '#17997f'
+                    //    }, {
+                    //        data: [{ x: 0, y: 13 }, { x: 1, y: 15 }, { x: 2, y: 17 }, { x: 3, y: 12 }, { x: 4, y: 10 }],
+                    //        color: '#eeeeee',
+                    //        stroke: '#d7d7d7'
+                    //    }]
+                    //});
+                    //graph2.renderer.unstack = true;
+                    //graph2.render();
+
+                });
+        </script>
+    }

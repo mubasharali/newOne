@@ -1,0 +1,469 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Tag
+@{
+    ViewBag.Title = Model.name; 
+}
+
+
+
+<input type="hidden" id="tagId" value="@ViewBag.tagId" />
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="ibox">
+                <div class="ibox-title">Search Tags</div>
+                <div class="ibox-content">
+                    <input id="select-tag" data-bind="value:searchTag" class="repositories" placeholder="Search tags..." />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="ibox">
+                    <div data-bind="visible:!showTag()">
+                        <div class="loading">
+                            <div class="sk-spinner sk-spinner-wandering-cubes">
+                                <div class="sk-cube1"></div>
+                                <div class="sk-cube2"></div>
+                            </div>
+                        </div>
+                    </div>
+                        <div id="FirstLoading" style="display:none" data-bind="with:showTag">
+                            <div class="ibox-title">
+                                <h2>
+                                    <span data-bind="text:name">@Model.name</span> <span style="font-size: 12px; color: #b4b6b8">
+                                        <a style="font-size: 12px; color: #b4b6b8">
+                                            <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id)},text:followText"></a>
+                                            (<span data-bind="text:followers"></span> followers )
+                                            <h6 class="pull-right">
+                                                <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+                                            </h6>
+                                        </a>
+                                    </span>
+                                </h2>
+                            </div>
+                            <div class="ibox-content">
+                                <div data-bind="visible:!isEditing()">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <dl>
+
+
+                                                <dt>Info: <button class="btn btn-white btn-xs" data-bind="click:editTag">Improve tag</button> </dt>
+                                                <dd data-bind="text:info"> </dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-sm-4 hidden-xs">
+                                            <dt>Created by:</dt>
+                                            <dd><a data-bind="attr:{href:createdByLink}"><span data-bind="text:createdByName"></span></a></dd>
+                                            <dt>Created:</dt>
+                                            <dd data-bind="text:time"></dd>
+                                            <dt>Latest Updated by:</dt>
+                                            <dd><a data-bind="attr:{href:updatedByLink}"><span data-bind="text:updatedByName"></span></a></dd>
+                                            <dt>Latest Updated:</dt>
+                                            <dd data-bind="text:updatedTime"></dd>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-bind="visible:isEditing()">
+                                    <h5>Improve Info</h5>
+                                    <textarea class="msgTextArea form-control" placeholder="Improve tag.." data-bind="value:info, jqAutoresize: {}"></textarea>
+                                    @*<span data-bind="visible:info().length > 800 && info().length < 1000">
+                            You can Enter only <span data-bind="text:999 - info().length"></span> more characters.
+                        </span>*@
+                                    <button class="btn btn-xs btn-success pull-right" data-bind="click:updateTag">Update</button>
+                                </div>
+                                <div class="row m-t-sm">
+                                    <div class="col-lg-12">
+                                        <div class="panel blank-panel">
+                                            <div class="panel-heading">
+                                                <div class="panel-options">
+                                                    <ul class="nav nav-tabs">
+                                                        <li class="active"><a href="#tab-ads" data-toggle="tab">Ads (<span data-bind="text:showAds().length"></span>)</a></li>
+                                                        <li class=""><a href="#tab-questions" data-toggle="tab">Questions (<span data-bind="text:showQuestions().length"></span>)</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel-body">
+
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="tab-ads">
+                                                        <div data-bind="foreach:showAds">
+                                                            @Html.Partial("/Views/Shared/_AdListView.cshtml")
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="tab-pane" id="tab-questions">
+
+                                                        <div data-bind="foreach:showQuestions">
+                                                            <div class="vote-item">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="vote-actions">
+                                                                            <a data-bind="attr:{href:link}">
+                                                                                <i class="fa fa-chevron-up"> </i>
+                                                                            </a>
+                                                                            <div data-bind="text:voteCount"></div>
+                                                                            <a data-bind="attr:{href:link}">
+                                                                                <i class="fa fa-chevron-down"> </i>
+                                                                            </a>
+                                                                        </div>
+                                                                        <a data-bind="attr:{href:link},text:title" style="font-weight:400" class="vote-title">
+                                                                        </a>
+                                                                        <div>
+                                                                            <div data-bind="foreach:showTags" style="padding: 0;float:none">
+                                                                                <a target="_blank" class="btn btn-white btn-xs" style="font-size:11px" data-bind="attr:{href:'/tag/' + name},text:name"> </a>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="vote-info">
+                                                                            <i class="fa fa-comments-o"></i> <a data-bind="attr:{href:link}">Answers (<span data-bind="text:answersCount"></span>)</a>
+                                                                            <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
+                                                                            <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+<style>
+    
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+        width: 250px !important;
+        height: 250px;
+        /apply max-padding or default image;
+    }
+
+    .carouselContainer img {
+        // height: 350px;
+        width: 250px !important;
+        height: 250px;
+    }
+
+    .showAds .ibox {
+        height: 420px;
+    }
+
+    .product-price {
+        top: 0px;
+    }
+</style>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+@Styles.Render("~/plugins/slickStyles")
+@Styles.Render("~/plugins/slickThemeStyles")
+@Styles.Render("~/bundles/tagStyles")
+<link href="~/Content/myStyles.css" rel="stylesheet" />
+}
+
+
+
+@section Scripts{
+@Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+@Scripts.Render("~/plugins/autosize")
+@Scripts.Render("~/plugins/slick")
+<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/app/chat.js"></script>
+<script src="~/Scripts/UserLogin.js"></script>
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+@*<script src="~/Scripts/app/Selectize-Knockout-binding.js"></script>*@
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script>
+        
+        function Question(data) {
+            var self = this;
+            data = data || {};
+            self.link = '/Forum/details/' + data.id;
+            self.postedByLink = '/User/Index/' + data.postedById;
+            self.title = data.title;
+            self.description = data.description;
+            self.postedByName = data.postedByName;
+            self.postedById = data.postedById;
+            self.id = data.id;
+            self.exectTime = data.time;
+            self.time = getTimeAgo(data.time);
+            self.loginUserId = data.islogin || "";
+            self.showQuestionReplies = ko.observableArray();
+            self.answersCount = data.answers;
+            self.views = data.views;
+            self.voteUpCount = data.voteUpCount;
+            self.voteDownCount = data.voteDownCount;
+            self.voteCount = self.voteUpCount - self.voteDownCount;
+            self.showTags = ko.observableArray();
+            if (data.tags) {
+                var tags = $.map(data.tags, function (item) { return new Tag(item); });
+                self.showTags(tags);
+            }
+        }
+        function Tag1(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.info = ko.observable( data.info);
+            self.createdByName = data.createdByName;
+            self.createdById = data.createdById;
+            self.time = getTimeAgo( data.time);
+            self.exectTime = data.time;
+            self.loginUserId = data.loginUserId;
+            self.updatedInfo =ko.observable( data.updatedInfo);
+            self.isReported = ko.observable(data.isReported);
+            self.reportedCount = ko.observable(data.reportedCount);
+
+            self.updatedTime = ko.observable( getTimeAgo( data.updatedTime));
+            self.updatedByName = ko.observable( data.updatedByName);
+            self.updatedById = ko.observable(data.updatedById);
+            self.createdByLink = '/User/Index/' + self.createdById;
+            self.updatedByLink = '/User/Index/' + self.updatedById();
+            self.isEditing = ko.observable(false);
+            self.followers = ko.observable( data.followers || 0);
+            self.isFollowed = ko.observable(false);
+            self.followText = ko.observable("Follow");
+            if (data.isFollowed) {
+                self.followText("UnFollow");
+                self.isFollowed(true);
+            }
+            self.editTag = function () {
+                if (self.loginUserId) {
+                    if (self.updatedInfo() != null) {
+                        toastr.info("This tag previous info is pending admin aproval", "Please wait for sometime");
+                    } else {
+                        if (self.info()) {
+                            self.info().trim();
+                        }
+                        self.isEditing(true);
+                    }
+                } else {
+                    loginBtn();
+                }
+            }
+            self.report = function () {
+                if (self.loginUserId) {
+                    $.ajax({
+                        url: '/api/Tag/reportTag?id=' + self.id,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.isReported(true);
+                            self.reportedCount(data);
+                        },
+                        error: function (xhr, status, error) {
+                            var err = eval("(" + xhr.responseText + ")");
+                            toastr.info(err.Message);
+                        }
+                    })
+                } else {
+                    loginBtn();
+                }
+            }
+            self.updateTag = function (questionId) {
+                var obj = {
+                    Id: self.id,
+                    name: self.name,
+                    info: self.info().trim(),
+                    time: self.exectTime,
+                    createdBy: self.createdById,
+
+                }
+                if (self.info()!= null && self.info().trim() != "") {
+                    $.ajax({
+                        url: '/api/Tag/updateTag',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        data: ko.toJSON(obj),
+                        success: function (data) {
+                            self.updatedById(data.updatedById);
+                            self.updatedByName(data.updatedByName);
+                            self.updatedTime(getTimeAgo(data.updatedTime));
+                            self.updatedInfo(data.updatedInfo);
+                            self.isEditing(false);
+                            toastr.info("Your suggestion is pending admin approval","Thank you");
+                        },
+                        error: function () {
+                            toastr.error("failed to update tag.Refresh page and try gain", "Error!");
+                        }
+                    });
+                }
+                else {
+                    toastr.info("You can't post empty. If you want to cancel, just leave this page", "Are you drunk!");
+                }
+            }
+            self.follow = function (questionId) {
+                if (self.loginUserId) {
+                    $.ajax({
+                        url: '/api/Tag/Follow?tagId=' + questionId,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.followText(data.status);
+                            self.followers(data.count);
+                            if (data.status == "Follow") {
+                                self.isFollowed(false);
+                            } else { self.isFollowed(true); }
+                        },
+                        error: function (xhr, status, error) {
+                            toastr.error("Please refresh page and try again", "Error!");
+                        }
+                    });
+                }
+                else {
+                    loginBtn();
+                }
+            }
+
+            //self.questionsTaged = data.questionSTaged;
+            //self.adsTaged = data.adsTaged;
+
+            self.showQuestions = ko.observableArray();
+            self.showAds = ko.observableArray();
+            if (data.questions != null) {
+                var mappedads = $.map(data.questions, function (item) { return new Question(item); });
+                self.showQuestions(mappedads);
+            }
+            if (data.ads != null) {
+                var mappedads = $.map(data.ads, function (item) { return new Ad(item); });
+                self.showAds(mappedads);
+            }
+        }
+        function viewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+            var self = this;
+            self.searchTag = ko.observable();
+            self.searchTag.subscribe(function () {
+                var tagname = self.searchTag().split(/[/]+/).pop();
+                var temp = self.searchTag().split(/[/ ]+/);
+                var newstr = "/" + temp[1] + "/" + temp[2];
+                tagname = convertToSlug(tagname);
+                window.location.href =  newstr + "/" + tagname ;
+            });
+            self.showTag = ko.observable();
+            self.loadTag = function () {
+                var adId = $("#tagId").val();
+                url_address = '/api/Tag/GetTag/' + adId;
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    type: 'GET'
+                })
+                .done(function (data) {
+                    var mappedads = new Tag1(data);
+                    self.showTag(mappedads);
+                    $("#FirstLoading").css({ "display": "block" });
+                })
+                .fail(function () {
+                    toastr.error("Unable to load data. Please refresh page and try again", "Error");
+                });
+
+            }
+
+            self.loadTag();
+            ChatViewModel();
+            AccountViewModel();
+            return self;
+        }
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        $('#select-tag').selectize({
+            valueField: 'url',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 1,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span> '+
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel);
+            $.connection.hub.start().done();
+        });
+    </script>
+    }

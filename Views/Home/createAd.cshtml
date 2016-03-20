@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewBag.Title = "createAd";
+}
+
+@*<h2>createAd</h2>
+choose category
+
+choose subcategory
+
+
+create electronic ad:
+@Html.RouteLink("link_text", "route_name", new { })*@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        
+        <div class="col-lg-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div data-bind="visible:!categorySelected()">
+                        <h3>Select category</h3>
+                        <ul class="sortable-list connectList agile-list">
+                            <li data-bind="click:electronicsClicked" class="info-element">
+                                Electronics
+                            </li>
+                            <li data-bind="click:vehiclesClicked" class="warning-element">
+                                Vehicles
+                            </li>
+                            <li class="success-element">
+                                Jobs
+                            </li>
+                            <li class="danger-element">
+                                Real Estate
+                            </li>
+                        </ul>
+                    </div>
+                    <div data-bind="visible: categorySelected()">
+                        <h3>Select subcategory </h3>
+                        <ul class="sortable-list connectList agile-list">
+                            <span data-bind="if:category() == 'Electronics'">
+                                <li data-bind="click:mobilesClicked" class="info-element">
+                                    Mobiles
+                                </li>
+                                <li data-bind="click:laptopsClicked" class="warning-element">
+                                    Laptops
+                                </li>
+                                <li class="success-element">
+                                    watches
+                                </li>
+                                <li class="danger-element">
+                                    others
+                                </li>
+                            </span>
+                            <span data-bind="if:category() == 'Vehicles'">
+                                <li data-bind="click:carsClicked" class="info-element">
+                                    Cars
+                                </li>
+                            </span>
+                        </ul>
+                        <button class="btn" data-bind="click:backButton">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+    @section Styles {
+
+        @Styles.Render("~/plugins/toastrStyles")
+    }
+
+    @section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/plugins/knockout")
+        @Scripts.Render("~/plugins/toastr")
+        @*@Scripts.Render("~/plugins/rickshaw")*@
+        <script type="text/javascript">
+                function ViewModel() {
+                    var self = this;
+                    self.categorySelected = ko.observable(false);
+                    self.category = ko.observable();
+                    self.subcategory = ko.observable();
+                    self.electronicsClicked = function () {
+                        self.category ("Electronics");
+                        self.categorySelected(true);
+                    }
+                    self.vehiclesClicked = function () {
+                        self.category("Vehicles");
+                        self.categorySelected(true);
+                    }
+                    self.carsClicked = function () {
+                        self.subcategory("Cars");
+                        window.location.href = '/Vehicles/CreateCarAd';
+                    }
+                    self.mobilesClicked = function () {
+                        self.subcategory("Mobiles");
+                        window.location.href = '/Electronics/Create';
+                    }
+                    self.laptopsClicked = function () {
+                        self.subcategory("Laptops");
+                        window.location.href = '/Electronics/CreateLaptopAd';
+                    }
+                    self.backButton = function () {
+                        self.categorySelected(false);
+                    }
+                }
+
+                $(document).ready(function () {
+                    ko.applyBindings(new ViewModel());
+                    $(".sortable-list").sortable({
+                        connectWith: ".connectList"
+                    }).disableSelection();
+                    
+               
+                    var error = $("#tempdataError").val();
+                    if (error != null) {
+                        toastr.info(error, "Oops!");
+                    }
+
+                    //rickshaw
+                    //$('.animation_select').click(function () {
+                    //    $('#animation_box').removeAttr('class').attr('class', '');
+                    //    var animation = $(this).attr("data-animation");
+                    //    $('#animation_box').addClass('animated');
+                    //    $('#animation_box').addClass(animation);
+                    //    return false;
+                    //});
+
+                    //var graph2 = new Rickshaw.Graph({
+                    //    element: document.querySelector("#rickshaw_multi"),
+                    //    renderer: 'area',
+                    //    stroke: true,
+                    //    series: [{
+                    //        data: [{ x: 0, y: 2 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 4 }, { x: 4, y: 8 }],
+                    //        color: '#1ab394',
+                    //        stroke: '#17997f'
+                    //    }, {
+                    //        data: [{ x: 0, y: 13 }, { x: 1, y: 15 }, { x: 2, y: 17 }, { x: 3, y: 12 }, { x: 4, y: 10 }],
+                    //        color: '#eeeeee',
+                    //        stroke: '#d7d7d7'
+                    //    }]
+                    //});
+                    //graph2.renderer.unstack = true;
+                    //graph2.render();
+
+                });
+        </script>
+    }

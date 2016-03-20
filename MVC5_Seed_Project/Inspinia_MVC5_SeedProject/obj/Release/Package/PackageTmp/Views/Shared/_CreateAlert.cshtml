@@ -1,0 +1,10 @@
+﻿<div class="hidden-xs">
+    <div class="ibox-title"><h5>Create alert</h5></div>
+    <div class="ibox-content">
+        <p>Enter tags you want to follow and you will be notified when new ad containing your followed tags will be posted</p>
+        <input id="select-tags-to-follow" data-bind="value:tagsToFollow" class="repositories" placeholder="Pick tags..." />
+        <p data-bind="visible:tagsToFollow().length > 0">Inform when a new ad containing tags <span data-bind="text:tagsToFollow"></span> is posted</p>
+        <button data-bind="click:followTagsBtn" class="btn btn-primary">Submit</button>
+        <div data-bind="text:followSummary"></div>
+    </div>
+</div>

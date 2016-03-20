@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNet.Identity;
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="orv0gPJPIeitRMIAGV_0VbMTx3DfWKJa32R4E9Vrr20" />
+    <link rel="icon" href="~/Images/others/favicon.png" >
+    <title>
+         @if (ViewBag.Title != null)
+        { @ViewBag.Title }
+        else
+        { <text>Classified in mobiles, laptops, vehicles, RealEstate, Jobs, Services, Electronics, Animals, Study, Entertainment, Matrimonal, Home Appliances, Business  </text> }
+    | dealkar.pk
+    </title>
+    
+    @RenderSection("Styles", required: false)
+    @Styles.Render("~/Content/css")
+@Styles.Render("~/font-awesome/css")
+    @Styles.Render("~/scripts/selectizeStyles")
+  @Styles.Render("~/plugins/laddaStyles")
+    <link href="~/Content/myStyles.css" rel="stylesheet" /> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<body class="fixed-sidebar fixed-nav mini-navbar">
+
+    <!-- Wrapper-->
+    <div id="wrapper">
+
+        <!-- Navigation -->
+
+        @Html.Partial("_Navigation")
+
+        <!-- Page wraper -->
+        <div id="page-wrapper" class="gray-bg">
+
+            <!-- Top Navbar -->
+            @Html.Partial("_TopNavbar")
+
+            @*@Html.MvcSiteMap().Menu()*@
+
+
+
+            @*@Html.MvcSiteMap().SiteMapPath()  this one was used *@
+
+            <!-- Main view  -->
+            @RenderBody()
+
+           
+
+            @Html.Partial("/Views/Shared/_Chat.cshtml")
+            @Html.Partial("~/Views/Shared/_UserLogin.cshtml")
+            <!-- Footer -->
+            @Html.Partial("_Footer")
+            @Html.Partial("~/Views/Search/_SearchLocation.cshtml")
+        </div>
+        <!-- End page wrapper-->
+        <!-- Right Sidebar -->
+        @*@Html.Partial("_RightSidebar")*@
+
+    </div>
+    <!-- End wrapper-->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/plugins/metsiMenu")
+    @Scripts.Render("~/plugins/pace")
+    @Scripts.Render("~/plugins/slimScroll")
+    @Scripts.Render("~/bundles/inspinia")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/scripts/selectize")
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/ladda")
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/app/_SearchLocation.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/app/chat.js"></script>
+    <script src="~/Scripts/UserLogin.js"></script>
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+        @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+            $.connection.hub.start().done();
+            $.cookie("AWSFolderName", "tempAds/", { path: '/' });
+            $.cookie("AWSUserFolder", "tempUsers/", { path: '/' });
+            $.cookie("AWSCompanyFolder", "tempCompanies/", { path: '/' });
+            $.cookie("AWSURL", "https://s3.amazonaws.com/dealkr/", { path: '/' });
+          //  $("#side-menu").css({ "display": "block" });
+        })
+        function authForFeedback() {
+            if (loginUserId() != "Visitor") {
+                window.location.href = '/Feedback-contact';
+            }
+            else {
+                loginBtn();
+            }
+        }
+    </script>
+</body>
+</html>

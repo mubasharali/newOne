@@ -1,0 +1,83 @@
+﻿
+<div class="social-footer">
+
+    <div data-bind="foreach:showComment">
+        <div data-bind="attr:{'id':id}">
+
+            <div class="social-comment">
+                <a data-bind="attr:{href:postedByLink}" class="pull-left">
+                    <img data-bind="attr:{src:profileLink}" alt=" image" class="img-circle">
+                </a>
+                <div class="media-body">
+
+                    <span data-bind="visible:!isEditing()">
+                        <a data-bind="attr:{href:postedByLink}">
+                            <span data-bind="text: postedByName"></span>
+                        </a>
+                        <span data-bind="text: description"></span>
+                        <br>
+                        <span class="small">
+                            <a data-bind="click:function(){ return likeComment(id,loginUserId,true) }"><span data-bind="style:{color: isliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-up"></i></span> </a>(<span data-bind="text:voteUpCount()"></span>)
+                            - <a data-bind="click:function(){ return likeComment(id,loginUserId,false) }"><span data-bind="style:{color: isunliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-down"></i></span> </a>(<span data-bind="text:voteDownCount()"></span>)
+                        </span>
+
+                        <small class="text-muted"><span data-bind="text: time"></span></small> - <span class="btn btn-white btn-xs" data-bind="click:toggleComment">Reply</span>
+
+                        <span data-bind="if: postedById === loginUserId"><a class="btn btn-white btn-xs pull-right" data-bind="click:function(){ $parent.deleteComment($data.id)}">Delete</a><a class="btn btn-white btn-xs pull-right" data-bind="click:function(){return editComment($data.description)}">Edit</a></span>
+                    </span>
+                    <span data-bind="visible:isEditing()">
+                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:description,valueUpdate:'afterkeydown', hasFocus:isFocus, jqAutoresize: {},event:{keyup:checkEnterEditing}"></textarea>
+                    </span>
+                </div>
+                <div data-bind="foreach: showCommentReply">
+                    <div data-bind="attr:{'id':id}">
+                        <div class="social-comment">
+                            <a data-bind="attr:{href:postedByLink}" class="pull-left">
+                                <img data-bind="attr:{src:profileLink}" alt="image" class="img-circle">
+                            </a>
+                            <div class="media-body">
+                                <span data-bind="visible:!isEditing()">
+                                    <a data-bind="attr:{href:postedByLink}">
+                                        <span data-bind="text: postedByName"></span>
+                                    </a>
+                                    <span data-bind="text: description"></span>
+                                    <br>
+                                    <span class="small">
+                                        <a data-bind="click:function(){ return likeCommentReply(id,$parent.loginUserId,true) }"><span data-bind="style:{color: isliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-up"></i></span> </a>(<span data-bind="text:voteUpCount()"></span>)
+                                        - <a data-bind="click:function(){ return likeCommentReply(id,$parent.loginUserId,false) }"><span data-bind="style:{color: isunliked()? 'red' : 'gray'}"><i class="fa fa-thumbs-down"></i></span> </a>(<span data-bind="text:voteDownCount()"></span>)
+                                    </span>
+                                    <small class="text-muted"><span data-bind="text: time"></span></small>
+                                    <span data-bind="if: postedById === $parent.loginUserId"><span class="btn btn-white btn-xs pull-right" data-bind="click:$parent.deleteCommentReply">Delete</span><a class="btn btn-white btn-xs pull-right" data-bind="click:function(){return editCommentReply()}">Edit</a></span>
+                                </span>
+                                <span data-bind="visible:isEditing()">
+                                    <textarea class="msgTextArea form-control" data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter1Editing($parent.id,data,event)}}" placeholder="reply.."></textarea>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <span data-bind="visible:isVisible">
+                    <div class="social-comment">
+                        <a href="#" class="pull-left">
+                            <img data-bind="attr:{src:$parent.loginUserProfileLink}" alt="image" class="img-circle">
+                        </a>
+                        <div class="media-body">
+                            <textarea class="msgTextArea form-control" data-bind="value:newCommentReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}" placeholder="reply.."></textarea>
+
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="social-comment">
+        <a href="#" class="pull-left">
+            <img data-bind="attr:{src:loginUserProfileLink}" alt="image" src="/Images/profile.jpg" class="img-circle">
+        </a>
+        <div class="media-body">
+            <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:newComment,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter}"></textarea>
+
+        </div>
+    </div>
+</div>

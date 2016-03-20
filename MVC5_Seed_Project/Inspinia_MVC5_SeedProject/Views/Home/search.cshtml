@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "Search classified website";
+}
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="alert alert-success alert-dismissable">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        Click on button <a class="navbar-minimalize btn btn-primary "><i class="fa fa-bars"></i> </a> and select your desired category which makes the search easier.
+        
+    </div>
+    @*<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+                    <form role="search" class="" method="post" action="/Search">
+                        <div class="form-group">
+                            <input type="text" placeholder="Search website..." class="form-control" name="s" id="top-search">
+                        </div>
+                    </form>
+                    <p>
+                        showing results summary
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-sm-4 col-md-3 col-lg-3">
+            <div class="ibox-title"><h5> search by tags</h5></div>
+            <div class="ibox-content"><input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." /></div>
+        </div>
+        <div class="col-sm-8 col-md-7 col-lg-7">
+            <div data-bind="visible:!showAds()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+           <b>Summary:</b> <span data-bind="text:showAds().length"></span> ads found <span data-bind="visible:isLoading()" class="req">Loading...</span>
+            <div id="FirstLoading" style="display:none" data-bind="foreach:showAds">
+                @Html.Partial("/Views/Shared/_AdListView.cshtml")
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+@Styles.Render("~/bundles/tagStyles")
+@Styles.Render("~/scripts/selectizeStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/slick")
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/CreateAlert.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script>
+        var tags = ko.observable($.cookie("selectedTag"));
+        function viewModel() {
+            SearchingLocation();
+            CreateAlert();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+            self.showAds = ko.observableArray();
+            
+            self.isLoading = ko.observable(false);
+            tags.subscribe(function () {
+                self.loadad();
+            });
+            self.title = ko.observable();
+            //self.city1 = ko.observable($.cookie("searchCity"));
+            //self.pp1 = ko.observable($.cookie("searchPP"));
+            searchingCity.subscribe(function () {
+                self.loadad();
+            })
+            searchingPP.subscribe(function () {
+                self.loadad();
+            })
+            self.loadad = function () {
+                //if (self.isLoading()) {
+                //    return;
+                //}
+                self.isLoading(true);
+                url_address = '/api/Electronic/SearchAds?tags=' + tags() + '&title=' + self.title() + '&city=' + searchingCity() + '&pp=' + searchingPP();
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        var mappedads = $.map(data, function (item) { return new Ad(item); });
+                        
+                        self.showAds(mappedads);
+                        $("#FirstLoading").css("display", "block");
+                        self.isLoading(false);
+                    },
+                    error: function () {
+                        self.isLoading(false);
+                        toastr.error("Unable to load data. Please try again", "Error");
+                    }
+                });
+            }
+            self.loadad();
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        var selectize_tags = $("#select-tag")[0].selectize;
+        
+            selectize_tags.addOption({
+                text: tags(),
+                value: tags(),
+                name: tags(),
+            });
+            selectize_tags.addItem(tags());
+        $(function () {
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            ko.applyBindings(new viewModel);
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
