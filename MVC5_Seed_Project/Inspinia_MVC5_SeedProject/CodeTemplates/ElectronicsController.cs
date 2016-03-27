@@ -26,6 +26,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public string fileName;
         public string fileId;
     }
+    public class IdStatus
+    {
+        public int id;
+        public string status;
+    }
     public class ElectronicsController : Controller
     {
        
@@ -177,14 +182,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ref ad, "Save","Laptops");
+                    ad = MyAd(ad, "Save", "Laptops");
                     LaptopAd mobileAd = new LaptopAd();
                     mobileAd.color = Request["color"];
 
                     mobileAd.laptopId = SaveLaptopBrandModel(ad);
-                    db.Ads.Add(ad);
+                    
                     //tags
-                    SaveTags(Request["tags"],ref ad);
+                    SaveTags(Request["tags"], ad);
                     mobileAd.Id = ad.Id;
                     // ad.LaptopAd.Add(mobileAd);
                     db.LaptopAds.Add(mobileAd);
@@ -197,9 +202,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         string ss = e.ToString();
                     }
                     PostAdByCompanyPage(ad.Id);
-                    ReplaceAdImages( ref ad, fileNames);
+                    ReplaceAdImages(  ad, fileNames);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
                 return RedirectToAction("Register", "Account");
@@ -279,9 +284,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ref ad, "Save", "LaptopAccessories");
-                    db.Ads.Add(ad);
-                    db.SaveChanges();
+                    ad = MyAd(ad, "Save", "LaptopAccessories");
+                    
                     PostAdByCompanyPage(ad.Id);
                     LaptopAd mobileAd = new  LaptopAd();
                     mobileAd.color = Request["color"];
@@ -289,13 +293,13 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     mobileAd.laptopId = SaveLaptopBrandModel( ad);
 
                     //tags
-                    SaveTags(Request["tags"], ref ad);
+                    SaveTags(Request["tags"],  ad);
 
                     mobileAd.Id = ad.Id;
                     db.LaptopAds.Add(mobileAd);
-                    ReplaceAdImages(ref ad, fileNames);
+                    ReplaceAdImages( ad, fileNames);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Save");
                     db.SaveChanges();
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
@@ -328,19 +332,18 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ref ad, "Save","Electronics","Cameras");
-                    db.Ads.Add(ad);
-                    db.SaveChanges();
+                    ad = MyAd(ad, "Save", "Electronics", "Cameras");
+                    
 
                     SaveCameraAd(ad.Id);
                     PostAdByCompanyPage(ad.Id);
                     
                     //tags
-                    SaveTags(Request["tags"], ref ad);
+                    SaveTags(Request["tags"],  ad);
 
-                    ReplaceAdImages(ref ad, fileNames);
+                    ReplaceAdImages( ad, fileNames);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Save");
                     db.SaveChanges();
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
@@ -359,19 +362,17 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                        MyAd(ref ad, "Update");
+                        ad = MyAd(ad, "Update");
 
-                        db.Entry(ad).State = EntityState.Modified;
-                        db.SaveChanges();
 
                         SaveCameraAd(ad.Id, true);
 
                         //tags
-                        SaveTags(Request["tags"], ref ad, "update");
+                        SaveTags(Request["tags"],  ad, "update");
                         //location
 
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
-                        ReplaceAdImages(ref ad, fileNames);
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Update");
+                        ReplaceAdImages( ad, fileNames);
                         db.SaveChanges();
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
@@ -390,19 +391,18 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    MyAd(ref ad, "Save", "Electronics", "CamerasAccessories");
-                    db.Ads.Add(ad);
-                    db.SaveChanges();
+                    ad = MyAd(ad, "Save", "Electronics", "CamerasAccessories");
+                    
 
                     SaveCameraAd(ad.Id);
                     PostAdByCompanyPage(ad.Id);
 
                     //tags
-                    SaveTags(Request["tags"], ref ad);
+                    SaveTags(Request["tags"],  ad);
 
-                    ReplaceAdImages(ref ad, fileNames);
+                    ReplaceAdImages( ad, fileNames);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Save");
                     db.SaveChanges();
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
@@ -421,19 +421,16 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                        MyAd(ref ad, "Update");
-
-                        db.Entry(ad).State = EntityState.Modified;
-                        db.SaveChanges();
+                        ad = MyAd(ad, "Update");
 
                         SaveCameraAd(ad.Id, true);
 
                         //tags
-                        SaveTags(Request["tags"], ref ad, "update");
+                        SaveTags(Request["tags"],  ad, "update");
                         //location
 
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
-                        ReplaceAdImages(ref ad, fileNames);
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Update");
+                        ReplaceAdImages( ad, fileNames);
                         db.SaveChanges();
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
@@ -454,10 +451,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                        MyAd(ref ad, "Update");
+                        ad = MyAd(ad, "Update");
 
-                        db.Entry(ad).State = EntityState.Modified;
-                        db.SaveChanges();
                         LaptopAd mobileAd = new LaptopAd();
                         mobileAd.color = Request["color"];
 
@@ -468,11 +463,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         db.Entry(mobileAd).State = EntityState.Modified;
 
                         //tags
-                        SaveTags(Request["tags"], ref ad, "update");
+                        SaveTags(Request["tags"],  ad, "update");
                         //location
 
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
-                        ReplaceAdImages(ref ad, fileNames);
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Update");
+                        ReplaceAdImages( ad, fileNames);
                         db.SaveChanges();
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
@@ -492,7 +487,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ConfigurationManager.AppSettings["Bucketname"];
         private static readonly string _folderName =
             ConfigurationManager.AppSettings["FolderName"];
-        public void ReplaceAdImages(ref Ad ad, FileName[] filenames)
+        private static readonly string _userFolder =
+            ConfigurationManager.AppSettings["UserFolder"];
+        public void ReplaceAdImages( Ad ad, FileName[] filenames)
         {
             string newFileName = "";
             int count = 1;
@@ -655,11 +652,25 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     return Json(new { Message = "Error in saving file" });
                 }
-
             }
             return Json(fileNames);
         }
+        public static void UploadDPToAWS(string path, string filename)
+        {
+            AmazonS3Config config = new AmazonS3Config();
+            config.ServiceURL = "https://s3.amazonaws.com/";
+            Amazon.S3.IAmazonS3 s3Client = AWSClientFactory.CreateAmazonS3Client(_awsAccessKey, _awsSecretKey, config);
 
+            var request2 = new PutObjectRequest()
+            {
+                BucketName = _bucketName,
+                CannedACL = S3CannedACL.PublicRead,//PERMISSION TO FILE PUBLIC ACCESIBLE
+                Key = _userFolder + filename,
+                //InputStream = file.InputStream//SEND THE FILE STREAM
+                FilePath = path
+            };
+            s3Client.PutObject(request2);
+        }
         public Image SetImageOpacity(Image image, float opacity)
         {
             try
@@ -808,9 +819,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return RedirectToAction("Register", "Account");
         }
-        public void MyAd(ref Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
+        public Ad MyAd( Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
         {
-            ad.status = "a";
+            if (ad.status == null || ad.status == "")
+            {
+                ad.status = "a";
+            }
             var type = System.Web.HttpContext.Current.Request["type"];
             var isbiding = System.Web.HttpContext.Current.Request["bidingAllowed"];
             var condition = System.Web.HttpContext.Current.Request["condition"];
@@ -866,6 +880,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 ad.category = cateogry;
                 ad.subcategory = subcategory;
                 ad.time = DateTime.UtcNow;
+                db.Ads.Add(ad);
+                
             }
             else if (SaveOrUpdate == "Update")
             {
@@ -878,9 +894,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 {
                     ad.subcategory = System.Web.HttpContext.Current.Request["subcategory"];
                 }
-                
-
+                db.Entry(ad).State = EntityState.Modified;
             }
+            db.SaveChanges();
+            return ad;
         }
         
         [HttpPost]
@@ -891,15 +908,13 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 if (Request.IsAuthenticated)
                 {
-                    MyAd(ref ad,"Save","Electronics","HomeAppliances");
+                   ad =  MyAd( ad,"Save","Electronics","HomeAppliances");
 
-                    AspNetUser asp = db.AspNetUsers.FirstOrDefault(x => x.Id == ad.postedBy);
 
-                    db.Ads.Add(ad);
                     //tags
-                    SaveTags(Request["tags"],ref ad);
+                    SaveTags(Request["tags"], ad);
                     //location
-                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Save");
+                    MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
                 return RedirectToAction("Register", "Account");
@@ -909,7 +924,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             //return View(ad);
         }
         
-        public void MyAdLocation(string city, string popularPlace, string exectLocation,ref Ad ad,string SaveOrUpdate)
+        public void MyAdLocation(string city, string popularPlace, string exectLocation, Ad ad,string SaveOrUpdate)
         {
             AdsLocation loc = new AdsLocation();
             if (city != null)
@@ -1153,7 +1168,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             else
                 return sb.ToString();
         }
-        public void SaveTags(string s,ref Ad ad,string addOrUpdate = "add")
+        public void SaveTags(string s, Ad ad,string addOrUpdate = "add")
         {
             if(addOrUpdate == "update")
             {
@@ -1230,7 +1245,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                        MyAd(ref ad, "Update");
+                        ad = MyAd(ad, "Update");
                         LaptopAd mobileAd = new LaptopAd();
 
                         mobileAd.color = Request["color"];
@@ -1239,13 +1254,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                         SaveLaptopBrandModel(ad);
                         //tags
-                        SaveTags(Request["tags"],ref ad,"update");
+                        SaveTags(Request["tags"], ad,"update");
 
                         var mobileModel = db.LaptopModels.FirstOrDefault(x => x.LaptopBrand.brand == company && x.model == model);
                         mobileAd.laptopId = mobileModel.Id;
                        
-                        db.Entry(ad).State = EntityState.Modified;
-                        db.SaveChanges();
+                        
                         //db.Ads.Add(ad);
                         mobileAd.Id = ad.Id;
                         db.Entry(mobileAd).State = EntityState.Modified;
@@ -1259,8 +1273,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             string sss = e.ToString();
                         }
                         //location
-                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],ref ad, "Update");
-                        ReplaceAdImages(ref ad, fileNames);
+                        MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Update");
+                        ReplaceAdImages( ad, fileNames);
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }
                 }

@@ -78,6 +78,25 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return Ok("Visitor");
         }
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSimpleUser()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var id = User.Identity.GetUserId();
+                var ret =await (from u in db.AspNetUsers
+                          where (u.Id.Equals(id))
+                          select new
+                          {
+                              id = u.Id,
+                              name = u.Email,
+                              email = u.UserName,
+                              dpExtension = u.dpExtension,
+                          }).FirstOrDefaultAsync();
+                return Ok(ret);
+            }
+            return BadRequest();
+        }
         [HttpPost]
         public async Task<IHttpActionResult> CheckEmail(string email){
             if (!User.Identity.IsAuthenticated)
@@ -261,6 +280,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                             {
                                 UserName = u.UserName,
                                 Email = u.Email,
+                                isEmailConfirmed = u.EmailConfirmed,
                                 Id = u.Id,
                                 dateOfBirth = u.dateOfBirth,
                                 gender = u.gender,
@@ -433,8 +453,28 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                          return BadRequest();
                      }
                      await cityId(user.city);
-
-                     db.Entry(user).State = EntityState.Modified;
+                     AspNetUser u =await db.AspNetUsers.FindAsync(user.Id);
+                     u.UserName = user.UserName;
+                     u.Email = user.Email;
+                     u.about = user.about;
+                     u.city = user.city;
+                     u.dateOfBirth = user.dateOfBirth;
+                     u.gender = user.gender;
+                     u.hideDateOfBirth = user.hideDateOfBirth;
+                     u.hideEmail = user.hideEmail;
+                    // u.hideFriends = user.hideFriends;
+                     u.hidePhoneNumber = user.hidePhoneNumber;
+                     u.PhoneNumber = user.PhoneNumber;
+                     
+                     //user.status = u.status;
+                     //user.since = u.since;
+                     //user.dpExtension = u.dpExtension;
+                     //user.IsPasswordSaved = u.IsPasswordSaved;
+                     //user.EmailConfirmed = u.EmailConfirmed;
+                     //user.reputation = u.reputation;
+                    
+                    // user.
+                    // db.Entry(user).State = EntityState.Modified;
 
                      try
                      {

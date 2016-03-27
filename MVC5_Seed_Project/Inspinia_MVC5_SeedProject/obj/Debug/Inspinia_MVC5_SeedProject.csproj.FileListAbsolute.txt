@@ -648,3 +648,7 @@ C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProje
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.dll
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.pdb
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Facebook.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.AspNet.Facebook.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Facebook.xml
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.AspNet.Facebook.xml

@@ -11,11 +11,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MyWebLogo | Login</title>
-
+    <title>dealkar.pk | Login</title>
+    <meta name="google-site-verification" content="orv0gPJPIeitRMIAGV_0VbMTx3DfWKJa32R4E9Vrr20" />
+    <link rel="icon" href="~/Images/others/favicon.png">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet">
     <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
-
+    <link href="~/Content/myStyles.css" rel="stylesheet" />
     <link href="~/Content/animate.css" rel="stylesheet">
     <link href="~/Content/style.css" rel="stylesheet">
 
@@ -28,15 +29,16 @@
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Welcom in <span class="">dealkar.pk</span> </h4>
-                <small>Use a local account to log in.</small>
+                <h3>Welcom to <span class="brand-style" style="font-weight:800">dealkar.pk</span> </h3>
+                @*<small>Use a local account to log in.</small>*@
+                <small class="req">@TempData["error"]</small>
                 <hr />
                 @Html.ValidationSummary(true)
                 <div class="form-group">
                     <label class="col-md-3 control-label" >Email</label>
                     @*@Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })*@
                     <div class="col-md-9">
-                        <input class="form-control" type="email" name="UserName" id="UserName" />
+                        <input class="form-control" type="email" value="@ViewBag.email" name="UserName" id="UserName" />
                         @*@Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })*@
                         @Html.ValidationMessageFor(m => m.UserName)
                     </div>
@@ -62,7 +64,7 @@
                     </div>
                 </div>
                 <p>
-                    @Html.ActionLink("Register", "Register") if you don't have a local account.
+                    @Html.ActionLink("Register", "Register", new { ReturnUrl = ViewBag.ReturnUrl }) if you don't have a account.
                 </p>
             }
         </div>

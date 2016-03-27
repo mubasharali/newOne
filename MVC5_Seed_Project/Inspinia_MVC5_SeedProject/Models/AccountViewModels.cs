@@ -7,6 +7,10 @@ namespace Inspinia_MVC5_SeedProject.Models
         [Required]
         [Display(Name = "User name")]
         public string UserName { get; set; }
+        //delete below
+        public string Email { get; set; }
+        public string HomeTown { get; set; }
+        public System.DateTime? BirthDate { get; set; }
     }
 
     public class ManageUserViewModel
@@ -64,5 +68,11 @@ namespace Inspinia_MVC5_SeedProject.Models
     {
         public string Action { get; set; }
         public string ReturnUrl { get; set; }
+    }
+    public class ExtPropertyViewModel
+    {
+        public string Issuer { get; set; }
+        public string Type { get; set; }
+        public string Value { get; set; }
     }
 }

@@ -2364,6 +2364,7 @@
     <NavigationProperty Name="FollowCompanies" Relationship="Model.FK_FollowCompany_ToTable" FromRole="Company" ToRole="FollowCompany" />
     <NavigationProperty Name="CompanyImages" Relationship="Model.FK_Image_ToTable" FromRole="Company" ToRole="CompanyImage" />
     <NavigationProperty Name="Reviews" Relationship="Model.FK_Review_ToTable" FromRole="Company" ToRole="Review" />
+    <Property Name="views" Type="Int32" />
   </EntityType>
   <Association Name="FK_Company_ToTable">
     <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">

@@ -39,15 +39,14 @@ create electronic ad:
                                     <li class="success-element" data-bind="click:mobileAccessories">Mobile Accessories</li>
                                 </span>
                                 <span data-bind="if:category() == 'Electronics'">
-                                    <li data-bind="click:laptops" class="warning-element">
+                                    <li data-bind="click:laptops" class="info-element">
                                         Laptops / Computers
                                     </li>
-                                    @*<li class="success-element">
-                                    watches
-                                </li>
-                                <li class="danger-element">
-                                    others
-                                </li>*@
+                                    <li data-bind="click:cameraClicked" class="info-element">Camera</li>
+                                    <li data-bind="click:TVDVDMultimediaClicked" class="info-element">TV-DVD-Multimedia</li>
+                                    <li data-bind="click:gamesClicked" class="info-element">Games</li>
+                                    <li data-bind="click:homeAppliancesClicked" class="info-element">Home Appliances</li>
+                                    <li data-bind="click:otherElectronicsClicked" class="info-element">Other Electronics</li>
                                 </span>
                                 <span data-bind="if:category() == 'Vehicles'">
                                     <li data-bind="click:carsClicked" class="info-element">
@@ -100,7 +99,7 @@ create electronic ad:
                 self.category = ko.observable();
                 self.subcategory = ko.observable();
                 self.categorySelected = ko.observable(false);
-                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles","Real Estate","Animals"];
+                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real Estate", "Pets & Animals", "books-sports-hobbies"];
                 self.categoryClicked = function (data) {
                     self.categorySelected(true);
                     self.category(data);
@@ -112,9 +111,13 @@ create electronic ad:
                         self.loading(true);
                         window.location.href = '/Realestate/Create';
                     }
-                    if (self.category() == "Animals") {
+                    if (self.category() == "Pets & Animals") {
                         self.loading(true);
                         window.location.href = '/Home/Create?category=Animals';
+                    }
+                    if (self.category() == "books-sports-hobbies") {
+                        self.loading(true);
+                        window.location.href = '/Home/Create?category=books-sports-hobbies';
                     }
                 }
                 self.backButtonUnderSubcategory = function () {
@@ -132,6 +135,26 @@ create electronic ad:
                 //electronics
                 self.laptops = function () {
                     self.subcategory("laptops");
+                }
+                self.cameraClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Electronics&subcategory=Camera';
+                }
+                self.TVDVDMultimediaClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Electronics&subcategory=TV-DVD-Multimedia';
+                }
+                self.gamesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Electronics&subcategory=Games';
+                }
+                self.homeAppliancesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Electronics&subcategory=Home-Appliances';
+                }
+                self.otherElectronicsClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Home/Create?category=Electronics&subcategory=Other-Electronics';
                 }
                 self.laptopsClicked = function () {
                     self.loading(true);
@@ -169,9 +192,6 @@ create electronic ad:
                 self.backButton = function () {
                     self.categorySelected(false);
                 }
-
-
-
             }
             
 

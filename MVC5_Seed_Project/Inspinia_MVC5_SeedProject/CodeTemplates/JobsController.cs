@@ -61,10 +61,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (ModelState.IsValid)
                 {
                    await SaveAd(ad);
-                    electronicController.SaveTags(Request["tags"],ref ad);
+                    electronicController.SaveTags(Request["tags"], ad);
                    await SaveSkills(Request["skills"],  ad);
                     electronicController.PostAdByCompanyPage(ad.Id);
-                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
+                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Save");
                    await db.SaveChangesAsync();
 
                     return RedirectToAction("Details","Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly( ad.title) });
@@ -254,7 +254,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                        await SaveAd(ad, true);
 
                        
-                        electronicController.SaveTags(Request["tags"], ref ad, "update");
+                        electronicController.SaveTags(Request["tags"],  ad, "update");
                        await SaveSkills(Request["skills"],ad,true);
                         //asp.Ads.Add(ad);
 
@@ -272,7 +272,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             string sss = e.ToString();
                         }
                         //location
-                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Update");
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly( ad.title) });
                     }
                 }

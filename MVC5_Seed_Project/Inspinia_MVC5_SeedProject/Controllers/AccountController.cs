@@ -13,6 +13,11 @@ using Inspinia_MVC5_SeedProject.Models;
 using Inspinia_MVC5_SeedProject.CodeTemplates;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin;
+using Microsoft.AspNet.Facebook.Client;
+using Facebook;
+using System.Configuration;
+using System.Net;
+using System.IO;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
   //   public class ApplicationUserManager : UserManager<ApplicationUser>
@@ -99,6 +104,8 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+         //  ViewBag.email = ViewBag.email;
+          //  TempData["error_msg"] = TempData["error_msg"];
             return View();
         }
         [AllowAnonymous]
@@ -108,7 +115,18 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             {
                 return View("Error");
             }
-
+            if (! User.Identity.IsAuthenticated)
+            {
+                TempData["error"] = "You must be login to confirm your email";
+                return View("Login");
+            }
+            if (User.Identity.GetUserId() != userId)
+            {
+                AuthenticationManager.SignOut();
+                TempData["error"] = "You must be login BY YOUR ACCOUNT to confirm your email";
+             //   ViewBag.ReturnUrl =  HttpContext.Current.Request.Url.AbsolutePath;
+                return View("Login");
+            }
             var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
             UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
                 as IUserTokenProvider<ApplicationUser, string>;
@@ -158,33 +176,6 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             }
             var user = await UserManager.FindAsync(email, password);
 
-            try
-            {
-                var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
-                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
-                    as IUserTokenProvider<ApplicationUser, string>;
-
-                //var provider = new DpapiDataProtectionProvider("Sample");
-
-                //var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>());
-
-                //userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(
-                //    provider.Create("EmailConfirmation"));
-
-                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                var callbackUrl = Url.Action(
-                   "ConfirmEmail", "Account",
-                   new { userId = user.Id, code = code },
-                   protocol: Request.Url.Scheme);
-
-                ElectronicsController.sendEmail(user.UserName, "Welcome to dealkar.pk - Confirm Email address", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-           //    await ConfirmEmail(user.Id, code);
-            }
-            catch (Exception e)
-            {
-                string s = e.ToString();
-            }
-
             if (user != null)
             {
                 await SignInAsync(user, true);
@@ -223,13 +214,84 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult Register(string ReturnUrl)
         {
+            ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }
         public void MakeAdmin()
         {
             
+        }
+        public async Task<bool> SendMailtoConfirmEmailAddress(string id,string name,string email)
+        {
+            try
+            {
+                var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                    as IUserTokenProvider<ApplicationUser, string>;
+
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(id);
+                var callbackUrl = Url.Action(
+                   "ConfirmEmail", "Account",
+                   new { userId = id, code = code },
+                   protocol: Request.Url.Scheme);
+
+                ElectronicsController.sendEmail(email, "Welcome to dealkar.pk - Confirm Email address", "Hello " + name + "!<br/>Confirm your email address by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
+                //    await ConfirmEmail(user.Id, code);
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
+            return true;
+        }
+        public async Task<bool> SendPasswordRecoveryMail(string id, string email)
+        {
+            try
+            {
+                var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                    as IUserTokenProvider<ApplicationUser, string>;
+
+                var code = await UserManager.GeneratePasswordResetTokenAsync(id);
+                var callbackUrl = Url.Action(
+                   "ConfirmPasswordRecoveryToken", "Account",
+                   new { userId = id, code = code },
+                   protocol: Request.Url.Scheme);
+
+                ElectronicsController.sendEmail(email, "Recover your password", "Recover your password by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
+                //    await ConfirmEmail(user.Id, code);
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
+            return true;
+        }
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmPasswordRecoveryToken(string userId, string code)
+        {
+            
+            var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+            UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                as IUserTokenProvider<ApplicationUser, string>;
+
+            IdentityResult result;
+            try
+            {
+                result = await UserManager.ConfirmEmailAsync(userId, code);
+            }
+            catch (InvalidOperationException ioe)
+            {
+                return Json("Error", JsonRequestBehavior.AllowGet);
+            }
+
+            if (result.Succeeded)
+            {
+                return Json("Done", JsonRequestBehavior.AllowGet);
+            }
+            return Json("Error", JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         [AllowAnonymous]
@@ -282,10 +344,14 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 }
                 data.hideEmail = true;
                 data.hidePhoneNumber = true;
+                data.hideDateOfBirth = true;
+                data.since = DateTime.UtcNow;
+                data.status = "active";
+                data.EmailConfirmed = false;
                 db.Entry(data).State = System.Data.Entity.EntityState.Modified;
                 await db.SaveChangesAsync();
-                
-                
+
+               
                 return Json("Done", JsonRequestBehavior.AllowGet);
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
@@ -299,11 +365,13 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName };
+                var email = Request["Email"];
+                var user = new ApplicationUser() { UserName = model.UserName,Email = email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
+                    await SendMailtoConfirmEmailAddress(user.Id, user.Email, user.UserName);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -341,10 +409,23 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                     name = name.Trim();
                     data.Email = name;
                     await db.SaveChangesAsync();
+                    await SendMailtoConfirmEmailAddress(data.Id, data.Email, data.UserName);
                     return Json("Done", JsonRequestBehavior.AllowGet);
                 }
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ForgetPassword(string ReturnUrl)
+        {
+            ViewBag.ReturnUrl = ReturnUrl;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ReceiveEmailToResetPassword(string ReturnUrl)
+        {
+            string email = Request["email"];
+            return View("ForgetPassword");
         }
         //
         // POST: /Account/Disassociate
@@ -441,34 +522,216 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
+        
 
+        private static readonly string _facebook_app_id =
+            ConfigurationManager.AppSettings["FacebookAppId"];
+        private static readonly string _facebook_app_secret =
+            ConfigurationManager.AppSettings["FacebookAppSecret"];
         //
         // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
+        public async Task<object> ExternalLoginCallback(string returnUrl)
         {
+
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
             }
+            string pictureUrl = null;
+            string gender = "Male";
+            bool verified = false;
+            string name = null;
+            DateTime ?dateOfBirth = null;
+            string city = null;
+            if (loginInfo.Login.LoginProvider == "Facebook")
+            {
+               ClaimsIdentity ext = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
+               var access_token = ext.Claims.First(x => x.Type.Equals("urn:facebook:access_token")).Value;
 
-            // Sign in the user with this external login provider if the user already has a login
+               var fb = new FacebookClient(access_token);
+               dynamic myInfo = fb.Get("/me?fields=name,email,gender,verified,birthday,location"); // specify the email field
+               loginInfo.Email = myInfo.email;
+               pictureUrl = GetPictureUrl(myInfo.id);
+               loginInfo.DefaultUserName = loginInfo.Email;
+                verified = myInfo.verified;
+                gender = myInfo.gender;
+                dateOfBirth = myInfo.birthday;
+                city = myInfo.location;
+                name = myInfo.name;
+                loginInfo.Email = name;
+            }
+
             var user = await UserManager.FindAsync(loginInfo.Login);
-            if (user != null)
+            if (user != null)  //User already exists. just update dp
             {
                 await SignInAsync(user, isPersistent: false);
+                if (pictureUrl != null && pictureUrl != "")
+                {
+                    WebClient wc = new WebClient();
+                    byte[] bytes = wc.DownloadData(pictureUrl);
+                    MemoryStream ms = new MemoryStream(bytes);
+                    System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                    string fileName = @"\Images\Users\p" + DateTime.UtcNow.Ticks + ".jpg";
+                    img.Save(Server.MapPath(fileName));
+                    ElectronicsController.UploadDPToAWS(Server.MapPath(fileName), "p" + user.Id + ".jpg");
+                    if (System.IO.File.Exists(Server.MapPath(fileName)))
+                    {
+                        System.IO.File.Delete(Server.MapPath(fileName));
+                    }
+                }
                 return RedirectToLocal(returnUrl);
             }
             else
             {
+                if (loginInfo.DefaultUserName != null)  //new user with an email address
+                {
+                    var newUser = new ApplicationUser() { UserName = loginInfo.DefaultUserName };
+                    var result = await UserManager.CreateAsync(newUser);
+                    if (result.Succeeded)
+                    {
+                        result = await UserManager.AddLoginAsync(newUser.Id, loginInfo.Login);
+                        if (result.Succeeded)
+                        {
+                            await SignInAsync(newUser, isPersistent: true);
+                            if (pictureUrl != null && pictureUrl != "")
+                            {
+                                WebClient wc = new WebClient();
+                                byte[] bytes = wc.DownloadData(pictureUrl);
+                                MemoryStream ms = new MemoryStream(bytes);
+                                System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                                string fileName = @"\Images\Users\p" + DateTime.UtcNow.Ticks + ".jpg";
+                                img.Save(Server.MapPath(fileName));
+                                ElectronicsController.UploadDPToAWS(Server.MapPath(fileName), "p" + newUser.Id + ".jpg");
+                                if (System.IO.File.Exists(Server.MapPath(fileName)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(fileName));
+                                }
+                            }
+                            string id = newUser.Id;
+                            AspNetUser aspNetUser = await db.AspNetUsers.FindAsync(id);
+                            aspNetUser.Email = name;
+                            aspNetUser.EmailConfirmed = verified;
+                            aspNetUser.hideDateOfBirth = true;
+                            aspNetUser.hideEmail = true;
+                            aspNetUser.hidePhoneNumber = true;
+                            aspNetUser.hideFriends = true;
+                            aspNetUser.gender = gender;
+                            aspNetUser.city = city;
+                            aspNetUser.dateOfBirth = dateOfBirth;
+                            aspNetUser.dpExtension = ".jpg";
+                            aspNetUser.since = DateTime.UtcNow;
+                            aspNetUser.status = "active";
+                            db.Entry(aspNetUser).State = System.Data.Entity.EntityState.Modified;
+                            await db.SaveChangesAsync();
+                            await SendMailtoConfirmEmailAddress(aspNetUser.Id, aspNetUser.Email, aspNetUser.UserName);
+                            return RedirectToLocal(returnUrl);
+                        }
+                    }
+                    TempData["error"] = "An account already exists by this email address.Try to login";
+                    ViewBag.ReturnUrl = returnUrl;
+                    ViewBag.email = loginInfo.DefaultUserName;
+                    return View("Login");
+                   // return "An account already exists by this email address"; //go to login page and tempdata["error"]
+                }
+                var newUser1 = new ApplicationUser() { Email = loginInfo.Email,UserName = "temp" + DateTime.UtcNow.Ticks + "@gmail.com" };
+                var result1 = await UserManager.CreateAsync(newUser1);
+                if (result1.Succeeded)
+                {
+                    result1 = await UserManager.AddLoginAsync(newUser1.Id, loginInfo.Login);
+                    if (result1.Succeeded)
+                    {
+                        await SignInAsync(newUser1, isPersistent: true);
+                        if (pictureUrl != null && pictureUrl != "")
+                        {
+                            WebClient wc = new WebClient();
+                            byte[] bytes = wc.DownloadData(pictureUrl);
+                            MemoryStream ms = new MemoryStream(bytes);
+                            System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                            string fileName = @"\Images\Users\p" + DateTime.UtcNow.Ticks + ".jpg";
+                            img.Save(Server.MapPath(fileName));
+                            ElectronicsController.UploadDPToAWS(Server.MapPath(fileName), "p" + newUser1.Id + ".jpg");
+                            if (System.IO.File.Exists(Server.MapPath(fileName)))
+                            {
+                                System.IO.File.Delete(Server.MapPath(fileName));
+                            }
+                        }
+                        string id = newUser1.Id;
+                        AspNetUser aspNetUser = await db.AspNetUsers.FindAsync(id);
+                        aspNetUser.Email = name;
+                        aspNetUser.EmailConfirmed = verified;
+                        aspNetUser.hideDateOfBirth = true;
+                        aspNetUser.hideEmail = true;
+                        aspNetUser.hidePhoneNumber = true;
+                        aspNetUser.hideFriends = true;
+                        aspNetUser.gender = gender;
+                        aspNetUser.city = city;
+                        aspNetUser.dateOfBirth = dateOfBirth;
+                        aspNetUser.dpExtension = ".jpg";
+                        aspNetUser.since = DateTime.UtcNow;
+                        aspNetUser.status = "active";
+                        db.Entry(aspNetUser).State = System.Data.Entity.EntityState.Modified;
+                        await db.SaveChangesAsync();
+                        //return RedirectToLocal(returnUrl);
+                        return RedirectToAction("ExternalLoginInfo", new { returnUrl = returnUrl });
+                    }
+                }
+                return "Error";
+                //GetExternalProperties(); //remove
                 // If the user does not have an account, then prompt the user to create an account
-                ViewBag.ReturnUrl = returnUrl;
-                ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
+                //ViewBag.ReturnUrl = returnUrl;
+                //ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
             }
         }
+        public ActionResult ExternalLoginInfo(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View("LockScreen");
+        }
+        public ActionResult LockScreen()
+        {
+            return View();
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CallBackFromLockScreen(string email, string ReturnUrl)   //if user login using facebook and fb api does not return email 
+        {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+            user.UserName = email;
 
+            var updateResult = await UserManager.UpdateAsync(user);
+            if (updateResult.Succeeded)
+            {
+                await SendMailtoConfirmEmailAddress(user.Id, user.Email, user.UserName);
+                return RedirectToLocal(ReturnUrl);
+            }
+            ViewBag.ReturnUrl = ReturnUrl;
+            return View("LockScreen");
+        }
+        public static string GetPictureUrl(string faceBookId)
+        {
+            WebResponse response = null;
+            string pictureUrl = string.Empty;
+            try
+            {
+                WebRequest request = WebRequest.Create(string.Format("https://graph.facebook.com/" + faceBookId + "/picture?width=300&height=300"));
+                response = request.GetResponse();
+                pictureUrl = response.ResponseUri.ToString();
+            }
+            catch (Exception ex)
+            {
+                //? handle
+            }
+            finally
+            {
+                if (response != null) response.Close();
+            }
+            return pictureUrl;
+        }
         //
         // POST: /Account/LinkLogin
         [HttpPost]
@@ -588,6 +851,8 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            // Extracted the part that has been changed in SignInAsync for clarity.
+            
             AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
         }
 

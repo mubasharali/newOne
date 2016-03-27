@@ -1,0 +1,251 @@
+﻿
+@{
+    //if (ViewBag.category == "Books-Sports-Hobbies")
+    //{
+    //    ViewBag.Title = ViewBag.category + " classified";
+    //}
+    ViewBag.Title = ViewBag.category + " classified";
+}
+<div id="category" style="display:none">@ViewBag.category</div>
+
+@*<ul data-bind="foreach:availableCategories">
+    <li data-bind="text:$data,click:subCategoryClicked"></li>
+</ul>*@
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 col-md-4">
+        <div class="ibox">
+            <div class="ibox-title"><h2>Select a Category</h2></div>
+            <div class="ibox-content">
+                <ul class="sortable-list connectList agile-list" data-bind="foreach:availableCategories">
+                    <li style="padding:20px" data-bind="text:$data,click:subCategoryClicked" class="success-element">
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3"></div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    <link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/plugins/ionRange")
+    <script src="~/Scripts/app/slick-knockout-binding.js"></script>
+    <script src="~/Scripts/app/CreateAlert.js"></script>
+    <script src="~/Scripts/app/_AdListView.js"></script>
+    <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+<script src="~/Scripts/app/ConvertToSlug.js"></script>
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    <script>
+        //animal search.js page
+        var title = ko.observable($("#search").val());
+        var category = $("#category").text();
+        var tags = ko.observable("");
+        var minPrice = ko.observable(0);
+        var maxPrice = ko.observable(50000);
+        var availableCategories = [];
+        if (category == "Books-Sports-Hobbies") {
+            availableCategories = ["Books & Magazines", "Classes", "Home tuitions", "Musical Instruments", "Sports Equipment", "Gym & Fitness", "other hobbies"];
+        }
+        var selectedCategory = ko.observable();
+
+        subCategoryClicked = function (category) {
+            linktemp = "../" + convertToSlug(category);
+            window.location.href = linktemp;
+        }
+
+        minPrice.subscribe(function () {
+            RefreshSearch();
+        });
+        maxPrice.subscribe(function () {
+            RefreshSearch();
+        });
+        tags.subscribe(function () {
+            RefreshSearch();
+        })
+        selectedCategory.subscribe(function () {
+            RefreshSearch();
+        })
+        function TreeViewModel() {
+            var self = this;
+            self.isLoading = ko.observable(false);
+            searchingCity.subscribe(function () {
+                self.isLoading(false);
+                RefreshSearch();
+            })
+            searchingPP.subscribe(function () {
+                self.isLoading(false);
+                RefreshSearch();
+            })
+            self.showAds = ko.observableArray();
+        }
+
+        function RefreshSearch() {
+            var self = this;
+            if (self.isLoading()) {
+                return;
+            }
+            var url = '/api/Search/SearchAds?tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&category=Animals&subcategory=' + selectedCategory();
+            self.isLoading(true);
+            $.ajax({
+                url: url,
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                type: 'POST',
+                success: function (data) {
+                    self.isLoading(false);
+                    var mappedads = $.map(data, function (item) { return new Ad(item); });
+                    $("#FirstLoading").css("display", "block");
+                    self.showAds(mappedads);
+                    $('#select-brand').selectize();
+                    $('#select-category').selectize();
+                },
+                error: function () {
+                    self.isLoading(false);
+                    toastr.error("failed to search. Please refresh page and try again", "Error!");
+                }
+            });
+
+        }
+        var saveResult = function (data) {
+            minPrice(data.fromNumber);
+            maxPrice(data.toNumber);
+        };
+        $("#ionrange_1").ionRangeSlider({
+            min: 0,
+            max: 50000,
+            type: 'double',
+            prefix: "Rs",
+            maxPostfix: "+",
+            prettify: false,
+            hasGrid: true,
+            from: minPrice,
+            to: maxPrice,
+            onFinish: saveResult
+        });
+        //end of animalSearch.js page
+        function viewModel() {
+            SearchingLocation();
+            CreateAlert();
+            TreeViewModel();
+            RefreshSearch();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        //$("#ionrange_1").ionRangeSlider({
+        //    min: 0,
+        //    max: 50000,
+        //    type: 'double',
+        //    prefix: "Rs",
+        //    maxPostfix: "+",
+        //    prettify: false,
+        //    hasGrid: true
+        //});
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            // ko.applyBindings(new viewModel, (document.getElementById('ads')));
+
+            // ko.applyBindings(new treeModel, document.getElementById('navigation'));
+            ko.applyBindings(new viewModel);
+            //window.onload = function () {
+            //    ko.applyBindings(new viewModel);
+            //};
+            var length = $(window).width();
+            if (length < 786) { //770
+                $(".collapse-link").click();
+            }
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

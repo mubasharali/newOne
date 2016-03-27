@@ -12,12 +12,7 @@
                     <h5>Edit Bike Ad</h5>
                 </div>
                 <div class="ibox-content">
-                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" action="@Url.Action("FileUploadHandler", "Electronics")" method="post" enctype="multipart/form-data">
-                        <h2>Add Images</h2>
-                        <div id="dropzonePreview" class="dz-default dz-message">
-                        </div>
-                    </form>
-                    <br />
+                    @Html.Partial("~/Views/Shared/_Dropzone.cshtml")
                     @using (Html.BeginForm("EditBikeAd", "Vehicles", FormMethod.Post, new { id = "form" }))
                     {
                         @Html.AntiForgeryToken()

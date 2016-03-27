@@ -65,7 +65,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/plugins/metsiMenu")
-    @*@Scripts.Render("~/plugins/pace")*@
+    @Scripts.Render("~/plugins/pace")
     @Scripts.Render("~/plugins/slimScroll")
     @Scripts.Render("~/bundles/inspinia")
     @Scripts.Render("~/plugins/knockout")
@@ -85,11 +85,18 @@
     <script>
         $(function () {
             $.connection.hub.start().done();
-            $.cookie("AWSFolderName", "tempAds/", { path: '/' });
-            $.cookie("AWSUserFolder", "tempUsers/", { path: '/' });
-            $.cookie("AWSCompanyFolder", "tempCompanies/", { path: '/' });
+            $.cookie("AWSFolderName", "Ads/", { path: '/' });
+            $.cookie("AWSUserFolder", "Users/", { path: '/' });
+            $.cookie("AWSCompanyFolder", "Companies/", { path: '/' });
             $.cookie("AWSURL", "https://s3.amazonaws.com/dealkr/", { path: '/' });
-          //  $("#side-menu").css({ "display": "block" });
+            //  $("#side-menu").css({ "display": "block" });
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
         })
         function authForFeedback() {
             if (loginUserId() != "Visitor") {

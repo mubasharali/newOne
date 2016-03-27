@@ -19,7 +19,7 @@
                             <a href="/Search">Search Ads</a>
                         </li>
                         <li>
-                            <a href="/CreateAd">Create Ad</a>
+                            <a href="/CreateAd">Post Ad</a>
                         </li>
                         <li>
                             <a href="/Company/Create">Create Page</a>
@@ -40,7 +40,7 @@
                 else
                 {
                     <div class="dropdown profile-element">
-                        <a class="btn" data-bind="click:loginBtn" >Login</a>
+                        <a class="btn btn-info" data-bind="click:loginBtn" >My Account</a>
                     </div>
                 }
                 @*<div class="logo-element">
@@ -88,6 +88,9 @@
             </li>
             <li class="@Html.IsSelected(controller: "Services")">
                 <a href="@Url.Action("Index", "Services")"><i class="fa fa-cogs"></i> <span class="nav-label">Services</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "Education")">
+                <a href="@Url.Action("categories", "Education")"><i class="fa fa-mortar-board"></i> <span class="nav-label">Books-Sports-Hobbies</span> </a>
             </li>
             @*<li class="@Html.IsSelected(controller: "Study")">
                 <a href="@Url.Action("Index", "Study")"><i class="fa fa-mortar-board"></i> <span class="nav-label">Study</span><span class="fa arrow"></span> </a>

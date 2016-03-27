@@ -12,12 +12,7 @@
                     <h5>Edit Ad</h5>
                 </div>
                 <div class="ibox-content">
-                    <form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" method="post" enctype="multipart/form-data">
-                        <h2>Add Images</h2>
-                        <div id="dropzonePreview" class="dz-default dz-message">
-                        </div>
-                    </form>
-                    <br />
+                    @Html.Partial("~/Views/Shared/_Dropzone.cshtml")
                     @using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { id = "form" }))
                     {
                         @Html.AntiForgeryToken()
@@ -26,7 +21,7 @@
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
                             
-                            @if (Model.category == "Animals")
+                            @if (Model.category == "Animals" || Model.category == "books-sports-hobbies")
                             {
                                 <div style="display:none" id="subcategory">@Model.subcategory</div>
                                 <div class="form-group">
@@ -102,6 +97,8 @@
             var category = $("#category").val();
             if (category == "Animals") {
                 self.availableCategories = ["Dog", "Bird", "Cat", "Fish", "Farm Animals", "others", "Pet Adoption", "Pet Accessories", "Pet Food", "Pet training", "Pet Clinics"];
+            } else if (category == "books-sports-hobbies") {
+                self.availableCategories = ["Books & Magazines", "Classes", "Home tuitions", "Musical Instruments", "Sports Equipment", "Gym & Fitness", "other hobbies"];
             }
            
             self.conditionChecked = ko.observable(false);

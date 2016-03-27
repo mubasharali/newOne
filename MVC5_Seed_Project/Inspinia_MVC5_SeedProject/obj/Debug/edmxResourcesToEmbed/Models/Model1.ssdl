@@ -325,6 +325,7 @@
     <Property Name="cityId" Type="int" />
     <Property Name="popularPlaceId" Type="int" />
     <Property Name="exectLocation" Type="nvarchar" MaxLength="100" />
+    <Property Name="views" Type="int" />
   </EntityType>
   <EntityType Name="CompanyAd">
     <Key>

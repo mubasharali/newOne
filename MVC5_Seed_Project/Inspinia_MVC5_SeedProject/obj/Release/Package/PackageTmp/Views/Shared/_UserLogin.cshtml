@@ -11,9 +11,9 @@
                 <div class="modal-body">
                     <div class="form-group"><label>Enter Email</label> <input type="email" name="email" data-bind="value:email,valueUpdate:'afterkeydown',event:{keyup:checkEnterEmail}" placeholder="Enter your email" class="form-control"></div>
                     <p class="req" data-bind="text:loginError"></p>
+                    <h3 style="text-align:center">OR</h3>
                     <section id="externalLogins">
-                        @*@Html.Action("RemoveAccountList","Account")*@
-                        @Html.Partial("../Account/_ExternalLoginsListPartial", new Inspinia_MVC5_SeedProject.Models.ExternalLoginViewModel { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
+                        @Html.Partial("../Account/_ExternalLoginsListPartial", new Inspinia_MVC5_SeedProject.Models.ExternalLoginViewModel { Action = "ExternalLogin", ReturnUrl =  HttpContext.Current.Request.Url.AbsolutePath })
                     </section>
                 </div>
                 <div class="modal-footer">
@@ -39,13 +39,13 @@
         <div class="modal-dialog">
             <div class="modal-content animated ">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @*<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>*@
                     @*<i class="fa fa-laptop modal-icon"></i>*@
                     <h4 class="modal-title brand-style">dealkar.pk</h4>
                     <small class="font-bold">Wait na kar, deal kar!</small>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group"><label>Enter Password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterNewPassword}" placeholder="Enter Password" class="form-control"></div>
+                    <div class="form-group"><label>Enter Password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterNewPassword}" placeholder="Enter a Password" class="form-control"></div>
                     <div class="form-group"><label>Confirm Password</label> <input type="password" data-bind="value:confirmPassword,hasFocus:hasConfirmPasswordFocus,valueUpdate:'afterkeydown',event:{keyup:checkEnterConfirmPassword}" placeholder="Again Enter your Password" class="form-control"></div>
                     <p class="req" data-bind="text:loginError"></p>
                 </div>
@@ -72,7 +72,7 @@
         <div class="modal-dialog">
             <div class="modal-content animated ">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    @*<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>*@
                     @*<i class="fa fa-laptop modal-icon"></i>*@
                     <h4 class="modal-title">Thank You for joining <span class="brand-style">dealkar.pk</span> !</h4>
                 </div>

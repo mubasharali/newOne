@@ -1,151 +1,142 @@
-﻿@*@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Ad>
+﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Ad>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Services";
 }
-
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-sm-4">
-        <h2>Index</h2>
-        <ol class="breadcrumb">
-            <li class="active">
-                <strong>Ad</strong>
-            </li>
-        </ol>
-    </div>
-</div>
-
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>List of Ad</h5>
-					<div class="ibox-tools">
-						@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})
-					</div>
-                </div>
-                <div class="ibox-content">
-
-<table class="table table-striped">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.category)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isnegotiable)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.subcategory)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.type)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.condition)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.views)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AdsLocation.exectLocation)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LaptopAd.color)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MobileAd.color)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CompanyAd.rating)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isnegotiable)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.subcategory)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.condition)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.views)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AdsLocation.exectLocation)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LaptopAd.color)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MobileAd.color)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyAd.rating)
-        </td>
-        <td>
-			@Html.ActionLink("Details", "Details", new { id=item.Id }, new { @class = "btn btn-primary btn-sm"})
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }, new { @class = "btn btn-white btn-sm"})
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { @class = "btn btn-white btn-sm"})
-        </td>
-    </tr>
-}
-
-</table>
-
-                </div>
-            </div>
+            <h1>The Services page is under maintaince Service :) </h1>
         </div>
     </div>
- </div>*@
+ </div>
+
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    <link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/plugins/ionRange")
+
+    <script src="~/Scripts/app/SearchAds.js"></script>
+    <script src="~/Scripts/app/slick-knockout-binding.js"></script>
+    <script src="~/Scripts/app/CreateAlert.js"></script>
+    <script src="~/Scripts/app/_AdListView.js"></script>
+    <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    <script>
+
+        function viewModel() {
+            SearchingLocation();
+            CreateAlert();
+           // TreeViewModel(); //in searchads.js
+          //  RefreshSearch();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $("#ionrange_1").ionRangeSlider({
+            min: 0,
+            max: 50000,
+            type: 'double',
+            prefix: "Rs",
+            maxPostfix: "+",
+            prettify: false,
+            hasGrid: true
+        });
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            var length = $(window).width();
+            if (length < 786) { //770
+                $(".collapse-link").click();
+            }
+            ko.applyBindings(new viewModel);
+        });
+
+    </script>
+}
+
+
 
 
 

@@ -72,6 +72,7 @@
     @Scripts.Render("~/scripts/selectize")
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/ladda")
+    @Scripts.Render("~/plugins/truncate")
     <script src="~/Scripts/jquery.cookie.js"></script>
     <script src="~/Scripts/app/_SearchLocation.js"></script>
     <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
@@ -84,11 +85,18 @@
     <script>
         $(function () {
             $.connection.hub.start().done();
-            $.cookie("AWSFolderName", "tempAds/", { path: '/' });
-            $.cookie("AWSUserFolder", "tempUsers/", { path: '/' });
-            $.cookie("AWSCompanyFolder", "tempCompanies/", { path: '/' });
+            $.cookie("AWSFolderName", "Ads/", { path: '/' });
+            $.cookie("AWSUserFolder", "Users/", { path: '/' });
+            $.cookie("AWSCompanyFolder", "Companies/", { path: '/' });
             $.cookie("AWSURL", "https://s3.amazonaws.com/dealkr/", { path: '/' });
-          //  $("#side-menu").css({ "display": "block" });
+            //  $("#side-menu").css({ "display": "block" });
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
         })
         function authForFeedback() {
             if (loginUserId() != "Visitor") {
@@ -98,6 +106,18 @@
                 loginBtn();
             }
         }
+        //ko.bindingHandlers.truncateLocation = {
+        //    update: function (element, valueAccessor, allBindingsAccessor) {
+        //        var originalText = ko.utils.unwrapObservable(valueAccessor()),
+        //            // 10 is a default maximum length
+        //            length = ko.utils.unwrapObservable(allBindingsAccessor().maxTextLength) || 12,
+        //            truncateLocation = originalText.length > length ? originalText.substring(0, length) + " ..." : originalText;
+        //        // updating text binding handler to show truncateLocation
+        //        ko.bindingHandlers.text.update(element, function () {
+        //            return truncateLocation;
+        //        });
+        //    }
+        //};
     </script>
 </body>
 </html>

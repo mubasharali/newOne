@@ -10,7 +10,7 @@ var maxArea = ko.observable(5000);
 var floor = ko.observable();
 var availablebedrooms = ["1", "2", "3", "4", "5"];
 var subcategory = ko.observable();
-var availablesubcategories = ["apartment", "house", "plot & land", "Shop", "Office", "PG & Flatmates", "other commerical places"]; //reference over Realestate/create page + HomeController/CheckCategory()
+var availablesubcategories = ["apartment", "house", "plot & land", "Shop", "Office", "PG & Flatmates", "other commerical places"]; //reference over Realestate/create page + ElectronicsController/CheckCategory()
 minPrice.subscribe(function () {
     RefreshSearch();
 });

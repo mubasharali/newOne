@@ -1,0 +1,122 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>dealkar.pk </title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/style.css" rel="stylesheet">
+    <meta name="google-site-verification" content="orv0gPJPIeitRMIAGV_0VbMTx3DfWKJa32R4E9Vrr20" />
+    <link rel="icon" href="~/Images/others/favicon.png">
+</head>
+
+<body class="gray-bg">
+
+    <div class="lock-word animated fadeInDown">
+        <span class="first-word">LOCKED</span><span>SCREEN</span>
+    </div>
+    <div class="middle-box text-center lockscreen animated fadeInDown">
+        <div data-bind="with:showUser">
+            <div class="m-b-md">
+                <img alt="image" width="180" height="180" class="img-circle circle-border" data-bind="attr:{src:dpLink}">
+            </div>
+            <h3 data-bind="text:name"></h3>
+            <p>Almost Done! Please enter your email  </p>
+
+            @using (Html.BeginForm("CallBackFromLockScreen", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+                </div>
+                <button type="submit" class="btn btn-primary block full-width">Submit</button>
+                
+            }
+            
+        </div>
+    </div>
+    @*@section Styles {
+        @Styles.Render("~/plugins/toastrStyles")
+
+    }*@
+
+   
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/plugins/metsiMenu")
+        @Scripts.Render("~/plugins/slimScroll")
+        @Scripts.Render("~/bundles/inspinia")
+        @Scripts.Render("~/plugins/knockout")
+        @Scripts.Render("~/plugins/toastr")
+        <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+        <script src="~/Scripts/jquery.cookie.js"></script>
+        <script>
+            function Profile(data) {
+                var self = this;
+                data = data || {};
+                self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + data.id + data.dpExtension;
+                if (!data.dpExtension) {
+                    self.dpLink = '/Images/Users/default.jpg';
+                }
+                self.name = data.name;
+                self.email = data.email;
+            }
+            function viewModel() {
+
+                var self = this;
+                self.showUser = ko.observable();
+                self.getUser = function () {
+                    $.ajax({
+                        url: '/api/User/GetSimpleUser',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'GET',
+                        success: function (data) {
+                            self.showUser(new Profile(data));
+                        },
+                        error: function () {
+                            toastr.error("failed to get data. Please refresh page", "Error");
+                        }
+                    });
+                }
+                self.getUser();
+                return self;
+            }
+            //tree
+
+            $(function () {
+
+                ko.applyBindings(new viewModel);
+            });
+
+        </script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
+
+
+

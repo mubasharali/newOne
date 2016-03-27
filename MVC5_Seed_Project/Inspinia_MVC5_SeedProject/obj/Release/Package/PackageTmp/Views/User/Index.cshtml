@@ -13,8 +13,15 @@
     </div>
     <div id="FirstLoading" style="display:none" data-bind="with:showProfile">
         <div class="row m-b-lg m-t-lg">
+            <div data-bind="if:loginUserId == id">
+                <div data-bind="visible:!isEmailConfirmed">
+                    <div class="alert alert-success alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        <h3>Confirm your email address</h3><p>Click on the link we sent at <b data-bind="text:UserName"></b>. @*<a>I have not received any mail. I have checked Spam folder</a>*@ OR <a data-bind="attr:{href:'/User/Profile/'+ id}">edit email address</a></p>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-5">
-
                 <div class="profile-image">
                     <a target="_blank" data-bind="attr:{href:dpLink}">
                         <img data-bind="attr:{src:dpLink}" class="img-circle circle-border m-b-md" alt="profile">
@@ -28,7 +35,7 @@
                             <br />
                             <small>
                                 @*<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return addFriend(id)} " style="margin-bottom:1px"><span data-bind="visible:!isFriend()">Add Friend</span><span data-bind="visible:isFriend">UnFriend</span></button>
-                                &nbsp;<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button> &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>*@
+    &nbsp;*@<button class="btn btn-sm" data-bind="visible: loginUserId != id,click:function(){ return sendMessage(id,name)}" style="margin-bottom:1px">Send message</button>@* &nbsp;<button data-bind="visible: loginUserId != id" style="margin-bottom:1px" class="btn btn-sm">Follow</button>*@
 
                                 <a class="btn btn-sm btn-default" data-bind="visible: loginUserId == id,attr:{href:'/User/Profile/'+ id}" style="margin-bottom:1px">Edit Profile</a>
                             </small>
@@ -305,7 +312,7 @@
                 var tagsdata = $.map(data.companies, function (item) { return new Company(item); });
                 self.showCompanies(tagsdata);
             }
-
+            self.isEmailConfirmed = data.isEmailConfirmed;
             self.tagsToFollow = ko.observable("");
             self.followSummary = ko.observable();
             self.followTagsBtn = function () {

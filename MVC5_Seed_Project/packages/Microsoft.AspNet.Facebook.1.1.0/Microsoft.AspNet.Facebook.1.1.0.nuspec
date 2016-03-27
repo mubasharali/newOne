@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.AspNet.Facebook</id>
+    <version>1.1.0</version>
+    <title>Microsoft ASP.NET Facebook</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://www.microsoft.com/web/webpi/eula/net_library_eula_ENU.htm</licenseUrl>
+    <projectUrl>http://www.asp.net/mvc</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Description: This package contains everything you need to create a Facebook application using ASP.NET MVC, ASP.NET Web API, and v2.0 of the Facebook Graph API.</description>
+    <summary>Description: This package contains everything you need to create a Facebook application using ASP.NET MVC, ASP.NET Web API, and v2.0 of the Facebook Graph API.</summary>
+    <releaseNotes>Please visit http://go.microsoft.com/fwlink/?LinkId=389866 to view the release notes.</releaseNotes>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <language>en-US</language>
+    <tags>Microsoft AspNet Facebook Graph API</tags>
+    <dependencies>
+      <dependency id="Facebook" version="6.1.4" />
+      <dependency id="Microsoft.AspNet.Mvc" version="[5.2.2, 6.0.0)" />
+      <dependency id="Microsoft.AspNet.Razor" version="[3.2.2, 4.0.0)" />
+      <dependency id="Microsoft.AspNet.WebApi" version="[5.2.2, 6.0.0)" />
+      <dependency id="Microsoft.AspNet.WebApi.Client" version="[5.2.2, 6.0.0)" />
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="[5.2.2, 6.0.0)" />
+      <dependency id="Microsoft.AspNet.WebApi.WebHost" version="[5.2.2, 6.0.0)" />
+      <dependency id="Microsoft.AspNet.WebPages" version="[3.2.2, 4.0.0)" />
+      <dependency id="Newtonsoft.Json" version="6.0.4" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Net.Http" targetFramework=".NETFramework4.5" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

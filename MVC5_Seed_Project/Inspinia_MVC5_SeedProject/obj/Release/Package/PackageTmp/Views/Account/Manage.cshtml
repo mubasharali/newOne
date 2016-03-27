@@ -1,7 +1,7 @@
 ﻿@using Inspinia_MVC5_SeedProject.Models;
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "Manage Account";
+    ViewBag.Title = "Manage Account Password";
 }
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -30,16 +30,43 @@
                         @Html.Partial("_SetPasswordPartial")
                     }
 
-                    <section id="externalLogins">
+                    @*<section id="externalLogins">
                         @Html.Action("RemoveAccountList")
                         @Html.Partial("_ExternalLoginsListPartial", new Inspinia_MVC5_SeedProject.Models.ExternalLoginViewModel{ Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
-                    </section>
+                    </section>*@
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+
+
+
+@section Scripts{
+@Scripts.Render("~/bundles/jqueryval")
+   
+    <script>
+
+        function viewModel() {
+            SearchingLocation();
+            
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+
+            return self;
+        }
+        //tree
+
+       
+       
+        $(function () {
+          
+            ko.applyBindings(new viewModel);
+            
+        });
+
+    </script>
 }
+

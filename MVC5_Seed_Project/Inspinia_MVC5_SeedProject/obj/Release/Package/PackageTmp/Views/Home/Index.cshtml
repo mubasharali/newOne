@@ -4,7 +4,6 @@
     <div class="col-sm-12">
 
         <div class="control-group form-horizontal">
-
             <label class="control-label col-sm-5" for="select-repo">What are you looking for <br /><small class="text-navy hidden-xs">pick tags</small></label>
             <div class="col-sm-5 col-md-4">
                 <input id="select-tag" name="tags" data-bind="value:selectedTag" class="repositories" placeholder="e.g, Samsung S3, evo, ups, washing mechine.." />
@@ -65,6 +64,26 @@
                             <div class="m-b-md">
                                 <i class="fa fa-cogs fa-4x"></i>
                                 <h3 class="m-xs">Services</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <a href="/Pets-Animals">
+                        <div class="widget navy-bg p-lg text-center">
+                            <div class="m-b-md">
+                                <i class="fa fa-paw fa-4x"></i>
+                                <h3 class="m-xs">Pets & Animals</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                    <a href="/books-sports-hobbies">
+                        <div class="widget navy-bg p-lg text-center">
+                            <div class="m-b-md">
+                                <i class="fa fa-mortar-board fa-4x"></i>
+                                <h3 class="m-xs">Books, Sports & Hobbies</h3>
                             </div>
                         </div>
                     </a>
@@ -700,7 +719,6 @@
             searchField: 'name',
             options: [],
             maxItems: 4,
-            create: true,
             render: {
                 option: function (item, escape) {
                     return '<div>' +

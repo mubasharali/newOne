@@ -85,11 +85,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     }
                     //string tempId = Request["tempId"];
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    electronicController.MyAd(ref ad, "Save", ad.category, ad.subcategory);
-                    db.Ads.Add(ad);
-                    db.SaveChanges();
-
-
+                    ad = electronicController.MyAd(ad, "Save", ad.category, ad.subcategory);
+                    
                     electronicController.PostAdByCompanyPage(ad.Id);
 
 
@@ -103,12 +100,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         string sbs = e.ToString();
                     }
                     //tags
-                    electronicController.SaveTags(Request["tags"], ref ad);
+                    electronicController.SaveTags(Request["tags"],  ad);
 
-                    electronicController.ReplaceAdImages(ref ad, fileNames);
+                    electronicController.ReplaceAdImages( ad, fileNames);
                     //location
-                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
-                    db.SaveChanges();
+                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Save");
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
                 return RedirectToAction("Register", "Account");
@@ -146,14 +142,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                        electronicController.MyAd(ref ad, "Update", ad.category , ad.subcategory);
+                        ad = electronicController.MyAd(ad, "Update", ad.category, ad.subcategory);
 
 
                         electronicController.PostAdByCompanyPage(ad.Id, true);
 
                         db.SaveChanges();
                         //tags
-                        electronicController.SaveTags(Request["tags"], ref ad, "update");
+                        electronicController.SaveTags(Request["tags"],  ad, "update");
 
 
                         try
@@ -166,11 +162,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         }
                         //location
 
-                        db.Entry(ad).State = EntityState.Modified;
-                        db.SaveChanges();
 
-                        electronicController.ReplaceAdImages(ref ad, fileNames);
-                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+                        electronicController.ReplaceAdImages( ad, fileNames);
+                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Update");
 
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }

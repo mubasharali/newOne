@@ -12,5 +12,131 @@
     </div>
  </div>
 
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    <link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/toastr")
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/knockout")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/plugins/ionRange")
+
+    <script src="~/Scripts/app/SearchAds.js"></script>
+    <script src="~/Scripts/app/slick-knockout-binding.js"></script>
+    <script src="~/Scripts/app/CreateAlert.js"></script>
+    <script src="~/Scripts/app/_AdListView.js"></script>
+    <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    <script>
+
+        function viewModel() {
+            SearchingLocation();
+            CreateAlert();
+           // TreeViewModel(); //in searchads.js
+          //  RefreshSearch();
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $("#ionrange_1").ionRangeSlider({
+            min: 0,
+            max: 50000,
+            type: 'double',
+            prefix: "Rs",
+            maxPostfix: "+",
+            prettify: false,
+            hasGrid: true
+        });
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'POST',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            var length = $(window).width();
+            if (length < 786) { //770
+                $(".collapse-link").click();
+            }
+            ko.applyBindings(new viewModel);
+        });
+
+    </script>
+}
+
+
+
 
 

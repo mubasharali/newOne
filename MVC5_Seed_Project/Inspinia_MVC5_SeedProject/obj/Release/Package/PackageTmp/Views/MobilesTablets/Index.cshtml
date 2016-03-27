@@ -173,7 +173,7 @@
     @Scripts.Render("~/plugins/slick")
     @Scripts.Render("~/plugins/jsTree")
 @Scripts.Render("~/plugins/ionRange")
-@Scripts.Render("~/plugins/truncate")
+
     <script src="~/Scripts/app/MobileTree.js"></script>
     
 <script src="~/Scripts/app/slick-knockout-binding.js"></script>
@@ -186,7 +186,11 @@
        
 
         function viewModel() {
-            
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (w < 786) {
+                $('.collapse-link').click();
+            }
             SearchingLocation();
             TreeViewModel();
             RefreshSearch();
@@ -261,11 +265,7 @@
                 onclick: null
             };
             ko.applyBindings(new viewModel);
-            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            if (w < 786) {
-                $('.collapse-link').click();
-            }
+            
         });
 
     </script>

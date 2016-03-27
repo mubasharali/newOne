@@ -107,7 +107,7 @@
             ChatViewModel();
 
             self.selectedCategory = ko.observable();
-            self.availableCategories = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real estate","Services"];
+            self.availableCategories = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real estate","Services","Pets & Animals","Books-Sports-Hobbies"];
 
             self.submitClicked = function () {
                 console.log(fileList);
@@ -388,6 +388,11 @@
             $("#form").validate({
                 ignore: '.ignoreit, :hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input ',
                 rules: {
+                    shortabout: {
+                        required: true,
+                        minlength: 20,
+                        maxlength: 60
+                    },
                     title: {
                         required: true,
                         maxlength: 50,
@@ -397,25 +402,8 @@
                         required: true,
                         maxlength: 15
                     },
-                    model: {
-                        required: true,
-                        maxlength: 20
-                    },
-                    description: {
-                        required: true,
-                        minlength: 25,
-                        maxlength: 1000
-                    },
-                    color: {
-                        required: true,
-                        maxlength: 20
-                    },
-                    price: {
-                        number: true
-                    },
-                    abc: {
-                        required: true
-                    }
+                    
+                    
                 }
             });
             $('.i-check').iCheck({

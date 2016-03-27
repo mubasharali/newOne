@@ -23,12 +23,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> GetCarTree()
         {
-            var mobiles = (from mobile in db.CarBrands.ToList()
-                           orderby mobile.Id
+            var mobiles = (from mobile in db.CarBrands
+                           where mobile.brand != "" && mobile.status != "p"
                            select new
                            {
                                companyName = mobile.brand,
-                               models = from model in mobile.CarModels.ToList()
+                               models = from model in mobile.CarModels
+                                        where model.model != "" && model.status != "p"
                                         select new
                                         {
                                             model = model.model
@@ -39,12 +40,13 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> GetBikeTree()
         {
-            var mobiles = (from mobile in db.BikeBrands.ToList()
-                           orderby mobile.Id
+            var mobiles = (from mobile in db.BikeBrands
+                           where mobile.brand != "" && mobile.status != "p"
                            select new
                            {
                                companyName = mobile.brand,
-                               models = from model in mobile.BikeModels.ToList()
+                               models = from model in mobile.BikeModels
+                                        where model.model != "" && model.status != "p"
                                         select new
                                         {
                                             model = model.model

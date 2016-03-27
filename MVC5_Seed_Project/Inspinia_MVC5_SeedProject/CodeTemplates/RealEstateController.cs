@@ -86,23 +86,19 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 if (Request.IsAuthenticated)
                 {
                     FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                    electronicController.MyAd(ref ad, "Save", ad.category, ad.subcategory);
-                    db.Ads.Add(ad);
-                    db.SaveChanges();
-
-
+                    ad = electronicController.MyAd(ad, "Save", ad.category, ad.subcategory);
+                    
                     electronicController.PostAdByCompanyPage(ad.Id);
 
                       SaveRealEstateAd(ad.Id);
 
                     
                     //tags
-                    electronicController.SaveTags(Request["tags"], ref ad);
+                    electronicController.SaveTags(Request["tags"],  ad);
 
-                    electronicController.ReplaceAdImages(ref ad, fileNames);
+                    electronicController.ReplaceAdImages( ad, fileNames);
                     //location
-                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Save");
-                    db.SaveChanges();
+                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Save");
                     return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                 }
                 return RedirectToAction("Register", "Account");
@@ -142,32 +138,15 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     if (Request["postedBy"] == User.Identity.GetUserId())
                     {
                         FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
-                        electronicController.MyAd(ref ad, "Update");
+                        ad = electronicController.MyAd(ad, "Update");
 
-                        db.Entry(ad).State = EntityState.Modified;
-                        try
-                        {
-                            await db.SaveChangesAsync();
-                        }
-                        catch (DbEntityValidationException e)
-                        {
-                            string s = e.ToString();
-                            List<string> errorMessages = new List<string>();
-                            foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
-                            {
-                                string entityName = validationResult.Entry.Entity.GetType().Name;
-                                foreach (DbValidationError error in validationResult.ValidationErrors)
-                                {
-                                    errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
-                                }
-                            }
-                        }
+                        
 
                         electronicController.PostAdByCompanyPage(ad.Id, true);
 
                         db.SaveChanges();
                         await SaveRealEstateAd(ad.Id, true);
-                        electronicController.SaveTags(Request["tags"], ref ad, "update");
+                        electronicController.SaveTags(Request["tags"],  ad, "update");
 
 
                         try
@@ -182,8 +161,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                         
 
-                        electronicController.ReplaceAdImages(ref ad, fileNames);
-                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ref ad, "Update");
+                        electronicController.ReplaceAdImages( ad, fileNames);
+                        electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"],  ad, "Update");
 
                         return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
                     }

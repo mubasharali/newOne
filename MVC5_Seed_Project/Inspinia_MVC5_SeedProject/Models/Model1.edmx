@@ -330,6 +330,7 @@
           <Property Name="cityId" Type="int" />
           <Property Name="popularPlaceId" Type="int" />
           <Property Name="exectLocation" Type="nvarchar" MaxLength="100" />
+          <Property Name="views" Type="int" />
         </EntityType>
         <EntityType Name="CompanyAd">
           <Key>
@@ -5077,6 +5078,7 @@
           <NavigationProperty Name="FollowCompanies" Relationship="Model.FK_FollowCompany_ToTable" FromRole="Company" ToRole="FollowCompany" />
           <NavigationProperty Name="CompanyImages" Relationship="Model.FK_Image_ToTable" FromRole="Company" ToRole="CompanyImage" />
           <NavigationProperty Name="Reviews" Relationship="Model.FK_Review_ToTable" FromRole="Company" ToRole="Review" />
+          <Property Name="views" Type="Int32" />
         </EntityType>
         <Association Name="FK_Company_ToTable">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -6206,6 +6208,7 @@
           <EntitySetMapping Name="Companies">
             <EntityTypeMapping TypeName="Model.Company">
               <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="views" ColumnName="views" />
                 <ScalarProperty Name="exectLocation" ColumnName="exectLocation" />
                 <ScalarProperty Name="popularPlaceId" ColumnName="popularPlaceId" />
                 <ScalarProperty Name="cityId" ColumnName="cityId" />
