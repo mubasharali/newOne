@@ -36,12 +36,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         // GET api/Location
         public async Task<IHttpActionResult> GetCities()
         {
-            var cities = (db.Cities.Select(x => x.cityName)).AsEnumerable();
+            var cities = (db.Cities.Where(x=>x.status != "p").Select(x => x.cityName)).AsEnumerable();
             return Ok(cities);
         }
         public async Task<IHttpActionResult> GetPopularPlaces(string city)
         {
-            var places = await db.popularPlaces.Where(x => x.City.cityName == city).Select(x => x.name).ToListAsync();
+            var places = await db.popularPlaces.Where(x => x.City.cityName == city && x.status != "p").Select(x => x.name).ToListAsync();
             return Ok(places);
         }
 
@@ -88,6 +88,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     return BadRequest();
                 }
+                city.status = "a";
                 city.updatedBy = User.Identity.GetUserId();
                 city.updatedOn = DateTime.UtcNow;
                 db.Entry(city).State = EntityState.Modified;
@@ -113,6 +114,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     return BadRequest();
                 }
+                city.status = "a";
                 city.updatedBy = User.Identity.GetUserId();
                 city.updatedOn = DateTime.UtcNow;
                 db.Entry(city).State = EntityState.Modified;
@@ -168,7 +170,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     return NotFound();
                 }
-
+                var data = city.CompanyOffices.ToList();
+                foreach (var office in data)
+                {
+                    office.popularPlaceId = null;
+                }
                 db.popularPlaces.Remove(city);
                 try
                 {
@@ -199,6 +205,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               updatedBy = mob.updatedBy,
                               updatedByName = mob.AspNetUser1.Email,
                               updatedOn = mob.updatedOn,
+                              status = mob.status,
                           };
                 return Ok(ret);
         }
@@ -220,6 +227,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           updatedBy = mob.updatedBy,
                           updatedByName = mob.AspNetUser1.Email,
                           updatedOn = mob.updatedOn,
+                          longitude = mob.longitude,
+                          latitude = mob.latitude,
+                          status = mob.status,
                       };
             return Ok(ret);
         }

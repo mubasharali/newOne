@@ -182,7 +182,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return BadRequest();
         }
-        public async Task<IHttpActionResult> SaveAd(int id)
+        public async Task<IHttpActionResult> SaveItem(int id)
         {
             if (User.Identity.IsAuthenticated)
             {

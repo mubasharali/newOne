@@ -860,8 +860,8 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="cityId" Type="Int32" Nullable="false" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="longitude" Type="Decimal" Precision="18" Scale="0" />
-    <Property Name="latitude" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="longitude" Type="Decimal" Precision="10" Scale="6" />
+    <Property Name="latitude" Type="Decimal" Precision="10" Scale="6" />
     <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="addedOn" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="updatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
@@ -872,6 +872,7 @@
     <NavigationProperty Name="AspNetUser" Relationship="Model.FK_popularPlace_ToTable_1" FromRole="popularPlace" ToRole="AspNetUser" />
     <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_popularPlace_ToTable_2" FromRole="popularPlace" ToRole="AspNetUser" />
     <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_2" FromRole="popularPlace" ToRole="Company" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="Question">
     <Key>
@@ -1413,6 +1414,7 @@
     <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_1" FromRole="City" ToRole="Company" />
     <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_2" FromRole="City" ToRole="CarAd" />
     <NavigationProperty Name="BikeAds" Relationship="Model.FK_BikeAd_ToTable_2" FromRole="City" ToRole="BikeAd" />
+    <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <Association Name="FK_AdsLocation_ToTable_1">
     <End Type="Model.City" Role="City" Multiplicity="0..1">

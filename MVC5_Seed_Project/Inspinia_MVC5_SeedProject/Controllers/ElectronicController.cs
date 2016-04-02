@@ -1070,7 +1070,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
         
         //[InitializeSimpleMembership]
-        public async Task<IHttpActionResult> GetAd(int id)
+        public async Task<IHttpActionResult> GetItem(int id)
         {
             Ad add = await db.Ads.FindAsync(id);
             if (add == null)

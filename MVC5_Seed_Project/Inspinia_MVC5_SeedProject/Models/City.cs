@@ -48,6 +48,8 @@ public partial class City
 
     public string cityName { get; set; }
 
+    public string status { get; set; }
+
 
 
     public virtual ICollection<AdsLocation> AdsLocations { get; set; }

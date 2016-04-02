@@ -48,6 +48,8 @@ public partial class popularPlace
 
     public Nullable<System.DateTime> updatedOn { get; set; }
 
+    public string status { get; set; }
+
 
 
     public virtual ICollection<AdsLocation> AdsLocations { get; set; }

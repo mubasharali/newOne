@@ -19,6 +19,8 @@ using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Net.Mail;
+using System.IO;
+using System.Xml;
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
     public class FileName
@@ -90,7 +92,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             else if (category == "Electronics")
             {
-                string[] subcategories = { "TV-DVD-Multimedia", "Games", "Home-Appliances", "Other-Electronics" };
+                string[] subcategories = { "TV-DVD-Multimedia","Camera", "Games", "Home-Appliances", "Other-Electronics" };
                 foreach (var subcat in subcategories)
                 {
                     if (subcategory == subcat)
@@ -937,16 +939,32 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                     cit.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     cit.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                     cit.addedOn = DateTime.UtcNow;
+                    cit.status = "p";
                     db.Cities.Add(cit);
                     db.SaveChanges();
                     loc.cityId = cit.Id;
                     if (popularPlace != null)
                     {
                         popularPlace pop = new popularPlace();
+                        try
+                        {
+                            Coordinates co = GetLongitudeAndLatitude(popularPlace,city);
+                            if (co.status)
+                            {
+                                pop.longitude = co.longitude;
+                                pop.latitude = co.latitude;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                        
                         pop.cityId = cit.Id;
                         pop.name = popularPlace;
                         pop.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                         pop.addedOn = DateTime.UtcNow;
+                        pop.status = "p";
                         db.popularPlaces.Add(pop);
                         db.SaveChanges();
                         loc.popularPlaceId = pop.Id;
@@ -961,11 +979,26 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         if (ppp == null)
                         {
                             popularPlace pop = new popularPlace();
+                            try
+                            {
+                                Coordinates co = GetLongitudeAndLatitude(popularPlace,city);
+                                if (co.status)
+                                {
+                                    pop.longitude = co.longitude;
+                                    pop.latitude = co.latitude;
+                                }
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
                             pop.cityId = citydb.Id;
                             pop.name = popularPlace;
                             pop.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
                             pop.addedOn = DateTime.UtcNow;
+                            pop.status = "p";
                             db.popularPlaces.Add(pop);
+                            
                             db.SaveChanges();
                             loc.popularPlaceId = pop.Id;
                         }
@@ -1332,6 +1365,46 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return View(ad);
         }
+        public Coordinates test(string abc,string city)
+        {
+            return GetLongitudeAndLatitude(abc,city);
+           // return GetCoordinates(abc);
+        }
+        public class Coordinates
+        {
+            public decimal longitude;
+            public decimal latitude;
+            public bool status;
+        }
+        public Coordinates GetLongitudeAndLatitude(string famousPlace,string city)
+        {
+            Coordinates co = new Coordinates();
+            co.status = false;
+            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace) + "&region=" + city + "&sensor=false";
+            try
+            {
+                XmlDocument objXmlDocument = new XmlDocument();
+                objXmlDocument.Load(urlAddress);
+                XmlNodeList objXmlNodeList = objXmlDocument.SelectNodes("/GeocodeResponse/result/geometry/location");
+                if (objXmlNodeList.Count == 1)
+                {
+                    co.status = true;
+                }
+                foreach (XmlNode objXmlNode in objXmlNodeList)
+                {
+                    // GET LONGITUDE 
+                    co.longitude = decimal.Parse ( objXmlNode.ChildNodes.Item(0).InnerText);
+                    // GET LATITUDE 
+                    co.latitude= decimal.Parse ( objXmlNode.ChildNodes.Item(1).InnerText);
+                }
+            }
+            catch
+            {
+                // Process an error action here if needed  
+            }
+            return co;
+        }
+
 
         // POST: /Electronics/Delete/5
         [HttpPost, ActionName("Delete")]

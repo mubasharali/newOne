@@ -1037,6 +1037,7 @@
     <Content Include="Views\Account\_ExternalUserPropertiesListPartial.cshtml" />
     <Content Include="Views\Account\LockScreen.cshtml" />
     <Content Include="Views\Account\ForgetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

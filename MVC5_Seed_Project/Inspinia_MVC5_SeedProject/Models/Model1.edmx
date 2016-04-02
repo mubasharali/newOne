@@ -267,6 +267,7 @@
           <Property Name="updatedBy" Type="nvarchar" MaxLength="128" />
           <Property Name="updatedOn" Type="datetime" />
           <Property Name="cityName" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -543,12 +544,13 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="cityId" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="longitude" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="latitude" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="longitude" Type="decimal" Precision="10" Scale="6" />
+          <Property Name="latitude" Type="decimal" Precision="10" Scale="6" />
           <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="addedOn" Type="datetime" Nullable="false" />
           <Property Name="updatedBy" Type="nvarchar" MaxLength="128" />
           <Property Name="updatedOn" Type="datetime" />
+          <Property Name="status" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -3574,8 +3576,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="cityId" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="longitude" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="latitude" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="longitude" Type="Decimal" Precision="10" Scale="6" />
+          <Property Name="latitude" Type="Decimal" Precision="10" Scale="6" />
           <Property Name="addedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="addedOn" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="updatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
@@ -3586,6 +3588,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_popularPlace_ToTable_1" FromRole="popularPlace" ToRole="AspNetUser" />
           <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_popularPlace_ToTable_2" FromRole="popularPlace" ToRole="AspNetUser" />
           <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_2" FromRole="popularPlace" ToRole="Company" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -4127,6 +4130,7 @@
           <NavigationProperty Name="Companies" Relationship="Model.FK_Company_ToTable_1" FromRole="City" ToRole="Company" />
           <NavigationProperty Name="CarAds" Relationship="Model.FK_CarAd_ToTable_2" FromRole="City" ToRole="CarAd" />
           <NavigationProperty Name="BikeAds" Relationship="Model.FK_BikeAd_ToTable_2" FromRole="City" ToRole="BikeAd" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <Association Name="FK_AdsLocation_ToTable_1">
           <End Type="Model.City" Role="City" Multiplicity="0..1">
@@ -5916,6 +5920,7 @@
           <EntitySetMapping Name="popularPlaces">
             <EntityTypeMapping TypeName="Model.popularPlace">
               <MappingFragment StoreEntitySet="popularPlace">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="updatedOn" ColumnName="updatedOn" />
                 <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />
                 <ScalarProperty Name="addedOn" ColumnName="addedOn" />
@@ -6027,6 +6032,7 @@
           <EntitySetMapping Name="Cities">
             <EntityTypeMapping TypeName="Model.City">
               <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="cityName" ColumnName="cityName" />
                 <ScalarProperty Name="updatedOn" ColumnName="updatedOn" />
                 <ScalarProperty Name="updatedBy" ColumnName="updatedBy" />

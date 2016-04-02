@@ -18,6 +18,7 @@ using Facebook;
 using System.Configuration;
 using System.Net;
 using System.IO;
+//using Inspinia_MVC5_SeedProject;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
   //   public class ApplicationUserManager : UserManager<ApplicationUser>
@@ -105,7 +106,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         {
             ViewBag.ReturnUrl = returnUrl;
          //  ViewBag.email = ViewBag.email;
-          //  TempData["error_msg"] = TempData["error_msg"];
+          //  TempData["Lerror"] = TempData["LError"];
             return View();
         }
         [AllowAnonymous]
@@ -117,13 +118,13 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             }
             if (! User.Identity.IsAuthenticated)
             {
-                TempData["error"] = "You must be login to confirm your email";
+                TempData["LError"] = "You must be login to confirm your email";
                 return View("Login");
             }
             if (User.Identity.GetUserId() != userId)
             {
                 AuthenticationManager.SignOut();
-                TempData["error"] = "You must be login BY YOUR ACCOUNT to confirm your email";
+                TempData["LError"] = "You must be login BY YOUR ACCOUNT to confirm your email";
              //   ViewBag.ReturnUrl =  HttpContext.Current.Request.Url.AbsolutePath;
                 return View("Login");
             }
@@ -143,10 +144,15 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
 
             if (result.Succeeded)
             {
-                return Json("Done", JsonRequestBehavior.AllowGet);
+                AuthenticationManager.SignOut();
+                TempData["LError"] = "Your email is successfully confirmed! Please login again";
+                //   ViewBag.ReturnUrl =  HttpContext.Current.Request.Url.AbsolutePath;
+                var email = db.AspNetUsers.Find(userId).UserName;
+                ViewBag.email = email;
+                return View("Login");
+               // return Json("Done", JsonRequestBehavior.AllowGet);
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
-            
         }
         [HttpPost]
         [AllowAnonymous]
@@ -199,6 +205,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+                //  await SendMailtoConfirmEmailAddress(user.Id, user.Email, user.UserName);
                     return RedirectToLocal(returnUrl);
                 }
                 else
@@ -225,6 +232,11 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         }
         public async Task<bool> SendMailtoConfirmEmailAddress(string id,string name,string email)
         {
+            var user = await db.AspNetUsers.FindAsync(id);
+            if (user.EmailConfirmed)
+            {
+                return false;
+            }
             try
             {
                 var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
@@ -232,13 +244,18 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                     as IUserTokenProvider<ApplicationUser, string>;
 
                 var code = await UserManager.GenerateEmailConfirmationTokenAsync(id);
+                //var callbackUrl = Url.Action(
+                //   "ConfirmEmail", "Account",
+                //   new { userId = id, code = code },
+                //   protocol: Request.Url.Scheme);
+
                 var callbackUrl = Url.Action(
                    "ConfirmEmail", "Account",
                    new { userId = id, code = code },
-                   protocol: Request.Url.Scheme);
+                   protocol: Request.Url.Scheme,defaultPort:true);
 
                 ElectronicsController.sendEmail(email, "Welcome to dealkar.pk - Confirm Email address", "Hello " + name + "!<br/>Confirm your email address by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
-                //    await ConfirmEmail(user.Id, code);
+                
             }
             catch (Exception e)
             {
@@ -256,12 +273,12 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
 
                 var code = await UserManager.GeneratePasswordResetTokenAsync(id);
                 var callbackUrl = Url.Action(
-                   "ConfirmPasswordRecoveryToken", "Account",
+                   "ResetPassword", "Account",
                    new { userId = id, code = code },
                    protocol: Request.Url.Scheme);
 
                 ElectronicsController.sendEmail(email, "Recover your password", "Recover your password by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
-                //    await ConfirmEmail(user.Id, code);
+                
             }
             catch (Exception e)
             {
@@ -270,9 +287,23 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             return true;
         }
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmPasswordRecoveryToken(string userId, string code)
+        public async Task<ActionResult> ResetPassword(string userId, string code)
         {
-            
+            ViewBag.userId = userId;
+            ViewBag.code = code;
+            return View();
+        }
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmPasswordRecoveryToken()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Json("Error: A User is already login", JsonRequestBehavior.AllowGet);
+            }
+
+            string userId = Request["userId"];
+            string code = Request["code"];
+            string password = Request["password"];
             var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
             UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
                 as IUserTokenProvider<ApplicationUser, string>;
@@ -280,16 +311,26 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             IdentityResult result;
             try
             {
-                result = await UserManager.ConfirmEmailAsync(userId, code);
+                result = await UserManager.ResetPasswordAsync(userId, code,password);
             }
             catch (InvalidOperationException ioe)
             {
-                return Json("Error", JsonRequestBehavior.AllowGet);
+                return Json("Error! Click on the link in email.", JsonRequestBehavior.AllowGet);
             }
 
             if (result.Succeeded)
             {
-                return Json("Done", JsonRequestBehavior.AllowGet);
+                var email = db.AspNetUsers.Find(userId).UserName;
+                TempData["LError"] = "Your Password is Successfully Changed! Enter password to login ";
+                ViewBag.email = email;
+                return View("Login");
+            }
+            foreach (var error in result.Errors)
+            {
+                TempData["LError"] = error;
+                ViewBag.userId = userId;
+                ViewBag.code = code;
+                return View("ResetPassword");
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
         }
@@ -415,6 +456,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             }
             return Json("Error", JsonRequestBehavior.AllowGet);
         }
+        [AllowAnonymous]
         public ActionResult ForgetPassword(string ReturnUrl)
         {
             ViewBag.ReturnUrl = ReturnUrl;
@@ -422,9 +464,19 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ReceiveEmailToResetPassword(string ReturnUrl)
+        [AllowAnonymous]
+        public async Task<ActionResult> SendEmailToResetPassword(string ReturnUrl)
         {
             string email = Request["email"];
+            var data = db.AspNetUsers.FirstOrDefault(x=>x.UserName.Equals(email));
+            if(data != null){
+                await SendPasswordRecoveryMail(data.Id, email);
+                TempData["LError"] = "Email is sent on " + email; 
+            return View("ForgetPassword");
+            }
+            var callbackUrl = Url.Action(
+                   "Register", "Account");
+            TempData["LError"] = "This email does not belong to any user. Make sure you have typed email right or <a href=\"" + callbackUrl + "\">Register</a> as a new user";
             return View("ForgetPassword");
         }
         //
@@ -629,11 +681,11 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                             return RedirectToLocal(returnUrl);
                         }
                     }
-                    TempData["error"] = "An account already exists by this email address.Try to login";
+                    TempData["LError"] = "An account already exists by this email address.Try to login";
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.email = loginInfo.DefaultUserName;
                     return View("Login");
-                   // return "An account already exists by this email address"; //go to login page and tempdata["error"]
+                   // return "An account already exists by this email address"; //go to login page and TempData["LError"]
                 }
                 var newUser1 = new ApplicationUser() { Email = loginInfo.Email,UserName = "temp" + DateTime.UtcNow.Ticks + "@gmail.com" };
                 var result1 = await UserManager.CreateAsync(newUser1);
@@ -660,7 +712,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                         string id = newUser1.Id;
                         AspNetUser aspNetUser = await db.AspNetUsers.FindAsync(id);
                         aspNetUser.Email = name;
-                        aspNetUser.EmailConfirmed = verified;
+                        aspNetUser.EmailConfirmed = false;
                         aspNetUser.hideDateOfBirth = true;
                         aspNetUser.hideEmail = true;
                         aspNetUser.hidePhoneNumber = true;

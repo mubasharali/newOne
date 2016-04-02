@@ -77,10 +77,10 @@
                                 Added on
                             </th>
                             <th>
-                                Latest Updated by
+                                @*Latest Updated by*@ longitude
                             </th>
                             <th>
-                                Latest Updated on
+                                @*Latest Updated on*@ latitude
                             </th>
                             <th>
                                 Edit
@@ -90,7 +90,7 @@
                             </th>
                         </tr>
                         <tbody data-bind="foreach:showPopularPlaces">
-                            <tr>
+                            <tr data-bind="style:{color:status() == 'p' ? 'red' : 'gray'}">
                                 <td data-bind="visible:!isPPEditing(),text:name"></td>
                                 <td data-bind="visible:isPPEditing()">
                                     <input type="text" data-bind="value:name" />
@@ -98,8 +98,10 @@
                                 <td data-bind="text:cityName"></td>
                                 <td data-bind="text:addedByName"></td>
                                 <td data-bind="text:addedOn"></td>
-                                <td data-bind="text:updatedByName"></td>
-                                <td data-bind="text:updatedOn"></td>
+                                @*<td data-bind="text:updatedByName"></td>
+                                <td data-bind="text:updatedOn"></td>*@
+                                <td data-bind="text:longitude"></td>
+                                <td data-bind="text:latitude"></td>
                                 <td data-bind=" visible:!isPPEditing(),click:editPPBtn">Edit</td>
                                 <td data-bind="visible:isPPEditing()"><button data-bind="click:updatePP">Update</button></td>
                                 <td data-bind="click:$parent.deletePP">Delete</td>
@@ -124,6 +126,7 @@
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/knockout")
     @Scripts.Render("~/plugins/sweetAlert")
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAesW0YAYpsFzGME6Vc1kfZO71Xh3ROB38&libraries=places"></script>
     <script>
 
         function City(data) {
@@ -138,7 +141,7 @@
             self.updatedByName = data.updatedByName;
             self.isCityEditing = ko.observable(false);
             self.updatedOn = data.updatedOn;
-
+            self.status = ko.observable( data.status);
             self.editCityBtn = function () {
                 self.isCityEditing(true);
             }
@@ -164,6 +167,9 @@
             var self = this;
             data = data || {};
             self.id = data.id,
+            self.longitude = data.longitude;
+            self.latitude = data.latitude;
+            self.status = ko.observable( data.status);
             self.cityId = data.cityId,
             self.cityName = data.cityName;
             self.name = ko.observable(data.name),
@@ -178,6 +184,7 @@
                 self.isPPEditing(true);
             }
             self.updatePP = function (pp) {
+                self.status("a");
                 $.ajax({
                     url: '/api/Location/UpdatePopularPlace',
                     dataType: "json",
@@ -186,9 +193,11 @@
                     type: 'POST',
                     data: ko.toJSON(pp),
                     success: function (data) {
+                        
                         self.isPPEditing(false);
                     },
                     error: function () {
+                        self.status("p");
                         toastr.error("failed to update Famous Place", "Error!");
                     }
                 });
@@ -257,7 +266,7 @@
                         type: 'POST',
                         success: function (data) {
                             self.showPopularPlaces.remove(brand);
-                            swal("Deleted!", brand.name() + " City has been deleted.", "success");
+                            swal("Deleted!", brand.name() + " Famous place has been deleted.", "success");
                         },
                         error: function () {
                             swal("Error", "please refresh page and try again", "error");

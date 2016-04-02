@@ -29,9 +29,9 @@
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h3>Welcom to <span class="brand-style" style="font-weight:800">dealkar.pk</span> </h3>
+                <h3>Welcom to <a href="/" class="brand-style" style="font-weight:800">dealkar.pk</a> </h3>
                 @*<small>Use a local account to log in.</small>*@
-                <small class="req">@TempData["error"]</small>
+                <small class="req">@TempData["LError"]</small>
                 <hr />
                 @Html.ValidationSummary(true)
                 <div class="form-group">
@@ -64,10 +64,18 @@
                     </div>
                 </div>
                 <p>
+                    @Html.ActionLink("ForgetPassword", "ForgetPassword", new { ReturnUrl = ViewBag.ReturnUrl }) ?
+                </p>
+                <p>
                     @Html.ActionLink("Register", "Register", new { ReturnUrl = ViewBag.ReturnUrl }) if you don't have a account.
                 </p>
             }
         </div>
+        <h3 style="text-align:center">OR</h3>
+        <section id="externalLogins">
+            @Html.Partial("../Account/_ExternalLoginsListPartial", new Inspinia_MVC5_SeedProject.Models.ExternalLoginViewModel { Action = "ExternalLogin", ReturnUrl = HttpContext.Current.Request.Url.AbsolutePath })
+        </section>
+
     </div>
 </body>
 </html>

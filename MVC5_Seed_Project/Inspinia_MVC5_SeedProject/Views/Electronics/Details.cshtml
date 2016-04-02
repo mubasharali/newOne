@@ -38,13 +38,13 @@
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
-            <div id="showAd" style="display:none">
+            <div id="showItem" style="display:none">
                 <div data-bind="visible:error()" class="alert alert-success">
                     <strong>Error! </strong><span data-bind="text:error"></span>
                 </div>
 
                 <div data-bind="visible:!isLoading()">
-                    <div data-bind="with: showAds()">
+                    <div data-bind="with: showItem()">
                         <div data-bind="visible:statusError" class="alert alert-success">
                             <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
                         </div>
@@ -124,7 +124,7 @@
                                                     </h1>
                                                     <hr />
                                                 </span>
-                                                <div data-bind="with:showCameraAd">
+                                                <div data-bind="with:showCamera">
                                                     <dl class="dl-horizontal m-t-md small">
                                                         <dt>Category:</dt>
                                                         <dd data-bind="text:category"></dd>
@@ -294,7 +294,7 @@
                                                 <br />
                                                 <div class="text-right">
                                                     <div class="btn-group">
-                                                        <button data-bind="click:saveAd" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
+                                                        <button data-bind="click:saveItem" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
                                                         <a data-bind="visible:companyId, attr:{href:companyLink}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller  (<span data-bind="text:companyName"></span> )</a>
 
                                                         <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
@@ -497,7 +497,7 @@
             self.bathroom = data.bathroom;
             self.area = data.area;
         }
-        function CameraAd(data) {
+        function Camera(data) {
             var self = this;
             data = data || {};
             self.category = data.category;
@@ -638,7 +638,7 @@
                 .replace(/ +/g, '-')
             ;
         }
-        function ad(data,commentsHub) {
+        function MainData(data, commentsHub) {
             var self = this;
             self.commentsHub = commentsHub;
             //slick
@@ -660,12 +660,12 @@
             self.title = data.title;
 
             self.showRealEstateAd = ko.observable();
-            self.showCameraAd = ko.observable();
+            self.showCamera = ko.observable();
             if (data.category == "RealEstate") {
                 self.showRealEstateAd(new RealEstate(data.realestatead));
             }
             if (data.subCategory == "Cameras" || data.subCategory == "CamerasAccessories") {
-                self.showCameraAd(new CameraAd(data.cameraad));
+                self.showCamera(new Camera(data.cameraad));
             }
             self.companyName = data.companyName;
             self.companyId = data.companyId;
@@ -700,7 +700,7 @@
             self.statusError = "";
             self.isVisible = true;
             if (data.status == "p") {
-                self.statusError = "This ad will be visible to public once it is approved by admin";
+                self.statusError = "This Item will be visible to public once it is approved by admin";
                 if (self.loginUserId != self.postedById) {
                     self.isVisible = false;
                 }
@@ -721,7 +721,7 @@
             }
 
             //-----------------------------------------------------------------------
-            //for job ad
+            //for job
             self.category = data.category;
             self.subcategory = data.subCategory;
             self.showJob = ko.observable();
@@ -768,7 +768,7 @@
                     if (!isalreadybid) {
                         self.placeBid(true);
                     } else {
-                        toastr.info("You cannot post multiple bids on one ad. Just edit your previous bid", "Wait!");
+                        toastr.info("You cannot post multiple bids on one item. Just edit your previous bid", "Wait!");
                     }
                 } else {
                     loginBtn();
@@ -811,7 +811,7 @@
                         }
                     });
                     if (isalreadybid) {
-                        toastr.info("You cannot post multiple bids on one ad. Just edit your previous bid", "Wait!");
+                        toastr.info("You cannot post multiple bids on one item. Just edit your previous bid", "Wait!");
                         return;
                     }
 
@@ -841,7 +841,7 @@
                             }
                         });
                     } else {
-                        toastr.info("Bid cannot be negative", "Are you drunk!");
+                        toastr.info("Bid must be greater than 0", "Are you drunk!");
                     }
                 }
                 else {
@@ -893,10 +893,10 @@
                 var img = $.map(data.adImages, function (item,ia) { return new adImages(item,data.id,imagesCount++); });
                 self.showImages(img);
             }
-            self.saveAd = function (ad) {
+            self.saveItem = function (item) {
                 if (self.loginUserId) {
                     $.ajax({
-                        url: '/api/User/SaveAd/' + ad.id,
+                        url: '/api/User/SaveItem/' + item.id,
                         dataType: "json",
                         contentType: "application/json",
                         cache: false,
@@ -911,7 +911,7 @@
                             }
                         },
                         error: function () {
-                            toastr.error("failed to Save Ad. Please refresh page and try again", "Error!");
+                            toastr.error("failed to Save. Please refresh page and try again", "Error!");
                         }
                     });
                 }
@@ -957,7 +957,7 @@
             self.deleteAd = function (id) {
                 swal({
                     title: "Are you sure?",
-                    text: "You will not be able to recover this Ad!",
+                    text: "You will not be able to recover this item!",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -971,7 +971,7 @@
                         cache: false,
                         type: 'POST',
                         success: function (data) {
-                            swal("Deleted!", "Your Ad has been deleted.", "success");
+                            swal("Deleted!", "Your item has been deleted.", "success");
                             window.location.href = "/User/Index/"+self.loginUserId;
                         },
                         error: function () {
@@ -1074,7 +1074,7 @@
                         }
                     })
                 } else {
-                    toastr.info("You must be login to report this ad", "Oops!");
+                    toastr.info("You must be login to report this item", "Oops!");
                     loginBtn();
                 }
             }
@@ -1090,12 +1090,12 @@
             Report();
             //initillizing hub
             self.commentsHub = $.connection.adComments;
-            self.showAds = ko.observable();
+            self.showItem = ko.observable();
             self.error = ko.observable();
-            self.loadad = function () {
+            self.loadItem = function () {
                 self.isLoading(true);
                 var adId = myAdId;
-                url_address = '/api/Electronic/GetAd/' + adId;
+                url_address = '/api/Electronic/GetItem/' + adId;
                 $.ajax({
                     url: url_address,
                     dataType: "json",
@@ -1103,9 +1103,9 @@
                 })
                 .done(function (data) {
                     self.isLoading(false);
-                    //var mappedads = $.map(data, function (item) { return new ad(item,self.commentsHub); });
-                    $("#showAd").css("display", "block");
-                    self.showAds(new ad(data));
+                    //var mappedads = $.map(data, function (item) { return new MainData(item,self.commentsHub); });
+                    $("#showItem").css("display", "block");
+                    self.showItem(new MainData(data));
                    
                     $(".sortable-list").sortable({
                         connectWith: ".connectList"
@@ -1117,12 +1117,12 @@
                 })
                 .fail(function () {
                     self.isLoading(false);
-                    $("#showAd").css("display", "block");
-                    self.error ( "This ad has been deleted or is unavailable. " );
+                    $("#showItem").css("display", "block");
+                    self.error ( "This item has been deleted or is unavailable. " );
                 });
             }
             
-            self.loadad();
+            self.loadItem();
             return self;
         }
 

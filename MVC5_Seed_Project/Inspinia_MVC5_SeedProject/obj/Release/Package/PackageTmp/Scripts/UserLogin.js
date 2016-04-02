@@ -113,7 +113,11 @@ function AccountViewModel() {
                         
                     location.reload();
                 } else {
-                    self.loginError("Incorrect password. Forget Password?");
+                    
+                    var link = $('<a/>').text("Forget password").attr('href', '/Account/ForgetPassword');
+
+                    self.loginError("Incorrect password." + link[0].outerHTML + " ?");
+                    console.log(an);
                 }
             },
             error: function () {

@@ -69,6 +69,11 @@
                 </div>
             }
         </div>
+        <h3 style="text-align:center">OR</h3>
+        <section id="externalLogins">
+            @Html.Partial("../Account/_ExternalLoginsListPartial", new Inspinia_MVC5_SeedProject.Models.ExternalLoginViewModel { Action = "ExternalLogin", ReturnUrl = HttpContext.Current.Request.Url.AbsolutePath })
+        </section>
+
     </div>
 </body>
 </html>

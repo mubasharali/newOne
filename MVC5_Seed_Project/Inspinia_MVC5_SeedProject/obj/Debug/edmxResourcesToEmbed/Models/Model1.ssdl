@@ -262,6 +262,7 @@
     <Property Name="updatedBy" Type="nvarchar" MaxLength="128" />
     <Property Name="updatedOn" Type="datetime" />
     <Property Name="cityName" Type="nvarchar" MaxLength="40" Nullable="false" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="Comment">
     <Key>
@@ -538,12 +539,13 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="cityId" Type="int" Nullable="false" />
     <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="longitude" Type="decimal" Precision="18" Scale="0" />
-    <Property Name="latitude" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="longitude" Type="decimal" Precision="10" Scale="6" />
+    <Property Name="latitude" Type="decimal" Precision="10" Scale="6" />
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="addedOn" Type="datetime" Nullable="false" />
     <Property Name="updatedBy" Type="nvarchar" MaxLength="128" />
     <Property Name="updatedOn" Type="datetime" />
+    <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="Question">
     <Key>
