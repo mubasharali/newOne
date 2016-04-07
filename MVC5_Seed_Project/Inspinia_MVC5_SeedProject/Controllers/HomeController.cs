@@ -182,9 +182,31 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return View();
         }
-        public ActionResult Index()
-        
+        private System.Threading.Timer timer;
+        private void SetUpTimer(TimeSpan alertTime)
         {
+            DateTime current = DateTime.Now;
+            TimeSpan timeToGo = alertTime - current.TimeOfDay;
+            if (timeToGo < TimeSpan.Zero)
+            {
+                return;//time already passed
+            }
+            this.timer = new System.Threading.Timer(x =>
+            {
+                this.SomeMethodRunsAt1600();
+            }, null, timeToGo, System.Threading.Timeout.InfiniteTimeSpan);
+        }
+        public static int count = 0;
+        private void SomeMethodRunsAt1600()
+        {
+            count++;
+            //this runs at 16:00:00
+            ElectronicsController.sendEmail("irfanyusanif@gmail.com", "The code is running", "Hi, I'm running at " + DateTime.UtcNow + "<br /> and the count is" + count);
+        }
+        public ActionResult Index()
+        {
+            SetUpTimer(new TimeSpan(4, 00, 00));
+            ViewBag.count = count;
             var mobiles = from ad in db.MobileAds
                           where ad.Ad.AdImages.Count > 0
                           orderby ad.Ad.views
@@ -195,6 +217,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           };
            // ViewBag.mobiles = mobiles;
             return View(mobiles);
+
         }
         //public string Index()
         //{

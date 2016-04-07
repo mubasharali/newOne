@@ -306,7 +306,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableBrands.push(item) });
 
@@ -324,7 +324,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableModels.push(item) });
                         if (self.selectedBrandOriginal == self.selectedBrand()) {

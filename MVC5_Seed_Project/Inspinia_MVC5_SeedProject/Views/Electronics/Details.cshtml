@@ -55,7 +55,14 @@
                             <div data-bind="attr:{'id':id}">
                                 <div class="ibox product-detail">
                                     <div class="ibox-content">
-
+                                        <div class="row">
+                                            <span data-bind="visible:loginUserId == postedById">
+                                                <span data-bind="visible:isRefreshable">
+                                                    <a data-bind="click: function(){return Refresh(id)}" class="btn btn-white btn-lg "> Refresh</a>
+                                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-lg pull-right confirmDelete"> Delete</a>
+                                                </span>
+                                            </span>
+                                        </div>
                                         <div class="row">
                                             <div class="lightBoxGallery">
 
@@ -455,7 +462,8 @@
 <script src="~/Scripts/app/IsAdmin.js"></script>
     <script>
         var myAdId = $("#adId").val();
-        function Biding(data) {
+        function Biding(data)
+        {
             var self = this;
             data = data || {};
             self.postedById = data.postedById;
@@ -638,6 +646,24 @@
                 .replace(/ +/g, '-')
             ;
         }
+        function dateDiffInDays(a) {
+            var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            a = new Date(a);
+            var d = new Date();
+
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+
+            var b = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day;
+            b = new Date(b);
+            // Discard the time and time-zone information.
+            var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+            var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+            return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+        }
         function MainData(data, commentsHub) {
             var self = this;
             self.commentsHub = commentsHub;
@@ -677,6 +703,12 @@
             self.postedByName = data.postedByName;
             self.postedById = data.postedById;
             self.id = data.id;
+            self.isRefreshable = dateDiffInDays(data.time);
+            if (self.isRefreshable > 15) {
+                self.isRefreshable = true;
+            } else {
+                self.isRefreshable = false;
+            }
             self.time = getTimeAgo(data.time);
             self.loginUserId = data.islogin || "";
             self.loginUserProfileLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.loginUserId + data.loginUserProfileExtension;
@@ -953,6 +985,21 @@
                 else {
                     window.location.href = "/Home/Edit/" + id;
                 }
+            }
+            self.Refresh = function (id) {
+                $.ajax({
+                    url: '/api/Electronic/Refresh/' + id,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        window.location.href = "/Details/" + self.id + "/" + convertToSlug(self.title);
+                    },
+                    error: function () {
+                        swal("Error", "please refresh page and try again", "error");
+                    }
+                });
             }
             self.deleteAd = function (id) {
                 swal({

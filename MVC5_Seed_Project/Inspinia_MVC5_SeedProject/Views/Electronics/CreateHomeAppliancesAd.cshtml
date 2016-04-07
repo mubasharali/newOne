@@ -185,7 +185,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableBrands.push(item) });
                         $('#select-brand').selectize({
@@ -213,7 +213,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableModels.push(item) });
                         $('#select-model').selectize({

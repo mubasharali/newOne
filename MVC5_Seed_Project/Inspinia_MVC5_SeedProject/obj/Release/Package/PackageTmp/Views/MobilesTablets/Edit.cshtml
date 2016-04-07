@@ -160,7 +160,7 @@
             })
             self.loadAd = function () {
                 $.ajax({
-                    url: '/api/Electronic/GetAd/' + $("#adId").val(),
+                    url: '/api/Electronic/GetItem/' + $("#adId").val(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -341,7 +341,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableBrands.push(item) });
                         
@@ -359,7 +359,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
-                    type: 'POST',
+                    type: 'GET',
                     success: function (data) {
                         $.each((data), function (i, item) { self.availableModels.push(item) });
                         if (self.selectedBrandOriginal == self.selectedBrand()) {

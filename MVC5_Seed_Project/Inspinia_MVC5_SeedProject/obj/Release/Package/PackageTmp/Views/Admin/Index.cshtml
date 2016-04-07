@@ -25,7 +25,7 @@
             @*<p>Showing Tags <span data-bind="visible:showUpdatedTag()"> updated </span> <span data-bind="visible:!showUpdatedTag()"> added </span> <span data-bind="text:daysAgo"></span> days ago</p>*@
             <div data-bind="foreach:showTags">
                 <div data-bind="visible:!isTagEditing()">
-                    <h3 data-bind="text:name"></h3>
+                   <a data-bind="attr:{href:'/Tag/' + id }"><h3 data-bind="text:name"></h3></a>
                     <p data-bind="text:info"></p>
                     <span data-bind="visible:updatedInfo()">
                         <b>Updated Info:</b><p data-bind="text:updatedInfo"></p>
@@ -124,7 +124,7 @@
                 };
                 console.log(comment);
                 $.ajax({
-                    url: '/api/Tag/UpdateTagAdmin',
+                    url: '/api/Tag/UpdateTagAdmin?id=' + comment.Id + '&name=' + comment.name + '&info=' + comment.info + '&createdBy=' + comment.createdBy + '&updatedBy=' + comment.updatedBy + '&updatedInfo=' + comment.updatedInfo , 
                     dataType: "json",
                     type: 'POST',
                     data: ko.toJSON(comment),

@@ -35,6 +35,196 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return false;
         }
+        [HttpPost]
+        public async Task<bool> addNewBrandModel(string brand, string model, string category)
+        {
+            if (brand != null)
+            {
+                brand.Trim();
+            }
+            if (model != null)
+            {
+                model.Trim();
+            }
+            if (brand == "" || brand == "undefined" || brand == null)
+            {
+                return true;
+            }
+            if (category == "Mobiles")
+            {
+                var isNew = db.Mobiles.Any(x => x.brand.Equals(brand));
+                if (!isNew)
+                {
+                    Mobile mob = new Mobile();
+                    mob.brand = brand;
+                    mob.addedBy = User.Identity.GetUserId();
+                    mob.status = "a";
+                    mob.time = DateTime.UtcNow;
+                    db.Mobiles.Add(mob);
+                    await db.SaveChangesAsync();
+                    if (model != null && model != "" && model != "undefined")
+                    {
+                        MobileModel mod = new MobileModel();
+                        mod.addedBy = User.Identity.GetUserId();
+                        mod.brandId = mob.Id;
+                        mod.status = "a";
+                        mod.time = DateTime.UtcNow;
+                        mod.model = model;
+                        db.MobileModels.Add(mod);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var isNewModel = db.MobileModels.Any(x => x.model.Equals(model));
+                    if (!isNewModel)
+                    {
+                        if (model != null && model != "" && model != "undefined")
+                        {
+                            var brandId = db.Mobiles.First(x => x.brand.Equals(brand));
+                            MobileModel mod = new MobileModel();
+                            mod.addedBy = User.Identity.GetUserId();
+                            mod.brandId = brandId.Id;
+                            mod.status = "a";
+                            mod.time = DateTime.UtcNow;
+                            mod.model = model;
+                            db.MobileModels.Add(mod);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            else if (category == "Laptops")
+            {
+                var isNew = db.LaptopBrands.Any(x => x.brand.Equals(brand));
+                if (!isNew)
+                {
+                    LaptopBrand mob = new  LaptopBrand();
+                    mob.brand = brand;
+                    mob.addedBy = User.Identity.GetUserId();
+                    mob.status = "a";
+                    mob.time = DateTime.UtcNow;
+                    db.LaptopBrands.Add(mob);
+                    await db.SaveChangesAsync();
+                    if (model != null && model != "" && model != "undefined")
+                    {
+                        LaptopModel mod = new  LaptopModel();
+                        mod.addedBy = User.Identity.GetUserId();
+                        mod.brandId = mob.Id;
+                        mod.status = "a";
+                        mod.time = DateTime.UtcNow;
+                        mod.model = model;
+                        db.LaptopModels.Add(mod);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var isNewModel = db.LaptopModels.Any(x => x.model.Equals(model));
+                    if (!isNewModel)
+                    {
+                        if (model != null && model != "" && model != "undefined")
+                        {
+                            LaptopModel mod = new  LaptopModel();
+                            mod.addedBy = User.Identity.GetUserId();
+                            mod.brandId = db.Mobiles.First(x => x.brand.Equals(brand)).Id;
+                            mod.status = "a";
+                            mod.time = DateTime.UtcNow;
+                            mod.model = model;
+                            db.LaptopModels.Add(mod);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            else if (category == "Bikes")
+            {
+                var isNew = db.BikeBrands.Any(x => x.brand.Equals(brand));
+                if (!isNew)
+                {
+                    BikeBrand mob = new  BikeBrand();
+                    mob.brand = brand;
+                    mob.addedBy = User.Identity.GetUserId();
+                    mob.status = "a";
+                    mob.time = DateTime.UtcNow;
+                    db.BikeBrands.Add(mob);
+                    await db.SaveChangesAsync();
+                    if (model != null && model != "" && model != "undefined")
+                    {
+                        BikeModel mod = new  BikeModel();
+                        mod.addedBy = User.Identity.GetUserId();
+                        mod.brandId = mob.Id;
+                        mod.status = "a";
+                        mod.time = DateTime.UtcNow;
+                        mod.model = model;
+                        db.BikeModels.Add(mod);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var isNewModel = db.BikeModels.Any(x => x.model.Equals(model));
+                    if (!isNewModel)
+                    {
+                        if (model != null && model != "" && model != "undefined")
+                        {
+                            BikeModel mod = new  BikeModel();
+                            mod.addedBy = User.Identity.GetUserId();
+                            mod.brandId = db.Mobiles.First(x => x.brand.Equals(brand)).Id;
+                            mod.status = "a";
+                            mod.time = DateTime.UtcNow;
+                            mod.model = model;
+                            db.BikeModels.Add(mod);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            else if (category == "Cars")
+            {
+                var isNew = db.CarBrands.Any(x => x.brand.Equals(brand));
+                if (!isNew)
+                {
+                    CarBrand mob = new  CarBrand();
+                    mob.brand = brand;
+                    mob.addedBy = User.Identity.GetUserId();
+                    mob.status = "a";
+                    mob.time = DateTime.UtcNow;
+                    db.CarBrands.Add(mob);
+                    await db.SaveChangesAsync();
+                    if (model != null && model != "" && model != "undefined")
+                    {
+                        CarModel mod = new  CarModel();
+                        mod.addedBy = User.Identity.GetUserId();
+                        mod.brandId = mob.Id;
+                        mod.status = "a";
+                        mod.time = DateTime.UtcNow;
+                        mod.model = model;
+                        db.CarModels.Add(mod);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    var isNewModel = db.CarModels.Any(x => x.model.Equals(model));
+                    if (!isNewModel)
+                    {
+                        if (model != null && model != "" && model != "undefined")
+                        {
+                            CarModel mod = new  CarModel();
+                            mod.addedBy = User.Identity.GetUserId();
+                            mod.brandId = db.Mobiles.First(x => x.brand.Equals(brand)).Id;
+                            mod.status = "a";
+                            mod.time = DateTime.UtcNow;
+                            mod.model = model;
+                            db.CarModels.Add(mod);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            return true;
+        }
         public async Task<IHttpActionResult> GetFeedbacks()
         {
             var ret = from feed in db.Feedbacks

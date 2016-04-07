@@ -36,7 +36,7 @@
                                             <i data-bind="style:{color: isFollowed()? 'red' : 'gray'}" class="fa fa-rss"></i> <a data-bind="click: function(){ return follow(id)},text:followText"></a>
                                             (<span data-bind="text:followers"></span> followers )
                                             <h6 class="pull-right">
-                                                <span data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
+                                                <span style="cursor:pointer" data-bind="click: function(){ return report(id,loginUserId)}"><span data-bind="style:{color: isReported()? 'red' : 'gray'}"> <i class="fa fa-flag"></i> </span> Report </span>(<span data-bind="text:reportedCount()"></span>)
                                             </h6>
                                         </a>
                                     </span>

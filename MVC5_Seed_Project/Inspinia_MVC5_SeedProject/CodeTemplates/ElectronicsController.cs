@@ -1376,11 +1376,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             public decimal latitude;
             public bool status;
         }
-        public Coordinates GetLongitudeAndLatitude(string famousPlace,string city)
+        public static Coordinates GetLongitudeAndLatitude(string famousPlace,string city)
         {
             Coordinates co = new Coordinates();
             co.status = false;
-            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace) + "&region=" + city + "&sensor=false";
+            //string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace) + "&region=" + city + "&sensor=false";
+            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace)  + "&sensor=false&components=postalCode:54000";
             try
             {
                 XmlDocument objXmlDocument = new XmlDocument();
@@ -1404,8 +1405,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return co;
         }
-
-
+        
+        
         // POST: /Electronics/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

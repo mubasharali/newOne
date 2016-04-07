@@ -275,7 +275,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 var callbackUrl = Url.Action(
                    "ResetPassword", "Account",
                    new { userId = id, code = code },
-                   protocol: Request.Url.Scheme);
+                   protocol: Request.Url.Scheme,defaultPort:true);
 
                 ElectronicsController.sendEmail(email, "Recover your password", "Recover your password by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
                 
@@ -287,8 +287,16 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             return true;
         }
         [AllowAnonymous]
-        public async Task<ActionResult> ResetPassword(string userId, string code)
+        public async Task<object> ResetPassword(string userId, string code)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.Identity.GetUserId() == userId)
+                {
+                    return RedirectToAction("Index", "User", new { id = userId });
+                }
+                return "Error! A user is already login. First logout and then click on the link in email";
+            }
             ViewBag.userId = userId;
             ViewBag.code = code;
             return View();
@@ -459,6 +467,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         [AllowAnonymous]
         public ActionResult ForgetPassword(string ReturnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "User", new { id = User.Identity.GetUserId() });
+            }
             ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }

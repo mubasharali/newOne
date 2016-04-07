@@ -15,6 +15,10 @@ using System.Web.Security;
 using System.Data.Entity.Validation;
 using Inspinia_MVC5_SeedProject.Models;
 using System.IO;
+using Amazon.S3.Model;
+using Amazon.S3;
+using System.Configuration;
+using Inspinia_MVC5_SeedProject.CodeTemplates;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class Image
@@ -480,28 +484,24 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return BadRequest();
         }
-        [HttpPost]
         public async Task<IHttpActionResult> GetLaptopBrands()
         {
             var brands = db.LaptopBrands.Where(x => x.brand != "" && x.status != "p").Select(x => x.brand);
             //var brands =  db.LaptopBrands.Select(x => x.brand);
             return Ok(brands);
         }
-        [HttpPost]
         public async Task<IHttpActionResult> GetLaptopModels(string brand)
         {
             var models = db.LaptopModels.Where(x => x.LaptopBrand.brand.Equals(brand) && x.status != "p").Select(x => x.model);
             //var models =  db.LaptopModels.Where(x => x.LaptopBrand.brand == brand).Select(x => x.model);
             return Ok(models);
         }
-        [HttpPost]
         public async Task<IHttpActionResult> GetBrands()
         {
             var brands =  db.Mobiles.Where(x=>x.brand != "" && x.status != "p").Select(x => x.brand);
             //var brands = await db.Mobiles.ToListAsync();
             return Ok(brands);
         }
-        [HttpPost]
         public async Task<IHttpActionResult> GetModels(string brand)
         {
             var models = db.MobileModels.Where(x=>x.Mobile.brand.Equals(brand) && x.status != "p").Select(x=>x.model);
@@ -1416,7 +1416,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
+        public async Task<IHttpActionResult> Refresh(int id)
+        {
+            var ad =await db.Ads.FindAsync(id);
+            if (ad != null)
+            {
+                ad.time = DateTime.UtcNow;
+                await db.SaveChangesAsync();
+                return Ok("Done");
+            }
+            return NotFound();
+        }
         // POST api/Electronic
         [ResponseType(typeof(Ad))]
         public async Task<IHttpActionResult> PostAd(Ad ad)
@@ -1431,7 +1441,20 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return CreatedAtRoute("DefaultApi", new { id = ad.Id }, ad);
         }
+        private static readonly string _awsAccessKey =
+            ConfigurationManager.AppSettings["AWSAccessKey"];
 
+        private static readonly string _awsSecretKey =
+            ConfigurationManager.AppSettings["AWSSecretKey"];
+
+        private static readonly string _bucketName =
+            ConfigurationManager.AppSettings["Bucketname"];
+        private static readonly string _folderName =
+            ConfigurationManager.AppSettings["FolderName"];
+        private static readonly string _userFolder =
+            ConfigurationManager.AppSettings["UserFolder"];
+        private static readonly string _email =
+            ConfigurationManager.AppSettings["email"];
         // DELETE api/Electronic/5
         [HttpPost]
         public async Task<IHttpActionResult> DeleteAd(int id)
@@ -1441,11 +1464,59 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 return NotFound();
             }
+            
+            IAmazonS3 client;
+
+
+            DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest();
+            multiObjectDeleteRequest.BucketName = _bucketName;
+            var adImages = ad.AdImages.ToList();
+            int count = 1;
+            foreach (var image in adImages)
+            {
+                multiObjectDeleteRequest.AddKey(_folderName + ad.Id + "_" + count + image.imageExtension.Trim(), null);
+                count++;
+            }
+            var userId = User.Identity.GetUserId();
+            var email = ad.AspNetUser.UserName;
+            var status = db.AspNetUsers.Find(userId).status;
+            if (status == "admin")
+            {
+                if(userId != ad.postedBy){
+                    string body = "<h2>" + ad.title + "</h2><br><br>";
+                    string info = "The above item is deleted by admin. The possible reasons for the deletion of this item are:<ul><li>Ad is duplicate</li><li>Posted in wrong category</li><li>Contains Irrelevent Content</li><li>Spam/Offensive Content</li><li>Fraud Reason</li></ul>";
+                    string footer = "<br><br><br><p>Regards <br> dealkar.pk team </P";
+                    ElectronicsController.sendEmail(email, ad.title +  " is deleted!", body + info + footer);
+                }
+            }
+            
+            try
+            {
+                AmazonS3Config config = new AmazonS3Config();
+                config.ServiceURL = "https://s3.amazonaws.com/";
+                using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(
+                     _awsAccessKey, _awsSecretKey, config))
+                {
+                    client.DeleteObjects(multiObjectDeleteRequest);
+                }
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
+            
+            var companyads = ad.CompanyAd;
+            db.CompanyAds.Remove(companyads);
 
             db.Ads.Remove(ad);
-            
-            await db.SaveChangesAsync();
-            
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
             return Ok(ad);
         }
         protected string GetIPAddress()

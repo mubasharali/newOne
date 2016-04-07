@@ -162,7 +162,7 @@ function ChatViewModel() {
                 toastr.info("You cannot send empty message");
             }
         } else {
-            toastr.info("Go to online users list or user profile to send message","send messge to whom?");
+            toastr.info("Go to user profile or open user ad to send message","send messge to whom?");
         }
     }
 

@@ -223,6 +223,100 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 loginUserId = User.Identity.GetUserId();
             }
+            if (loginUserId != id)
+            {
+                var user = (from u in db.AspNetUsers
+                            where u.Id.Equals(id)
+                            select new
+                            {
+                                UserName = u.UserName,
+                                Email = u.Email,
+                                isEmailConfirmed = u.EmailConfirmed,
+                                Id = u.Id,
+                                dateOfBirth = u.dateOfBirth,
+                                gender = u.gender,
+                                hideEmail = u.hideEmail,
+                                hidePhoneNumber = u.hidePhoneNumber,
+                                hideDateOfBirth = u.hideDateOfBirth,
+                                phoneNumber = u.PhoneNumber,
+                                about = u.about,
+                                dpExtension = u.dpExtension,
+                                lastSeen = Membership.UserIsOnlineTimeWindow,
+                                reputation = u.reputation,
+                                since = u.since,
+                                city = u.city,
+                                isFriend = u.Friends.Any(x => x.friendId.Equals(loginUserId) || x.userId.Equals(loginUserId)),
+                                loginUserId = loginUserId,
+                                companies = from company in u.Companies
+                                            select new
+                                            {
+                                                id = company.Id,
+                                                name = company.title,
+                                                logoExtension = company.logoextension,
+                                            },
+                                followingTags = from tag in u.FollowTags
+                                                select new
+                                                {
+                                                    id = tag.Tag.Id,
+                                                    name = tag.Tag.name,
+                                                },
+                                activeads = from ad in u.Ads
+                                            where ad.CompanyAd == null
+                                            orderby ad.time descending
+                                            select new
+                                            {
+                                                title = ad.title,
+                                                postedById = ad.AspNetUser.Id,
+                                                postedByName = ad.AspNetUser.Email,
+                                                description = ad.description,
+                                                id = ad.Id,
+                                                time = ad.time,
+                                                islogin = loginUserId,
+                                                isNegotiable = ad.isnegotiable,
+                                                price = ad.price,
+                                                reportedCount = ad.Reporteds.Count,
+                                                isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
+                                                //views = ad.AdViews.Count,
+                                                views = ad.views,
+                                                condition = ad.condition,
+
+                                                color = ad.LaptopAd.color,
+                                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                                model = ad.LaptopAd.LaptopModel.model,
+                                                adTags = from tag in ad.AdTags.ToList()
+                                                         select new
+                                                         {
+                                                             id = tag.tagId,
+                                                             name = tag.Tag.name,
+                                                         },
+                                                bid = from biding in ad.Bids.ToList()
+                                                      select new
+                                                      {
+                                                          price = biding.price,
+                                                      },
+                                                adImages = from image in ad.AdImages.ToList()
+                                                           select new
+                                                           {
+                                                               imageExtension = image.imageExtension,
+                                                           },
+                                                location = new
+                                                {
+                                                    cityName = ad.AdsLocation.City.cityName,
+                                                    cityId = ad.AdsLocation.cityId,
+                                                    popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                                    popularPlace = ad.AdsLocation.popularPlace.name,
+                                                },
+                                            },
+                                savedads = "",
+
+                                notificationads = "",
+                            }).FirstOrDefault();
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
+            }
             var adnotifications = from followtag in db.FollowTags
                                   where followtag.followedBy.Equals(id)
                                   from adtag in db.AdTags
@@ -274,7 +368,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                           popularPlace = ad.AdsLocation.popularPlace.name,
                                       },
                                   };
-                var user = (from u in db.AspNetUsers
+            adnotifications = adnotifications.GroupBy(x => x.id).Select(x => x.FirstOrDefault()).OrderByDescending(x=>x.time);
+                var user1 = (from u in db.AspNetUsers
                             where u.Id.Equals(id)
                             select new
                             {
@@ -406,11 +501,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 notificationads = adnotifications,
                             }).FirstOrDefault();
 
-                if (user == null)
+                if (user1 == null)
                 {
                     return NotFound();
                 }
-                return Ok(user);
+                return Ok(user1);
         }
         //public async Task<IHttpActionResult> IsUserOnline(string id)
         //{

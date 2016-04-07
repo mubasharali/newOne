@@ -11,7 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
-
+using Inspinia_MVC5_SeedProject.CodeTemplates;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class LocationController : ApiController
@@ -33,6 +33,87 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return BadRequest();
         }
+
+        public async Task<bool>  SaveLocation(string city, string popularPlace)
+        {
+            if (city != null && city != "undefined")
+            {
+                var citydb = db.Cities.FirstOrDefault(x => x.cityName.Equals(city, StringComparison.OrdinalIgnoreCase));
+                if (citydb == null)
+                {
+                    City cit = new City();
+                    cit.cityName = city;
+                    cit.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    cit.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                    cit.addedOn = DateTime.UtcNow;
+                    cit.status = "a";
+                    db.Cities.Add(cit);
+                    await db.SaveChangesAsync();
+                    if (popularPlace != null && popularPlace != "undefined")
+                    {
+                        popularPlace pop = new popularPlace();
+                        pop.status = "p";
+                        try
+                        {
+                           ElectronicsController.Coordinates co =   ElectronicsController.GetLongitudeAndLatitude(popularPlace, city);
+                            if (co.status)
+                            {
+                                pop.longitude = co.longitude;
+                                pop.latitude = co.latitude;
+                                pop.status = "a";
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+
+                        pop.cityId = cit.Id;
+                        pop.name = popularPlace;
+                        pop.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                        pop.addedOn = DateTime.UtcNow;
+                        
+                        db.popularPlaces.Add(pop);
+                        await db.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    if (popularPlace != null && popularPlace != "undefined")
+                    {
+                        var ppp = db.popularPlaces.FirstOrDefault(x => x.City.cityName.Equals(city, StringComparison.OrdinalIgnoreCase) && x.name.Equals(popularPlace, StringComparison.OrdinalIgnoreCase));
+                        if (ppp == null)
+                        {
+                            popularPlace pop = new popularPlace();
+                            pop.status = "p";
+                            try
+                            {
+                                ElectronicsController.Coordinates co = ElectronicsController.GetLongitudeAndLatitude(popularPlace, city);
+                                if (co.status)
+                                {
+                                    pop.longitude = co.longitude;
+                                    pop.latitude = co.latitude;
+                                    pop.status = "a";
+                                }
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            pop.cityId = citydb.Id;
+                            pop.name = popularPlace;
+                            pop.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                            pop.addedOn = DateTime.UtcNow;
+                            
+                            db.popularPlaces.Add(pop);
+                            await db.SaveChangesAsync();
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         // GET api/Location
         public async Task<IHttpActionResult> GetCities()
         {

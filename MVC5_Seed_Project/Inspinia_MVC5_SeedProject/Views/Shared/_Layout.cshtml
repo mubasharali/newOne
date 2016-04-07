@@ -85,9 +85,9 @@
     <script>
         $(function () {
             $.connection.hub.start().done();
-            $.cookie("AWSFolderName", "Ads/", { path: '/' });
-            $.cookie("AWSUserFolder", "Users/", { path: '/' });
-            $.cookie("AWSCompanyFolder", "Companies/", { path: '/' });
+            $.cookie("AWSFolderName", "tempAds/", { path: '/' });
+            $.cookie("AWSUserFolder", "tempUsers/", { path: '/' });
+            $.cookie("AWSCompanyFolder", "tempCompanies/", { path: '/' });
             $.cookie("AWSURL", "https://s3.amazonaws.com/dealkr/", { path: '/' });
             //  $("#side-menu").css({ "display": "block" });
             toastr.options = {

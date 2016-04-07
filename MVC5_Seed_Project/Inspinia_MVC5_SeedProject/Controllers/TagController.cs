@@ -411,18 +411,45 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return BadRequest("Not login");
         }
         [HttpPost]
-        public async Task<IHttpActionResult> updateTagAdmin(Tag comment)
+        public async Task<IHttpActionResult> updateTagAdmin(int id,string name,string info, string createdBy,string updatedBy,string updatedInfo)
         {
             if (User.Identity.IsAuthenticated)
             {
-                if (!ModelState.IsValid)
+            //    if (!ModelState.IsValid)
+            //    {
+            //        return BadRequest();
+            //    }
+                var data1 = await db.Tags.FindAsync(id);
+                data1.name = name;
+                data1.info = info;
+                data1.updatedInfo = null;
+                data1.updatedBy = updatedBy;
+                if (updatedBy == "null")
                 {
-                    return BadRequest();
+                    data1.updatedBy = User.Identity.GetUserId();
                 }
-                var data1 = await db.Tags.FindAsync(comment.Id);
-
-                db.Entry(comment).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+               // db.Entry(comment).State = EntityState.Modified;
+                try
+                {
+                    await db.SaveChangesAsync();
+                }
+                catch (DbEntityValidationException e)
+                {
+                    string s = e.ToString();
+                    List<string> errorMessages = new List<string>();
+                    foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                    {
+                        string entityName = validationResult.Entry.Entity.GetType().Name;
+                        foreach (DbValidationError error in validationResult.ValidationErrors)
+                        {
+                            errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
                 return Ok("Done");
             }
             return BadRequest();
