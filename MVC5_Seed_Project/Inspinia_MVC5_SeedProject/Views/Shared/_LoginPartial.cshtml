@@ -6,20 +6,29 @@
     @Html.AntiForgeryToken()
 
     <ul class="nav navbar-top-links navbar-right">
-        <li class="hidden-xs">
+        @*<li class="hidden-xs">
             <a href="/Company/Create">Create Page</a>
-        </li>
+        </li>*@
         <li class="hidden-xs">
             <a href="/CreateAd">Post Ad</a>
         </li>
         @*<li style="padding:0px">
             <a  href="#"><img alt="member" class="img-circle" style="height:18px;padding:0px" src="/Images/profile.jpg"></a>
         </li>*@
-        <li class="hidden-xs">
-            <a href="/User/Index/@User.Identity.GetUserId()">Hello @Html.Action("GetUserEmail", "Shared")</a>
-            @*@Html.ActionLink("Hello " + Html.Action("GetUserEmail","Shared") + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+        
+        <li class="dropdown hidden-xs">
+            <a aria-expanded="false" role="button" class="dropdown-toggle" data-toggle="dropdown"><img alt="dp" @*class="img-circle"*@ style="height:18px;padding:0px" data-bind="attr:{src:loginUserProfileExt}"> @Html.Action("GetUserEmail", "Shared") <span class="caret"></span></a>
+            <ul role="menu" class="dropdown-menu">
+                <li><a href="/Search">Search Ads</a></li>
+                <li><a href="/Company/Create">Create Page</a></li>
+                <li><a href="/User/Index/@User.Identity.GetUserId()">Profile</a></li>
+                <li><a href="/User/Profile/@User.Identity.GetUserId()">Edit profile</a></li>
+                <li class="divider"></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            </ul>
         </li>
-        <li class="hidden-xs"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+       
+        @*<li class="hidden-xs"><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>*@
         
     @*<li class="pull-right">
             

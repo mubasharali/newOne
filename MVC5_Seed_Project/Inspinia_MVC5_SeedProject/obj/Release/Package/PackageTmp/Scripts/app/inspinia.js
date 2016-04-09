@@ -8,6 +8,11 @@
 
 $(document).ready(function () {
 
+    var loginUserProfileExtension = $("#loginUserProfileExtension").text();
+    window.loginUserProfileExt = '/Images/profile.jpg';
+    if (loginUserProfileExtension != null) {
+        window.loginUserProfileExt = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + "p" + loginUserProfileExtension;
+    }
 
     // Add body-small class if window less than 768px
     if ($(this).width() < 769) {

@@ -2,11 +2,12 @@
     <div class="sidebar-collapse">
         <ul class="nav" style="display:none" id="side-menu">
             <li class="nav-header hidden-lg hidden-md hidden-sm">
+                <p style="display:none" id="loginUserProfileExtension">@User.Identity.GetUserId()@Html.Action("GetUserProfileExtension","Shared")</p>
                 @if (Request.IsAuthenticated) { 
                 <div class="dropdown profile-element">
-                    @*<span> no image extension
-                        <img alt="image" class="img-circle" src="/Images/Users/@User.Identity.GetUserId()" />
-                    </span>*@
+                    <span> 
+                        <img alt="image" width="48" class="img-circle" data-bind="attr:{src:loginUserProfileExt}" />
+                    </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="/User/Index/@User.Identity.GetUserId()">
                         <span class="clear">
                             <span class="block m-t-xs">

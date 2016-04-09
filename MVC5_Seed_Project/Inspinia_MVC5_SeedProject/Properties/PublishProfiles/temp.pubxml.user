@@ -55,7 +55,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/18/2016 09:25:20</publishTime>
     </File>
     <File Include="bin/Inspinia_MVC5_SeedProject.dll">
-      <publishTime>04/07/2016 19:30:48</publishTime>
+      <publishTime>04/08/2016 02:08:53</publishTime>
     </File>
     <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
       <publishTime>03/18/2016 09:25:20</publishTime>
@@ -805,7 +805,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/03/2016 22:55:41</publishTime>
     </File>
     <File Include="Scripts/app/inspinia.js">
-      <publishTime>02/13/2016 16:45:32</publishTime>
+      <publishTime>04/07/2016 22:02:23</publishTime>
     </File>
     <File Include="Scripts/app/IsAdmin.js">
       <publishTime>03/11/2016 18:03:48</publishTime>
@@ -1690,7 +1690,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/25/2016 17:43:21</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>04/07/2016 19:30:38</publishTime>
+      <publishTime>04/09/2016 13:42:54</publishTime>
     </File>
     <File Include="Views/Shared/_Layout_3.cshtml">
       <publishTime>02/13/2016 16:45:37</publishTime>
@@ -1702,13 +1702,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2016 16:45:37</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
-      <publishTime>03/21/2016 03:44:59</publishTime>
+      <publishTime>04/08/2016 02:13:45</publishTime>
     </File>
     <File Include="Views/Shared/_MyAccount.cshtml">
       <publishTime>02/13/2016 16:45:37</publishTime>
     </File>
     <File Include="Views/Shared/_Navigation.cshtml">
-      <publishTime>03/25/2016 18:00:33</publishTime>
+      <publishTime>04/07/2016 22:11:02</publishTime>
     </File>
     <File Include="Views/Shared/_RightSideBar.cshtml">
       <publishTime>02/13/2016 16:45:37</publishTime>
@@ -1792,7 +1792,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/13/2016 16:45:37</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/07/2016 19:30:50</publishTime>
+      <publishTime>04/09/2016 13:43:30</publishTime>
     </File>
   </ItemGroup>
 </Project>
