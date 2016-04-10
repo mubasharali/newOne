@@ -257,7 +257,7 @@
             self.loadAd = function () {
                 var idd = $("#adId").val();
                 $.ajax({
-                    url: '/api/Electronic/GetAd/' + idd,
+                    url: '/api/Electronic/GetItem/' + idd,
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,

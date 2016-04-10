@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -27,7 +27,7 @@
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="price" Type="int" />
           <Property Name="isnegotiable" Type="char" MaxLength="1" />
-          <Property Name="subcategory" Type="nvarchar" MaxLength="20" />
+          <Property Name="subcategory" Type="nvarchar" MaxLength="30" />
           <Property Name="type" Type="bit" />
           <Property Name="condition" Type="char" MaxLength="1" />
           <Property Name="status" Type="char" MaxLength="1" />
@@ -1369,18 +1369,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CompanyOffice_ToTable_2">
-          <End Role="popularPlace" Type="Self.popularPlace" Multiplicity="0..1" />
-          <End Role="CompanyOffice" Type="Self.CompanyOffice" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="popularPlace">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CompanyOffice">
-              <PropertyRef Name="popularPlaceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CompanyQuestion_ToTable">
           <End Role="Company" Type="Self.Company" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2463,10 +2451,6 @@
             <End Role="City" EntitySet="City" />
             <End Role="CompanyOffice" EntitySet="CompanyOffice" />
           </AssociationSet>
-          <AssociationSet Name="FK_CompanyOffice_ToTable_2" Association="Self.FK_CompanyOffice_ToTable_2">
-            <End Role="popularPlace" EntitySet="popularPlace" />
-            <End Role="CompanyOffice" EntitySet="CompanyOffice" />
-          </AssociationSet>
           <AssociationSet Name="FK_CompanyQuestion_ToTable" Association="Self.FK_CompanyQuestion_ToTable">
             <End Role="Company" EntitySet="Company" />
             <End Role="CompanyQuestion" EntitySet="CompanyQuestion" />
@@ -3260,7 +3244,7 @@
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="price" Type="Int32" />
           <Property Name="isnegotiable" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="subcategory" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="subcategory" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="type" Type="Boolean" />
           <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
           <NavigationProperty Name="AdImages" Relationship="Model.FK_AdImage_ToTable" FromRole="Ad" ToRole="AdImage" />

@@ -14,7 +14,10 @@
 <div class="row">
     <div class="col-sm-3"></div>
     <div class="col-sm-6 col-md-4">
-        <div class="ibox">
+        <div data-bind="visible:isLoading()">
+            @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+        </div>
+        <div style="display:none" id="FirstLoading" class="ibox">
             <div class="ibox-title"><h2>Select a Category</h2></div>
             <div class="ibox-content">
                 <ul class="sortable-list connectList agile-list" data-bind="foreach:availableCategories">
@@ -61,6 +64,9 @@
         if (category == "Books-Sports-Hobbies") {
             availableCategories = ["Books & Magazines", "Classes", "Home tuitions", "Musical Instruments", "Sports Equipment", "Gym & Fitness", "other hobbies"];
         }
+        else if (category == "Home-LifeStyle") {
+            availableCategories = ["Watches", "Clothes","Footware", "Jewellery","Baby products","health and beauty products", "Furniture", "Household", "Home Decoration","others in home and lifeStyle"];
+        }
         var selectedCategory = ko.observable();
 
         subCategoryClicked = function (category) {
@@ -68,82 +74,30 @@
             window.location.href = linktemp;
         }
 
-        minPrice.subscribe(function () {
-            RefreshSearch();
-        });
-        maxPrice.subscribe(function () {
-            RefreshSearch();
-        });
-        tags.subscribe(function () {
-            RefreshSearch();
-        })
-        selectedCategory.subscribe(function () {
-            RefreshSearch();
-        })
-        function TreeViewModel() {
+        //minPrice.subscribe(function () {
+        //    RefreshSearch();
+        //});
+        //maxPrice.subscribe(function () {
+        //    RefreshSearch();
+        //});
+        //tags.subscribe(function () {
+        //    RefreshSearch();
+        //})
+        //selectedCategory.subscribe(function () {
+        //    RefreshSearch();
+        //})
+        function CategoriesViewModel() {
             var self = this;
             self.isLoading = ko.observable(false);
-            searchingCity.subscribe(function () {
-                self.isLoading(false);
-                RefreshSearch();
-            })
-            searchingPP.subscribe(function () {
-                self.isLoading(false);
-                RefreshSearch();
-            })
+            $("#FirstLoading").css({ "display": "block" });
+            
             self.showAds = ko.observableArray();
         }
 
-        function RefreshSearch() {
-            var self = this;
-            if (self.isLoading()) {
-                return;
-            }
-            var url = '/api/Search/SearchAds?tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&category=Animals&subcategory=' + selectedCategory();
-            self.isLoading(true);
-            $.ajax({
-                url: url,
-                dataType: "json",
-                contentType: "application/json",
-                cache: false,
-                type: 'POST',
-                success: function (data) {
-                    self.isLoading(false);
-                    var mappedads = $.map(data, function (item) { return new Ad(item); });
-                    $("#FirstLoading").css("display", "block");
-                    self.showAds(mappedads);
-                    $('#select-brand').selectize();
-                    $('#select-category').selectize();
-                },
-                error: function () {
-                    self.isLoading(false);
-                    toastr.error("failed to search. Please refresh page and try again", "Error!");
-                }
-            });
-
-        }
-        var saveResult = function (data) {
-            minPrice(data.fromNumber);
-            maxPrice(data.toNumber);
-        };
-        $("#ionrange_1").ionRangeSlider({
-            min: 0,
-            max: 50000,
-            type: 'double',
-            prefix: "Rs",
-            maxPostfix: "+",
-            prettify: false,
-            hasGrid: true,
-            from: minPrice,
-            to: maxPrice,
-            onFinish: saveResult
-        });
-        //end of animalSearch.js page
         function viewModel() {
             SearchingLocation();
             CreateAlert();
-            TreeViewModel();
-            RefreshSearch();
+            CategoriesViewModel();
             ChatViewModel();
             AccountViewModel();
             var self = this;
@@ -151,22 +105,22 @@
         }
         //tree
 
-        function getTimeAgo(varDate) {
-            if (varDate) {
-                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
-            }
-            else {
-                return '';
-            }
-        }
-        ko.bindingHandlers.jqAutoresize = {
-            init: function (element, valueAccessor, aBA, vm) {
-                if (!$(element).hasClass('msgTextArea')) {
-                    $(element).css('height', '1em');
-                }
-                $(element).autosize();
-            }
-        };
+        //function getTimeAgo(varDate) {
+        //    if (varDate) {
+        //        return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+        //    }
+        //    else {
+        //        return '';
+        //    }
+        //}
+        //ko.bindingHandlers.jqAutoresize = {
+        //    init: function (element, valueAccessor, aBA, vm) {
+        //        if (!$(element).hasClass('msgTextArea')) {
+        //            $(element).css('height', '1em');
+        //        }
+        //        $(element).autosize();
+        //    }
+        //};
         //$("#ionrange_1").ionRangeSlider({
         //    min: 0,
         //    max: 50000,
@@ -176,41 +130,41 @@
         //    prettify: false,
         //    hasGrid: true
         //});
-        $('#select-tag').selectize({
-            valueField: 'name',
-            labelField: 'name',
-            searchField: 'name',
-            options: [],
-            maxItems: 4,
-            render: {
-                option: function (item, escape) {
-                    return '<div>' +
-                        '<span class="title">' +
-                            '<span class="name">' + escape(item.name) + '</span>' +
+        //$('#select-tag').selectize({
+        //    valueField: 'name',
+        //    labelField: 'name',
+        //    searchField: 'name',
+        //    options: [],
+        //    maxItems: 4,
+        //    render: {
+        //        option: function (item, escape) {
+        //            return '<div>' +
+        //                '<span class="title">' +
+        //                    '<span class="name">' + escape(item.name) + '</span>' +
 
-                        '</span>' +
-                        '<span class="description">' + escape(item.info) + '</span>' +
-                        '<ul class="meta">' +
-                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
-                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
-                        '</ul>' +
-                    '</div>';
-                }
-            },
-            load: function (query, callback) {
-                if (!query.length) return callback();
-                $.ajax({
-                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                    type: 'POST',
-                    error: function () {
-                        callback();
-                    },
-                    success: function (res) {
-                        callback(res.slice(0, 10));
-                    }
-                });
-            }
-        });
+        //                '</span>' +
+        //                '<span class="description">' + escape(item.info) + '</span>' +
+        //                '<ul class="meta">' +
+        //                    '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+        //                    '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+        //                '</ul>' +
+        //            '</div>';
+        //        }
+        //    },
+        //    load: function (query, callback) {
+        //        if (!query.length) return callback();
+        //        $.ajax({
+        //            url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+        //            type: 'POST',
+        //            error: function () {
+        //                callback();
+        //            },
+        //            success: function (res) {
+        //                callback(res.slice(0, 10));
+        //            }
+        //        });
+        //    }
+        //});
         $(function () {
             $('.ladda-button').ladda('bind', { timeout: 200000 });
 

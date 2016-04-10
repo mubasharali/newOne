@@ -544,7 +544,7 @@
     <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="price" Type="Int32" />
     <Property Name="isnegotiable" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="subcategory" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="subcategory" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
     <Property Name="type" Type="Boolean" />
     <Property Name="condition" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
     <NavigationProperty Name="AdImages" Relationship="Model.FK_AdImage_ToTable" FromRole="Ad" ToRole="AdImage" />

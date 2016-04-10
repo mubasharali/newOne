@@ -30,6 +30,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View();
            // return RedirectToAction("notFound","Home");
         }
+        [Route("Home-LifeStyle")]
+        public ActionResult homeL()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            return View("Categories");
+        }
         [Route("Books-Magazines")]
         public ActionResult abc()
         {
@@ -77,6 +83,76 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             ViewBag.category = "Books-Sports-Hobbies";
             ViewBag.subcategory = "other hobbies";
+            return View("Index");
+        }
+        [Route("Watches")]
+        public ActionResult watches()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Watches";
+            return View("Index");
+        }
+        [Route("Clothes")]
+        public ActionResult clothes()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Clothes";
+            return View("Index");
+        }
+        [Route("Footware")]
+        public ActionResult footware()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Footware";
+            return View("Index");
+        }
+        [Route("Jewellery")]
+        public ActionResult jewellery()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Jewellery";
+            return View("Index");
+        }
+        [Route("Baby-Products")]
+        public ActionResult babyProducts()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Baby Products";
+            return View("Index");
+        }
+        [Route("Health-and-beauty-products")]
+        public ActionResult healthBeautyProducts()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Health and beauty products";
+            return View("Index");
+        }
+        [Route("Furniture")]
+        public ActionResult furniture()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Furniture";
+            return View("Index");
+        }
+        [Route("HouseHold")]
+        public ActionResult houseHold()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "HouseHold";
+            return View("Index");
+        }
+        [Route("Home-Decoration")]
+        public ActionResult HomeDecoration()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "Home Decoration";
+            return View("Index");
+        }
+        [Route("others-in-home-and-lifeStyle")]
+        public ActionResult othersInHome()
+        {
+            ViewBag.category = "Home-LifeStyle";
+            ViewBag.subcategory = "others in home and lifeStyle";
             return View("Index");
         }
         public ActionResult Create()

@@ -21,6 +21,8 @@ using System.Drawing.Imaging;
 using System.Net.Mail;
 using System.IO;
 using System.Xml;
+using System.Data.Entity.Validation;
+
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
     public class FileName
@@ -70,6 +72,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 //{
                 //    return true;
                 //}
+                return true;
+            }
+            if(category == "Home-LifeStyle")
+            {
                 return true;
             }
             if (category == "Vehicles")
@@ -898,7 +904,23 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 db.Entry(ad).State = EntityState.Modified;
             }
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                string s = e.ToString();
+                List<string> errorMessages = new List<string>();
+                foreach (DbEntityValidationResult validationResult in e.EntityValidationErrors)
+                {
+                    string entityName = validationResult.Entry.Entity.GetType().Name;
+                    foreach (DbValidationError error in validationResult.ValidationErrors)
+                    {
+                        errorMessages.Add(entityName + "." + error.PropertyName + ": " + error.ErrorMessage);
+                    }
+                }
+            }
             return ad;
         }
         
