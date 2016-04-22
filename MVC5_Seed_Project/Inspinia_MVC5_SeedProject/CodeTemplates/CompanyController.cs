@@ -77,7 +77,6 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             //db.SaveChanges();
             return RedirectToAction("Details","Company", new { id = id ,title = ElectronicsController.URLFriendly( data.title) });
         }
-
         public ActionResult Create()
         {
             Company company = new Company();

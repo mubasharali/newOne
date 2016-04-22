@@ -130,7 +130,7 @@
 
             self.loadAd = function () {
                 $.ajax({
-                    url: '/api/Electronic/GetAd/' + $("#adId").val(),
+                    url: '/api/Electronic/GetItem/' + $("#adId").val(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -229,7 +229,7 @@
                                 if (!query.length) return callback();
                                 $.ajax({
                                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                                    type: 'POST',
+                                    type: 'GET',
                                     error: function () {
                                         callback();
                                     },

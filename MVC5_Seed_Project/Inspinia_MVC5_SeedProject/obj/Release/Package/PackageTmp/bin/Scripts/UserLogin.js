@@ -115,9 +115,12 @@ function AccountViewModel() {
                 } else {
                     
                     var link = $('<a/>').text("Forget password").attr('href', '/Account/ForgetPassword');
-
                     self.loginError("Incorrect password." + link[0].outerHTML + " ?");
-                    console.log(an);
+                    //var linkText = "Forget password";
+                    //var link = $('a').text(linkText).attr('href', '/Account/ForgetPassword');
+                    self.loginError("Incorrect password." + linkText + " ?");
+                   // $('.req123').html(self.loginError());
+                    //console.log(an);
                 }
             },
             error: function () {

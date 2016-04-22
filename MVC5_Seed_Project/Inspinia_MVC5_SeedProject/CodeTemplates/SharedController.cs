@@ -32,6 +32,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 var userId = User.Identity.GetUserId();
                 var ext = db.AspNetUsers.Find(userId).dpExtension;
+                if(ext == "")
+                {
+                    return null;
+                }
                 return ext;
             }
             return null;

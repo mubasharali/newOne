@@ -99,7 +99,7 @@ create electronic ad:
                 self.category = ko.observable();
                 self.subcategory = ko.observable();
                 self.categorySelected = ko.observable(false);
-                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real Estate", "Pets & Animals", "books-sports-hobbies","Home and life style"];
+                self.categoryList = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real Estate", "Pets & Animals", "books-sports-hobbies","Home and life style","Services"];
                 self.categoryClicked = function (data) {
                     self.categorySelected(true);
                     self.category(data);
@@ -122,6 +122,10 @@ create electronic ad:
                     if (self.category() == "Home and life style") {
                         self.loading(true);
                         window.location.href = '/Home/Create?category=Home-LifeStyle';
+                    }
+                    if (self.category() == "Services") {
+                        self.loading(true);
+                        window.location.href = '/Company/Create';
                     }
                 }
                 self.backButtonUnderSubcategory = function () {

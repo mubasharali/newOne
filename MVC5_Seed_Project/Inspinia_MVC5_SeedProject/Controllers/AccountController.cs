@@ -104,6 +104,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.ReturnUrl = returnUrl;
          //  ViewBag.email = ViewBag.email;
           //  TempData["Lerror"] = TempData["LError"];
@@ -223,6 +227,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         [AllowAnonymous]
         public ActionResult Register(string ReturnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }
@@ -583,6 +591,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }

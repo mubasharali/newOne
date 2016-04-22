@@ -21,7 +21,7 @@
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
                             
-                            @if (Model.category == "Animals" || Model.category == "books-sports-hobbies")
+                            @if (Model.category == "Animals" || Model.category == "books-sports-hobbies" || Model.category == "Home-LifeStyle")
                             {
                                 <div style="display:none" id="subcategory">@Model.subcategory</div>
                                 <div class="form-group">
@@ -99,6 +99,8 @@
                 self.availableCategories = ["Dog", "Bird", "Cat", "Fish", "Farm Animals", "others", "Pet Adoption", "Pet Accessories", "Pet Food", "Pet training", "Pet Clinics"];
             } else if (category == "books-sports-hobbies") {
                 self.availableCategories = ["Books & Magazines", "Classes", "Home tuitions", "Musical Instruments", "Sports Equipment", "Gym & Fitness", "other hobbies"];
+            } else if (category == "Home-LifeStyle") {
+                self.availableCategories = ["Watches", "Clothes", "Footware", "Jewellery", "Baby Products", "Health and beauty products", "Furniture", "HouseHold", "Home Decoration", "others in home and lifeStyle"];
             }
            
             self.conditionChecked = ko.observable(false);
@@ -128,7 +130,7 @@
             
             self.loadAd = function () {
                 $.ajax({
-                    url: '/api/Electronic/GetAd/' + $("#adId").val(),
+                    url: '/api/Electronic/GetItem/' + $("#adId").val(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -221,7 +223,7 @@
                                 if (!query.length) return callback();
                                 $.ajax({
                                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                                    type: 'POST',
+                                    type: 'GET',
                                     error: function () {
                                         callback();
                                     },

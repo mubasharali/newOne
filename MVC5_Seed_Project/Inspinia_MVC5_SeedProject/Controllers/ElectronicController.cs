@@ -1504,13 +1504,17 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 string s = e.ToString();
             }
-            
-            var companyads = ad.CompanyAd;
-            db.CompanyAds.Remove(companyads);
-
-            db.Ads.Remove(ad);
             try
             {
+                try { 
+                var companyads = ad.CompanyAd;
+            db.CompanyAds.Remove(companyads);
+                }catch(Exception e)
+                {
+
+                }
+            db.Ads.Remove(ad);
+            
                 await db.SaveChangesAsync();
             }
             catch (Exception e)

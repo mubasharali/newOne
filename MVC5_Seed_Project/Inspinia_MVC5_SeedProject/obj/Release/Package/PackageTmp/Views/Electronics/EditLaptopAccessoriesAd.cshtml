@@ -248,7 +248,7 @@
             self.loadAd = function () {
                 var idd = $("#adId").val();
                 $.ajax({
-                    url: '/api/Electronic/GetAd/' + idd,
+                    url: '/api/Electronic/GetItem/' + idd,
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -368,7 +368,7 @@
                                 if (!query.length) return callback();
                                 $.ajax({
                                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                                    type: 'POST',
+                                    type: 'GET',
                                     error: function () {
                                         callback();
                                     },
@@ -572,7 +572,7 @@
                     if (!query.length) return callback();
                     $.ajax({
                         url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                        type: 'POST',
+                        type: 'GET',
                         error: function () {
                             callback();
                         },

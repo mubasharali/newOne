@@ -29,7 +29,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2">Description<span class="req">*</span></label>
                                 <div class="col-md-10">
-                                    <textarea class="form-control msgTextArea" data-bind="jqAutoresize: {},value:description" rows="4" ></textarea>
+                                    <textarea class="form-control msgTextArea" data-bind="jqAutoresize: {},value:description" rows="4" required></textarea>
                                 </div>
                             </div>
 
@@ -96,6 +96,10 @@
             //});
             self.description = ko.observable();
             self.submitClicked = function () {
+                if (self.description() == null || self.description() == "" || self.description() == "undefined") {
+                    toastr.info("Please mention some detials");
+                    return;
+                }
                window.btn_clicked = true;
                 //  $("#form").submit();
                var fb = {

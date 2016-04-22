@@ -4,14 +4,154 @@
     ViewBag.Title = "Services";
 }
 
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+<div class="row wrapper wrapper-content animated white-bg fadeInRight">
+    <div class="">
+        <div class="col-sm-12">
+            <p>&nbsp</p>
+            <div class="control-group form-horizontal">
+                <label class="control-label col-sm-5" for="select-repo">What are you looking for <br /><small class="text-navy hidden-xs">pick tags</small></label>
+                <div class="col-sm-5 col-md-4">
+                    <input id="select-tag" name="tags" data-bind="value:tags" class="repositories" placeholder="e.g, Mobile repair, plumber, travel agencies.." />
+                </div>
+            </div>
+            <p>&nbsp</p>
+
+        </div>
+        @*<div class="col-lg-12">
+            <div class="ibox">
+                <div class="">
+                   <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div data-bind="foreach: rows">
+                            <div class="col-sm-offset-1 col-sm-3">
+                                <ul  class="sortable-list connectList agile-list" data-bind="foreach: $data">
+                                    <li  style="padding:20px" data-bind="text:$data,click:subCategoryClicked" class="success-element"   ></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+            adss
+        </div>*@
         <div class="col-lg-12">
-            <h1>The Services page is under maintaince Service :) </h1>
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                @*<a href="/ServiceProviders" data-style="expand-left" class=" pull-right btn btn-danger">I Provide a service </a>*@
+                <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>
+                <span data-bind="text:showAds().length"> </span> results found<br />
+                @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity()  || tags() )"> all </span> ads
+    <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>*@
+
+                @*<span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
+                    with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+                </span>
+                <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                    <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                    <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+                </span>*@
+                <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
+                @*<div data-bind="foreach:showAds">
+                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                </div>*@
+                <div class="row">
+                    <br /> <br /><br />
+                    <div class="col-sm-6" data-bind="foreach: showAds.slice(0,showAds().length / 2) ">
+                        @Html.Partial("~/Views/Company/_CompanyListView.cshtml")
+                    </div>
+                    <div class="col-sm-6" data-bind="foreach: showAds.slice(showAds().length / 2)">
+                        @Html.Partial("~/Views/Company/_CompanyListView.cshtml")
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
  </div>
+<div class="modal inmodal fade" id="needAService" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                @*<i class="fa fa-laptop modal-icon"></i>*@
+                <h6 class="modal-title">Welcome to <span class="navbar-brand"> dealkar.pk</span> services!</h6>
+                <small class="font-bold">Tell us what you need and service providers will contact you!</small>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <small class="control-label col-sm-2">What you need <span class="req">*</span></small>
+                    <div class="col-sm-10">
+                        <input type="text" data-bind="value:needAServiceTitle" class="form-control" name="title" value="" />
+                    </div>
+                <br />
+                </div>            @*<p class="req" data-bind="text:loginError"></p>*@
+                <div class="form-group"> <br />
+                    <small class="control-label col-sm-2" for="select-repo">Tags @*<br /><small class="text-navy">optional</small>*@</small>
+                    <div class="col-sm-10">
+                        <input id="select-tag1" data-bind="value:needAServiceTags" name="tags" class="repositories" placeholder="Pick tags..." />
+                    </div>
+                </div>
+                <small>Where you need</small>
+                <div class="form-group">
+                    <small class="control-label col-sm-2">City</small>
+                    <div class="col-sm-10">
+                        <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
+                       value: selectedCity,
+                       optionsCaption: 'Choose City...'"></select>
 
+                    </div>
+                </div>
+                
+                <div data-bind="with:selectedCity">
+                    <br /><br /><br />
+                    <div class="form-group">
+                        <small class="control-label col-sm-2">Famous Place</small>
+                        <div class="col-sm-10">
+                            <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options:availablePopularPlaces,
+                       value: selectedPopularPlace,
+                       optionsCaption: 'Choose Famous place...'"></select>
+                        </div>
+                    </div>
+                </div>
+                <div data-bind="with:selectedPopularPlace">
+                    <br /><br /><br />
+                    <div class="form-group">
+                        <small class="control-label col-sm-2">Exect location<br /><small class="text-navy">optional</small></small>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="exectLocation" />
+                        </div>
+                    </div>
+                </div><br />
+                @*<div class="form-group"><label>Your location</label></div>
+                <div class="form-group"><label>City</label></div>
+                <div class="form-group"><label>Famous Place</label></div>*@
+            </div>
+            <div class="modal-footer">
+                <div data-bind="visible:!isNeedAServiceSubmitting()">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
+                    <button type="button" data-bind="click:saveNeedAService" class="btn btn-primary">Submit</button>
+                </div>
+                <div data-bind="visible:isNeedAServiceSubmitting()">
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
@@ -31,24 +171,194 @@
     @Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/plugins/ionRange")
 
-    <script src="~/Scripts/app/SearchAds.js"></script>
+    @*<script src="~/Scripts/app/SearchAds.js"></script>*@
     <script src="~/Scripts/app/slick-knockout-binding.js"></script>
     <script src="~/Scripts/app/CreateAlert.js"></script>
-    <script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/ConvertToSlug.js"></script>
+    @*<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/SearchAds.js"></script>*@
     <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script src="~/Scripts/app/GetLoginUserId.js"></script>
-    <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+<script src="~/Scripts/app/Company/CompanySearch.js"></script>
     <script>
+        function HandleCategories() {
+            var self = this;
+           // self.selectedTag = ko.observable();
+            self.availableCategories = [];
+            self.availableCategories = ["Computer Repair", "Home Appliance Repair", "Movers and Packers", "Drivers and Taxi", "Event Services", "Maids and Domestic help", "Education and classes", "Web Development", "other services"];
 
+            subCategoryClicked = function (category) {
+                linktemp = "../" + convertToSlug(category);
+                window.location.href = linktemp;
+            }
+            var columedRow = {
+                items: ko.observableArray(),
+                columnLength: ko.observable(3)
+            };
+            $.each((self.availableCategories), function (i, item) {
+                columedRow.items.push(item);
+            });
+           
+            //return an array of rows.  Each row is an array of items
+            columedRow.rows = ko.computed(function () {
+                var result = [],
+                    row,
+                    colLength = parseInt(this.columnLength(), 10);
+
+                //loop through items and push each item to a row array that gets pushed to the final result
+                for (var i = 0, j = this.items().length; i < j; i++) {
+                    if (i % colLength === 0) {
+                        if (row) {
+                            result.push(row);
+                        }
+                        row = [];
+                    }
+                    row.push(this.items()[i]);
+                }
+
+                //push the final row  
+                if (row) {
+                    result.push(row);
+                }
+
+                return result;
+            }, columedRow);
+          //  var abc = columedRow;
+           // ko.applyBindings(columedRow);
+        }
+        
+        function NeedAService() {
+            var self = this;
+            self.isNeedAServiceSubmitting = ko.observable(false);
+            self.needAServiceTags = ko.observable();
+            self.needAServiceTitle = ko.observable();
+            self.needAServiceBtn = function () {
+                if (loginUserId() == "Visitor") {
+                    loginBtn();
+                } else {
+                    $("#needAService").modal('show');
+                }
+            }
+            self.saveNeedAService = function () {
+                if (!self.needAServiceTitle()) {
+                    toastr.info("Please tell what you need");
+                    return;
+                } if (!self.needAServiceTags()) {
+                    console.log(self.needAServiceTags());
+                    toastr.info("Enter atleast one tag. This will help service providers to find you!");
+                    return;
+                } if (!self.selectedCity()) {
+                    toastr.info("Please enter city name");
+                    return;
+                } if (!self.selectedPopularPlace()) {
+                    toastr.info("Please enter a famous place near you in " + self.selectedCity());
+                    return;
+                }
+            }
+            //location
+            self.availableCities = ko.observableArray();
+            self.selectedCity = ko.observable();
+            self.availablePopularPlaces = ko.observableArray();
+            self.selectedPopularPlace = ko.observable();
+            self.loadCities = function () {
+                $.ajax({
+                    url: '/api/Location/GetCities',
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availableCities.push(item) });
+                        $('#select-city').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 39,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Cities.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadPopularPlaces = function () {
+                self.availablePopularPlaces.removeAll();
+                $.ajax({
+                    url: '/api/Location/GetPopularPlaces?city=' + self.selectedCity(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'GET',
+                    success: function (data) {
+                        $.each((data), function (i, item) { self.availablePopularPlaces.push(item) });
+                        console.log(self.availablePopularPlaces());
+                        $('#select-popularPlace').selectize({
+                            create: true,
+                            plugins: ['inputMaxlength'],
+                            inputMaxlength: 49,
+                            sortField: {
+                                field: 'text',
+                                direction: 'asc'
+                            },
+                        });
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
+                    }
+                });
+            }
+            self.loadCities();
+            var sub = self.selectedCity.subscribe(function (value) {
+                self.loadPopularPlaces();
+            })
+        }
         function viewModel() {
+            
             SearchingLocation();
             CreateAlert();
-           // TreeViewModel(); //in searchads.js
+         //  TreeViewModel(); //in searchads.js
           //  RefreshSearch();
             ChatViewModel();
             AccountViewModel();
             var self = this;
-
+            NeedAService();
+            HandleCategories();
+            self.showAds = ko.observableArray();
+            self.tags = ko.observable();
+            self.title = ko.observable();
+            self.isLoading = ko.observable(false);
+            self.title.subscribe(function () {
+                self.loadad();
+            })
+            self.tags.subscribe(function () {
+                console.log(self.tags());
+                self.loadad();
+            })
+            self.loadad = function () {
+                self.isLoading(true);
+                url_address = '/api/Company/SearchCompanies?title=' + self.title() + '&tags=' + self.tags() + '&category=Services';
+                $.ajax({
+                    url: url_address,
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.isLoading(false);
+                        var mappedads = $.map(data, function (item) { return new Company(item); });
+                        self.showAds(mappedads);
+                    },
+                    error: function () {
+                        self.isLoading(false);
+                        toastr.error("Unable to load data. Please try again", "Error");
+                    }
+                });
+            }
+            self.loadad();
             return self;
         }
         //tree
@@ -69,6 +379,16 @@
                 $(element).autosize();
             }
         };
+        Selectize.define('inputMaxlength', function (options) {
+            var self = this;
+            this.setup = (function () {
+                var original = self.setup;
+                return function () {
+                    original.apply(this, arguments);
+                    this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                };
+            })();
+        });
         $("#ionrange_1").ionRangeSlider({
             min: 0,
             max: 50000,
@@ -77,6 +397,42 @@
             maxPostfix: "+",
             prettify: false,
             hasGrid: true
+        });
+        $('#select-tag1').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            create: true,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'GET',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
         });
         $('#select-tag').selectize({
             valueField: 'name',
@@ -103,7 +459,7 @@
                 if (!query.length) return callback();
                 $.ajax({
                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                    type: 'POST',
+                    type: 'GET',
                     error: function () {
                         callback();
                     },

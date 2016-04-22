@@ -54,7 +54,6 @@ function SearchingLocation() {
                 $.each((data), function (i, item) { searchingPPs.push(item) });
                 searchingPP($.cookie("searchPP"));
                 $('#searching-popularPlace').selectize({
-
                     sortField: {
                         field: 'text',
                         direction: 'asc'

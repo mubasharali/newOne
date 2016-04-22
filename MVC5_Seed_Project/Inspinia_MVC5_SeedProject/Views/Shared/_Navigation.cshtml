@@ -52,7 +52,7 @@
                 <a href="@Url.Action("Index", "MobilesTablets")"><i class="fa fa-mobile fa-2x"></i> <span class="nav-label">Mobiles, Tablets</span> </a>
             </li>
             <li @*class="@Html.IsSelected(controller: "Electronics")"*@ >
-                <a href="@Url.Action("Index", "Electronics")"><i class="fa fa-tv"></i> <span class="nav-label">Electronics, Appliances</span><span class="fa arrow"></span> </a>
+                <a href="@Url.Action("Index", "Electronics")"><i class="fa fa-tv"></i> <span class="nav-label">Electronics</span><span class="fa arrow"></span> </a>
                 <ul class="nav nav-second-level collapse">
                     <li class="@Html.IsSelected(action: "ComputersLaptops")"><a href="@Url.Action("ComputersLaptops", "Electronics")"><i class="fa fa-laptop"></i>Computers </a></li>
                     <li class="@Html.IsSelected(action: "Camera")"><a href="@Url.Action("Cameras", "Electronics")"><i class="fa fa-camera"></i>Camera</a></li>

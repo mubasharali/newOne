@@ -126,7 +126,7 @@
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a data-toggle="tab" href="#Overview">Overview</a></li>
                                         <li class=""><a data-toggle="tab" href="#reviews">Reviews (<span data-bind="text:showReviews().length"></span>)</a></li>
-                                        <li class=""><a data-toggle="tab" href="#ActiveAds">Active Ads (<span data-bind="text:activeAds().length"></span>) </a></li>
+                                        <li data-bind="visible:category != 'Services'" class=""><a data-toggle="tab" href="#ActiveAds">Active Ads (<span data-bind="text:activeAds().length"></span>) </a></li>
 
                                     </ul>
                                     <div class="tab-content">
@@ -157,8 +157,9 @@
                                                     </div>
 
                                                 </div>*@
-                                                    <h2>Location</h2>
-                                                    <h3>HeadOffice</h3>
+                                                    @*<h2>Location</h2>*@
+                                                    <h3 data-bind="visible:showBranches().length>0">HeadOffice</h3>
+                                                    <h3 data-bind="visible:showBranches().length==0">Location and contact Info</h3>
                                                     <div data-bind="visible:!isMainBranchEditing()">
                                                         <span data-bind="visible:loginUserId == createdBy">
                                                             <a data-bind="click: function(){return editLocation(id)},visible:cityName()" class="btn btn-white btn-xs pull-right"> Edit</a>
@@ -232,7 +233,7 @@
                                                         </div><br />
                                                         <div class="row">
                                                             <div class="form-group">
-                                                                <label class="control-label col-md-2">Company is established since</label>
+                                                                <label class="control-label col-md-2">Company/Business is established since</label>
                                                                 <div class="col-md-10">
                                                                     <input type="date" class="form-control" data-bind="value:since" />
                                                                 </div>
@@ -1264,7 +1265,8 @@
                     success: function (data) {
                         self.showTags.removeAll();
                         if (data != -1) {
-                            $.each((data), function (i, item) { self.showTags.push(item.name) });
+                            //$.each((data), function (i, item) { self.showTags.push(item.name) });
+                            $.each((data), function (i, item) { self.showTags.push(new Tag( item)) });
                         }
                         self.isPageEditing(false);
                         self.isLongAboutEditing(false);
@@ -1355,7 +1357,7 @@
                         if (!query.length) return callback();
                         $.ajax({
                             url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                            type: 'POST',
+                            type: 'GET',
                             error: function () {
                                 callback();
                             },
@@ -1368,11 +1370,11 @@
                 var selectize_tags = $("#select-tag")[0].selectize;
                 $.each((self.showTags()), function (i, item) {
                     selectize_tags.addOption({
-                        text: item,
-                        value: item,
-                        name: item,
+                        text: item.name,
+                        value: item.name,
+                        name: item.name,
                     });
-                    selectize_tags.addItem(item);
+                    selectize_tags.addItem(item.name);
                 });
                 //selectize_tags.addOption({
                 //    text: 'Technology',

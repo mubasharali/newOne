@@ -253,7 +253,7 @@
                                 if (!query.length) return callback();
                                 $.ajax({
                                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                                    type: 'POST',
+                                    type: 'GET',
                                     error: function () {
                                         callback();
                                     },

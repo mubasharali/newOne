@@ -16,10 +16,12 @@ $(document).ready(function () {
 
     // Add body-small class if window less than 768px
     if ($(this).width() < 769) {
-        $('body').addClass('body-small')
+        $('body').addClass('body-small');
+        if ($('body').hasClass('mini-navbar')) { $('body').removeClass('mini-navbar') }
     } else {
         $('body').removeClass('body-small')
     }
+
 
     // MetsiMenu
     $('#side-menu').metisMenu();

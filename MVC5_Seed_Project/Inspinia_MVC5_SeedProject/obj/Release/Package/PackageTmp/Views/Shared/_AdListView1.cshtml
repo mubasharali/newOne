@@ -3,7 +3,7 @@
     <div class="ibox">
         <div class="ibox-content1 product-box">
             <div class="media">
-                <div class="pull-left hidden-xs">
+                <a data-bind="attr:{href:link}" class="pull-left hidden-xs">
                     <div class="product-imitation">
                         <div class="carouselContainer">
                             <span id="gallery" data-gallery=""
@@ -14,7 +14,7 @@
                             <div data-bind="visible:images().length == 0"><h2><br /><br /><br /><br /> No Images<br /><br /><br /><br /><br /></h2></div>
                         </div>
                     </div>
-                </div>
+                </a>
                 <div class="media-body">
                     <div class="product-desc">
                         <span class="product-price">

@@ -37,7 +37,13 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-sm-12">
         <span style="margin-top:18px" class="hidden-xs pull-right">
+            @if(ViewBag.category == "Books-Sports-Hobbies") { 
             <a data-bind="click:function(){ return createAd('/Home/Create?category=books-sports-hobbies')}" data-style="expand-left" class=" pull-right btn btn-danger">Post Ad in @ViewBag.subcategory</a>
+            }
+            else if (ViewBag.category == "Home-LifeStyle")
+            {
+                <a data-bind="click:function(){ return createAd('/Home/Create?category=Home-LifeStyle')}" data-style="expand-left" class=" pull-right btn btn-danger">Post Ad in @ViewBag.subcategory</a>
+            }
         </span>
         <h2>@ViewBag.subcategory</h2>
         <ol class="breadcrumb">
@@ -293,7 +299,7 @@
                 if (!query.length) return callback();
                 $.ajax({
                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                    type: 'POST',
+                    type: 'GET',
                     error: function () {
                         callback();
                     },

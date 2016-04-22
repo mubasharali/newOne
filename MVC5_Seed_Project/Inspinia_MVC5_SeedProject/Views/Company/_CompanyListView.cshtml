@@ -1,0 +1,27 @@
+﻿<div @*class="col-md-4 col-sm-6"*@>
+    <div class="contact-box">
+        <a data-bind="attr:{href:link}">
+            <div class="col-sm-4">
+                <div class="text-center">
+                    <img alt="logo" class="img-circle m-t-xs img-responsive" data-bind="attr:{src:logoLink}">
+                    @*<div data-bind="text:shortabout" class="m-t-xs font-bold"></div>*@
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <h3><strong data-bind="text:title"></strong></h3>
+                <span data-bind="visible:city">
+                    <p><i class="fa fa-map-marker"></i> <span data-bind="text:city"></span></p>
+                    <address>
+                        <strong data-bind="text:shortabout"></strong><br>
+                        @*<span data-bind="text:exectLocation"></span> <br>*@
+                        <span data-bind="text:popularPlace"></span><br>
+                        <span data-bind="visible:contactNo1"> <span class="fa fa-phone"></span><span data-bind="text:contactNo1"></span></span>
+                    </address>
+                    Category: <span data-bind="text:category"></span><br />
+                </span>
+                @*<span data-bind="visible:showTags().length > 0">Tags:</span>*@ <span data-bind="foreach:showTags"><span class="btn btn-white btn-xs" data-bind="text:name"></span></span>
+            </div>
+            <div class="clearfix"></div>
+        </a>
+    </div>
+</div>

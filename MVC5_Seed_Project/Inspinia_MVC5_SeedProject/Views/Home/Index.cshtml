@@ -19,7 +19,7 @@
         </div>
     </div>*@
 
-    <div class="">
+    <div class="col-sm-12">
 
         
         <br />
@@ -221,8 +221,10 @@
                 </div>
             </div>
         </div>
+        <div class="row"></div>
+        <br /><br /><br /><br />
     </div>
-    <br /><br /><br /><br />
+    
 </div>
 
 @*<div class="wrapper wrapper-content animated fadeInUp">
@@ -739,7 +741,7 @@
                 if (!query.length) return callback();
                 $.ajax({
                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                    type: 'POST',
+                    type: 'GET',
                     error: function () {
                         callback();
                     },

@@ -2,8 +2,13 @@
 var title = ko.observable($("#search").val());
 var category = ko.observable($("#category").val());
 var subcategory = ko.observable($("#subcategory").val());
-
-var availableCategories = ["Dog", "Bird", "Cat", "Fish", "Farm Animals", "others", "Pet Adoption", "Pet Accessories", "Pet Food", "Pet training", "Pet Clinics"];
+var availableCategories = [];
+if (category == "Animals") {
+    availableCategories = ["Dog", "Bird", "Cat", "Fish", "Farm Animals", "others", "Pet Adoption", "Pet Accessories", "Pet Food", "Pet training", "Pet Clinics"];
+} else if (category == "Services") {
+    availableCategories = ["Computer Repair", "Home Appliance Repair", "Movers and Packers", "Drivers and Taxi", "Event Services", "Maids and Domestic help", "Education and classes", "Web Development", "other services"];
+}
+ 
 var selectedCategory = ko.observable();
 
 var tags = ko.observable("");

@@ -11,12 +11,51 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Inspinia_MVC5_SeedProject.Models;
 using Microsoft.AspNet.Identity;
+using Inspinia_MVC5_SeedProject.CodeTemplates;
+
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class RealEstateController : ApiController
     {
         private Entities db = new Entities();
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateServiesAd(string title , string tags , string city, string popularPlace , string exectLocation)
+        {
+            ElectronicsController electronicController = new ElectronicsController();
+            
+                if (User.Identity.IsAuthenticated)
+                {
+                //if (!ElectronicsController.checkCategory(ad.category, ad.subcategory))
+                //{
+                //    return RedirectToAction("CreateAd", "Home");
+                //}
+                //  FileName[] fileNames = JsonConvert.DeserializeObject<FileName[]>(Request["files"]);
+                Ad ad = new Ad();
+                    ad = electronicController.MyAd(ad, "Save", "Services", null);
 
+                //    electronicController.PostAdByCompanyPage(ad.Id);
+
+
+                    //images
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        string sbs = e.ToString();
+                    }
+                    //tags
+                    // electronicController.SaveTags(Request["tags"], ad);
+
+                    //    electronicController.ReplaceAdImages(ad, fileNames);
+                    //location
+                        electronicController.MyAdLocation(city,popularPlace,exectLocation, ad, "Save");
+                    //return RedirectToAction("Details", "Electronics", new { id = ad.Id, title = ElectronicsController.URLFriendly(ad.title) });
+                    return Ok("Done");
+                }
+            return BadRequest();
+        }
         public async Task<IHttpActionResult> SearchRealEstateAds(string tags, string title, int minPrice, int maxPrice, string city, string pp, int minArea, int maxArea, string floor, string bedroom, string bathroom,string subcategory)
         {
             if (subcategory == "plot ")

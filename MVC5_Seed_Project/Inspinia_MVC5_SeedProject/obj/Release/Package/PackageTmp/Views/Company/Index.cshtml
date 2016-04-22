@@ -38,33 +38,11 @@
     </div>
     <div class="row">
         <br /> <br /><br />
-        <div data-bind="foreach:showAds">
-            <div class="col-md-4 col-sm-6">
-                <div class="contact-box">
-                    <a data-bind="attr:{href:link}" >
-                        <div class="col-sm-4">
-                            <div class="text-center">
-                                <img alt="logo" class="img-circle m-t-xs img-responsive" data-bind="attr:{src:logoLink}">
-                                @*<div data-bind="text:shortabout" class="m-t-xs font-bold"></div>*@
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <h3><strong data-bind="text:title"></strong></h3>
-                            <span data-bind="visible:city">
-                                <p><i class="fa fa-map-marker"></i> <span data-bind="text:city"></span></p>
-                                <address>
-                                    <strong data-bind="text:shortabout"></strong><br>
-                                    <span data-bind="text:exectLocation"></span> <br>
-                                    <span data-bind="text:popularPlace"></span><br>
-                                    <abbr title="Phone">P:</abbr><span data-bind="text:contactNo1"></span>
-                                </address>
-                            </span>
-                            <div data-bind="foreach:showTags"><span data-bind="text:name"></span></div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
+        <div class="col-sm-6" data-bind="foreach: showAds.slice(0,showAds().length / 2) ">
+            @Html.Partial("~/Views/Company/_CompanyListView.cshtml")
+        </div>
+        <div class="col-sm-6" data-bind="foreach: showAds.slice(showAds().length / 2)">
+            @Html.Partial("~/Views/Company/_CompanyListView.cshtml")
         </div>
     </div>
 </div>
@@ -81,49 +59,11 @@
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/slick")
-
+<script src="~/Scripts/app/ConvertToSlug.js"></script>
+<script src="~/Scripts/app/Company/CompanySearch.js"></script>
     <script>
-        function convertToSlug(Text) {
-            return Text
-                .toLowerCase()
-                .replace(/[^\w ]+/g, '')
-                .replace(/ +/g, '-')
-            ;
-        }
-        function Tag(data) {
-            var self = this;
-            data = data || {};
-            self.id = data.id;
-            self.name = data.name;
-        }
-        function Company(data) {
-            var self = this;
-            data = data || {};
-            self.title = data.title;
-            self.shortabout = data.shortabout;
-            self.postedByName = data.postedByName;
-            self.postedById = data.postedById;
-            self.id = data.id;
-            self.link = "/CompanyPage/" + self.id + '/' + convertToSlug(self.title);
-            self.logoLink = '/Images/Company/default_logo.png';
-            if (data.logoExtension) {
-                self.logoLink = $.cookie("AWSURL") + $.cookie("AWSCompanyFolder") + self.id + "/logo" + data.logoExtension;
-            }
-            self.city = data.city;
-            self.popularPlace = data.popularPlace;
-            self.exectLocation = data.exectLocation;
-            self.contactNo1 = data.contactNo1;
-            self.contactNo2 = data.contactNo2;
-            self.showTags = ko.observableArray();
-
-           
-            if (data.adTags != null) {
-                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
-                self.showTags(tags);
-            }
-           
-            
-        }
+        
+        
         function ViewModel() {
             SearchingLocation();
             AccountViewModel();
@@ -290,7 +230,7 @@
                 if (!query.length) return callback();
                 $.ajax({
                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                    type: 'POST',
+                    type: 'GET',
                     error: function () {
                         callback();
                     },

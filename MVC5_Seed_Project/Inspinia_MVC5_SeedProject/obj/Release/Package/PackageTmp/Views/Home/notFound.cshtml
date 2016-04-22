@@ -21,4 +21,18 @@
 
 @*<h2>NotFound</h2>
 The page you are looking for is not available. Do you have any problem? Feel free to contact us!*@
+@section Scripts{
+<script>
+    function ViewModel() {
+        SearchingLocation();
+        AccountViewModel();
+        ChatViewModel();
+        var self = this;
+        
+    }
+    $(document).ready(function () {
+        ko.applyBindings(new ViewModel);
+    });
+</script>
 
+}

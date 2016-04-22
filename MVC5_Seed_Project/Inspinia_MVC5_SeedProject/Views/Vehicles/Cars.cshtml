@@ -59,7 +59,17 @@
                 </div>
             </div>
             @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
-            
+            <br />
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- left side cars page -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-5427185622945199"
+                 data-ad-slot="8056269068"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
         <div class="col-sm-8 col-md-9 col-lg-7">
             <div data-bind="visible:isLoading()">
@@ -176,7 +186,7 @@
                 if (!query.length) return callback();
                 $.ajax({
                     url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                    type: 'POST',
+                    type: 'GET',
                     error: function () {
                         callback();
                     },

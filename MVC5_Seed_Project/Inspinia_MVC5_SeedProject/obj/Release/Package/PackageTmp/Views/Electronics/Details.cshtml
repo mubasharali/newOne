@@ -24,14 +24,14 @@
     <div class="row">
         <div class="col-sm-3 hidden-sm hidden-xs">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- tempAds -->
+            <!-- newtemp1 -->
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-5427185622945199"
-                 data-ad-slot="1030384265"
+                 data-ad-slot="8335470667"
                  data-ad-format="auto"></ins>
             <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
+(adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
         <div class="col-md-9">
@@ -48,21 +48,25 @@
                         <div data-bind="visible:statusError" class="alert alert-success">
                             <strong>Pending admin approval! </strong><span data-bind="text:statusError"></span>
                         </div>
-
+                        <div class="">
+                            <span data-bind="visible:loginUserId == postedById">
+                                <span class="alert alert-success" data-bind="visible:isRefreshable">
+                                    <strong> Is your ad still valid? </strong>
+                                    <a data-bind="click: function(){return Refresh(id)}" class="btn btn-white btn-lg "> Refresh</a>
+                                    <strong>OR delete it</strong>
+                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-lg  confirmDelete"> Delete</a>
+                                    <br /><br />
+                                </span>
+                                
+                            </span>
+                        </div>
                         <div data-bind="visible:isVisible">
                             <input type="hidden" id="loginUserId" data-bind="value:loginUserId" />
 
                             <div data-bind="attr:{'id':id}">
                                 <div class="ibox product-detail">
                                     <div class="ibox-content">
-                                        <div class="row">
-                                            <span data-bind="visible:loginUserId == postedById">
-                                                <span data-bind="visible:isRefreshable">
-                                                    <a data-bind="click: function(){return Refresh(id)}" class="btn btn-white btn-lg "> Refresh</a>
-                                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-lg pull-right confirmDelete"> Delete</a>
-                                                </span>
-                                            </span>
-                                        </div>
+                                        
                                         <div class="row">
                                             <div class="lightBoxGallery">
 
@@ -76,12 +80,35 @@
                 slickOptions: {dots:true, initialSlide:0,autoplay:true,autoplaySpeed: 1000,infinite: false,speed: 1000,fade: true,},
                 slickIndex: imageIndex">
                                                         </div>
-                                                        <div data-bind="visible:images().length == 0">Display your banner ad here</div>
+                                                        <div data-bind="visible:images().length == 0">
+                                                            Display your banner ad here
+                                                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                                                            <!-- display instead of ad images -->
+                                                            <ins class="adsbygoogle"
+                                                                 style="display:block"
+                                                                 data-ad-client="ca-pub-5427185622945199"
+                                                                 data-ad-slot="3765670269"
+                                                                 data-ad-format="auto"></ins>
+                                                            <script>
+                                                                (adsbygoogle = window.adsbygoogle || []).push({});
+                                                            </script>
+                                                        </div>
                                                     </div>
 
 
                                                 </div>
-                                                <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here</div>
+                                                <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here
+                                                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                                                    <!-- display right to ad images in small devices -->
+                                                    <ins class="adsbygoogle"
+                                                         style="display:block"
+                                                         data-ad-client="ca-pub-5427185622945199"
+                                                         data-ad-slot="7497865869"
+                                                         data-ad-format="auto"></ins>
+                                                    <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+                                                    </script>
+                                                </div>
                                             </div>
                                             <div class="col-md-7 col-sm-12">
                                                 <span data-bind="visible:(loginUserId != postedById ) ">
@@ -154,7 +181,7 @@
                                                     }
                                                 </style>
 
-                                                <div data-bind="visible:category == 'Animals' || category=='books-sports-hobbies'">
+                                                <div data-bind="visible:category == 'Animals' || category=='books-sports-hobbies' || category == 'Home-LifeStyle'">
                                                     <dl class="dl-horizontal m-t-md small">
                                                         <dt>Category:</dt>
                                                         <dd data-bind="text:subcategory"></dd>
@@ -457,7 +484,7 @@
 <script src="~/signalr/hubs"></script>
 <script src="~/Scripts/UserLogin.js"></script>
 <script src="~/Scripts/app/chat.js"></script>
-<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/slick-knockout-binding-for-detail-page.js"></script>
 <script src="~/Scripts/_Comments.js"></script>
 <script src="~/Scripts/app/IsAdmin.js"></script>
     <script>

@@ -224,6 +224,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return -1;
         }
+        [HttpGet]
         public async Task<IHttpActionResult> SearchTags(string s)
         {
             //var ret = db.Tags.Where(x => x.name.Contains(s));

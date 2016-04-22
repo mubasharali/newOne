@@ -47,12 +47,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return Ok(company);
         }
-        public async Task<IHttpActionResult> SearchCompanies(string title, string tags)
+        public async Task<IHttpActionResult> SearchCompanies(string title, string tags,string category = null)
         {
             if (tags == null || tags == "undefined")
             {
                 var ret = from company in db.Companies
-                          where (title == null || title == "" || title == "undefined" || company.title.Contains(title))
+                          where ((title == null || title == "" || title == "undefined" || company.title.Contains(title)) && (category == null || category == "" || category == "undefined" || company.category.Equals(category)))
                           select new
                           {
                               id = company.Id,
@@ -62,6 +62,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               exectLocation = company.exectLocation,
                               popularPlace = company.popularPlace.name,
                               logoExtension = company.logoextension,
+                              //  rating = company.Reviews.Average(x=>x.rating),
+                              category = company.category,
                               contactNo1 = company.contactNo1,
                               contactNo2 = company.contactNo2,
                               tags = from tag in company.CompanyTags
@@ -80,16 +82,27 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 tagsArray = tags.Split(',');
             }
             var ret1 = from company in db.Companies
-                       where (title == null || title == "" || title == "undefined" || company.title.Contains(title) && (!tagsArray.Except( company.CompanyTags.Select(x=>x.Tag.name)).Any()))
+                       where (title == null || title == "" || title == "undefined" || company.title.Contains(title) && (!tagsArray.Except(company.CompanyTags.Select(x => x.Tag.name)).Any()) && (category == null || category == "" || category == "undefined" || company.category.Equals(category)))
                       select new
                       {
                           id = company.Id,
                           title = company.title,
+                          shortabout = company.shortabout,
                           city = company.City.cityName,
+                          exectLocation = company.exectLocation,
                           popularPlace = company.popularPlace.name,
                           logoExtension = company.logoextension,
+                          //  rating = company.Reviews.Average(x=>x.rating),
                           contactNo1 = company.contactNo1,
-                          contactNo2 = company.contactNo2
+                          contactNo2 = company.contactNo2,
+                          category = company.category,
+                          tags = from tag in company.CompanyTags
+                                 select new
+                                 {
+                                     id = tag.tagId,
+                                     name = tag.Tag.name
+                                 },
+
                       };
             return Ok(ret1);
         }
@@ -588,7 +601,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             
             await db.SaveChangesAsync();
-            if(s == null)
+            if(s == null || s == "" || s== "undefined")
             {
                 return -1;
             }
@@ -643,6 +656,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var ret = from taa in qt
                       select new
                       {
+                          id = taa.tagId,
                           name = taa.Tag.name,
                       };
             return ret;

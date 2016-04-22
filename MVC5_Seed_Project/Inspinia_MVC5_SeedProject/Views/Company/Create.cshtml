@@ -41,6 +41,7 @@
                                 <label class="control-label col-md-2">One line description <span class="req">*</span></label>
                                 <div class="col-md-10">
                                     <input type="text" class="form-control" required name="shortabout" value="@Model.shortabout" />
+                                    <p>Just one line description. You can enter detials later</p>
                                 </div>
                             </div>
 
@@ -360,7 +361,7 @@
                     if (!query.length) return callback();
                     $.ajax({
                         url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
-                        type: 'POST',
+                        type: 'GET',
                         error: function () {
                             callback();
                         },

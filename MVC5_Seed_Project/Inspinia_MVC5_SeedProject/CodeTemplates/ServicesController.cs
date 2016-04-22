@@ -21,7 +21,16 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             var ads = db.Ads.Include(a => a.AdsLocation).Include(a => a.LaptopAd).Include(a => a.MobileAd).Include(a => a.AspNetUser).Include(a => a.CompanyAd);
             return View(await ads.ToListAsync());
         }
-
+        [Route("ServiceProviders")]
+        public async Task<ActionResult> ServiceProvider()
+        {
+            return View();
+        }
+        [Route("ServiceConsumers")]
+        public async Task<ActionResult> ServiceConsumer()
+        {
+            return View();
+        }
         // GET: /Services/Details/5
         public async Task<ActionResult> Details(int? id)
         {
