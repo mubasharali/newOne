@@ -15,7 +15,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
     public class AdminController : Controller
     {
         private Entities db = new Entities();
-
+        
         public bool isAdmin()
         {
             if (Request.IsAuthenticated)
@@ -38,7 +38,23 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return RedirectToAction("../not-found");
         }
+        public async Task<ActionResult> SuperAdmin()
+        {
+            if(User.Identity.GetUserId() == "c1239071-cf6d-4cec-9da4-4b2871250143" || User.Identity.GetUserId() == "7234b5b0-2cb5-4d4a-bc18-98e17c460221")
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
+        }
         public async Task<ActionResult> Models()
+        {
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
+        }
+        public async Task<ActionResult> ManageUsers()
         {
             if (isAdmin())
             {

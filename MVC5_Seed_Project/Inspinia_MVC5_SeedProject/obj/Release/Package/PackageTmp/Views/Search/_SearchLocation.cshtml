@@ -7,6 +7,7 @@
                 <small class="font-bold">Set your location</small>
             </div>
             <div class="modal-body">
+                <div class="req" data-bind="text:_searchingLocationError"></div>
                 <div class="form-group">
                     <label class="control-label col-md-2">City</label>
                     <div class="col-md-10" data-bind="visible:!_isSearchCityLoading()">

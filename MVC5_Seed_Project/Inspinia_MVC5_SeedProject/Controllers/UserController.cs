@@ -29,42 +29,21 @@ using Owin;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
-    //public class MyDbContext : IdentityDbContext<ApplicationUser>
-    //{
-    //    // Other part of codes still same 
-    //    // You don't need to add AppUser and AppRole 
-    //    // since automatically added by inheriting form IdentityDbContext<AppUser>
-    //}
-    //public class AppUserManager : UserManager<ApplicationUser>
-    //{
-    //    public AppUserManager(IUserStore<ApplicationUser> store)
-    //        : base(store)
-    //    {
-    //    }
-
-    //    // this method is called by Owin therefore best place to configure your User Manager
-    //    public static AppUserManager Create(
-    //        IdentityFactoryOptions<AppUserManager> options, IOwinContext context)
-    //    {
-    //        var manager = new AppUserManager(
-    //            new UserStore<ApplicationUser>(context.Get<MyDbContext>()));
-
-    //        // optionally configure your manager
-    //        // ...
-
-    //        return manager;
-    //    }
-    //}
-    //public class AppRole : IdentityRole
-    //{
-    //    public AppRole() : base() { }
-    //    public AppRole(string name) : base(name) { }
-    //    // extra properties here 
-    //}
+    
     public class UserController : ApiController
     {
         private Entities db = new Entities();
+        public UserController()
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        {
 
+        }
+
+        public UserController(UserManager<ApplicationUser> userManager)
+        {
+            UserManager = userManager;
+        }
+        public UserManager<ApplicationUser> UserManager { get; private set; }
         // GET api/User
         public IQueryable<AspNetUser> GetAspNetUsers()
         {
@@ -111,6 +90,15 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 if (ret == null)
                 {
                     return Ok("NewUser");
+                }
+                try {
+                    if (await UserManager.GetLockoutEnabledAsync(ret.Id))
+                    {
+                        return Ok("Blocked");
+                    } }
+                catch(Exception e)
+                {
+                    string s = e.ToString();
                 }
                 var data = new
                 {

@@ -35,7 +35,13 @@ namespace Inspinia_MVC5_SeedProject
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                LoginPath = new PathString("/Account/Login")
+                LoginPath = new PathString("/Account/Login"),
+                Provider = new CookieAuthenticationProvider
+                {
+                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<AppUserManager, ApplicationUser>(
+                    validateInterval: TimeSpan.FromSeconds(0),
+                    regenerateIdentity: (manager, user) => manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie))
+                }
             });
             // Use a cookie to temporarily store information about a user logging in with a third party login provider
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
@@ -86,7 +92,7 @@ namespace Inspinia_MVC5_SeedProject
                     {
                         OnAuthenticated = async context =>
                             {
-                                context.Identity.AddClaim(new System.Security.Claims.Claim("urn:facebook:access_token", context.AccessToken));
+                                context.Identity.AddClaim(new Claim("urn:facebook:access_token", context.AccessToken));
                                 foreach (var claim in context.User)
                                 {
                                     var claimType = string.Format("urn:facebook:{0}", claim.Key);

@@ -880,6 +880,8 @@
     </Content>
     <Content Include="Scripts\_Comments.js" />
     <Content Include="Scripts\_CreateAd.js" />
+    <Content Include="Views\Admin\Email\ConfirmEmail.html" />
+    <Content Include="Views\Admin\Email\DeleteAdAlert.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1062,6 +1064,8 @@
     <Content Include="Views\Company\_CompanyListView.cshtml" />
     <Content Include="Views\Services\ServiceProvider.cshtml" />
     <Content Include="Views\Services\ServiceConsumer.cshtml" />
+    <Content Include="Views\Admin\ManageUsers.cshtml" />
+    <Content Include="Views\Admin\SuperAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

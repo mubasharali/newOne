@@ -72,7 +72,7 @@
 
                                                 <div class="col-md-5 col-sm-7">
 
-                                                    <div class="carouselContainer">
+                                                    <div class="carouselContainer ">
                                                         <div><span data-bind="text:images().length"></span>  images attched</div>
 
                                                         <div id="gallery" data-gallery=""
@@ -462,11 +462,23 @@
 
 
 @section Styles {
+<style>
+    /* Local style for demo purpose */
+
+    .lightBoxGallery {
+        text-align: center;
+    }
+
+        .lightBoxGallery img {
+            margin: 5px;
+        }
+</style>
     @Styles.Render("~/plugins/slickStyles")
     @Styles.Render("~/plugins/slickThemeStyles")
     @Styles.Render("~/plugins/toastrStyles")
     @*@Styles.Render("~/Content/plugins/jsTree")*@
 @Styles.Render("~/plugins/sweetAlertStyles")
+@Styles.Render("~/Content/plugins/blueimp/css/")
 }
 
 
@@ -474,7 +486,7 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    
+    @Scripts.Render("~/plugins/lightboxGallery")
     @Scripts.Render("~/plugins/slick")
     @*@Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/bundles/categoryTree")*@

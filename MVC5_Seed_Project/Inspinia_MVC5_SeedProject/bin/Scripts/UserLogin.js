@@ -81,6 +81,9 @@ function AccountViewModel() {
                     $("#inputEmail").modal('hide');
                     if (data == "NewUser") {
                         $("#newUser").modal('show');
+                    } else if (data == "Blocked") {
+                        toastr.info("You account has been blocked by administration!");
+                        self.loginError("You account has been blocked by administration!");
                     } else {
                         self.isPasswordSaved(data.isPasswordSaved);
                         $("#oldUser").modal('show');
@@ -93,7 +96,8 @@ function AccountViewModel() {
                     self.loginError("failed to send Email. Please refresh page and try again");
                 }
             });
-        }else{
+        } else {
+            toastr.info("Please enter a valid email address");
             self.loginError("Please enter a valid email address");
         }
     }
@@ -118,7 +122,7 @@ function AccountViewModel() {
                     self.loginError("Incorrect password." + link[0].outerHTML + " ?");
                     //var linkText = "Forget password";
                     //var link = $('a').text(linkText).attr('href', '/Account/ForgetPassword');
-                    self.loginError("Incorrect password." + linkText + " ?");
+                 //   self.loginError("Incorrect password." + linkText + " ?");
                    // $('.req123').html(self.loginError());
                     //console.log(an);
                 }

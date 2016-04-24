@@ -61,7 +61,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/18/2016 09:25:20</publishTime>
     </File>
     <File Include="bin/Inspinia_MVC5_SeedProject.dll">
-      <publishTime>04/22/2016 20:33:19</publishTime>
+      <publishTime>04/24/2016 18:50:49</publishTime>
     </File>
     <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
       <publishTime>03/18/2016 09:25:20</publishTime>
@@ -172,7 +172,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/18/2016 09:25:20</publishTime>
     </File>
     <File Include="bin/Scripts/UserLogin.js">
-      <publishTime>04/22/2016 01:06:42</publishTime>
+      <publishTime>04/23/2016 14:37:54</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>03/18/2016 09:25:20</publishTime>
@@ -355,7 +355,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/18/2016 09:25:20</publishTime>
     </File>
     <File Include="Content/myStyles.css">
-      <publishTime>03/18/2016 09:25:20</publishTime>
+      <publishTime>04/24/2016 14:30:53</publishTime>
     </File>
     <File Include="Content/patterns/1.png">
       <publishTime>03/18/2016 09:25:20</publishTime>
@@ -817,7 +817,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/04/2016 11:55:42</publishTime>
     </File>
     <File Include="Scripts/app/inspinia.js">
-      <publishTime>04/13/2016 18:58:26</publishTime>
+      <publishTime>04/24/2016 11:35:55</publishTime>
     </File>
     <File Include="Scripts/app/IsAdmin.js">
       <publishTime>03/12/2016 07:03:50</publishTime>
@@ -844,7 +844,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/22/2016 18:06:23</publishTime>
     </File>
     <File Include="Scripts/app/slick-knockout-binding-for-detail-page.js">
-      <publishTime>04/22/2016 17:53:27</publishTime>
+      <publishTime>04/24/2016 11:15:47</publishTime>
     </File>
     <File Include="Scripts/app/slick-knockout-binding.js">
       <publishTime>04/22/2016 17:50:18</publishTime>
@@ -856,7 +856,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/14/2016 05:45:34</publishTime>
     </File>
     <File Include="Scripts/app/_SearchLocation.js">
-      <publishTime>04/14/2016 19:11:57</publishTime>
+      <publishTime>04/22/2016 22:05:33</publishTime>
     </File>
     <File Include="Scripts/app/_Truncate-knockout-binding.js">
       <publishTime>03/18/2016 22:09:32</publishTime>
@@ -1276,7 +1276,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/18/2016 09:25:20</publishTime>
     </File>
     <File Include="Scripts/UserLogin.js">
-      <publishTime>04/22/2016 01:06:42</publishTime>
+      <publishTime>04/23/2016 14:37:54</publishTime>
     </File>
     <File Include="Scripts/_Comments.js">
       <publishTime>03/18/2016 09:25:20</publishTime>
@@ -1338,6 +1338,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Admin/Edit.cshtml">
       <publishTime>02/14/2016 05:45:38</publishTime>
     </File>
+    <File Include="Views/Admin/Email/ConfirmEmail.html">
+      <publishTime>04/24/2016 18:11:55</publishTime>
+    </File>
+    <File Include="Views/Admin/Email/DeleteAdAlert.html">
+      <publishTime>04/24/2016 18:43:01</publishTime>
+    </File>
     <File Include="Views/Admin/Feedback.cshtml">
       <publishTime>02/29/2016 09:39:42</publishTime>
     </File>
@@ -1347,8 +1353,14 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Admin/Location.cshtml">
       <publishTime>04/05/2016 14:57:42</publishTime>
     </File>
+    <File Include="Views/Admin/ManageUsers.cshtml">
+      <publishTime>04/24/2016 15:23:16</publishTime>
+    </File>
     <File Include="Views/Admin/Models.cshtml">
       <publishTime>04/05/2016 15:01:38</publishTime>
+    </File>
+    <File Include="Views/Admin/SuperAdmin.cshtml">
+      <publishTime>04/24/2016 15:13:32</publishTime>
     </File>
     <File Include="Views/Animals/Create.cshtml">
       <publishTime>02/14/2016 05:45:38</publishTime>
@@ -1441,7 +1453,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/14/2016 05:45:38</publishTime>
     </File>
     <File Include="Views/Electronics/Details.cshtml">
-      <publishTime>04/22/2016 17:54:16</publishTime>
+      <publishTime>04/24/2016 11:17:24</publishTime>
     </File>
     <File Include="Views/Electronics/EditAd.cshtml">
       <publishTime>04/22/2016 18:06:23</publishTime>
@@ -1606,7 +1618,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/22/2016 18:06:23</publishTime>
     </File>
     <File Include="Views/RealEstate/Index.cshtml">
-      <publishTime>04/22/2016 18:06:23</publishTime>
+      <publishTime>04/23/2016 22:31:18</publishTime>
     </File>
     <File Include="Views/Search/Create.cshtml">
       <publishTime>02/14/2016 05:45:38</publishTime>
@@ -1624,7 +1636,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/14/2016 05:45:38</publishTime>
     </File>
     <File Include="Views/Search/_SearchLocation.cshtml">
-      <publishTime>03/18/2016 22:19:16</publishTime>
+      <publishTime>04/22/2016 22:06:40</publishTime>
     </File>
     <File Include="Views/Services/Create.cshtml">
       <publishTime>02/14/2016 05:45:38</publishTime>
@@ -1678,7 +1690,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/22/2016 17:48:57</publishTime>
     </File>
     <File Include="Views/Shared/_Chat.cshtml">
-      <publishTime>02/14/2016 05:45:38</publishTime>
+      <publishTime>04/24/2016 11:33:09</publishTime>
     </File>
     <File Include="Views/Shared/_Comments.cshtml">
       <publishTime>02/14/2016 05:45:38</publishTime>
@@ -1717,7 +1729,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/25/2016 17:43:22</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>04/22/2016 20:32:35</publishTime>
+      <publishTime>04/24/2016 18:49:58</publishTime>
     </File>
     <File Include="Views/Shared/_Layout_3.cshtml">
       <publishTime>02/14/2016 05:45:38</publishTime>
@@ -1726,7 +1738,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/14/2016 05:45:38</publishTime>
     </File>
     <File Include="Views/Shared/_LoadingBoxes.cshtml">
-      <publishTime>02/14/2016 05:45:38</publishTime>
+      <publishTime>04/24/2016 14:33:03</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
       <publishTime>04/08/2016 02:13:46</publishTime>
@@ -1819,7 +1831,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/14/2016 05:45:38</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/22/2016 20:33:21</publishTime>
+      <publishTime>04/24/2016 18:50:53</publishTime>
     </File>
   </ItemGroup>
 </Project>

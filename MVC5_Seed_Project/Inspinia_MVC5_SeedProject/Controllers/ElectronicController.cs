@@ -1483,10 +1483,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if (status == "admin")
             {
                 if(userId != ad.postedBy){
-                    string body = "<h2>" + ad.title + "</h2><br><br>";
-                    string info = "The above item is deleted by admin. The possible reasons for the deletion of this item are:<ul><li>Ad is duplicate</li><li>Posted in wrong category</li><li>Contains Irrelevent Content</li><li>Spam/Offensive Content</li><li>Fraud Reason</li></ul>";
-                    string footer = "<br><br><br><p>Regards <br> dealkar.pk team </P";
-                    ElectronicsController.sendEmail(email, ad.title +  " is deleted!", body + info + footer);
+                    string Body = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("/Views/Admin/Email/DeleteAdAlert.html"));
+                    Body = Body.Replace("#AdTitle#", "Cake is for sale");
+                    ElectronicsController.sendEmail("m.irfanwatoo@gmail.com", "Your item is deleted by admin!", Body);
                 }
             }
             

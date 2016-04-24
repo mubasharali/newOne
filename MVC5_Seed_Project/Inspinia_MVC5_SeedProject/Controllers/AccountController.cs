@@ -21,13 +21,13 @@ using System.IO;
 //using Inspinia_MVC5_SeedProject;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
-  //   public class ApplicationUserManager : UserManager<ApplicationUser>
-  //{
-  //        public ApplicationUserManager(): base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
-  //        {
-  //              PasswordValidator = new MinimumLengthValidator (0);
-  //        }
-  //}
+    //   public class ApplicationUserManager : UserManager<ApplicationUser>
+    //{
+    //        public ApplicationUserManager(): base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
+    //        {
+    //              PasswordValidator = new MinimumLengthValidator (0);
+    //        }
+    //}
     //public class MyUserManager : UserManager<ApplicationUser>
     //{
     //    public MyUserManager() :
@@ -37,6 +37,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     //    }
     //}
     //following code is for email verification
+ 
     public class AppUserManager : UserManager<ApplicationUser>
 {
 public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
@@ -109,10 +110,16 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.ReturnUrl = returnUrl;
-         //  ViewBag.email = ViewBag.email;
-          //  TempData["Lerror"] = TempData["LError"];
+            //  ViewBag.email = ViewBag.email;
+            //  TempData["Lerror"] = TempData["LError"];
+
+            //string Body = System.IO.File.ReadAllText(Server.MapPath("/Views/Admin/Email/DeleteAdAlert.html"));
+            //Body = Body.Replace("#AdTitle#", "Cake is for sale");
+            //ElectronicsController.sendEmail("m.irfanwatoo@gmail.com", "Your item is deleted by admin!", Body);
             return View();
+            
         }
+
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -132,6 +139,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
              //   ViewBag.ReturnUrl =  HttpContext.Current.Request.Url.AbsolutePath;
                 return View("Login");
             }
+            
             var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
             UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
                 as IUserTokenProvider<ApplicationUser, string>;
@@ -206,6 +214,12 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
+                if(await UserManager.GetLockoutEnabledAsync(user.Id))
+                {
+                    ModelState.AddModelError("", "You account has been blocked by administration");
+                    return View(model);
+                }
+                
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
@@ -238,6 +252,11 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         {
             
         }
+        public async Task<bool> SendWelcomeMail(string name, string email)
+        {
+            ElectronicsController.sendEmail(email, "Welcome to dealkar.pk", "Hello " + name + "!<br/>Our team welcome you to <a href='\newtemp.apphb.com'>here</a>");
+            return true;
+        }
         public async Task<bool> SendMailtoConfirmEmailAddress(string id,string name,string email)
         {
             var user = await db.AspNetUsers.FindAsync(id);
@@ -262,8 +281,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                    new { userId = id, code = code },
                    protocol: Request.Url.Scheme,defaultPort:true);
 
-                ElectronicsController.sendEmail(email, "Welcome to dealkar.pk - Confirm Email address", "Hello " + name + "!<br/>Confirm your email address by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
-                
+             //   ElectronicsController.sendEmail(email, "Welcome to dealkar.pk - Confirm Email address", "Hello " + name + "!<br/>Confirm your email address by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
+                string Body = System.IO.File.ReadAllText(Server.MapPath("/Views/Admin/Email/ConfirmEmail.html"));
+                Body = Body.Replace("ConfirmEmailLink", callbackUrl);
+                ElectronicsController.sendEmail(email, "Welcome to dealkar.pk", Body);
             }
             catch (Exception e)
             {

@@ -11,11 +11,25 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Inspinia_MVC5_SeedProject.Models;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
+using Inspinia_MVC5_SeedProject.Controllers;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class AdminController : ApiController
     {
         private Entities db = new Entities();
+        public AdminController()
+            : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
+        {
+
+        }
+
+        public AdminController(UserManager<ApplicationUser> userManager)
+        {
+            UserManager = userManager;
+        }
+        public UserManager<ApplicationUser> UserManager { get; private set; }
 
         // GET api/Admin
         public IQueryable<Mobile> GetMobiles()
@@ -34,6 +48,81 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
             }
             return false;
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> MakeAdmin(string email)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    var makeAdmin =await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email));
+                    if(makeAdmin != null)
+                    {
+                        if (makeAdmin.status != "admin") {
+                            makeAdmin.status = "admin";
+                        }
+                        else
+                        {
+                            makeAdmin.status = "active";
+                        }
+                        await db.SaveChangesAsync();
+                        return Ok("Done");
+                    }
+                    return NotFound();
+                }
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> GetAllAdmin()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    var ret = from admin in db.AspNetUsers
+                              where admin.status.Equals("admin")
+                              select new
+                              {
+                                  id = admin.Id,
+                                  name = admin.Email
+                              };
+                    return Ok(ret);
+
+                }
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> BlockUser(string email) //block on the basis of id
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    var makeAdmin = await db.AspNetUsers.FirstOrDefaultAsync(x => x.Id.Equals(email));
+                    if(makeAdmin != null)
+                    {
+                        makeAdmin.status = "blocked";
+                        await db.SaveChangesAsync();
+                        await UserManager.UpdateSecurityStampAsync(makeAdmin.Id);
+                        await UserManager.SetLockoutEnabledAsync(makeAdmin.Id, true);
+                        await UserManager.SetLockoutEndDateAsync(makeAdmin.Id,DateTime.Today.AddYears(10));
+                        return Ok("Done");
+                        
+                    }
+                   
+                    return NotFound();
+                }
+            }
+            return BadRequest();
         }
         [HttpPost]
         public async Task<bool> addNewBrandModel(string brand, string model, string category)

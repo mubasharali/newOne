@@ -9,6 +9,7 @@ function SearchingLocation() {
     searchingPP = ko.observable();
     searchingCities = ko.observableArray();
     searchingPPs = ko.observableArray();
+    self._searchingLocationError = ko.observable();
     self.searchLocationBtn = function () {
         $("#setLocation").modal('hide');
     }
@@ -35,6 +36,7 @@ function SearchingLocation() {
                 });
             },
             error: function (jqXHR, status, thrownError) {
+                self._searchingLocationError("Error! Check your internet connection and refresh page");
                 self._isSearchCityLoading(false);
                 toastr.error("failed to load Cities.Please refresh page and try again", "Error");
             }
@@ -68,6 +70,7 @@ function SearchingLocation() {
                 //-----------------
             },
             error: function (jqXHR, status, thrownError) {
+                self._searchingLocationError("Error! Check your internet connection and refresh page");
                 self._isSearchPPLoading(false);
                 toastr.error("failed to load Famous Places.Please refresh page and try again", "Error");
             }
