@@ -14,6 +14,8 @@ using System.Net.Http.Headers;
 using System.Data.Entity.Validation;
 using Inspinia_MVC5_SeedProject.Models;
 using Inspinia_MVC5_SeedProject.CodeTemplates;
+using MvcSiteMapProvider.Web.Mvc;
+
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
    // [InitializeSimpleMembership]
@@ -48,7 +50,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return View();
         }
         #endregion
-
+       
         [Route("Feedback-contact")]
         public ActionResult Feedback()
         {

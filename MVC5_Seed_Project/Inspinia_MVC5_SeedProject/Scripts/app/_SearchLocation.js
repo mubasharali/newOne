@@ -27,6 +27,7 @@ function SearchingLocation() {
             success: function (data) {
                 self._isSearchCityLoading(false);
                 $.each((data), function (i, item) { searchingCities.push(item) });
+                self._searchingLocationError("");
                 searchingCity($.cookie("searchCity"));
                 $('#searching-city').selectize({
                     sortField: {
@@ -54,6 +55,7 @@ function SearchingLocation() {
             success: function (data) {
                 self._isSearchPPLoading(false);
                 $.each((data), function (i, item) { searchingPPs.push(item) });
+                self._searchingLocationError("");
                 searchingPP($.cookie("searchPP"));
                 $('#searching-popularPlace').selectize({
                     sortField: {

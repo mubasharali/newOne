@@ -1484,8 +1484,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 if(userId != ad.postedBy){
                     string Body = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("/Views/Admin/Email/DeleteAdAlert.html"));
-                    Body = Body.Replace("#AdTitle#", "Cake is for sale");
-                    ElectronicsController.sendEmail("m.irfanwatoo@gmail.com", "Your item is deleted by admin!", Body);
+                    Body = Body.Replace("#AdTitle#", ad.title);
+                    ElectronicsController.sendEmail(email, "Your item is deleted by admin!", Body);
                 }
             }
             

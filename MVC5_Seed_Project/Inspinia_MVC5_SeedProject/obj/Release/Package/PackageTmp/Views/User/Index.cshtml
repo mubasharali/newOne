@@ -172,7 +172,7 @@
                         <input id="select-tags-to-follow" data-bind="value:tagsToFollow" class="repositories" placeholder="Pick tags..." />
                         <p data-bind="visible:tagsToFollow().length > 0">Follow tags <span data-bind="text:tagsToFollow"></span> and if already followed then unfollow</p>
                         <button data-bind="click:followTagsBtn" class="ladda-button btn btn-primary" data-style="expand-left">Submit</button>
-                        <div style="color:red" data-bind="text:followSummary"></div>
+                        <div style="color:red" data-bind="html:followSummary"></div>
                     </div>
                 </div>
 
@@ -330,7 +330,9 @@
                     cache: false,
                     type: 'POST',
                     success: function (data) {
-                        self.followSummary("Done! Refresh page to see changes");
+                        var refreshPagelink = $('<a/>').text("Refresh").attr('href', '');
+                        self.followSummary("Done! " + refreshPagelink[0].outerHTML + " page to see changes");
+                     //   self.followSummary("Done! Refresh page to see changes");
                         laddaloading.ladda('stop');
                     },
                     error: function () {
@@ -635,7 +637,7 @@
             $("#setDrag").click(function () {
                 $image.cropper("setDragMode", "crop");
             });
-            $.connection.hub.start().done();
+          
             
             ko.applyBindings(new viewModel());
             

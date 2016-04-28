@@ -10,7 +10,7 @@ $(document).ready(function () {
 
     var loginUserProfileExtension = $("#loginUserProfileExtension").text();
     window.loginUserProfileExt = '/Images/profile.jpg';
-    if (loginUserProfileExtension != null) {
+    if (loginUserProfileExtension != null && loginUserProfileExtension != "" && loginUserProfileExtension == "null") {
         window.loginUserProfileExt = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + "p" + loginUserProfileExtension;
     }
 
@@ -87,10 +87,7 @@ $(document).ready(function () {
         $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
         $('.small-chat-box').toggleClass('active');
     });
-    $('.open-small-chat1').click(function () {
-        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove'); //find children with id
-        $('.small-chat-box').toggleClass('active');
-    });
+    
 
     // Initialize slimscroll for small chat
     $('.small-chat-box .content').slimScroll({

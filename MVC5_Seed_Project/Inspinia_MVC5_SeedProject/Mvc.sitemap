@@ -14,6 +14,43 @@
       </mvcSiteMapNode>
     </mvcSiteMapNode>
     <mvcSiteMapNode title="About" controller="Home" action="About"/>
+    <mvcSiteMapNode title="Jobs" controller="Jobs" action="Index"/>
+    <mvcSiteMapNode title="RealEstate" controller="RealEstate" action="Index"/>
+    <mvcSiteMapNode title="Services" controller="Services" action="Index"/>
+    <mvcSiteMapNode title="MobilesTablets" controller="MobilesTablets" action="Index"/>
+    
+    <mvcSiteMapNode title="Cameras" controller="Electronics" action="Cameras"/>
+    <mvcSiteMapNode title="Books-Sports-Hobbies" controller="Education" action="Categories">
+      <mvcSiteMapNode title="Home-LifeStyle" controller="Education" action="homeL"/>
+      <mvcSiteMapNode title="Books-Magazines" controller="Education" action="abc"/>
+      <mvcSiteMapNode title="Classes" controller="Education" action="abc6"/>
+      <mvcSiteMapNode title="Home-tuitions" controller="Education" action="abc5"/>
+      <mvcSiteMapNode title="Musical-Instruments" controller="Education" action="abc4"/>
+      <mvcSiteMapNode title="Sports-Equipment" controller="Education" action="abc3"/>
+      <mvcSiteMapNode title="Gym-Fitness" controller="Education" action="abc2"/>
+      <mvcSiteMapNode title="other-hobbies" controller="Education" action="abc1"/>
+        
+    </mvcSiteMapNode>
+    <mvcSiteMapNode title="Watches" controller="Education" action="watches"/>
+    <mvcSiteMapNode title="Clothes" controller="Education" action="clothes"/>
+    <mvcSiteMapNode title="Footware" controller="Education" action="footware"/>
+    <mvcSiteMapNode title="Jewellery" controller="Education" action="jewellery"/>
+    <mvcSiteMapNode title="Baby-Products" controller="Education" action="babyProducts"/>
+    <mvcSiteMapNode title="Health-and-beauty-products" controller="Education" action="healthBeautyProducts"/>
+    <mvcSiteMapNode title="Furniture" controller="Education" action="furniture"/>
+    <mvcSiteMapNode title="HouseHold" controller="Education" action="houseHold"/>
+    <mvcSiteMapNode title="Home-Decoration" controller="Education" action="HomeDecoration"/>
+    <mvcSiteMapNode title="others-in-home-and-lifeStyle" controller="Education" action="othersInHome"/>
+    
+    
+    <mvcSiteMapNode title="Cars" controller="Vehicles" action="Cars"/>
+    <mvcSiteMapNode title="Bikes" controller="Vehicles" action="Bikes"/>
+    <mvcSiteMapNode title="Commerical-Vehicles" controller="Vehicles" action="CommericalVehicles"/>
+    <mvcSiteMapNode title="Vehicles-for-rent" controller="Vehicles" action="VehiclesForRent"/>
+    <mvcSiteMapNode title="Other-Vehicles" controller="Vehicles" action="OtherVehicles"/>
+    <mvcSiteMapNode title="Vehicles-spare-parts" controller="Vehicles" action="SpareParts"/>
+
+    <mvcSiteMapNode title="Pets-Animals" controller="Vehicles" action="Animals"/>
   </mvcSiteMapNode>
   
 </mvcSiteMap>

@@ -14,6 +14,7 @@ using System.Data.Entity.Core.Objects.DataClasses;
 using System.Threading;
 using Inspinia_MVC5_SeedProject.Models;
 using WebMatrix.WebData;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace Inspinia_MVC5_SeedProject
 {
@@ -22,6 +23,7 @@ namespace Inspinia_MVC5_SeedProject
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+           // XmlSiteMapController.RegisterRoutes(RouteTable.Routes); //this line to create links in sitemap.xml for search engines.
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

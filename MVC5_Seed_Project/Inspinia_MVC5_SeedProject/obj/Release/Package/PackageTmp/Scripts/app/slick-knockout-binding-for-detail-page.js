@@ -4,7 +4,7 @@
         $a = $('<a>');
         $a.attr('href', imgUrl);
       //  $a.attr('data-gallery', '#blueimp-gallery');
-        $a.attr('data-gallery', '');
+      //  $a.attr('data-gallery', '');
         $a.attr('target', '_blank');
         $div = $('<div>');
         $image = $('<img>');

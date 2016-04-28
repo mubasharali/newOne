@@ -6,16 +6,73 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 using System.Web;
+using Quartz;
+using Quartz.Impl;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    public class HelloJob : IJob
+    {
+        public void Execute(IJobExecutionContext context)
+        {
+            ElectronicsController.sendEmail("irfanyusanif@gmail.com", "I am job scheduler", "not online.I am running at" + DateTime.UtcNow);
+            
+        }
+
+    }
     public class AdminController : Controller
     {
         private Entities db = new Entities();
-        
+        [HttpPost]
+        public ActionResult ExecuteJob()
+        {
+            if (!isSuperAdmin())
+            {
+                return HttpNotFound();
+            }
+            // construct a scheduler factory
+            ISchedulerFactory schedFact = new StdSchedulerFactory();
+
+            // get a scheduler
+            IScheduler sched = schedFact.GetScheduler();
+            
+            sched.Start();
+
+            // define the job and tie it to our HelloJob class
+            IJobDetail job = JobBuilder.Create<HelloJob>()
+                .WithIdentity("myJob", "group1")
+                .Build();
+
+            // Trigger the job to run now, and then every 40 seconds
+            ITrigger trigger = TriggerBuilder.Create()
+            //  .WithIdentity("myTrigger", "group1")
+            //  .StartNow()
+            //  .WithSimpleSchedule(x => x
+            //      .WithIntervalInSeconds(86400)
+            //      .RepeatForever())
+            //  .Build();
+            //.ForJob(job)
+                                    .WithIdentity("myTrigger", "group1")
+                                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(17, 20))
+                                    .Build();
+
+            sched.ScheduleJob(job, trigger);
+            return Json("ok", JsonRequestBehavior.AllowGet);
+        }
+        public bool isSuperAdmin()
+        {
+            if (Request.IsAuthenticated)
+            {
+                if(User.Identity.GetUserId() == "c1239071-cf6d-4cec-9da4-4b2871250143" || User.Identity.GetUserId() == "7234b5b0-2cb5-4d4a-bc18-98e17c460221")
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public bool isAdmin()
         {
             if (Request.IsAuthenticated)

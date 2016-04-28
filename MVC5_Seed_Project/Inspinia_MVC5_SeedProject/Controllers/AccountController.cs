@@ -113,9 +113,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             //  ViewBag.email = ViewBag.email;
             //  TempData["Lerror"] = TempData["LError"];
 
-            //string Body = System.IO.File.ReadAllText(Server.MapPath("/Views/Admin/Email/DeleteAdAlert.html"));
+            //string Body = System.IO.File.ReadAllText(Server.MapPath("/Views/Admin/Email/RenewAdAlert.html"));
             //Body = Body.Replace("#AdTitle#", "Cake is for sale");
-            //ElectronicsController.sendEmail("m.irfanwatoo@gmail.com", "Your item is deleted by admin!", Body);
+            //Body = Body.Replace("#AdId#", "1318");
+            //ElectronicsController.sendEmail("m.irfanwatoo@gmail.com", "Update your ad status!", Body);
             return View();
             
         }

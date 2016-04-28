@@ -13,6 +13,11 @@ using System.Web.Http.Description;
 using System.Net.Http.Formatting;
 using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
+using System.Configuration;
+using Amazon.S3;
+using Amazon.S3.Model;
+using Inspinia_MVC5_SeedProject.CodeTemplates;
+using System.Web;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
@@ -606,7 +611,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 return -1;
             }
             string[] values = s.Split(',');
-            Tag[] tags = new Tag[values.Length];
+            Models.Tag[] tags = new Models.Tag[values.Length];
             CompanyTag[] qt = new CompanyTag[values.Length];
             for (int i = 0; i < values.Length; i++)
             {
@@ -616,7 +621,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 {
                     var data = await db.Tags.FirstOrDefaultAsync(x => x.name.Equals(ss, StringComparison.OrdinalIgnoreCase));
 
-                    tags[i] = new Tag();
+                    tags[i] = new Models.Tag();
                     if (data != null)
                     {
                         tags[i].Id = data.Id;
@@ -734,9 +739,24 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             public string cityName;
             public string popularPlace;
         }
-        
+        private static readonly string _awsAccessKey =
+            ConfigurationManager.AppSettings["AWSAccessKey"];
+
+        private static readonly string _awsSecretKey =
+            ConfigurationManager.AppSettings["AWSSecretKey"];
+
+        private static readonly string _bucketName =
+            ConfigurationManager.AppSettings["Bucketname"];
+        private static readonly string _folderName =
+            ConfigurationManager.AppSettings["FolderName"];
+        private static readonly string _userFolder =
+            ConfigurationManager.AppSettings["UserFolder"];
+        private static readonly string _email =
+            ConfigurationManager.AppSettings["email"];
+        private static readonly string _companyFoler =
+            ConfigurationManager.AppSettings["CompanyFolder"];
         // DELETE api/Company/5
-        [ResponseType(typeof(Company))]
+        [HttpPost]
         public async Task<IHttpActionResult> DeleteCompany(int id)
         {
             Company company = await db.Companies.FindAsync(id);
@@ -744,7 +764,44 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 return NotFound();
             }
+            IAmazonS3 client;
 
+            var logoExtension = company.logoextension;
+            if (logoExtension != null) {
+                logoExtension = logoExtension.Trim();
+            }
+
+            DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest();
+            multiObjectDeleteRequest.BucketName = _bucketName;
+            multiObjectDeleteRequest.AddKey(_companyFoler + "/" + company.Id + "/logo" +logoExtension, null);
+              
+            var userId = User.Identity.GetUserId();
+            var email = company.AspNetUser.UserName;
+            var status = db.AspNetUsers.Find(userId).status;
+            if (status == "admin")
+            {
+                if (userId != company.createdBy)
+                {
+                    string Body = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("/Views/Admin/Email/DeletePageAlert.html"));
+                    Body = Body.Replace("#CompanyTitle#", company.title);
+                    ElectronicsController.sendEmail(email, "Your Busniess page is deleted by admin!", Body);
+                }
+            }
+
+            try
+            {
+                AmazonS3Config config = new AmazonS3Config();
+                config.ServiceURL = "https://s3.amazonaws.com/";
+                using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(
+                     _awsAccessKey, _awsSecretKey, config))
+                {
+                    client.DeleteObjects(multiObjectDeleteRequest);
+                }
+            }
+            catch (Exception e)
+            {
+                string s = e.ToString();
+            }
             db.Companies.Remove(company);
             await db.SaveChangesAsync();
 

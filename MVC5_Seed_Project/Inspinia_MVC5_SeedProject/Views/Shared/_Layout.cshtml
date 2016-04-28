@@ -81,14 +81,22 @@
     <script src="~/Scripts/UserLogin.js"></script>
     <script src="~/Scripts/app/GetLoginUserId.js"></script>
     <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    <script>
+        var isConnectionReady = ko.observable(false);
+        $(function () {
+            $.connection.hub.start().done(function () {
+                 isConnectionReady(true);
+            });
+        });
+    </script>
         @RenderSection("scripts", required: false)
     <script>
         $(function () {
-            $.connection.hub.start().done();
+            
             $.cookie("AWSFolderName", "Ads/", { path: '/' });
             $.cookie("AWSUserFolder", "Users/", { path: '/' });
             $.cookie("AWSCompanyFolder", "Companies/", { path: '/' });
-            $.cookie("AWSURL", "https://s3.amazonaws.com/dealkr/", { path: '/' });
+            $.cookie("AWSURL", "https://s3.amazonaws.com/dealkar.pk/", { path: '/' });
             //  $("#side-menu").css({ "display": "block" });
             toastr.options = {
                 closeButton: true,

@@ -44,6 +44,15 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return RedirectToAction("../Home/Index");
         }
+        public ActionResult Chat()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return View();
+            }
+            string path = Request.Url.AbsolutePath;
+            return RedirectToAction("Login", "Account", new { ReturnUrl = path });
+        }
         private static readonly string _awsAccessKey =
             ConfigurationManager.AppSettings["AWSAccessKey"];
 

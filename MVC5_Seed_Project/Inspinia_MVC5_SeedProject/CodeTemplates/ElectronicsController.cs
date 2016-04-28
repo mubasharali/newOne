@@ -59,11 +59,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         //    }
         //}
         // GET: /Electronics/
-        //public ActionResult Index()
-        //{
-        //    var ads = db.Ads.Include(a => a.AspNetUser);
-        //    return View(ads);
-        //}
+        public ActionResult Index()
+        {
+           /// var ads = db.Ads.Include(a => a.AspNetUser);
+            return View();
+        }
         public static bool checkCategory(string category, string subcategory = null)
         {
             if (category == "books-sports-hobbies")
@@ -864,7 +864,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 pp = prices[1];
                 ad.isnegotiable = "b";
             }
-
+            
             if (condition == "new")
             {
                 ad.condition = "n";
@@ -876,6 +876,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             else
             {
                 ad.condition = "u";
+            }
+            if (condition == null)
+            {
+                ad.condition = "z";
             }
             if (pp != null && pp != "")
             {

@@ -1386,7 +1386,7 @@
             self.deletePage = function (id) {
                 swal({
                     title: "Are you sure?",
-                    text: "You will not be able to recover this Ad!",
+                    text: "You will not be able to recover this Page!",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -1394,17 +1394,17 @@
                     closeOnConfirm: false
                 }, function () {
                     $.ajax({
-                        url: '/api/Electronic/DeleteAd/' + id,
+                        url: '/api/Company/DeleteCompany/' + id,
                         dataType: "json",
                         contentType: "application/json",
                         cache: false,
                         type: 'POST',
                         success: function (data) {
-                            swal("Deleted!", "Your Ad has been deleted.", "success");
+                            swal("Deleted!", "Your Page has been deleted.", "success");
                             window.location.href = "/User/Index/" + self.loginUserId;
                         },
                         error: function () {
-                            toastr.error("failed to delete Ad. Please refresh page and try again", "Error!");
+                            toastr.error("failed to delete Page. Please refresh page and try again", "Error!");
                         }
                     });
                 });

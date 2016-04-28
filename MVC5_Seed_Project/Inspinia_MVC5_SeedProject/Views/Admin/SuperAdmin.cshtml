@@ -19,6 +19,12 @@
             <button class="btn btn-default" data-bind="click:blockUserBtn">Submit</button>
         </div>
     </div>
+    <hr /><hr />
+    <div class="row">
+        <div class="col-sm-6">
+            <button data-bind="click:executeJobBtn">Execute job</button>
+        </div>
+    </div>
 </div>
 @section Styles {
     @Styles.Render("~/plugins/toastrStyles")
@@ -46,6 +52,19 @@
             ChatViewModel();
             AccountViewModel();
             var self = this;
+            self.executeJobBtn = function () {
+                $.ajax({
+                    url: '/Admin/ExecuteJob',
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        toastr.info("Success");
+                    },
+                    error: function () {
+                        toastr.info("Error! please refresh page and try again");
+                    },
+                });
+            }
             self.loginUserId = ko.observable( loginUserId());
             self.adminEmail = ko.observable();
             self.blockUserEmail = ko.observable();

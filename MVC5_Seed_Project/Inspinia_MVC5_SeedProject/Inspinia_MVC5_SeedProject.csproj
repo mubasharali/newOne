@@ -282,7 +282,6 @@
     <Compile Include="Controllers\TempController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
-    <Compile Include="Filters\Scheduler.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -882,6 +881,9 @@
     <Content Include="Scripts\_CreateAd.js" />
     <Content Include="Views\Admin\Email\ConfirmEmail.html" />
     <Content Include="Views\Admin\Email\DeleteAdAlert.html" />
+    <Content Include="Views\Admin\Email\DeletePageAlert.html" />
+    <Content Include="Views\Admin\Email\RenewAdAlert.html" />
+    <Content Include="Views\Home\sitemap.xml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1066,15 +1068,15 @@
     <Content Include="Views\Services\ServiceConsumer.cshtml" />
     <Content Include="Views\Admin\ManageUsers.cshtml" />
     <Content Include="Views\Admin\SuperAdmin.cshtml" />
+    <Content Include="Views\User\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\plugins\summernote\" />
+    <Folder Include="Filters\" />
     <Folder Include="Images\Ads\" />
     <Folder Include="Scripts\plugins\summernote\" />
     <Folder Include="Views\Filter\" />
-    <Folder Include="Views\Scheduler\" />
-    <Folder Include="Views\Schedule\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

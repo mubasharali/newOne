@@ -22,21 +22,24 @@ function Message(data,sendMessageTo) {
     self.sentFromName = data.sentFromName;
     self.sentToName = data.sentToName;
     self.message = data.message;
+    
     self.time = (data.time);
     self.timeAgo = getTimeAgo(data.time);
     self.loginUserId = data.loginUserId;
-    console.log(self.sentFrom);
-    console.log(self.sentTo);
-    console.log("will be sent to : " + sendMessageTo);
+  //  console.log(self.sentFrom);
+  //  console.log(self.sentTo);
+  //  console.log("will be sent to : " + sendMessageTo);
     if (sendMessageTo == self.sentFrom || sendMessageTo == self.sentTo) {
         
     } else {
-        console.log("No entry");
+       // console.log("No entry");
         self.message = "";
     }
 }
 function ChatViewModel() {
-    
+    $(".collapse-chat-box").click(function () {
+        $(".open-small-chat").trigger('click');
+    })
     var self = this;
     self.hub = $.connection.chatHub;
     self.onlineUsersHub = $.connection.onlineUsers;

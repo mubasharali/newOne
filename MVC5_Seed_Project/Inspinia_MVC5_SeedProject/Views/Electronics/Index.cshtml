@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Ad>
 
 @{
-    ViewBag.Title = "";
+    ViewBag.Title = "All in Electronics";
 }
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -138,7 +138,7 @@
         }
     </style>
     @Styles.Render("~/Content/plugins/jsTree")
-
+@Styles.Render("~/plugins/toastrStyles")
 }
 
 @section Scripts {
@@ -146,32 +146,37 @@
     @Scripts.Render("~/plugins/knockout")
 @Scripts.Render("~/plugins/rickshaw")
 <script type="text/javascript">
+    function ViewModel() {
+        SearchingLocation();
+        AccountViewModel();
+        ChatViewModel();
+    }
     $(document).ready(function () {
+        ko.applyBindings(new ViewModel());
+        //$('#animation_bo').click(function () {
+        //    $('#animation_bo').removeAttr('class').attr('class', '');
+        //    var animation = $(this).attr("data-animation");
+        //    $('#animation_bo').addClass('animated');
+        //    $('#animation_bo').addClass(animation);
+        //    return false;
+        //});
 
-        $('#animation_bo').click(function () {
-            $('#animation_bo').removeAttr('class').attr('class', '');
-            var animation = $(this).attr("data-animation");
-            $('#animation_bo').addClass('animated');
-            $('#animation_bo').addClass(animation);
-            return false;
-        });
-
-        var graph2 = new Rickshaw.Graph({
-            element: document.querySelector("#rickshaw_multi"),
-            renderer: 'area',
-            stroke: true,
-            series: [{
-                data: [{ x: 0, y: 2 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 4 }, { x: 4, y: 8 }],
-                color: '#1ab394',
-                stroke: '#17997f'
-            }, {
-                data: [{ x: 0, y: 13 }, { x: 1, y: 15 }, { x: 2, y: 17 }, { x: 3, y: 12 }, { x: 4, y: 10 }],
-                color: '#eeeeee',
-                stroke: '#d7d7d7'
-            }]
-        });
-        graph2.renderer.unstack = true;
-        graph2.render();
+        //var graph2 = new Rickshaw.Graph({
+        //    element: document.querySelector("#rickshaw_multi"),
+        //    renderer: 'area',
+        //    stroke: true,
+        //    series: [{
+        //        data: [{ x: 0, y: 2 }, { x: 1, y: 5 }, { x: 2, y: 8 }, { x: 3, y: 4 }, { x: 4, y: 8 }],
+        //        color: '#1ab394',
+        //        stroke: '#17997f'
+        //    }, {
+        //        data: [{ x: 0, y: 13 }, { x: 1, y: 15 }, { x: 2, y: 17 }, { x: 3, y: 12 }, { x: 4, y: 10 }],
+        //        color: '#eeeeee',
+        //        stroke: '#d7d7d7'
+        //    }]
+        //});
+        //graph2.renderer.unstack = true;
+        //graph2.render();
     });</script>
 
     @*<script>

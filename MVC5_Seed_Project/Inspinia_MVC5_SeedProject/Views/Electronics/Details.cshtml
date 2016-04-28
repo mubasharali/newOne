@@ -66,280 +66,297 @@
                             <div data-bind="attr:{'id':id}">
                                 <div class="ibox product-detail">
                                     <div class="ibox-content">
-                                        
-                                        <div class="row">
-                                            <div class="lightBoxGallery">
 
-                                                <div class="col-md-5 col-sm-7">
+                                       
 
-                                                    <div class="carouselContainer ">
-                                                        <div><span data-bind="text:images().length"></span>  images attched</div>
 
-                                                        <div id="gallery" data-gallery=""
-                                                             data-bind="slick: images,
+                                <div class="row">
+                                    <div class="">@*lightBoxGallery*@
+
+                                        <div class="col-md-5 col-sm-7">
+
+                                            <div class="carouselContainer ">
+                                                <div><span data-bind="text:images().length"></span>  images attched</div>
+                                                
+                                                    <div id="gallery" data-gallery=""
+                                                         data-bind="slick: images,
                 slickOptions: {dots:true, initialSlide:0,autoplay:true,autoplaySpeed: 1000,infinite: false,speed: 1000,fade: true,},
                 slickIndex: imageIndex">
-                                                        </div>
-                                                        <div data-bind="visible:images().length == 0">
-                                                            Display your banner ad here
-                                                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                                                            <!-- display instead of ad images -->
-                                                            <ins class="adsbygoogle"
-                                                                 style="display:block"
-                                                                 data-ad-client="ca-pub-5427185622945199"
-                                                                 data-ad-slot="3765670269"
-                                                                 data-ad-format="auto"></ins>
-                                                            <script>
-                                                                (adsbygoogle = window.adsbygoogle || []).push({});
-                                                            </script>
-                                                        </div>
                                                     </div>
-
-
-                                                </div>
-                                                <div class="col-sm-5 hidden-lg hidden-md hidden-xs">Display your banner ad here
+                                                <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+                                                @*<div id="blueimp-gallery" class="blueimp-gallery">
+                                                    <div class="slides"></div>
+                                                    <h3 class="title"></h3>
+                                                    <a class="prev">‹</a>
+                                                    <a class="next">›</a>
+                                                    <a class="close">×</a>
+                                                    <a class="play-pause"></a>
+                                                    <ol class="indicator"></ol>
+                                                </div>*@
+                                                <div data-bind="visible:images().length == 0">
+                                                    Display your banner ad here
                                                     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                                                    <!-- display right to ad images in small devices -->
+                                                    <!-- display instead of ad images -->
                                                     <ins class="adsbygoogle"
                                                          style="display:block"
                                                          data-ad-client="ca-pub-5427185622945199"
-                                                         data-ad-slot="7497865869"
+                                                         data-ad-slot="3765670269"
                                                          data-ad-format="auto"></ins>
                                                     <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
+                                                        (adsbygoogle = window.adsbygoogle || []).push({});
                                                     </script>
                                                 </div>
                                             </div>
-                                            <div class="col-md-7 col-sm-12">
-                                                <span data-bind="visible:(loginUserId != postedById ) ">
-                                                    <span data-bind="visible:isAdmin()">
-                                                        <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a>
 
+
+                                        </div>
+                                        <div class="col-sm-5 hidden-lg hidden-md hidden-xs">
+                                            Display your banner ad here
+                                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                                            <!-- display right to ad images in small devices -->
+                                            <ins class="adsbygoogle"
+                                                 style="display:block"
+                                                 data-ad-client="ca-pub-5427185622945199"
+                                                 data-ad-slot="7497865869"
+                                                 data-ad-format="auto"></ins>
+                                            <script>
+                                                (adsbygoogle = window.adsbygoogle || []).push({});
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7 col-sm-12">
+                                        <span data-bind="visible:(loginUserId != postedById ) ">
+                                            <span data-bind="visible:isAdmin()">
+                                                <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a>
+
+                                            </span>
+                                        </span>
+                                        <span data-bind="visible:loginUserId == postedById">
+                                            <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                        </span>
+                                        <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
+                                        <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
+                                            <li><a target="_blank" data-bind="attr:{href:tagLink}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
+                                        </ul><br /><br />
+                                        <hr>
+                                        <span data-bind="visible:!showJob()">
+                                            @*remove this*@
+                                            <span data-bind="visible:loginUserId != postedById">
+                                                <button data-bind="click:function(){ return sendMessage(postedById,postedByName)}" class="btn btn-primary pull-right">Chat with seller</button>
+                                            </span>
+                                            <h1 class="product-main-price">
+                                                <span data-bind="if:!isBidingAllowed">
+                                                    <span data-bind="if:price">
+                                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                                    </span>
+                                                    <span data-bind="if:!price">Price on contact</span>
+                                                </span>
+                                                <span data-bind="if:isBidingAllowed">
+                                                    <span data-bind="if:price">
+                                                        <span data-bind="if:highestBid() == '-Infinity'">
+                                                            <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                                        </span>
+                                                        <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                            <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) Initial Bid = <span data-bind="text:price"></span> </small>
+                                                        </span>
+                                                    </span>
+                                                    <span data-bind="if:!price">
+                                                        <span data-bind="if:highestBid() == '-Infinity'">
+                                                            No Bit yet
+                                                        </span>
+                                                        <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                            <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                                        </span>
                                                     </span>
                                                 </span>
-                                                <span data-bind="visible:loginUserId == postedById">
-                                                    <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a><a data-bind="click: function(){return editAd(id)}" class="btn btn-white btn-xs pull-right"> Edit</a>
+                                            </h1>
+                                            <hr />
+                                        </span>
+                                        <div data-bind="with:showCamera">
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Category:</dt>
+                                                <dd data-bind="text:category"></dd>
+
+                                                <dt data-bind="with:brand">Brand:</dt>
+                                                <dd data-bind="text:brand"></dd>
+                                            </dl>
+                                        </div>
+
+                                        <style>
+                                            dt {
+                                                float: left;
+                                                clear: left;
+                                                margin-right: 5px;
+                                                font-weight: bold;
+                                            }
+
+                                            dd {
+                                                margin-left: 0px;
+                                            }
+                                        </style>
+
+                                        <div data-bind="visible:category == 'Animals' || category=='books-sports-hobbies' || category == 'Home-LifeStyle'">
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Category:</dt>
+                                                <dd data-bind="text:subcategory"></dd>
+                                                <dt data-bind="visible:condition != 'z'">Condition:</dt>
+                                                <dd data-bind="visible:condition != 'z',text:condition"></dd>
+                                            </dl>
+                                        </div>
+
+                                        <div data-bind="with:showMobileAd">
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>condition:</dt>
+                                                <dd data-bind="text:$parent.condition"></dd>
+                                                <dt>Tye:</dt>
+                                                <dd data-bind="text:$parent.type"></dd>
+                                                <dt data-bind="with:brand">Brand:</dt>
+                                                <dd data-bind="text:brand"></dd>
+                                                <dt data-bind="with:model">Model:</dt>
+                                                <dd data-bind="text:model"></dd>
+                                                <dt data-bind="with:color">color:</dt>
+                                                <dd data-bind="text:color"></dd>
+                                                <span data-bind="if:sims">
+                                                    <dt>Number of sims:</dt>
+                                                    <dd data-bind="text:sims"></dd>
                                                 </span>
-                                                <h2 data-bind="text:title" class="font-bold m-b-xs"></h2>
-                                                <ul class="tag-list" data-bind="foreach:showTags" style="padding: 0">
-                                                    <li><a target="_blank" data-bind="attr:{href:tagLink}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
-                                                </ul><br /><br />
-                                                <hr>
-                                                <span data-bind="visible:!showJob()">
-                                                    @*remove this*@
-                                                    <span data-bind="visible:loginUserId != postedById">
-                                                        <button data-bind="click:function(){ return sendMessage(postedById,postedByName)}" class="btn btn-primary pull-right">Chat with seller</button>
-                                                    </span>
-                                                    <h1 class="product-main-price">
-                                                        <span data-bind="if:!isBidingAllowed">
-                                                            <span data-bind="if:price">
-                                                                <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
-                                                            </span>
-                                                            <span data-bind="if:!price">Price on contact</span>
-                                                        </span>
-                                                        <span data-bind="if:isBidingAllowed">
-                                                            <span data-bind="if:price">
-                                                                <span data-bind="if:highestBid() == '-Infinity'">
-                                                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
-                                                                </span>
-                                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) Initial Bid = <span data-bind="text:price"></span> </small>
-                                                                </span>
-                                                            </span>
-                                                            <span data-bind="if:!price">
-                                                                <span data-bind="if:highestBid() == '-Infinity'">
-                                                                    No Bit yet
-                                                                </span>
-                                                                <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                                                    <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
-                                                                </span>
-                                                            </span>
-                                                        </span>
-                                                    </h1>
-                                                    <hr />
+
+                                            </dl>
+                                        </div>
+                                        <div data-bind="with: showBikeAd">
+
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Brand:</dt>
+                                                <dd data-bind="text:brand"></dd>
+                                                <dt>Model:</dt>
+                                                <dd data-bind="text:model"></dd>
+                                                <dt>condition:</dt>
+                                                <dd data-bind="text:$parent.condition"></dd>
+                                                <dt>Km Driven</dt>
+                                                <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
+
+                                                <dt>Year</dt>
+                                                <dd data-bind="text:year"></dd>
+                                                <dt>Number of owners</dt>
+                                                <dd data-bind="text:noOfOwners"></dd>
+                                                <dt>Registered City</dt>
+                                                <dd data-bind="text:registeredCity"></dd>
+                                            </dl>
+                                        </div>
+                                        <div data-bind="with: showCarAd">
+
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Brand:</dt>
+                                                <dd data-bind="text:brand"></dd>
+                                                <dt>Model:</dt>
+                                                <dd data-bind="text:model"></dd>
+                                                <dt>color:</dt>
+                                                <dd data-bind="text:color"></dd>
+                                                <dt>condition:</dt>
+                                                <dd data-bind="text:$parent.condition"></dd>
+                                                <dt>Fuel type</dt>
+                                                <dd data-bind="text:fuelType"></dd>
+                                                <dt>Km Driven</dt>
+                                                <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
+
+                                                <dt>Year</dt>
+                                                <dd data-bind="text:year"></dd>
+                                                <dt>Number of owners</dt>
+                                                <dd data-bind="text:noOfOwners"></dd>
+                                                <dt>Registered City</dt>
+                                                <dd data-bind="text:registeredCity"></dd>
+                                                <dt>Transmission</dt>
+                                                <dd data-bind="text:transmission"></dd>
+                                                <dt>Assembly</dt>
+                                                <dd data-bind="text:assembly"></dd>
+                                                <dt>Engine Capacity</dt>
+                                                <dd data-bind="if:engineCapacity"><span data-bind="text:engineCapacity"></span> cc</dd>
+
+                                            </dl>
+                                        </div>
+                                        <div data-bind="with: showRealEstateAd">
+
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Category:</dt>
+                                                <dd data-bind="text:$parent.subcategory"></dd>
+                                                <dt>Area:</dt>
+                                                <dd data-bind="text:area"></dd>
+                                                <dt>Bed rooms:</dt>
+                                                <dd data-bind="text:bedroom"></dd>
+                                                <dt>Bath room:</dt>
+                                                <dd data-bind="text:bathroom"></dd>
+                                                <dt>Floor</dt>
+                                                <dd data-bind="text:floor"></dd>
+                                            </dl>
+                                        </div>
+                                        <div data-bind="with: showJob">
+
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Category:</dt>
+                                                <dd data-bind="text:category"></dd>
+
+                                                <dt>Seats:</dt>
+                                                <dd data-bind="text:seats"></dd>
+                                                <dt>Qualification:</dt>
+                                                <dd data-bind="text:qualification"></dd>
+                                                <dt>exprience:</dt>
+                                                <dd data-bind="text:exprience"></dd>
+                                                <dt>Career Level</dt>
+                                                <dd data-bind="text:careerLevel"></dd>
+                                                <dt>Last Date To Apply</dt>
+                                                <dd data-bind="text:lastDateToApply"></dd>
+                                                <dt>Salary</dt>
+                                                <dd data-bind="text:$parent.price"></dd>
+                                                <dt>Salary Type</dt>
+                                                <dd data-bind="text:salaryType"></dd>
+                                                <span @*data-bind="visible:!showSkills().length == 0"*@>
+                                                    <dt>Skills</dt>
+                                                    <dd><span data-bind="foreach:showSkills"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></span> </dd>
                                                 </span>
-                                                <div data-bind="with:showCamera">
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>Category:</dt>
-                                                        <dd data-bind="text:category"></dd>
+                                                <dt>Gender</dt>
+                                                <dd data-bind="text:$parent.gender"></dd>
+                                                <dt>Job Type</dt>
+                                                <dd data-bind="text:$parent.subcategory"></dd>
+                                                <dt>Shift</dt>
+                                                <dd data-bind="text:$parent.shift"></dd>
+                                                @*<dt>Year</dt>
+                            <dd data-bind="text:year"></dd>
+                            <dt>Year</dt>
+                            <dd data-bind="text:year"></dd>
+                            <dt>Year</dt>
+                            <dd data-bind="text:year"></dd>*@
+                                            </dl>
+                                        </div>
+                                        <h4>Details</h4>
+                                        <div data-bind="text:description" class="small text-muted">
+                                        </div>
 
-                                                        <dt data-bind="with:brand">Brand:</dt>
-                                                        <dd data-bind="text:brand"></dd>
-                                                    </dl>
-                                                </div>
+                                        <div data-bind="with:showLocation">
+                                            <h5 data-bind="with:cityName">Location</h5>
+                                            <span data-bind="if:exectLocation">
+                                                <span data-bind="text:exectLocation"></span>,
+                                            </span>
+                                            <span data-bind="if:popularPlace">
+                                                <span data-bind="text:popularPlace"></span>,
+                                            </span>
+                                            <span data-bind="text:cityName"></span>
+                                        </div>
+                                        <br />
+                                        <div class="text-right">
+                                            <div class="btn-group">
+                                                <button data-bind="click:saveItem" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
+                                                <a data-bind="visible:companyId, attr:{href:companyLink}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller  (<span data-bind="text:companyName"></span> )</a>
 
-                                                <style>
-                                                    dt {
-                                                        float: left;
-                                                        clear: left;
-                                                        margin-right: 5px;
-                                                        font-weight: bold;
-                                                    }
-
-                                                    dd {
-                                                        margin-left: 0px;
-                                                    }
-                                                </style>
-
-                                                <div data-bind="visible:category == 'Animals' || category=='books-sports-hobbies' || category == 'Home-LifeStyle'">
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>Category:</dt>
-                                                        <dd data-bind="text:subcategory"></dd>
-                                                    </dl>
-                                                </div>
-
-                                                <div data-bind="with:showMobileAd">
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>condition:</dt>
-                                                        <dd data-bind="text:$parent.condition"></dd>
-                                                        <dt>Tye:</dt>
-                                                        <dd data-bind="text:$parent.type"></dd>
-                                                        <dt data-bind="with:brand">Brand:</dt>
-                                                        <dd data-bind="text:brand"></dd>
-                                                        <dt data-bind="with:model">Model:</dt>
-                                                        <dd data-bind="text:model"></dd>
-                                                        <dt data-bind="with:color">color:</dt>
-                                                        <dd data-bind="text:color"></dd>
-                                                        <span data-bind="if:sims">
-                                                            <dt>Number of sims:</dt>
-                                                            <dd data-bind="text:sims"></dd>
-                                                        </span>
-
-                                                    </dl>
-                                                </div>
-                                                <div data-bind="with: showBikeAd">
-
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>Brand:</dt>
-                                                        <dd data-bind="text:brand"></dd>
-                                                        <dt>Model:</dt>
-                                                        <dd data-bind="text:model"></dd>
-                                                        <dt>condition:</dt>
-                                                        <dd data-bind="text:$parent.condition"></dd>
-                                                        <dt>Km Driven</dt>
-                                                        <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
-
-                                                        <dt>Year</dt>
-                                                        <dd data-bind="text:year"></dd>
-                                                        <dt>Number of owners</dt>
-                                                        <dd data-bind="text:noOfOwners"></dd>
-                                                        <dt>Registered City</dt>
-                                                        <dd data-bind="text:registeredCity"></dd>
-                                                    </dl>
-                                                </div>
-                                                <div data-bind="with: showCarAd">
-
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>Brand:</dt>
-                                                        <dd data-bind="text:brand"></dd>
-                                                        <dt>Model:</dt>
-                                                        <dd data-bind="text:model"></dd>
-                                                        <dt>color:</dt>
-                                                        <dd data-bind="text:color"></dd>
-                                                        <dt>condition:</dt>
-                                                        <dd data-bind="text:$parent.condition"></dd>
-                                                        <dt>Fuel type</dt>
-                                                        <dd data-bind="text:fuelType"></dd>
-                                                        <dt>Km Driven</dt>
-                                                        <dd data-bind="if:kmDriven"><span data-bind="text:kmDriven"></span>  Km</dd>
-
-                                                        <dt>Year</dt>
-                                                        <dd data-bind="text:year"></dd>
-                                                        <dt>Number of owners</dt>
-                                                        <dd data-bind="text:noOfOwners"></dd>
-                                                        <dt>Registered City</dt>
-                                                        <dd data-bind="text:registeredCity"></dd>
-                                                        <dt>Transmission</dt>
-                                                        <dd data-bind="text:transmission"></dd>
-                                                        <dt>Assembly</dt>
-                                                        <dd data-bind="text:assembly"></dd>
-                                                        <dt>Engine Capacity</dt>
-                                                        <dd data-bind="if:engineCapacity"><span data-bind="text:engineCapacity"></span> cc</dd>
-
-                                                    </dl>
-                                                </div>
-                                                <div data-bind="with: showRealEstateAd">
-
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>Category:</dt>
-                                                        <dd data-bind="text:$parent.subcategory"></dd>
-                                                        <dt>Area:</dt>
-                                                        <dd data-bind="text:area"></dd>
-                                                        <dt>Bed rooms:</dt>
-                                                        <dd data-bind="text:bedroom"></dd>
-                                                        <dt>Bath room:</dt>
-                                                        <dd data-bind="text:bathroom"></dd>
-                                                        <dt>Floor</dt>
-                                                        <dd data-bind="text:floor"></dd>
-                                                    </dl>
-                                                </div>
-                                                <div data-bind="with: showJob">
-
-                                                    <dl class="dl-horizontal m-t-md small">
-                                                        <dt>Category:</dt>
-                                                        <dd data-bind="text:category"></dd>
-
-                                                        <dt>Seats:</dt>
-                                                        <dd data-bind="text:seats"></dd>
-                                                        <dt>Qualification:</dt>
-                                                        <dd data-bind="text:qualification"></dd>
-                                                        <dt>exprience:</dt>
-                                                        <dd data-bind="text:exprience"></dd>
-                                                        <dt>Career Level</dt>
-                                                        <dd data-bind="text:careerLevel"></dd>
-                                                        <dt>Last Date To Apply</dt>
-                                                        <dd data-bind="text:lastDateToApply"></dd>
-                                                        <dt>Salary</dt>
-                                                        <dd data-bind="text:$parent.price"></dd>
-                                                        <dt>Salary Type</dt>
-                                                        <dd data-bind="text:salaryType"></dd>
-                                                        <span @*data-bind="visible:!showSkills().length == 0"*@>
-                                                            <dt>Skills</dt>
-                                                            <dd><span data-bind="foreach:showSkills"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></span> </dd>
-                                                        </span>
-                                                        <dt>Gender</dt>
-                                                        <dd data-bind="text:$parent.gender"></dd>
-                                                        <dt>Job Type</dt>
-                                                        <dd data-bind="text:$parent.subcategory"></dd>
-                                                        <dt>Shift</dt>
-                                                        <dd data-bind="text:$parent.shift"></dd>
-                                                        @*<dt>Year</dt>
-                                                        <dd data-bind="text:year"></dd>
-                                                        <dt>Year</dt>
-                                                        <dd data-bind="text:year"></dd>
-                                                        <dt>Year</dt>
-                                                        <dd data-bind="text:year"></dd>*@
-                                                    </dl>
-                                                </div>
-                                                <h4>Details</h4>
-                                                <div data-bind="text:description" class="small text-muted">
-                                                </div>
-
-                                                <div data-bind="with:showLocation">
-                                                    <h5 data-bind="with:cityName">Location</h5>
-                                                    <span data-bind="if:exectLocation">
-                                                        <span data-bind="text:exectLocation"></span>,
-                                                    </span>
-                                                    <span data-bind="if:popularPlace">
-                                                        <span data-bind="text:popularPlace"></span>,
-                                                    </span>
-                                                    <span data-bind="text:cityName"></span>
-                                                </div>
-                                                <br />
-                                                <div class="text-right">
-                                                    <div class="btn-group">
-                                                        <button data-bind="click:saveItem" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
-                                                        <a data-bind="visible:companyId, attr:{href:companyLink}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller  (<span data-bind="text:companyName"></span> )</a>
-
-                                                        <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
-                                                    </div>
-                                                </div>
-
-
+                                                <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
                                             </div>
                                         </div>
 
+
                                     </div>
+                                </div>
+
+                            </div>
+
                                     <div class="ibox-footer">
                                         <span class="pull-right">
                                             <i class="fa fa-clock-o"></i> <span data-bind="text:time"></span>
@@ -362,7 +379,7 @@
                                                                 <span class="input-group-addon">Rs</span><input type="number" placeholder="place bid.." data-bind="value:newBidPrice" class="form-control" pattern="[0-9]*" name="price" required />
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-2"><button class="btn btn-success" data-bind="click:postBid">Submit</button></div>
+                                                        <div class="col-sm-2"><button data-style="expand-left" class="ladda-button btn btn-success" data-bind="click:postBid">Submit</button></div>
                                                     </div>
                                                 </div>
 
@@ -478,7 +495,7 @@
     @Styles.Render("~/plugins/toastrStyles")
     @*@Styles.Render("~/Content/plugins/jsTree")*@
 @Styles.Render("~/plugins/sweetAlertStyles")
-@Styles.Render("~/Content/plugins/blueimp/css/")
+@*@Styles.Render("~/Content/plugins/blueimp/css/")*@
 }
 
 
@@ -486,7 +503,7 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
-    @Scripts.Render("~/plugins/lightboxGallery")
+    @*@Scripts.Render("~/plugins/lightboxGallery")*@
     @Scripts.Render("~/plugins/slick")
     @*@Scripts.Render("~/plugins/jsTree")
     @Scripts.Render("~/bundles/categoryTree")*@
@@ -500,6 +517,7 @@
 <script src="~/Scripts/_Comments.js"></script>
 <script src="~/Scripts/app/IsAdmin.js"></script>
     <script>
+        
         var myAdId = $("#adId").val();
         function Biding(data)
         {
@@ -890,6 +908,8 @@
                     bid.adId = self.id;
                     bid.price = self.newBidPrice();
                     bid.time = new Date($.now());
+                    var savingBidLoader = $('.ladda-button').ladda();
+                    savingBidLoader.ladda('start');
                     if (bid.price >= 0) {
                         $.ajax({
                             url: '/api/Electronic/PostBid',
@@ -899,6 +919,7 @@
                             type: 'POST',
                             data: ko.toJSON(bid),
                             success: function (data) {
+                                savingBidLoader.ladda('stop');
                                     self.showBidings.push(new Biding(data));
                                     self.highestBid(Math.max.apply(Math, self.showBidings().map(function (o) { return o.price(); })));
                                 self.newBidPrice('');
@@ -908,6 +929,7 @@
                                 self.placeBid(false);
                             },
                             error: function () {
+                                savingBidLoader.ladda('stop');
                                 toastr.error("failed to Post Bid. Please refresh page and try again", "Error!");
                             }
                         });

@@ -21,12 +21,7 @@
             <div class="row">
                 <div class="ibox">
                     <div data-bind="visible:!showTag()">
-                        <div class="loading">
-                            <div class="sk-spinner sk-spinner-wandering-cubes">
-                                <div class="sk-cube1"></div>
-                                <div class="sk-cube2"></div>
-                            </div>
-                        </div>
+                        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
                     </div>
                         <div id="FirstLoading" style="display:none" data-bind="with:showTag">
                             <div class="ibox-title">

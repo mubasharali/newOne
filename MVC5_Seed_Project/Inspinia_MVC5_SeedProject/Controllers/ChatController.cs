@@ -23,7 +23,26 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return db.Chats;
         }
-
+        public async Task<IHttpActionResult> GetAllChatUsers()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var id = User.Identity.GetUserId();
+                var users = from user in db.Chats
+                          where user.sentTo.Equals(id) || user.sentFrom.Equals(id)
+                          select new
+                          {
+                              id = user.sentTo.Equals(id)? user.AspNetUser.Id: user.AspNetUser1.Id,
+                              name = user.sentTo.Equals(id) ? user.AspNetUser.Email: user.AspNetUser1.Email,
+                              dpExtension = user.sentTo.Equals(id) ? user.AspNetUser.dpExtension: user.AspNetUser1.dpExtension,
+                              lastMessage = user.message,
+                              time = user.time
+                          };
+                users = users.GroupBy(x => x.id).Select(x => x.FirstOrDefault());
+                return Ok(users);
+            }
+            return BadRequest();
+        }
         // GET api/Chat/5
         [ResponseType(typeof(Chat))]
         public async Task<IHttpActionResult> GetChat(string with)
@@ -41,7 +60,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               sentToName = chat.AspNetUser.Email,
                               message = chat.message,
                               time = chat.time,
-                              loginUserId = userId
+                              loginUserId = userId,
+                              dpExtension = chat.AspNetUser.dpExtension
                           };
             return Ok(ret);
             }

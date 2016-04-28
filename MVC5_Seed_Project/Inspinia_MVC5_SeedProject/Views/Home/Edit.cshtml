@@ -184,6 +184,8 @@
                             $('#new').iCheck('check');
                             self.conditionChecked("new");
 
+                        } else if (data.condition == 'z') {
+                            self.conditionChecked("z");
                         }
                         
                         self.selectedPopularPlaceOriginal = data.location.popularPlace;

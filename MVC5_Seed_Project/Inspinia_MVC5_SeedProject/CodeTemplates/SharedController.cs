@@ -27,12 +27,13 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return "visitor";
         }
         public string GetUserProfileExtension()
+
         {
             if (Request.IsAuthenticated)
             {
                 var userId = User.Identity.GetUserId();
                 var ext = db.AspNetUsers.Find(userId).dpExtension;
-                if(ext == "")
+                if(ext == "" || ext == null)
                 {
                     return null;
                 }

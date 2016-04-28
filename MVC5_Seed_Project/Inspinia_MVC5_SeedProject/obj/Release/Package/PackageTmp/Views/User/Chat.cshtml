@@ -1,0 +1,444 @@
+﻿
+@{
+    ViewBag.Title = "Chat";
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    @*<div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <strong>Chat room </strong> can be used to create chat room in your app.
+                    You can also use a small chat in the right corner to provide live discussion.
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="ibox chat-view">
+
+                <div class="ibox-title">
+                    @*<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>*@
+                    <span class="visible-xs">
+                        <span class="btn btn-xs btn-white" data-bind="visible:isChating(),click:backToChatList">Back to chat list</span>
+                    </span>
+                    Chat room 
+                </div>
+
+
+                <div class="ibox-content">
+
+                    <div class="row">
+                            <div data-bind="visible:!isChating()">
+                                <div class="col-sm-4 col-md-3 hidden-sm hidden-md hidden-lg">
+                                    <div class="chat-users">
+
+                                        <div class="users-list" data-bind="foreach:allChatUsers">
+                                            <div class="chat-user">
+                                                <img class="chat-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                                <div class="chat-user-name">
+                                                    <a data-bind="click:openChat,text:name"></a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div data-bind="visible:(!isSmallScreen) || (isSmallScreen && isChating())">
+                            <div data-bind="">
+                                <div class="col-sm-8 col-md-9">
+                                    <div class="chat-discussion">
+                                        <div data-bind="visible:!isConnectionReady()">
+                                            Server connection not ready...
+                                        </div>
+                                        <div data-bind="visible:isConnectionReady()">
+                                            <div data-bind="if:allChatUsers().length == 0">
+                                                <h2>Your chat room is empty :( </h2>
+                                            </div>
+
+                                            <div data-bind="foreach:showChat">
+
+                                                <div data-bind="if:message.length > 0">
+                                                    <div data-bind="visible:sentFrom != loginUserId1" class="chat-message left">
+                                                        <img class="message-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                                        <div class="message">
+                                                            <a class="message-author" data-bind="text:sentToName,attr:{href:'/User/Index/'+sentFrom}"> </a>
+                                                            <span class="message-date" data-bind="text:timeAgo"> </span>
+                                                            <span class="message-content" data-bind="text:message">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div data-bind="visible: sentFrom == loginUserId1" class="chat-message right">
+                                                        <img class="message-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                                        <div class="message">
+                                                            <a class="message-author" data-bind="text:sentToName,attr:{href:'/User/Index/' + sentFrom}"> </a>
+                                                            <span class="message-date" data-bind="text:timeAgo"></span>
+                                                            <span class="message-content" data-bind="text:message">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div data-bind="">
+                            <div class="col-sm-4 col-md-3 hidden-xs">
+                                <div class="chat-users">
+
+                                    <div class="users-list" data-bind="foreach:allChatUsers">
+                                        <div class="chat-user">
+                                            <img style="margin-top:10px" class="chat-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                            <div class="chat-user-name">
+                                                <div class="feed-element">
+                                                    
+                                                    
+                                                        <small data-bind="text:time" class="pull-right text-navy">1m ago</small>
+                                                    <strong><a data-bind="text:name,click:openChat">Monica Smith</a></strong>
+                                                        <div data-bind="text:message">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</div>
+                                                    
+                                                </div>
+                                                @*<a data-bind="click:openChat,text:name"></a>
+                                                <span data-bind="text:message"></span>
+                                                <span data-bind="text:time"></span>*@
+                                            </div>
+                                        </div>
+                                        @*
+                        <div class="chat-user">
+                            <span class="pull-right label label-primary">Online</span>
+                            <img class="chat-avatar" src="~/Images/a2.jpg" alt="">
+                            <div class="chat-user-name">
+                                <a href="#">Michael Smith</a>
+                            </div>
+                        </div>
+                                        *@
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row" data-bind="visible:(!isSmallScreen) || (isSmallScreen && isChating())">
+                        <div class="col-sm-8 col-md-9">
+                            <div class="form-chat">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" placeholder="Enter message.." data-bind="value:newMessage,valueUpdate:'afterkeydown',event:{keyup:checkMsgEnter}" class="form-control"> <span class="input-group-btn">
+                                        <button class="btn btn-primary" data-bind="click: function(){ return sendMessage()} " type="button">
+                                            Send
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script>
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            
+            //start chatViewModel
+            function OnlineUsers(data) {
+                var self = this;
+                data = data || {};
+                self.id = data.id;
+                self.name = data.name;
+                self.dpLink = '/Images/Users/p' + self.id + data.dpExtension;
+                if (!data.dpExtension) {
+                    self.dpLink = '/Images/Users/default.jpg';
+                }
+                self.openProfile = function () {
+                    window.location.href = '/User/Index/' + self.id;
+                }
+            }
+            function AllChatUsers(data) {
+                var self = this;
+                data = data || {};
+                self.id = data.id;
+                self.name = data.name;
+                self.message = data.lastMessage;
+                self.exectTime = data.time;
+                self.time = getTimeAgo( data.time);
+                self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.id + data.dpExtension;
+                if (!data.dpExtension) {
+                    self.dpLink = '/Images/Users/default.jpg';
+                }
+                self.openChat = function () {
+                    loadMessages(self.id,self.name);
+                }
+            }
+            function Message(data, sendMessageTo) {
+                var self = this;
+                data = data || {};
+                self.id = data.id;
+                self.name = data.name;
+                self.sentFrom = data.sentFrom;
+                self.sentTo = data.sentTo;
+                self.sentFromName = data.sentFromName;
+                self.sentToName = data.sentToName;
+                self.message = data.message;
+                self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.sentFrom + data.dpExtension;
+                if (!data.dpExtension) {
+                    self.dpLink = '/Images/Users/default.jpg';
+                }
+                self.time = (data.time);
+                self.timeAgo = getTimeAgo(data.time);
+                self.loginUserId = data.loginUserId;
+                //console.log(self.sentFrom);
+               // console.log(self.sentTo);
+             //   console.log("will be sent to : " + sendMessageTo);
+                if (sendMessageTo == self.sentFrom || sendMessageTo == self.sentTo) {
+
+                } else {
+                  //  console.log("No entry");
+                    self.message = "";
+                }
+            }
+            function ChatViewModel() {
+                $(".collapse-chat-box").click(function () {
+                    $(".open-small-chat").trigger('click');
+                })
+                var self = this;
+                self.hub = $.connection.chatHub;
+                self.onlineUsersHub = $.connection.onlineUsers;
+                self.isChating = ko.observable(false);
+                if (!isSmallScreen) {
+                    self.isChating(true);
+                }
+                self.backToChatList = function () {
+                    self.isChating(false);
+                }
+                self.showChat = ko.observableArray();
+                self.newMessage = ko.observable();
+                self.loginUserId1 = "";
+                self.allChatUsers = ko.observableArray();
+                self.onlineUsers = ko.observableArray();
+                self.sendMessageTo = ko.observable();
+                self.sendMessgeToName = ko.observable();
+                self.getAllChatUsers = function () {
+                    $.ajax({
+                        url: '/api/Chat/GetAllChatUsers',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'GET',
+                        success: function (data) {
+                            var msg = $.map(data, function (item) { return new AllChatUsers(item) });
+                            self.allChatUsers(msg);
+                        },
+                        error: function () {
+                            toastr.error("failed to load data.", "Error!");
+                            return null;
+                        }
+                    });
+                };
+                self.getAllChatUsers();
+                self.sendTo = function (data) {
+                    if (self.loginUserId1) {
+                        self.sendMessageTo(data.id);
+                        self.sendMessgeToName(data.name);
+                    } else {
+                        loginBtn();
+                    }
+                }
+                self.isOnline = ko.observable("Offline");
+
+                var sub = self.sendMessageTo.subscribe(function (value) {
+                    self.loadMessages();
+                })
+                self.checkUserOnline = function () {
+                    if (window.location.pathname.indexOf("/User/Index/") > -1 || window.location.pathname.indexOf("/User/Profile/") > -1) {
+                        var userId = $("#userId").val();
+                        self.isOnline("Offline");
+                        $.each(self.onlineUsers(), function (key, value) {
+                            if (value.id == userId) {
+                                self.isOnline("Online");
+                            }
+                        })
+                    }
+                }
+                self.onlineUsers.subscribe(function (value) {
+                    self.checkUserOnline();
+                })
+                self.getLoginUserId = function () {
+                    $.ajax({
+                        url: '/api/Chat/GetLoginUserId',
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'GET',
+                        success: function (data) {
+                            self.loginUserId1 = data;
+                        },
+                        error: function () {
+                            toastr.error("failed to check user login", "Error!");
+                            return null;
+                        }
+                    });
+                };
+                self.getLoginUserId();
+                self.checkUserOnline();
+                self.loadMessages = function (userId,name) {
+                    self.isChating(true);
+                    if (userId == "undefined") {
+                        userId = self.sendMessageTo();
+                    }
+                    if (userId != undefined) {
+                        self.sendMessageTo(userId);  //test it
+                        self.sendMessgeToName(name);
+                    }
+                    $.ajax({
+                        url: '/api/Chat/GetChat?with=' + userId,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'GET',
+                        success: function (data) {
+                            var msg = $.map(data, function (item) { return new Message(item, userId) });//self.sendMessageTo() replaced by userId
+                            self.showChat(msg);
+                        },
+                        error: function () {
+                            toastr.error("failed to load message. Please refresh page and try again", "Error!");
+                            return null;
+                        }
+                    });
+                }
+                self.checkMsgEnter = function (d, e) {
+                    if (self.loginUserId1) {
+                        if (self.newMessage().length < 1000) {
+                            if (e.keyCode == 13) {
+                                if (isConnectionReady()) {
+                                    self.sendMessage();
+                                }
+                                else {
+                                    toastr.info("Connection not established to server");
+                                }
+                            }
+                        } else {
+                            self.newMessage(self.newMessage().slice(0, -1));
+                            toastr.info("You reached the limit", "Message too long!");
+                        }
+                    } else {
+                        loginBtn();
+                    }
+                }
+                self.hub.client.loadNewMessage = function (data) {
+                    self.newMessage('');
+                    if (data != null) {
+                        self.showChat.push(new Message(data, self.sendMessageTo()));
+                        
+                    }
+                }
+                self.onlineUsersHub.client.showConnected = function (connectionId) {
+                    var mape = $.map(connectionId, function (item) { return new OnlineUsers(item) });
+                    self.onlineUsers(mape);
+                    self.checkUserOnline();
+                    console.log(self.onlineUsers());
+                }
+                self.getReceiverId = function (email) {
+                    $.ajax({
+                        url: '/api/Chat/GetIdByEmail?email=' + email,
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            return data;
+                        },
+                        error: function () {
+                            toastr.error("failed to send message", "Error!");
+                            return null;
+                        }
+                    });
+                }
+                self.sendMessage = function () {
+                    if (self.sendMessageTo()) {
+                        var msg = new Message();
+                        msg.sentTo = self.sendMessageTo();
+                        msg.message = self.newMessage();
+                        msg.message = $.trim(msg.message);
+                        if (msg.message != "") {
+                            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                        } else {
+                            toastr.info("You cannot send empty message");
+                        }
+                    } else {
+                        toastr.info("Go to user profile or open user ad to send message", "send messge to whom?");
+                    }
+                }
+                self.sendMessageLarge = function (sentTo) {
+                    if (sentTo) {
+                        var msg = new Message();
+                        msg.sentTo = sentTo;
+                        msg.message = self.newMessage();
+                        msg.message = $.trim(msg.message);
+                        if (msg.message != "") {
+                            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                        } else {
+                            toastr.info("You cannot send empty message");
+                        }
+                    } else {
+                        toastr.info( "send messge to whom?");
+                    }
+                }
+
+            }
+            //end chatViewModel
+            
+            ChatViewModel();
+        }
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        var isSmallScreen = false;
+        $(function () {
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (w < 786) {
+                isSmallScreen = true;
+            }
+            ko.applyBindings(new ViewModel());
+        });
+    </script>
+}
