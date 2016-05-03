@@ -54,7 +54,7 @@
                                 <div class="col-sm-8 col-md-9">
                                     <div class="chat-discussion">
                                         <div data-bind="visible:!isConnectionReady()">
-                                            Server connection not ready...
+                                            Connecting to server... (please wait)
                                         </div>
                                         <div data-bind="visible:isConnectionReady()">
                                             <div data-bind="if:allChatUsers().length == 0">
@@ -432,6 +432,13 @@
             }
         };
         var isSmallScreen = false;
+        $(window).resize(function(){
+            var w = $(document).width();
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            if (w < 786) {
+                isSmallScreen = true;
+            }
+        });
         $(function () {
             var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
             var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);

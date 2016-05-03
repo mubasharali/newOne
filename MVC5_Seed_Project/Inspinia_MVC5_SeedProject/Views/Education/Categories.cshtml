@@ -66,11 +66,18 @@
         }
         else if (category == "Home-LifeStyle") {
             availableCategories = ["Watches", "Clothes","Footware", "Jewellery","Baby products","health and beauty products", "Furniture", "Household", "Home Decoration","others in home and lifeStyle"];
+        } else if (category == "Vehicles") {
+            availableCategories = ["Cars", "Bikes", "Commerical Vehicles", "Vehicles for rent", "other vehicles", "Vehicles Spare parts"];
         }
         var selectedCategory = ko.observable();
 
-        subCategoryClicked = function (category) {
-            linktemp = "../" + convertToSlug(category);
+        subCategoryClicked = function (category1) {
+            //if (category == "Cars") {
+            //    window.location.href = '/Cars';
+            //} else if (category == "Bikes") {
+            //    window.location.href = "/Bikes";
+            //}
+            linktemp = "../" + convertToSlug(category1);
             window.location.href = linktemp;
         }
 

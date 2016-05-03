@@ -65,7 +65,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit"  data-bind="click:submitClicked" value="Update" class="btn btn-primary" />
+                                    <input type="submit"  data-bind="click:submitClicked" value="Update"  data-style="expand-left" class="ladda-button btn btn-primary" />
                                     <a href="/Details/@Model.Id/@ElectronicsController.URLFriendly( @Model.title )" class="btn btn-white">Cancel</a>
                                 </div>
                             </div>
@@ -111,10 +111,15 @@
             var self = this;
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
-                console.log(fileList);
                 $("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
+                if ($("#form").valid()) {
+                    var savingBidLoader = $('.ladda-button').ladda();
+                    savingBidLoader.ladda('start');
+                } else {
+                    toastr.info("Fields with * are mandatory!");
+                }
             }
             self.conditionChecked = ko.observable(false);
             self.typeValue = ko.observable();
@@ -170,15 +175,15 @@
                         //for company
                         if (data.companyName) {
                             var comid = $("#" + data.companyName);
-                            comid.iCheck('check');
+                            comid.icheck('checked');
                             self.postAdUsing(data.companyName);
-                            $('.i-check').iCheck({
+                            $('.i-check').icheck({
                                 checkboxClass: 'icheckbox_square-green',
                                 radioClass: 'iradio_square-green',
                             });
-                            // $("#Netsol Technologies Limited").iCheck('check');
+                            // $("#Netsol Technologies Limited").icheck('checked');
                         } else {
-                            $("#on").iCheck('check');
+                            $("#on").icheck('checked');
                             self.postAdUsing("on");
                         }
 
@@ -191,31 +196,35 @@
                         self.selectedCity(data.location.cityName);
                         self.selectedCityOriginal = data.location.cityName
                         if (data.type == true) {
-                            $("#sell").iCheck('check');
+                             $("#sell").icheck('checked');
+                            //$('#sell').icheck({
+                            //    checkboxClass: 'icheckbox_square-green',
+                            //    radioClass: 'iradio_square-green',
+                            //});
                         } else if (data.type == false) {
-                            $("#buy").iCheck('check');
+                            $("#buy").icheck('checked');
                         }
                         if (data.isNegotiable == 'b') {
                             self.selectedVal("fixedPrice");
-                            $("#allowBiding").iCheck('check');
+                            $("#allowBiding").icheck('checked');
                         } else if (data.isNegotiable == 'n') {
-                            $("#fixedPrice").iCheck('check');
+                            $("#fixedPrice").icheck('checked');
                         } else if (data.isNegotiable == 'y') {
-                            $("#fixedPrice").iCheck('check');
-                            $("#isNegotiable").iCheck('check');
+                            $("#fixedPrice").icheck('checked');
+                            $("#isNegotiable").icheck('checked');
                         }
                         if (data.condition == 'u') {
-                            $('#used').iCheck('check');
+                            $('#used').icheck('checked');
                             self.conditionChecked("used");
                            // self.condition1('used');
 
                         } else if (data.condition == 'b') {
-                            $('#unboxed').iCheck('check');
+                            $('#unboxed').icheck('checked');
                             self.conditionChecked("unboxed");
                             //self.condition1("unboxed");
                             //self.condition1('new');
                         } else if (data.condition == 'n') {
-                            $('#new').iCheck('check');
+                            $('#new').icheck('checked');
                             self.conditionChecked("new");
                             
                         }
@@ -434,11 +443,11 @@
             self.loadBrands();
             
             self.loadAd();
-            ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+            ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
 
                 init: function (element, valueAccessor) {
                     //initialize icheck to the element
-                    $(element).iCheck({
+                    $(element).icheck({
                         radioClass: 'iradio_square-green'
                     });
                     $(element).on('ifChecked', function (event) {
@@ -584,7 +593,7 @@
                     }
                 }
             });
-            $('.i-check').iCheck({
+            $('.i-check').icheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });

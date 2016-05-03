@@ -350,7 +350,7 @@
                                                 <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
                                             </div>
                                         </div>
-
+                                        <p class="small text-muted"> when you contact <span data-bind="visible:companyId,text:companyName"></span><span data-bind="visible:!companyId,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
 
                                     </div>
                                 </div>
@@ -908,9 +908,10 @@
                     bid.adId = self.id;
                     bid.price = self.newBidPrice();
                     bid.time = new Date($.now());
-                    var savingBidLoader = $('.ladda-button').ladda();
-                    savingBidLoader.ladda('start');
+                    
                     if (bid.price >= 0) {
+                        var savingBidLoader = $('.ladda-button').ladda();
+                        savingBidLoader.ladda('start');
                         $.ajax({
                             url: '/api/Electronic/PostBid',
                             dataType: "json",
@@ -1250,10 +1251,10 @@
                 $(element).autosize();
             }
         };
-        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+        ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
             init: function (element, valueAccessor) {
                 //initialize icheck to the element
-                $(element).iCheck({
+                $(element).icheck({
                     radioClass: 'iradio_square-green'
                 });
                 $(element).on('ifChecked', function (event) {

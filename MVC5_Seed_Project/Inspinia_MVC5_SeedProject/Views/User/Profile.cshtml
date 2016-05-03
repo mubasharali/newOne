@@ -488,7 +488,9 @@
                         $("#FirstLoading").css({ "display": "block" });
                     },
                     error: function () {
+                        $("#FirstLoading").css({ "display": "block" });
                         toastr.error("Unable to load profile data. Please refresh page and try again", "Error");
+                        self.showProfile(new User());
                     }
                 })
             }

@@ -99,7 +99,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return BadRequest();
         }
         [HttpPost]
-        public async Task<IHttpActionResult> BlockUser(string email) //block on the basis of id
+        public async Task<IHttpActionResult> BlockUser(string id) //block on the basis of id
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -107,7 +107,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 var status = db.AspNetUsers.Find(userId).status;
                 if (status == "admin")
                 {
-                    var makeAdmin = await db.AspNetUsers.FirstOrDefaultAsync(x => x.Id.Equals(email));
+                    var makeAdmin = await db.AspNetUsers.FirstOrDefaultAsync(x => x.Id.Equals(id));
                     if(makeAdmin != null)
                     {
                         makeAdmin.status = "blocked";
@@ -119,6 +119,32 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         
                     }
                    
+                    return NotFound();
+                }
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> BlockUserEmail(string email) //block on the basis of email
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    var makeAdmin = await db.AspNetUsers.FirstOrDefaultAsync(x => x.UserName.Equals(email));
+                    if (makeAdmin != null)
+                    {
+                        makeAdmin.status = "blocked";
+                        await db.SaveChangesAsync();
+                        await UserManager.UpdateSecurityStampAsync(makeAdmin.Id);
+                        await UserManager.SetLockoutEnabledAsync(makeAdmin.Id, true);
+                        await UserManager.SetLockoutEndDateAsync(makeAdmin.Id, DateTime.Today.AddYears(10));
+                        return Ok("Done");
+
+                    }
+
                     return NotFound();
                 }
             }

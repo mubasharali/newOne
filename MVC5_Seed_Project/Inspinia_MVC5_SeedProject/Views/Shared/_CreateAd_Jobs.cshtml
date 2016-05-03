@@ -68,14 +68,14 @@
             <div data-bind="foreach:showCompanies">
                 <div class="radio">
                     <label>
-                        <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: $parent.postAdUsing },value:$data,attr:{id:$data}" name="postAdUsing" required /> <span data-bind="text:$data"></span>
+                        <input class="radio i-checks" type="radio" data-bind="icheck: { checked: $parent.postAdUsing },value:$data,attr:{id:$data}" name="postAdUsing" required /> <span data-bind="text:$data"></span>
                     </label>
                 </div>
             </div>
 
             <div class="radio">
                 <label>
-                    <input class="radio i-checks" type="radio" id="on" data-bind="iCheck: { checked: postAdUsing }" name="postAdUsing" required /> Using My Individual Account
+                    <input class="radio i-checks" type="radio" id="on" data-bind="icheck: { checked: postAdUsing }" name="postAdUsing" required /> Using My Individual Account
                 </label>
             </div>
         </div>

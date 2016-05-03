@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Buy and sell Laptops & Computers|Buy Second hand laptop or computer";
+    ViewBag.Title = "Buy and sell Laptops & Computers | Buy Second hand laptop or computer";
 }
 
 @*<div class="row wrapper border-bottom white-bg page-heading">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <label> <input data-bind="checked:laptopAccessories" type="checkbox">Computer/Laptop accessories </label>
+                    <label> <input data-bind="checked:laptopAccessories" type="checkbox"> Computer/Laptop accessories </label>
                     <hr />
                     <h5>Search by Brand/Model</h5>
                     @Html.Partial("~/Views/Electronics/_TreeLaptop.cshtml")
@@ -79,8 +79,8 @@
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
-                <a data-bind="visible:!laptopAccessories(),click:function(){ return createAd('/Electronics/CreateLaptopAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Create Laptop Ad</a>
-                <a data-bind="visible:laptopAccessories(),click:function(){ return createAd('/Electronics/CreateLaptopAccessoriesAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Create Laptop Accessories Ad</a>
+                <a data-bind="visible:!laptopAccessories(),click:function(){ return createAd('/Electronics/CreateLaptopAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell your laptop/Computer</a>
+                <a data-bind="visible:laptopAccessories(),click:function(){ return createAd('/Electronics/CreateLaptopAccessoriesAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell accessories</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Laptop/Computer Accessories </span> <span data-bind="visible:!laptopAccessories()">Laptops/Computers</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>

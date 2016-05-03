@@ -239,3 +239,7 @@ C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProje
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Common.Logging.Core.xml
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Quartz.pdb
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Quartz.xml
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Microsoft.Azure.AppService.ApiApps.Service.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Swashbuckle.Core.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\System.IdentityModel.Tokens.Jwt.xml

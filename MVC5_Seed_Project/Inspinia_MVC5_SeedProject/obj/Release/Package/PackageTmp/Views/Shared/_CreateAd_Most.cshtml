@@ -11,12 +11,12 @@
     <div class="col-sm-10">
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: typeValue }" name="type" value="sell" required /> For Sale
+                <input class="radio i-checks" type="radio" data-bind="icheck: { checked: typeValue }" name="type" value="sell" required /> For Sale
             </label>
         </div>
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: typeValue }" name="type" value="buy" required /> want to buy
+                <input class="radio i-checks" type="radio" data-bind="icheck: { checked: typeValue }" name="type" value="buy" required /> want to buy
             </label>
         </div>
     </div>
@@ -28,12 +28,12 @@
     <div class="col-sm-10">
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: conditionChecked }" name="condition" value="new" required /> New
+                <input class="radio i-checks" type="radio" data-bind="icheck: { checked: conditionChecked }" name="condition" value="new" required /> New
             </label>
         </div>
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: conditionChecked }" name="condition" value="used" required /> Used
+                <input class="radio i-checks" type="radio" data-bind="icheck: { checked: conditionChecked }" name="condition" value="used" required /> Used
             </label>
         </div>
     </div>
@@ -44,12 +44,12 @@
     <div class="col-sm-10">
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: selectedVal }" name="bidingAllowed" value="fixedPrice" required /> Fixed Price
+                <input class="radio i-checks" type="radio" data-bind="icheck: { checked: selectedVal }" name="bidingAllowed" value="fixedPrice" required /> Fixed Price
             </label>
         </div>
         <div class="radio">
             <label>
-                <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: selectedVal }" name="bidingAllowed" value="allowBiding" required /> Allow Biding
+                <input class="radio i-checks" type="radio" data-bind="icheck: { checked: selectedVal }" name="bidingAllowed" value="allowBiding" required /> Allow Biding
             </label>
         </div>
     </div>
@@ -136,14 +136,14 @@
             <div data-bind="foreach:showCompanies">
                 <div class="radio">
                     <label>
-                        <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: $parent.postAdUsing },value:$data" name="postAdUsing" required /> <span data-bind="text:$data"></span>
+                        <input class="radio i-checks" type="radio" data-bind="icheck: { checked: $parent.postAdUsing },value:$data" name="postAdUsing" required /> <span data-bind="text:$data"></span>
                     </label>
                 </div>
             </div>
 
             <div class="radio">
                 <label>
-                    <input class="radio i-checks" type="radio" data-bind="iCheck: { checked: postAdUsing }" name="postAdUsing" required /> Using My Individual Account
+                    <input class="radio i-checks" type="radio" data-bind="icheck: { checked: postAdUsing }" name="postAdUsing" required /> Using My Individual Account
                 </label>
             </div>
         </div>

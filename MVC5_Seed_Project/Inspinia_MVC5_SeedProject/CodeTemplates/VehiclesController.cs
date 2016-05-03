@@ -23,7 +23,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         string url = "http://localhost:59322/api";
         ElectronicsController electronicController = new ElectronicsController();
         // GET: /Vehicles/
-        
+
 
         //[Route("Vehicle/{category?}")]
         //public ActionResult Index(string category)
@@ -32,6 +32,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         //    ViewBag.category = "Vehicles";
         //    return View("Index");
         //}
+        public ActionResult Index()
+        {
+            ViewBag.category = "Vehicles";
+            return View("../Education/Categories");
+        }
         [Route("Cars")]
         public ActionResult Cars()
         {

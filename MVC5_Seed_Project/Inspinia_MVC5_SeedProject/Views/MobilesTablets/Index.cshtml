@@ -57,10 +57,23 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <label> <input data-bind="checked:mobileAccessories" type="checkbox">Mobile accessories </label>
+                    <label> <input data-bind="checked:mobileAccessories" type="checkbox"> Mobile accessories </label>
                     <hr />
-                    <h5>Search by Brand/Model</h5>
-                    @Html.Partial("/Views/Electronics/_TreeMobile.cshtml")
+                    <h5>Search by Brand</h5>
+                    <div class="form-group">
+                            <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
+                       value: selectedBrand,
+                       optionsCaption: 'Choose brand...'"></select>
+                    </div>
+                    <div data-bind="with:selectedBrand">
+                        <h5>Search by Model</h5>
+                        <div class="form-group">
+                                <select id="select-model" required class="demo-default" name="model" data-bind="options: availableModels,
+                       value: selectedModel,
+                       optionsCaption: 'Choose model...'"></select>
+                        </div>
+                    </div>
+                    @*@Html.Partial("/Views/Electronics/_TreeMobile.cshtml")*@
                     <hr />
                     <h5> search by tags</h5>
                     <input id="select-tag" data-bind="value:tags" class="repositories" placeholder="Pick tags..." />
@@ -71,27 +84,29 @@
                 </div>
             </div>
             @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
-            <br />
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- left side mobile page -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-5427185622945199"
-                 data-ad-slot="9672603064"
-                 data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+            <div class="hidden-xs">
+                <br />
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- left side mobile page -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-5427185622945199"
+                     data-ad-slot="9672603064"
+                     data-ad-format="auto"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         </div>
         <div class="col-sm-9 col-md-9 col-lg-7">
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
-                <a data-bind="visible:!mobileAccessories(),click:function(){ return createAd('/MobilesTablets/Create')}" data-style="expand-left" class="pull-right btn btn-danger">Create Mobile Ad</a>
-                <a data-bind="visible:mobileAccessories(),click:function(){ return createAd('/MobilesTablets/CreateMobileAccessoriesAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Create Mobile Accessories Ad</a>
+                <a data-bind="visible:!mobileAccessories(),click:function(){ return createAd('/MobilesTablets/Create')}" data-style="expand-left" class="pull-right btn btn-danger">Sell your phone</a>
+                <a data-bind="visible:mobileAccessories(),click:function(){ return createAd('/MobilesTablets/CreateMobileAccessoriesAd')}" data-style="expand-left" class=" pull-right btn btn-danger">Sell mobile accessories</a>
                 <span data-bind="text:showAds().length"> </span> results found<br />
-                <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || brand() || model() || tags() )"> all </span> <b> <span data-bind="visible:mobileAccessories()"> Mobile Accessories </span> <span data-bind="visible:!mobileAccessories()">Mobiles</span> </b><span data-bind="visible:brand || model"> of </span> <b> <span data-bind="text:brand"></span> <span data-bind="text:model"> </b>
+                <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || selectedBrand() || selectedModel() || tags() )"> all </span> <b> <span data-bind="visible:mobileAccessories()"> Mobile Accessories </span> <span data-bind="visible:!mobileAccessories()">Mobiles</span> </b><span data-bind="visible:selectedBrand || selectedModel"> of </span> <b> <span data-bind="text:selectedBrand"></span> <span data-bind="text:selectedModel"> </b>
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
 
                 <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
@@ -195,7 +210,13 @@
 <script src="~/Scripts/app/GoogleAnalytics.js"></script>
     <script>
        
-
+        //$(window).resize(function () {
+        //    var w = $(document).width()
+        //    var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        //    if (w < 786) {
+        //        $('.collapse-link').click();
+        //    }
+        //});
         function viewModel() {
             var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
             var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);

@@ -41,8 +41,8 @@
     <mvcSiteMapNode title="HouseHold" controller="Education" action="houseHold"/>
     <mvcSiteMapNode title="Home-Decoration" controller="Education" action="HomeDecoration"/>
     <mvcSiteMapNode title="others-in-home-and-lifeStyle" controller="Education" action="othersInHome"/>
-    
-    
+
+    <mvcSiteMapNode title="Vehicles" controller="Vehicles" action="Index" />
     <mvcSiteMapNode title="Cars" controller="Vehicles" action="Cars"/>
     <mvcSiteMapNode title="Bikes" controller="Vehicles" action="Bikes"/>
     <mvcSiteMapNode title="Commerical-Vehicles" controller="Vehicles" action="CommericalVehicles"/>

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Release\Package\PackageTmp" />
+  <setAcl path="C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

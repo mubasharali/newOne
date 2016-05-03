@@ -13,6 +13,51 @@ function Company(data) {
         self.showModels(models);
     }
 }
+var availableBrands = ko.observableArray();
+var selectedBrand = ko.observable();
+var selectedModel = ko.observable();
+var sub = selectedBrand.subscribe(function (value) {
+    RefreshSearch();
+    loadModels();
+})
+loadBrands = function () {
+    $.ajax({
+        url: '/api/Electronic/GetBrands',
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        type: 'GET',
+        success: function (data) {
+            $.each((data), function (i, item) { availableBrands.push(item) });
+            $('#select-brand').selectize();
+        },
+        error: function (jqXHR, status, thrownError) {
+            toastr.error("failed to load Brands.Please refresh page and try again", "Error");
+        }
+    });
+}
+var availableModels = ko.observableArray();
+var selectedModel = ko.observable();
+var loadModels = function () {
+    availableModels.removeAll();
+    $.ajax({
+        url: '/api/Electronic/GetModels?brand=' + selectedBrand(),
+        dataType: "json",
+        contentType: "application/json",
+        cache: false,
+        type: 'GET',
+        success: function (data) {
+            $.each((data), function (i, item) { availableModels.push(item) });
+            $('#select-model').selectize();
+        },
+        error: function (jqXHR, status, thrownError) {
+            toastr.error("failed to load Models.Please refresh page and try again", "Error");
+        }
+    });
+}
+
+
+
 var mobileAccessories = ko.observable(false);
 var brand = ko.observable("");
 var model = ko.observable("");
@@ -20,6 +65,9 @@ var title = ko.observable($("#search").val());
 var tags = ko.observable("");
 var minPrice = ko.observable(0);
 var maxPrice = ko.observable(50000);
+selectedModel.subscribe(function () {
+    RefreshSearch();
+})
 mobileAccessories.subscribe(function () {
     RefreshSearch();
 })
@@ -35,6 +83,7 @@ tags.subscribe(function () {
 
 function TreeViewModel() {
     var self = this;
+    loadBrands();
     self.showAds = ko.observableArray();
     self.isLoading = ko.observable(false);
     searchingCity.subscribe(function () {
@@ -89,15 +138,16 @@ function TreeViewModel() {
             }
         });
     }
-    self.loadTree();
+    //self.loadTree();
     
 }
 
 
 function RefreshSearch() {
     self.isLoading(true);
+    console.log(selectedBrand());
     $.ajax({
-        url: '/api/Electronic/SearchMobileAds?brand=' + brand() + '&model=' + model() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&isAccessories=' + mobileAccessories(),
+        url: '/api/Electronic/SearchMobileAds?brand=' + selectedBrand() + '&model=' + selectedModel() + '&tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&isAccessories=' + mobileAccessories(),
         dataType: "json",
         contentType: "application/json",
         cache: false,

@@ -18,10 +18,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
     {
         public void Execute(IJobExecutionContext context)
         {
-            ElectronicsController.sendEmail("irfanyusanif@gmail.com", "I am job scheduler", "not online.I am running at" + DateTime.UtcNow);
-            
+            ElectronicsController.sendEmail("irfanyusanif@gmail.com", "I am job scheduler v 2.0 ", ".I am running at " + DateTime.UtcNow);
         }
-
     }
     public class AdminController : Controller
     {
@@ -45,7 +43,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             IJobDetail job = JobBuilder.Create<HelloJob>()
                 .WithIdentity("myJob", "group1")
                 .Build();
-
+            
             // Trigger the job to run now, and then every 40 seconds
             ITrigger trigger = TriggerBuilder.Create()
             //  .WithIdentity("myTrigger", "group1")
@@ -56,7 +54,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             //  .Build();
             //.ForJob(job)
                                     .WithIdentity("myTrigger", "group1")
-                                    .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(17, 20))
+                                    .StartAt(DateTime.UtcNow)
+                                    .WithSimpleSchedule(x => x.RepeatForever().WithIntervalInHours(24))
+                                    //.WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(4, 20))
                                     .Build();
 
             sched.ScheduleJob(job, trigger);

@@ -301,10 +301,10 @@
                 $(element).autosize();
             }
         };
-        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+        ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
             init: function (element, valueAccessor) {
                 //initialize icheck to the element
-                $(element).iCheck({
+                $(element).icheck({
                     radioClass: 'iradio_square-green'
                 });
                 $(element).on('ifChecked', function (event) {
@@ -411,7 +411,7 @@
                     }
                 }
             });
-            $('.i-check').iCheck({
+            $('.i-check').icheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });

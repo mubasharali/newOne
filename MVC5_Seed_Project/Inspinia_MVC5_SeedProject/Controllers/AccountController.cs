@@ -217,7 +217,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 var user = await UserManager.FindAsync(model.UserName, model.Password);
                 if(await UserManager.GetLockoutEnabledAsync(user.Id))
                 {
-                    ModelState.AddModelError("", "You account has been blocked by administration");
+                    ModelState.AddModelError("", "Your account has been blocked by administration");
                     return View(model);
                 }
                 

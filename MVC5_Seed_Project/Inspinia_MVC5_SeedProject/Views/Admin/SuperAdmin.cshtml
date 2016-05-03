@@ -15,8 +15,13 @@
         </div>
         <div class="col-sm-6">
             <h2>Block User</h2>
-            <input type="email" data-bind="value:blockUserEmail" />
-            <button class="btn btn-default" data-bind="click:blockUserBtn">Submit</button>
+            <input type="email" data-bind="value:blockUserEmail" placeholder="email" />
+            <button class="btn btn-default" data-bind="click:blockUserEmailBtn">Submit</button>
+        </div>
+        <div class="col-sm-6">
+            <h2>Block User</h2>
+            <input type="email" data-bind="value:blockUserId" placeholder="id" />
+            <button class="btn btn-default" data-bind="click:blockUserIdBtn">Submit</button>
         </div>
     </div>
     <hr /><hr />
@@ -68,6 +73,7 @@
             self.loginUserId = ko.observable( loginUserId());
             self.adminEmail = ko.observable();
             self.blockUserEmail = ko.observable();
+            self.blockUserId = ko.observable();
             self.showAdmins = ko.observableArray();
             self.loadAdmins = function () {
                 $.ajax({
@@ -96,9 +102,9 @@
                     },
                 });
             }
-            self.blockUserBtn = function () {
+            self.blockUserEmailBtn = function () {
                 $.ajax({
-                    url: '/api/Admin/BlockUser?email=' + self.blockUserEmail(),
+                    url: '/api/Admin/BlockUserEmail?email=' + self.blockUserEmail(),
                     dataType: "json",
                     type: 'POST',
                     success: function (data) {
@@ -109,7 +115,19 @@
                     },
                 });
             }
-
+            self.blockUserIdBtn = function () {
+                $.ajax({
+                    url: '/api/Admin/BlockUser?id=' + self.blockUserId(),
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        toastr.error("Successfully blocked!");
+                    },
+                    error: function () {
+                        toastr.error("Error! please refresh page and try again");
+                    },
+                });
+            }
 
         }
         function getTimeAgo(varDate) {

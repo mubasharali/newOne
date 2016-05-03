@@ -508,7 +508,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             //var models =await db.MobileModels.Where(x => x.Mobile == brand).ToListAsync();
             return Ok(models);
         }
-        public async Task<IHttpActionResult> SearchAds( string tags, string title, string city, string pp)
+        public async Task<IHttpActionResult> SearchItems( string tags, string title, string city, string pp)
         {
             string islogin = "";
             if (User.Identity.IsAuthenticated)
@@ -572,7 +572,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 },
 
                             };
-                return Ok(temp1);
+                return Ok(temp1.Take(60));
             }
             string[] tagsArray = null;
             if (tags != null)
@@ -635,7 +635,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                exectLocation = ad.AdsLocation.exectLocation,
                            },
                        };
-            return Ok(temp);
+            return Ok(temp.Take(60));
         }
 
         public async Task<IHttpActionResult> SearchMobileAds(string brand, string model,string tags,string title, int minPrice, int maxPrice,string city, string pp,bool isAccessories)
@@ -648,7 +648,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             if(tags == null)
             {
                 var temp1 = from ad in db.MobileAds
-                           where ( ( ( isAccessories && ad.Ad.category.Equals("MobileAccessories") ) || (!isAccessories && ad.Ad.category == "Mobiles"  ) ) && ad.Ad.status.Equals("a") && (model == null || ad.MobileModel.model.Equals(model)) && (brand == null || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp)) ) )
+                           where ( ( ( isAccessories && ad.Ad.category.Equals("MobileAccessories") ) || (!isAccessories && ad.Ad.category == "Mobiles"  ) ) && ad.Ad.status.Equals("a") && (model == null || model == "undefined" || ad.MobileModel.model.Equals(model)) && (brand == null || brand == "undefined" || ad.MobileModel.Mobile.brand.Equals(brand)) && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 50000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp)) ) )
                             orderby ad.Ad.time descending
                             select new
                            {

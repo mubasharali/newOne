@@ -57,6 +57,7 @@ function AccountViewModel() {
             type: 'POST',
             success: function (data) {
                 if (data == "Done") {
+                    self.loginError("Done! Redirecting..");
                     location.reload();
                 } else {
                     self.loginError("Some Error has occured.Please try again");
@@ -82,8 +83,8 @@ function AccountViewModel() {
                     if (data == "NewUser") {
                         $("#newUser").modal('show');
                     } else if (data == "Blocked") {
-                        toastr.info("You account has been blocked by administration!");
-                        self.loginError("You account has been blocked by administration!");
+                        toastr.info("Your account has been blocked by administration!");
+                        self.loginError("Your account has been blocked by administration!");
                     } else {
                         self.isPasswordSaved(data.isPasswordSaved);
                         $("#oldUser").modal('show');
@@ -97,7 +98,6 @@ function AccountViewModel() {
                 }
             });
         } else {
-            toastr.info("Please enter a valid email address");
             self.loginError("Please enter a valid email address");
         }
     }
@@ -113,18 +113,12 @@ function AccountViewModel() {
             success: function (data) {
                 self.isUserLoginLoading(false);
                 if (data == "Done") {
-                    self.loginError("");
-                        
+                    self.loginError("Done! Redirecting..");
                     location.reload();
                 } else {
                     
                     var link = $('<a/>').text("Forget password").attr('href', '/Account/ForgetPassword');
                     self.loginError("Incorrect password." + link[0].outerHTML + " ?");
-                    //var linkText = "Forget password";
-                    //var link = $('a').text(linkText).attr('href', '/Account/ForgetPassword');
-                 //   self.loginError("Incorrect password." + linkText + " ?");
-                   // $('.req123').html(self.loginError());
-                    //console.log(an);
                 }
             },
             error: function () {

@@ -195,7 +195,7 @@
             <br />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" data-bind="click:submitClicked" class="btn btn-primary">Submit</button>
+                    <button type="submit" data-bind="click:submitClicked"  data-style="expand-left" class="ladda-button btn btn-primary">Submit</button>
                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
                 </div>
             </div>
@@ -235,13 +235,18 @@
             ChatViewModel();
             var self = this;
             UserCompanies_CreateAd(self);
+        
         self.submitClicked = function () {
-           // console.log(fileList);
-           // $("input[id*='fileNames']").val(JSON.stringify(fileList));
+         //   $("input[id*='fileNames']").val(JSON.stringify(fileList));
             window.btn_clicked = true;
             $("#post").submit();
+            if ($("#post").valid()) {
+                var savingBidLoader = $('.ladda-button').ladda();
+                savingBidLoader.ladda('start');
+            } else {
+                toastr.info("Fields with * are mandatory!");
+            }
         }
-        
         self.availableCategories = ko.observableArray(new Array("Accountancy", "Administration", "Advertising", "Aerospace", "Apprenticeships", "Automotive", "Banking", "Call Center", "Catering", "Charity", "Construction", "Creative", "Customer Service", "Digital", "Education", "Engineering", "Finance", "FMCG", "Graduate", "HealthCare", "Hospitality", "HR", "Insurance", "IT", "Legal", "Leisure", "Logistics", "Management Consultancy", "Manufacturing", "Marketing", "Media", "Nursing", "Oil and Gas", "PA", "Pharmaceutical", "PR", "Property", "Public Sector", "Recruitment Sales", "Renewable Energy", "Retail", "Sales", "Science", "Secretarial", "Senior Appointments", "Social Work", "Teaching", "Telecoms", "Tourism", "Transport", "Travel", "Utilities", "Wholesale"));
         self.selectedCategory = ko.observable();
         self.typeValue = ko.observable("sell");
@@ -337,10 +342,10 @@
             $(element).autosize();
         }
     };
-    ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+    ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
         init: function (element, valueAccessor) {
             //initialize icheck to the element
-            $(element).iCheck({
+            $(element).icheck({
                 radioClass: 'iradio_square-green'
             });
             $(element).on('ifChecked', function (event) {
@@ -506,7 +511,7 @@
                 }
             }
         });
-        $('.i-check').iCheck({
+        $('.i-check').icheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
         });

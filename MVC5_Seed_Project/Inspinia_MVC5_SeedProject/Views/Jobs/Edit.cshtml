@@ -194,7 +194,7 @@
                             <br /><br /><br /><br />
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <button type="submit" data-bind="click:submitClicked" class="btn btn-primary">Submit</button>
+                                    <button type="submit" data-bind="click:submitClicked"  data-style="expand-left" class="ladda-button btn btn-primary">Submit</button>
                                     @Html.ActionLink("Cancel", "Details", "Electronics", new { id = Model.Id, title = ElectronicsController.URLFriendly( @Model.title) }, new { @class= "btn btn-white" })
                                 </div>
                             </div>
@@ -231,13 +231,18 @@
             ChatViewModel();
             var self = this;
             UserCompanies_CreateAd(self);
+            
             self.submitClicked = function () {
-                // console.log(fileList);
-                // $("input[id*='fileNames']").val(JSON.stringify(fileList));
+               // $("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#post").submit();
+                if ($("#post").valid()) {
+                    var savingBidLoader = $('.ladda-button').ladda();
+                    savingBidLoader.ladda('start');
+                } else {
+                    toastr.info("Fields with * are mandatory!");
+                }
             }
-
             self.availableCategories = ko.observableArray(new Array("Accountancy", "Administration", "Advertising", "Aerospace", "Apprenticeships", "Automotive", "Banking", "Call Center", "Catering", "Charity", "Construction", "Creative", "Customer Service", "Digital", "Education", "Engineering", "Finance", "FMCG", "Graduate", "HealthCare", "Hospitality", "HR", "Insurance", "IT", "Legal", "Leisure", "Logistics", "Management Consultancy", "Manufacturing", "Marketing", "Media", "Nursing", "Oil and Gas", "PA", "Pharmaceutical", "PR", "Property", "Public Sector", "Recruitment Sales", "Renewable Energy", "Retail", "Sales", "Science", "Secretarial", "Senior Appointments", "Social Work", "Teaching", "Telecoms", "Tourism", "Transport", "Travel", "Utilities", "Wholesale"));
             self.selectedCategory = ko.observable();
             self.typeValue = ko.observable("sell");
@@ -335,15 +340,15 @@
                         //for company
                         if (data.companyName) {
                             var comid = $("#" + data.companyName);
-                            comid.iCheck('check');
+                            comid.icheck('checked');
                             self.postAdUsing(data.companyName);
-                            $('.i-check').iCheck({
+                            $('.i-check').icheck({
                                 checkboxClass: 'icheckbox_square-green',
                                 radioClass: 'iradio_square-green',
                             });
-                            // $("#Netsol Technologies Limited").iCheck('check');
+                            // $("#Netsol Technologies Limited").icheck('checked');
                         } else {
-                            $("#on").iCheck('check');
+                            $("#on").icheck('checked');
                             self.postAdUsing("on");
                         }
 
@@ -381,28 +386,28 @@
                         self.selectedCity(data.location.cityName);
                         self.selectedCityOriginal = data.location.cityName;
                         if (data.type == true) {
-                            $("#sell").iCheck('check');
+                            $("#sell").icheck('checked');
                         } else if (data.type == false) {
-                            $("#buy").iCheck('check');
+                            $("#buy").icheck('checked');
                         }
                         if (data.isNegotiable == 'b') {
                             self.selectedVal("fixedPrice");
-                            $("#allowBiding").iCheck('check');
+                            $("#allowBiding").icheck('checked');
                         } else if (data.isNegotiable == 'n') {
-                            $("#fixedPrice").iCheck('check');
+                            $("#fixedPrice").icheck('checked');
                         } else if (data.isNegotiable == 'y') {
-                            $("#fixedPrice").iCheck('check');
-                            $("#isNegotiable").iCheck('check');
+                            $("#fixedPrice").icheck('checked');
+                            $("#isNegotiable").icheck('checked');
                         }
                         if (data.condition == 'u') {
-                            $('#used').iCheck('check');
+                            $('#used').icheck('checked');
                             self.conditionChecked("used");
 
                         } else if (data.condition == 'b') {
-                            $('#unboxed').iCheck('check');
+                            $('#unboxed').icheck('checked');
                             self.conditionChecked("unboxed");
                         } else if (data.condition == 'n') {
-                            $('#new').iCheck('check');
+                            $('#new').icheck('checked');
                             self.conditionChecked("new");
 
                         }
@@ -567,10 +572,10 @@
                 $(element).autosize();
             }
         };
-        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+        ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
             init: function (element, valueAccessor) {
                 //initialize icheck to the element
-                $(element).iCheck({
+                $(element).icheck({
                     radioClass: 'iradio_square-green'
                 });
                 $(element).on('ifChecked', function (event) {
@@ -671,7 +676,7 @@
                     }
                 }
             });
-            $('.i-check').iCheck({
+            $('.i-check').icheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });

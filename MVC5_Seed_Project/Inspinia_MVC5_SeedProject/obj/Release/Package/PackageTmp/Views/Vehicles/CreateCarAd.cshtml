@@ -147,7 +147,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <button type="submit" data-bind="click:submitClicked" class="btn btn-primary">Submit</button>
+                                    <button type="submit" data-bind="click:submitClicked"  data-style="expand-left" class="ladda-button btn btn-primary">Submit</button>
                                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -190,10 +190,15 @@
             ChatViewModel();
             var self = this;
             self.submitClicked = function () {
-                console.log(fileList);
                 $("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
+                if ($("#form").valid()) {
+                    var savingBidLoader = $('.ladda-button').ladda();
+                    savingBidLoader.ladda('start');
+                } else {
+                    toastr.info("Fields with * are mandatory!");
+                }
             }
 
             UserCompanies_CreateAd(self);
@@ -367,10 +372,10 @@
             }
         };
 
-        ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+        ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
             init: function (element, valueAccessor) {
                 //initialize icheck to the element
-                $(element).iCheck({
+                $(element).icheck({
                     radioClass: 'iradio_square-green'
                 });
                 $(element).on('ifChecked', function (event) {
@@ -485,7 +490,7 @@
                     }
                 }
             });
-            $('.i-check').iCheck({
+            $('.i-check').icheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });

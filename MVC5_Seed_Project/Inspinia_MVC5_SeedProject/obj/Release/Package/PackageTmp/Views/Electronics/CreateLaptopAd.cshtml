@@ -65,7 +65,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" data-bind="click:submitClicked" value="Create" class="btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Create"  data-style="expand-left" class="ladda-button btn btn-primary" />
                                     @Html.ActionLink("Cancel", "ComputersLaptops", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -109,12 +109,17 @@
             ChatViewModel();
             var self = this;
             UserCompanies_CreateAd(self);
-        self.submitClicked = function () {
-            console.log(fileList);
-            $("input[id*='fileNames']").val(JSON.stringify(fileList));
-            window.btn_clicked = true;
-            $("#form").submit();
-        }
+            self.submitClicked = function () {
+                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                window.btn_clicked = true;
+                $("#form").submit();
+                if ($("#form").valid()) {
+                    var savingBidLoader = $('.ladda-button').ladda();
+                    savingBidLoader.ladda('start');
+                } else {
+                    toastr.info("Fields with * are mandatory!");
+                }
+            }
         self.typeValue = ko.observable("sell");
         self.conditionChecked = ko.observable(false);
         self.selectedVal = ko.observable();
@@ -259,10 +264,10 @@
             $(element).autosize();
         }
     };
-    ko.bindingHandlers.iCheck = { // integrating icheck plugin using bh
+    ko.bindingHandlers.icheck = { // integrating icheck plugin using bh
         init: function (element, valueAccessor) {
             //initialize icheck to the element
-            $(element).iCheck({
+            $(element).icheck({
                 radioClass: 'iradio_square-green'
             });
             $(element).on('ifChecked', function (event) {
@@ -377,7 +382,7 @@
                 }
             }
         });
-        $('.i-check').iCheck({
+        $('.i-check').icheck({
             checkboxClass: 'icheckbox_square-green',
             radioClass: 'iradio_square-green',
         });

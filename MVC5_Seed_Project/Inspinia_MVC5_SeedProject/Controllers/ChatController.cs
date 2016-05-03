@@ -38,8 +38,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               lastMessage = user.message,
                               time = user.time
                           };
-                users = users.GroupBy(x => x.id).Select(x => x.FirstOrDefault());
-                return Ok(users);
+               var users1 = users.GroupBy(x => x.id).AsEnumerable().Select(x => x.LastOrDefault());
+                return Ok(users1);
             }
             return BadRequest();
         }

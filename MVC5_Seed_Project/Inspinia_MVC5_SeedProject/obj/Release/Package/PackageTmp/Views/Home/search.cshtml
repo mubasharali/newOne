@@ -92,7 +92,7 @@
                 //    return;
                 //}
                 self.isLoading(true);
-                url_address = '/api/Electronic/SearchAds?tags=' + tags() + '&title=' + self.title() + '&city=' + searchingCity() + '&pp=' + searchingPP();
+                url_address = '/api/Electronic/SearchItems?tags=' + tags() + '&title=' + self.title() + '&city=' + searchingCity() + '&pp=' + searchingPP();
                 $.ajax({
                     url: url_address,
                     dataType: "json",
