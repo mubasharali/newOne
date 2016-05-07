@@ -137,10 +137,10 @@
                                                     <ul @*class="tag-list"*@ data-bind="foreach:showTags" style="padding: 0">
                                                         <li class="btn btn-white btn-xs"><a target="_blank" data-bind="attr:{href:link}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                                     </ul>
-                                                    <h2>About</h2>
-                                                    <span data-bind="visible:loginUserId == createdBy">
-                                                        <a data-bind="click:editLongAboutBtn" class="btn btn-white btn-xs "> Edit</a>
-                                                    </span>
+                                                    <h2>About<span data-bind="visible:loginUserId == createdBy">
+    <a data-bind="click:editLongAboutBtn" class="btn btn-white btn-xs "> Edit</a>
+</span></h2>
+                                                    
                                                     <div data-bind="visible:!isLongAboutEditing(),text:longAbout"></div>
                                                     <div data-bind="visible:isLongAboutEditing()">
                                                         <div class="col-sm-12">
@@ -159,10 +159,11 @@
                                                 </div>*@
                                                     @*<h2>Location</h2>*@
                                                     <h3 data-bind="visible:showBranches().length>0">HeadOffice</h3>
-                                                    <h3 data-bind="visible:showBranches().length==0">Location and contact Info</h3>
+                                                    <h3 data-bind="visible:showBranches().length==0">Location and contact Info<span data-bind="visible:loginUserId == createdBy">
+    <a data-bind="click: function(){return editLocation(id)},visible:cityName()" class="btn btn-white btn-xs"> Edit</a>
+</span></h3>
                                                     <div data-bind="visible:!isMainBranchEditing()">
                                                         <span data-bind="visible:loginUserId == createdBy">
-                                                            <a data-bind="click: function(){return editLocation(id)},visible:cityName()" class="btn btn-white btn-xs pull-right"> Edit</a>
                                                             <a data-bind="click: function(){return editLocation(id)},visible:!cityName()" class="btn btn-white btn-xs "> Add Head office location</a>
                                                         </span>
                                                         <span data-bind="if:exectLocation">
@@ -446,11 +447,10 @@
                                                             <span class="btn btn-xs btn-white" data-bind="click:reviewReplyBtn">Reply</span>
                                                             <i class="fa fa-user"></i> <a data-bind="attr:{href:'/User/Index/'+reviewedBy},text:reviewedByName"></a>
                                                             <i class="fa fa-clock-o"></i> <span data-bind="text:friendlyTime"></span>
-
                                                         </div>
                                                         <div data-bind="visible:isAddingReviewReply()">
                                                             <div style="margin-left:45px" class="vote">
-                                                                <textarea class="msgTextArea form-control" placeholder="Reply.." data-bind="valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.loginUserId,replyDescription.length,data,event)}},value:replyDescription"></textarea>
+                                                                <textarea class="msgTextArea form-control" placeholder="Reply (Enter to post)" data-bind="valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.loginUserId,replyDescription.length,data,event)}},value:replyDescription"></textarea>
                                                             </div>
                                                         </div>
                                                         <div data-bind="foreach:showReviewReplies">

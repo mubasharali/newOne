@@ -34,28 +34,30 @@
                        optionsCaption: 'Choose category...'"></select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Select Floors</label>
-                                <div class="col-md-10">
-                                    <select id="select-floor"  class="demo-default" name="floor" data-bind="options: availableFloors,
+                            <div data-bind="visible:selectedCategory() != 'plot & land' ">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Select Floors</label>
+                                    <div class="col-md-10">
+                                        <select id="select-floor" class="demo-default" name="floor" data-bind="options: availableFloors,
                        value: selectedFloor,
                        optionsCaption: 'Choose Floors...'"></select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Select Bed Rooms</label>
-                                <div class="col-md-10">
-                                    <select id="select-bedroom" class="demo-default" name="bedroom" data-bind="options: availablebedroom,
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Select Bed Rooms</label>
+                                    <div class="col-md-10">
+                                        <select id="select-bedroom" class="demo-default" name="bedroom" data-bind="options: availablebedroom,
                        value: selectedbedroom,
                        optionsCaption: 'Choose bed rooms...'"></select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">Select bathroom</label>
-                                <div class="col-md-10">
-                                    <select id="select-bathroom" class="demo-default" name="bathroom" data-bind="options: availablebathrooms,
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Select bathroom</label>
+                                    <div class="col-md-10">
+                                        <select id="select-bathroom" class="demo-default" name="bathroom" data-bind="options: availablebathrooms,
                        value: selectedbathroom,
                        optionsCaption: 'Choose bathroom...'"></select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -113,7 +115,7 @@
             ChatViewModel();
             var self = this;
             self.submitClicked = function () {
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
                 if ($("#form").valid()) {

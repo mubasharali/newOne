@@ -46,9 +46,9 @@
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
-                @*<a href="/ServiceProviders" data-style="expand-left" class=" pull-right btn btn-danger">I Provide a service </a>*@
-                <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>
-                <span data-bind="text:showAds().length"> </span> results found<br />
+                <a href="/ServiceConsumers" data-style="expand-left" class="  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
+                <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>&nbsp; &nbsp;
+                <span class="hidden-xs"> <span data-bind="text:showAds().length"> </span> results found<br /></span>
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity()  || tags() )"> all </span> ads
     <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>*@
 
@@ -65,10 +65,10 @@
                 </div>*@
                 <div class="row">
                     <br /> <br /><br />
-                    <div class="col-sm-6" data-bind="foreach: showAds.slice(0,showAds().length / 2) ">
+                    <div class="col-lg-offset-1 col-sm-6 col-lg-5" data-bind="foreach: showAds.slice(0,showAds().length / 2) ">
                         @Html.Partial("~/Views/Company/_CompanyListView.cshtml")
                     </div>
-                    <div class="col-sm-6" data-bind="foreach: showAds.slice(showAds().length / 2)">
+                    <div class="col-lg-offset-1 col-sm-6 col-lg-5" data-bind="foreach: showAds.slice(showAds().length / 2)">
                         @Html.Partial("~/Views/Company/_CompanyListView.cshtml")
                     </div>
                 </div>
@@ -126,18 +126,15 @@
                     <div class="form-group">
                         <small class="control-label col-sm-2">Exect location<br /><small class="text-navy">optional</small></small>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="exectLocation" />
+                            <input type="text" class="form-control" data-bind="value:exectLocation" name="exectLocation" />
                         </div>
                     </div>
                 </div><br />
-                @*<div class="form-group"><label>Your location</label></div>
-                <div class="form-group"><label>City</label></div>
-                <div class="form-group"><label>Famous Place</label></div>*@
             </div>
             <div class="modal-footer">
                 <div data-bind="visible:!isNeedAServiceSubmitting()">
+                    <button type="button" data-bind="click:saveNeedAService" class=" btn btn-primary">Submit</button>@*updted*@
                     <button type="button" class="btn btn-white" data-dismiss="modal">Cancel</button>
-                    <button type="button" data-bind="click:saveNeedAService" class="btn btn-primary">Submit</button>
                 </div>
                 <div data-bind="visible:isNeedAServiceSubmitting()">
                     <div class="sk-spinner sk-spinner-wave">
@@ -232,6 +229,7 @@
             self.isNeedAServiceSubmitting = ko.observable(false);
             self.needAServiceTags = ko.observable();
             self.needAServiceTitle = ko.observable();
+            self.exectLocation =ko.observable();
             self.needAServiceBtn = function () {
                 if (loginUserId() == "Visitor") {
                     loginBtn();
@@ -254,6 +252,23 @@
                     toastr.info("Please enter a famous place near you in " + self.selectedCity());
                     return;
                 }
+                self.isNeedAServiceSubmitting(true);
+                    $.ajax({
+                        url: '/api/Company/SaveNeedAService?title=' + self.needAServiceTitle() + '&tags=' + self.needAServiceTags() + '&city=' + self.selectedCity() + '&pp=' + self.selectedPopularPlace() + '&ExectLocation=' + self.exectLocation(),
+                        dataType: "json",
+                        contentType: "application/json",
+                        cache: false,
+                        type: 'POST',
+                        success: function (data) {
+                            self.isNeedAServiceSubmitting(false);
+                            $("#needAService").modal('hide');
+                            toastr.info("Soon service providers will contact you!","Done!");
+                        },
+                        error: function (jqXHR, status, thrownError) {
+                            self.isNeedAServiceSubmitting(false);
+                            toastr.error("failed.Please refresh page and try again", "Error");
+                        }
+                    });
             }
             //location
             self.availableCities = ko.observableArray();
@@ -320,8 +335,6 @@
             
             SearchingLocation();
             CreateAlert();
-         //  TreeViewModel(); //in searchads.js
-          //  RefreshSearch();
             ChatViewModel();
             AccountViewModel();
             var self = this;
@@ -338,9 +351,20 @@
                 console.log(self.tags());
                 self.loadad();
             })
+            searchingCity.subscribe(function () {
+                self.isLoading(false);
+                self.loadad();
+            })
+            searchingPP.subscribe(function () {
+                if (searchingCity() != null && searchingCity() != "undefined") {
+                    self.isLoading(false);
+                    self.loadad();
+                }
+        
+            })
             self.loadad = function () {
                 self.isLoading(true);
-                url_address = '/api/Company/SearchCompanies?title=' + self.title() + '&tags=' + self.tags() + '&category=Services';
+                url_address = '/api/Company/SearchCompanies?title=' + self.title() + '&tags=' + self.tags() + '&category=Services' + '&city=' + searchingCity() + '&famousPlace=' + searchingPP();
                 $.ajax({
                     url: url_address,
                     dataType: "json",

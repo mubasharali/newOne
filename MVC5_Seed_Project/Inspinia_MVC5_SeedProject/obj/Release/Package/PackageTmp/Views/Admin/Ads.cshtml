@@ -67,16 +67,16 @@
                                             <li><a href=""><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                         </ul><br /><br />
                                         <hr>
-                                        <span data-bind="if:isBidingAllowed">
+                                        @*<span data-bind="if:isBidingAllowed">
                                             <button data-bind="click:placeBidButton" class="btn btn-primary pull-right">Place Bid</button>
                                         </span>
                                         <span data-bind="if:!isBidingAllowed">
                                             <button data-bind="" class="btn btn-primary pull-right">Chat with seller</button>
-                                        </span>
+                                        </span>*@
                                         <span data-bind="visible:!isApproved()">
                                             <button data-bind="click:approve">Approve</button>
                                         </span>
-                                        <h1 class="product-main-price">
+                                        @*<h1 class="product-main-price">
                                             <span data-bind="if:!isBidingAllowed">
                                                 <span data-bind="if:price">
                                                     <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
@@ -101,7 +101,7 @@
                                                     </span>
                                                 </span>
                                             </span>
-                                        </h1>
+                                        </h1>*@
                                         <hr>
                                         <dl class="dl-horizontal m-t-md small">
                                             <dt>condition:</dt>
@@ -631,9 +631,9 @@
             .done(function (data) {
                 var mappedads = $.map(data, function (item) { return new ad(item); });
                 self.showAds(mappedads);
-                $(".sortable-list").sortable({
-                    connectWith: ".connectList"
-                }).disableSelection();
+                //$(".sortable-list").sortable({
+                //    connectWith: ".connectList"
+                //}).disableSelection();
             })
             .fail(function () {
                 toastr.error("Unable to load data. Please try again", "Error");

@@ -1034,7 +1034,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                         }
                     }
                 }
-                loc.exectLocation = exectLocation;
+                loc.exectLocation = exectLocation == "undefined"?null:exectLocation;
                 loc.Id = ad.Id;
                 if (SaveOrUpdate == "Save")
                 {

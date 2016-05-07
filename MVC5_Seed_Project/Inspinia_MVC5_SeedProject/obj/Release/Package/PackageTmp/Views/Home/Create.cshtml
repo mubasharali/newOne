@@ -82,13 +82,19 @@
     <script src="~/Scripts/app/_CreateAd.js"></script>
     <script type="text/javascript">
         var fileList = new Array;
+        
         function ViewModel() {
             SearchingLocation();
             AccountViewModel();
             ChatViewModel();
             var self = this;
+            
             self.submitClicked = function () {
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                //if (isFilesUploading) {
+                //    toastr.info("Please wait until images are uploaded");
+                //    return;
+                //}
+                if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
                 if ($("#form").valid()) {

@@ -68,7 +68,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                            isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
                                            views = ad.Ad.views,
                                            condition = ad.Ad.condition,
-
+                                           category = ad.Ad.category,
                                            color = ad.Ad.LaptopAd.color,
                                            brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
                                            model = ad.Ad.LaptopAd.LaptopModel.model,

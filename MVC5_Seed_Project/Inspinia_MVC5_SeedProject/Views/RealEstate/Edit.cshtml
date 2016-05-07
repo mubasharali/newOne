@@ -110,7 +110,7 @@
             var self = this;
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
                 if ($("#form").valid()) {

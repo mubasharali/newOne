@@ -32,6 +32,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
                           where q.title.Contains(title)
                           where q.category.Equals(category)
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,
@@ -57,6 +58,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 var ret = from q in db.Questions
                           where q.title.Contains(title)
                           where q.category.Equals(category)
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,
@@ -82,6 +84,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 var ret = from q in db.Questions
                           where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
                           where q.category.Equals(category)
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,
@@ -106,6 +109,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var ret = from q in db.Questions
                           where q.title.Contains(title)
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,
@@ -130,6 +134,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var ret = from q in db.Questions
                           where q.category.Equals(category)
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,
@@ -154,6 +159,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var ret = from q in db.Questions
                           where q.QuestionTags.Any(x => x.Tag.name.Equals(tags))
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,
@@ -177,6 +183,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             else
             {
                 var ret = from q in db.Questions
+                          orderby q.time descending
                           select new
                           {
                               title = q.title,

@@ -81,7 +81,7 @@
                                 </div>
                             </div>
                             
-                            @Html.Partial("~/Views/Shared/_EditAd_Most.cshtml")
+                            @Html.Partial("~/Views/Shared/_EditAdUnique.cshtml")
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
@@ -120,6 +120,7 @@
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/dropZone")
+<script src="~/Scripts/app/dropzone-knockout-binding-edit.js"></script>
     <script src="~/Scripts/app/_CreateAd.js"></script>
     <script type="text/javascript">
 
@@ -130,7 +131,7 @@
             var self = this;
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
                 if ($("#form").valid()) {
@@ -504,44 +505,7 @@
 
         loadImages();
         var fileList = [];
-        ko.bindingHandlers.dropzone = {
-            init: function (element, valueAccessor) {
-                var value = ko.unwrap(valueAccessor());
-
-                var options = {
-                    maxFileSize: 15,
-                    uploadMultiple: true,
-                    parallelUploads: 100,
-                    maxFiles: 30,
-                    addRemoveLinks: false,
-                    acceptedFiles: ".jpeg,.jpg,.png,.gif",
-                    init: function () {
-                        var myDropzone = this;
-                        myDropzone1 = this;
-                        this.on("success", function (file, serverFileName) {
-                            fileList = [];
-                            i = 1;
-                            var abc = $.map(serverFileName, function (item) { return (item); });
-                            $.each(abc, function (index, value) {
-                                fileList[i] = { "fileName": value, "fileId": i++ };
-                            })
-                        });
-                        if (images) {
-                            for (i = 0; i < images.length; i++) {
-                                myDropzone.emit("addedfile", images[i]);
-                                myDropzone.emit("thumbnail", images[i], "/Images/Ads/");
-                                myDropzone.emit("complete", images[i]);
-                            }
-                        }
-                    }
-                };
-
-                $.extend(options, value);
-
-                $(element).addClass('dropzone');
-                new Dropzone(element, options);
-            }
-        };
+        
 
 
 

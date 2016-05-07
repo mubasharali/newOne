@@ -39,7 +39,7 @@ function Ad(data) {
 
     data = data || {};
     self.title = data.title;
-    
+    self.category = data.category;
     self.description = ko.observable(data.description);
     self.postedByName = data.postedByName;
     self.postedById = data.postedById;

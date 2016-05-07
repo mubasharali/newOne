@@ -3,7 +3,7 @@
     <div class="ibox">
         <div class="ibox-content1 product-box">
             <div class="media">
-                <a data-bind="attr:{href:link}" class="pull-left hidden-xs">
+                <a data-bind="attr:{href:link},visible:category != 'Services'" class="pull-left hidden-xs">
                     <div class="product-imitation">
                         <div class="carouselContainer">
                             <span id="gallery" data-gallery=""
@@ -22,7 +22,7 @@
                                 <span data-bind="if:price">
                                     <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
                                 </span>
-                                <span data-bind="if:!price">Price on contact</span>
+                                <span data-bind="if:!price"><span data-bind="if:category == 'Jobs'">Salary</span><span data-bind="if:category != 'Jobs'">Price</span> on contact</span>
                             </span>
                             <span data-bind="if:isBidingAllowed">
                                 <span data-bind="if:price">

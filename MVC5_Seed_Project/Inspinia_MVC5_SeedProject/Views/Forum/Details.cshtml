@@ -89,7 +89,7 @@
                                     </div>
                                     @*<a data-bind="click:toggleQuestionReply">Reply</a>*@
                                     <div style="margin-left:30px" data-bind="visible:isQuestionReplyVisible">
-                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isQuestionReplyFocused,value:newQuestionReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}"></textarea>
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="hasFocus:isQuestionReplyFocused,value:newQuestionReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}"></textarea>
                                         <span data-bind="visible:newQuestionReply().length > 400 && newQuestionReply().length < 500">
                                             You can Enter only <span data-bind="text:499 - newQuestionReply().length"></span> more characters.
                                         </span>
@@ -151,14 +151,14 @@
                                             </div>
                                         </div>
                                         <div data-bind="visible:isAnswerReplyEditing()">
-                                            <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.id,data,event)}}"></textarea>
+                                            <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter($parent.id,data,event)}}"></textarea>
                                             <span data-bind="visible:description().length > 400 && description().length < 500">
                                                 You can Enter only <span data-bind="text:499 - description().length"></span> more characters.
                                             </span>
                                         </div>
                                     </div>
                                     <div style="margin-left:40px;" data-bind="visible:isAnswerReplyVisible()">
-                                        <textarea class="msgTextArea form-control" placeholder="Write comment.." data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
                                         <span data-bind="visible:newAnswerReply().length > 400 && newAnswerReply().length < 500">
                                             You can Enter only <span data-bind="text:499 - newAnswerReply().length"></span> more characters.
                                         </span>
@@ -183,7 +183,7 @@
                                         You can Enter only <span data-bind="text:1000 - newAnswer().length"></span> more characters.
                                     </span>
                                     <div style="margin:6px">
-                                        <button data-bind="click:function(){return addAnswer()}" class="btn btn-success pull-right">submit</button>
+                                        <button data-bind="click:function(){return addAnswer()}" id="submit-answer"  data-style="expand-left" class="ladda-button btn btn-success pull-right">submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -822,6 +822,8 @@
                     answer.description ( self.newAnswer());
                     answer.time = new Date($.now());
                     if (answer.description() != null && answer.description().trim() != "") {
+                        var laddaL = $('#submit-answer').ladda();
+                        laddaL.ladda('start');
                         $.ajax({
                             url: '/api/Forum/PostAnswer',
                             dataType: "json",
@@ -832,9 +834,11 @@
                             success: function (data) {
                                 self.showAnswers.push(new Answer(data));
                                 self.newAnswer('');
+                                laddaL.ladda('stop');
                             },
                             error: function () {
                                 toastr.error("failed to post Answer", "Error!");
+                                laddaL.ladda('stop');
                             }
                         })
                     }

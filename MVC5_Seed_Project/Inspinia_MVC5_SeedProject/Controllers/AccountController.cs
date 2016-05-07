@@ -307,8 +307,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                    new { userId = id, code = code },
                    protocol: Request.Url.Scheme,defaultPort:true);
 
-                ElectronicsController.sendEmail(email, "Recover your password", "Recover your password by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
-                
+               // ElectronicsController.sendEmail(email, "Recover your password", "Recover your password by clicking <a href=\"" + callbackUrl + "\">here</a> OR " + callbackUrl);
+                string Body = System.IO.File.ReadAllText(Server.MapPath("/Views/Admin/Email/PasswordRecovery.html"));
+                Body = Body.Replace("ResetPasswordLink", callbackUrl);
+                ElectronicsController.sendEmail(email, "Recover your password", Body);
             }
             catch (Exception e)
             {

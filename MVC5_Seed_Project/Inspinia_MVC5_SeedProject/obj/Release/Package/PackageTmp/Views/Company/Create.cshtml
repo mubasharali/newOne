@@ -111,8 +111,7 @@
             self.availableCategories = ["Mobiles", "Electronics", "Jobs", "Vehicles", "Real estate","Services","Pets & Animals","Books-Sports-Hobbies"];
 
             self.submitClicked = function () {
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
-                window.btn_clicked = true;
+                window.btn_clicked = true; //changed
                 $("#form").submit();
                 if ($("#form").valid()) {
                     var savingBidLoader = $('.ladda-button').ladda();

@@ -105,7 +105,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     @*<i class="fa fa-laptop modal-icon"></i>*@
-                    <h4 class="modal-title">Welcome Back <span data-bind="text:UserName"></span>!</h4>
+                    <h5 class="modal-title">Welcome Back <span data-bind="text:UserName"></span>!</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group"><label><span data-bind="visible:!isPasswordSaved()">Create </span> <span data-bind="visible:isPasswordSaved()">Enter </span>  password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterPassword}" placeholder="Password" class="form-control"></div>

@@ -208,7 +208,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         public ActionResult Index()
         {
             //SetUpTimer(new TimeSpan(4, 00, 00));
-          //  ViewBag.count = count;
+            //  ViewBag.count = count;
+           // return View("../Admin/WebsiteIsDown");
             var mobiles = from ad in db.MobileAds
                           where ad.Ad.AdImages.Count > 0
                           orderby ad.Ad.views

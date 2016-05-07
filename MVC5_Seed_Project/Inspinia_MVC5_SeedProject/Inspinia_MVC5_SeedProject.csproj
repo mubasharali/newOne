@@ -641,12 +641,14 @@
     <Content Include="Images\others\WaterMark.png" />
     <Content Include="Images\spinner.gif" />
     <Content Include="Images\Users\default.jpg" />
+    <Content Include="Images\others\Under.jpg" />
     <Content Include="Scripts\app\adImage-EditAd.js" />
     <Content Include="Scripts\app\AnimalSearch.js" />
     <Content Include="Scripts\app\BikesTree.js" />
     <Content Include="Scripts\app\CarsTree.js" />
     <Content Include="Scripts\app\chat.js" />
     <Content Include="Scripts\app\Company\CompanySearch.js" />
+    <Content Include="Scripts\app\dropzone-knockout-binding-edit.js" />
     <Content Include="Scripts\app\slick-knockout-binding-for-detail-page.js" />
     <Content Include="Scripts\app\ConvertToSlug.js" />
     <Content Include="Scripts\app\CreateAlert.js" />
@@ -746,6 +748,7 @@
     <None Include="MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\PublishProfiles\dealkar - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\dealkar-azure.pubxml" />
     <None Include="Properties\PublishProfiles\godady.pubxml" />
     <None Include="Properties\PublishProfiles\HostDemo.pubxml" />
@@ -901,6 +904,7 @@
     <Content Include="Views\Admin\Email\ConfirmEmail.html" />
     <Content Include="Views\Admin\Email\DeleteAdAlert.html" />
     <Content Include="Views\Admin\Email\DeletePageAlert.html" />
+    <Content Include="Views\Admin\Email\PasswordRecovery.html" />
     <Content Include="Views\Admin\Email\RenewAdAlert.html" />
     <Content Include="Views\Home\sitemap.xml" />
     <Content Include="Web.config">
@@ -1088,6 +1092,9 @@
     <Content Include="Views\Admin\ManageUsers.cshtml" />
     <Content Include="Views\Admin\SuperAdmin.cshtml" />
     <Content Include="Views\User\Chat.cshtml" />
+    <Content Include="Views\Admin\WebsiteIsDown.cshtml" />
+    <Content Include="Views\Shared\_CreateAdUnique.cshtml" />
+    <Content Include="Views\Shared\_EditAdUnique.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

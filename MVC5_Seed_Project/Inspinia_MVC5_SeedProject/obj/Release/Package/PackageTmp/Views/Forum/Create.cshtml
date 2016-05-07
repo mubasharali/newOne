@@ -65,7 +65,7 @@
                         </div>
                         <br />
                         <div class="form-group col-md-offset-2">
-                            <input type="submit" class="btn btn-info" />
+                            <input type="submit" data-bind="click:submitClicked"  data-style="expand-left" class="ladda-button btn btn-info" />
                         </div>
 
                     </form>
@@ -180,6 +180,17 @@
             SearchingLocation();
             AccountViewModel();
             ChatViewModel();
+            var self = this;
+            self.submitClicked = function () {
+                window.btn_clicked = true;
+                $("#form").submit();
+                if ($("#form").valid()) {
+                    var savingBidLoader = $('.ladda-button').ladda();
+                    savingBidLoader.ladda('start');
+                } else {
+                    toastr.info("Fields with * are mandatory!");
+                }
+            }
         }
         $(document).ready(function () {
             ko.applyBindings(new viewModel());

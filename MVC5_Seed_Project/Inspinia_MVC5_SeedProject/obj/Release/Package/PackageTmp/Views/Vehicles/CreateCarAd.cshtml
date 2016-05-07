@@ -143,7 +143,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @Html.Partial("~/Views/Shared/_CreateAd_Most.cshtml")
+                            @Html.Partial("~/Views/Shared/_CreateAdUnique.cshtml")
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
@@ -190,7 +190,7 @@
             ChatViewModel();
             var self = this;
             self.submitClicked = function () {
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;
                 $("#form").submit();
                 if ($("#form").valid()) {

@@ -28,7 +28,7 @@
             self.name = ko.observable("Irfan");
             self.getList = function () {
                 console.log(fileList);
-                $("input[id*='fileNames']").val(JSON.stringify(fileList));
+                if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
             }
         };
         $(document).ready(function () {

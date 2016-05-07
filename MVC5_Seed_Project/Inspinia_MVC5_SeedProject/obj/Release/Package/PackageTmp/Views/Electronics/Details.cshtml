@@ -199,7 +199,7 @@
                                             <dl class="dl-horizontal m-t-md small">
                                                 <dt>Category:</dt>
                                                 <dd data-bind="text:subcategory"></dd>
-                                                <dt data-bind="visible:condition != 'z'">Condition:</dt>
+                                                <dt data-bind="visible:condition != 'z' && condition != ''">Condition:</dt>
                                                 <dd data-bind="visible:condition != 'z',text:condition"></dd>
                                             </dl>
                                         </div>
@@ -278,15 +278,17 @@
 
                                             <dl class="dl-horizontal m-t-md small">
                                                 <dt>Category:</dt>
-                                                <dd data-bind="text:$parent.subcategory"></dd>
+                                                <dd><span data-bind="text:$parent.subcategory"></span> (<span data-bind="if:$parent.type=='Want to buy'">For rent</span><span data-bind="if:$parent.type!='Want to buy'">For sale</span>)</dd>
                                                 <dt>Area:</dt>
-                                                <dd data-bind="text:area"></dd>
-                                                <dt>Bed rooms:</dt>
-                                                <dd data-bind="text:bedroom"></dd>
-                                                <dt>Bath room:</dt>
-                                                <dd data-bind="text:bathroom"></dd>
-                                                <dt>Floor</dt>
-                                                <dd data-bind="text:floor"></dd>
+                                                <dd><span data-bind="text:area"></span> sq ft</dd>
+                                                <span data-bind="if:$parent.subcategory != 'plot & land'">
+                                                    <dt>Bed rooms:</dt>
+                                                    <dd data-bind="text:bedroom"></dd>
+                                                    <dt>Bath room:</dt>
+                                                    <dd data-bind="text:bathroom"></dd>
+                                                    <dt>Floor</dt>
+                                                    <dd data-bind="text:floor"></dd>
+                                                </span>
                                             </dl>
                                         </div>
                                         <div data-bind="with: showJob">
@@ -301,23 +303,23 @@
                                                 <dd data-bind="text:qualification"></dd>
                                                 <dt>exprience:</dt>
                                                 <dd data-bind="text:exprience"></dd>
-                                                <dt>Career Level</dt>
+                                                <dt>Career Level:</dt>
                                                 <dd data-bind="text:careerLevel"></dd>
-                                                <dt>Last Date To Apply</dt>
+                                                <dt>Last Date To Apply:</dt>
                                                 <dd data-bind="text:lastDateToApply"></dd>
-                                                <dt>Salary</dt>
+                                                <dt>Salary:</dt>
                                                 <dd data-bind="text:$parent.price"></dd>
-                                                <dt>Salary Type</dt>
+                                                <dt>Salary Type:</dt>
                                                 <dd data-bind="text:salaryType"></dd>
                                                 <span @*data-bind="visible:!showSkills().length == 0"*@>
-                                                    <dt>Skills</dt>
+                                                    <dt>Skills:</dt>
                                                     <dd><span data-bind="foreach:showSkills"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></span> </dd>
                                                 </span>
-                                                <dt>Gender</dt>
+                                                <dt>Gender:</dt>
                                                 <dd data-bind="text:$parent.gender"></dd>
-                                                <dt>Job Type</dt>
+                                                <dt>Job Type:</dt>
                                                 <dd data-bind="text:$parent.subcategory"></dd>
-                                                <dt>Shift</dt>
+                                                <dt>Shift:</dt>
                                                 <dd data-bind="text:$parent.shift"></dd>
                                                 @*<dt>Year</dt>
                             <dd data-bind="text:year"></dd>
@@ -345,11 +347,11 @@
                                         <div class="text-right">
                                             <div class="btn-group">
                                                 <button data-bind="click:saveItem" class="btn btn-white btn-sm"><i data-bind="style:{color: isSaved()? 'red' : 'gray'}" class="fa fa-star"></i> <span data-bind="visible:isSaved()"> Remove from</span><span data-bind="visible:!isSaved()"> Add to</span>  wishlist </button>
-                                                <a data-bind="visible:companyId, attr:{href:companyLink}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller  (<span data-bind="text:companyName"></span> )</a>
+                                                <a data-bind="visible:companyId, attr:{href:companyLink}" class="btn btn-white btn-sm"><i class="fa fa-user"></i><span data-bind="if:category == 'Jobs' || category == 'Services'"> Posted by</span><span data-bind="if:category != 'Jobs' && category != 'Services'"> Seller </span>   (<span data-bind="text:companyName"></span>)</a>
 
-                                                <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i> Seller profile (<span data-bind="text:postedByName"></span> )</a>
+                                                <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i><span data-bind="if:category == 'Jobs' || category == 'Services'"> Posted by</span> <span data-bind="if:category != 'Jobs' && category != 'Services'"> Seller profile</span> (<span data-bind="text:postedByName"></span>)</a>
                                             </div>
-                                        </div>
+                                        </div><br />
                                         <p class="small text-muted"> when you contact <span data-bind="visible:companyId,text:companyName"></span><span data-bind="visible:!companyId,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
 
                                     </div>

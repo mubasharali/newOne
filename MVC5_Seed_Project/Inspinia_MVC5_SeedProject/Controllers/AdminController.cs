@@ -242,7 +242,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         {
                             LaptopModel mod = new  LaptopModel();
                             mod.addedBy = User.Identity.GetUserId();
-                            mod.brandId = db.Mobiles.First(x => x.brand.Equals(brand)).Id;
+                            mod.brandId = db.LaptopBrands.First(x => x.brand.Equals(brand)).Id;
                             mod.status = "a";
                             mod.time = DateTime.UtcNow;
                             mod.model = model;
@@ -285,7 +285,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         {
                             BikeModel mod = new  BikeModel();
                             mod.addedBy = User.Identity.GetUserId();
-                            mod.brandId = db.Mobiles.First(x => x.brand.Equals(brand)).Id;
+                            mod.brandId = db.BikeBrands.First(x => x.brand.Equals(brand)).Id;
                             mod.status = "a";
                             mod.time = DateTime.UtcNow;
                             mod.model = model;
@@ -328,7 +328,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                         {
                             CarModel mod = new  CarModel();
                             mod.addedBy = User.Identity.GetUserId();
-                            mod.brandId = db.Mobiles.First(x => x.brand.Equals(brand)).Id;
+                            mod.brandId = db.CarBrands.First(x => x.brand.Equals(brand)).Id;
                             mod.status = "a";
                             mod.time = DateTime.UtcNow;
                             mod.model = model;

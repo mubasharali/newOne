@@ -264,13 +264,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                 price = ad.price,
                                                 reportedCount = ad.Reporteds.Count,
                                                 isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
-                                                //views = ad.AdViews.Count,
+                                                category = ad.category,
+                                                subcategory = ad.subcategory,
                                                 views = ad.views,
-                                                condition = ad.condition,
-
-                                                color = ad.LaptopAd.color,
-                                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                                model = ad.LaptopAd.LaptopModel.model,
                                                 adTags = from tag in ad.AdTags.ToList()
                                                          select new
                                                          {
@@ -325,13 +321,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                       price = ad.price,
                                       reportedCount = ad.Reporteds.Count,
                                       isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
-                                      //views = ad.AdViews.Count,
+                                      category = ad.category,
+                                      subcategory = ad.subcategory,
                                       views = ad.views,
-                                      condition = ad.condition,
-
-                                      color = ad.LaptopAd.color,
-                                      brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                      model = ad.LaptopAd.LaptopModel.model,
                                       adTags = from tag in ad.AdTags.ToList()
                                                select new
                                                {
@@ -408,13 +400,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                 price = ad.price,
                                                 reportedCount = ad.Reporteds.Count,
                                                 isReported = ad.Reporteds.Any(x => x.reportedBy == loginUserId),
-                                                //views = ad.AdViews.Count,
+                                                category = ad.category,
+                                                subcategory = ad.subcategory,
                                                 views = ad.views,
-                                                condition = ad.condition,
-
-                                                color = ad.LaptopAd.color,
-                                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                                model = ad.LaptopAd.LaptopModel.model,
                                                 adTags = from tag in ad.AdTags.ToList()
                                                          select new
                                                          {
@@ -454,13 +442,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                price = ad.Ad.price,
                                                reportedCount = ad.Ad.Reporteds.Count,
                                                isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
-                                               //views = ad.AdViews.Count,
+                                               category = ad.Ad.category,
+                                               subcategory = ad.Ad.subcategory,
                                                views = ad.Ad.views,
-                                               condition = ad.Ad.condition,
-
-                                               color = ad.Ad.LaptopAd.color,
-                                               brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                               model = ad.Ad.LaptopAd.LaptopModel.model,
                                                adTags = from tag in ad.Ad.AdTags.ToList()
                                                         select new
                                                         {

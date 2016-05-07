@@ -43,7 +43,7 @@ function SearchingLocation() {
             }
         });
     }
-    self.loadPopularPlaces = function () {
+    self._loadPopularPlaces = function () {
         self._isSearchPPLoading(true);
         searchingPPs.removeAll();
         $.ajax({
@@ -84,7 +84,7 @@ function SearchingLocation() {
             searchingPP("");
         }
         $.cookie("searchCity", searchingCity(), { path: '/'});
-        self.loadPopularPlaces();
+        self._loadPopularPlaces();
     })
     searchingPP.subscribe(function (value) {
         $.cookie("searchPP", searchingPP(), { path: '/' });

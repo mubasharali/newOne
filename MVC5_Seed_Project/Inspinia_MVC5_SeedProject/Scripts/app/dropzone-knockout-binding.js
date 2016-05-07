@@ -13,14 +13,15 @@
                 var myDropzone = this;
                 fileList = [];
                 i = 1;
+                this.on("addedfile", function (file) {
+                    isFilesUploading = true;
+                });
                 this.on("success", function (file, serverFileName) {
-
-                    console.log(serverFileName);
                     var abc = $.map(serverFileName, function (item) { return (item); });
                     $.each(abc, function (index, value) {
                         fileList[i] = { "fileName": value, "fileId": i++ };
                     })
-                    console.log(fileList);
+                    isFilesUploading = false;
                 });
             }
         };

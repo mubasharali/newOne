@@ -17,28 +17,29 @@
             <p> It is mendatory to submit after changing option</p>
 
             <div class="btn btn-default" data-bind="click:addModelBtn">Add new</div>
-            <div data-bind="visible:isAddingModel">
-                <div class="form-group">
-                    <label class="control-label col-md-2">Select Brand</label>
-                    <div class="col-md-10">
-                        <select id="select-brand" class="demo-default" name="brand" data-bind="options: availableBrands,
+            <div class="row">
+                <div data-bind="visible:isAddingModel">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Select Brand</label>
+                        <div class="col-md-10">
+                            <select id="select-brand" class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
                        optionsCaption: 'Choose brand...'"></select>
-                    </div>
-                </div>
-                <div data-bind="with:selectedBrand">
-                    <div class="form-group">
-                        <label class="control-label col-md-2">Select Model</label>
-                        <div class="col-md-10">
-                            <select id="select-model" class="demo-default" name="model" data-bind="options: $parent.availableModels,
-                       value: $parent.selectedModel,
-                       optionsCaption: 'Choose model...'"></select>
                         </div>
                     </div>
+                    <div data-bind="with:selectedBrand">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Select Model</label>
+                            <div class="col-md-10">
+                                <select id="select-model" class="demo-default" name="model" data-bind="options: $parent.availableModels,
+                       value: $parent.selectedModel,
+                       optionsCaption: 'Choose model...'"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <button data-bind="click:saveModel">Save</button>
                 </div>
-                <button data-bind="click:saveModel">Save</button>
             </div>
-
             <h3>Brands</h3>
             <div data-bind="foreach:showBrands">
                 <div data-bind="visible:!isBrandEditing()">

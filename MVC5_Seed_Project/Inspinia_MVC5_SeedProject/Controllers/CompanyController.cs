@@ -18,7 +18,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Inspinia_MVC5_SeedProject.CodeTemplates;
 using System.Web;
-
+using Inspinia_MVC5_SeedProject.CodeTemplates;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class CompanyController : ApiController
@@ -40,6 +40,38 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             var companies = db.Companies.Where(x => x.createdBy.Equals(loginUserId)).Select(x => x.title);
             return Ok(companies);
         }
+        public async Task<IHttpActionResult> SaveNeedAService(string title, string tags, string city, string pp , string exectLocation)
+        {
+            var loginUserId = User.Identity.GetUserId();
+            if (loginUserId == null)
+            {
+                return BadRequest();
+            }
+            Ad ad = new Ad();
+            ad.title = title;
+            ElectronicsController e = new ElectronicsController();
+            // e.MyAd(ad, "Save", "Services");
+            ad.category = "Services";
+            ad.status = "a";
+            ad.type = true;
+            ad.condition = "z";
+            ad.description = "                                                               ";
+            ad.postedBy = loginUserId;
+            ad.time = DateTime.UtcNow;
+            db.Ads.Add(ad);
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch(Exception ed)
+            {
+                string s = ed.ToString();
+            }
+            e.SaveTags(tags, ad);
+            e.MyAdLocation(city, pp, exectLocation, ad,"Save");
+            await db.SaveChangesAsync();
+            return Ok("Done");
+        }
         // GET api/Company/5
         [ResponseType(typeof(Company))]
         public async Task<IHttpActionResult> GetCompany(int id)
@@ -52,12 +84,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
             return Ok(company);
         }
-        public async Task<IHttpActionResult> SearchCompanies(string title, string tags,string category = null)
+        public async Task<IHttpActionResult> SearchCompanies(string title, string tags,string category = null,string city = null, string famousPlace = null)
         {
             if (tags == null || tags == "undefined")
             {
                 var ret = from company in db.Companies
-                          where ((title == null || title == "" || title == "undefined" || company.title.Contains(title)) && (category == null || category == "" || category == "undefined" || company.category.Equals(category)))
+                          where ((title == null || title == "" || title == "undefined" || company.title.Contains(title)) && (category == null || category == "" || category == "undefined" || company.category.Equals(category)) && (city == null || city == "undefined" || company.City.cityName.Equals(city)) && (famousPlace == null || famousPlace == "undefined" || company.popularPlace.name.Equals(famousPlace)))
                           select new
                           {
                               id = company.Id,
@@ -87,7 +119,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 tagsArray = tags.Split(',');
             }
             var ret1 = from company in db.Companies
-                       where (title == null || title == "" || title == "undefined" || company.title.Contains(title) && (!tagsArray.Except(company.CompanyTags.Select(x => x.Tag.name)).Any()) && (category == null || category == "" || category == "undefined" || company.category.Equals(category)))
+                       where ((title == null || title == "" || title == "undefined" || company.title.Contains(title) ) && (!tagsArray.Except(company.CompanyTags.Select(x => x.Tag.name)).Any()) && (category == null || category == "" || category == "undefined" || company.category.Equals(category)))
                       select new
                       {
                           id = company.Id,
@@ -322,10 +354,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                    isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == loginUserId),
                                                    views = ad.Ad.views,
                                                    condition = ad.Ad.condition,
-
+                                                   category = ad.Ad.category,
                                                    color = ad.Ad.LaptopAd.color,
-                                                   brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
-                                                   model = ad.Ad.LaptopAd.LaptopModel.model,
+                                                 //  brand = ad.Ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                                 //  model = ad.Ad.LaptopAd.LaptopModel.model,
                                                    adTags = from tag1 in ad.Ad.AdTags.ToList()
                                                             select new
                                                             {
