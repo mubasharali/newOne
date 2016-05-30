@@ -15,6 +15,7 @@ using System.Data.Entity.Validation;
 using Inspinia_MVC5_SeedProject.Models;
 using Inspinia_MVC5_SeedProject.CodeTemplates;
 using MvcSiteMapProvider.Web.Mvc;
+using MinifierLibrary.Minifiers;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
@@ -238,6 +239,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
 
         public ActionResult Temp()
+        {
+            return View();
+        }
+        [Route("Error")]
+        public ActionResult Error()
         {
             return View();
         }

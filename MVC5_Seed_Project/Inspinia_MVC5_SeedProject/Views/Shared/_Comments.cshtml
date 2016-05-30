@@ -24,6 +24,11 @@
                         <small class="text-muted"><span data-bind="text: time"></span></small> - <span class="btn btn-white btn-xs" data-bind="click:toggleComment">Reply</span>
 
                         <span data-bind="if: postedById === loginUserId"><a class="btn btn-white btn-xs pull-right" data-bind="click:function(){ $parent.deleteComment($data.id)}">Delete</a><a class="btn btn-white btn-xs pull-right" data-bind="click:function(){return editComment($data.description)}">Edit</a></span>
+                        <span data-bind="visible:($parent.loginUserId != postedById ) ">
+                            <span data-bind="visible:isAdmin()">
+                                <a data-bind="click:function(){ $parent.deleteComment($data.id)}" class="btn btn-white btn-xs pull-right confirmDelete">Delete</a>
+                            </span>
+                        </span>
                     </span>
                     <span data-bind="visible:isEditing()">
                         <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="value:description,valueUpdate:'afterkeydown', hasFocus:isFocus, jqAutoresize: {},event:{keyup:checkEnterEditing}"></textarea>
@@ -48,6 +53,11 @@
                                     </span>
                                     <small class="text-muted"><span data-bind="text: time"></span></small>
                                     <span data-bind="if: postedById === $parent.loginUserId"><span class="btn btn-white btn-xs pull-right" data-bind="click:$parent.deleteCommentReply">Delete</span><a class="btn btn-white btn-xs pull-right" data-bind="click:function(){return editCommentReply()}">Edit</a></span>
+                                    <span data-bind="visible:($parent.loginUserId != postedById ) ">
+                                        <span data-bind="visible:isAdmin()">
+                                            <a data-bind="click:$parent.deleteCommentReply" class="btn btn-white btn-xs pull-right confirmDelete">Delete</a>
+                                        </span>
+                                    </span>
                                 </span>
                                 <span data-bind="visible:isEditing()">
                                     <textarea class="msgTextArea form-control" data-bind="value:description,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter1Editing($parent.id,data,event)}}" placeholder="Write reply (Enter to post)"></textarea>
@@ -63,7 +73,7 @@
                             <img data-bind="attr:{src:$parent.loginUserProfileLink}" alt="image" class="img-circle">
                         </a>
                         <div class="media-body">
-                            <textarea class="msgTextArea form-control" data-bind="value:newCommentReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}" placeholder="Write reply (Enter to post)"></textarea>
+                            <textarea class="msgTextArea form-control" data-bind="attr:{disabled:isCommentReplyPosting()},value:newCommentReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}" placeholder="Write reply (Enter to post)"></textarea>
 
                         </div>
                     </div>
@@ -76,7 +86,7 @@
             <img data-bind="attr:{src:loginUserProfileLink}" alt="image" src="/Images/profile.jpg" class="img-circle">
         </a>
         <div class="media-body">
-            <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="value:newComment,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter}"></textarea>
+            <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="attr:{disabled:isCommentPosting()},value:newComment,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter}"></textarea>
 
         </div>
     </div>

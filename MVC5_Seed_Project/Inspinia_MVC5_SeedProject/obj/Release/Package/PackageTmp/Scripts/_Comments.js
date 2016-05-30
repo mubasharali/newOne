@@ -58,6 +58,13 @@
         }
         self.likeCommentReply = function (id, loginUserId, isup) {
             if (loginUserId) {
+                if (isup) {
+                    self.isliked(true);
+                    self.isunliked(false);
+                } else {
+                    self.isliked(false);
+                    self.isunliked(true);
+                }
                 $.ajax({
                     url: '/api/Comment/likeCommentReply?id=' + id + '&isup=' + isup,
                     dataType: "json",
@@ -191,6 +198,15 @@
         }
         self.likeComment = function (id, loginUserId, isup) {
             if (loginUserId) {
+             //   var currentStatus = self.isliked();
+                if (isup) {
+                    self.isliked(true);
+                    self.isunliked(false);
+                   // self.voteUpCount(self.voteUpCount()++);
+                } else {
+                    self.isliked(false);
+                    self.isunliked(true);
+                }
                 $.ajax({
                     url: '/api/Comment/likeComment?id=' + id + '&isup=' + isup,
                     dataType: "json",
@@ -218,6 +234,7 @@
             }
         }
         self.newCommentReply = ko.observable();
+        self.isCommentReplyPosting = ko.observable(false);
         self.addCommentReply = function (islog) { //change
             if (islog) {
                 var reply = new commentReply();
@@ -226,7 +243,7 @@
                 reply.description(self.newCommentReply());
                 if (reply.description() != null && reply.description().trim() != "") {
                     //myhub.server.AddCommentReply(reply).fail(function (err) { toastr.error("failed to post comment reply", "Error!"); });
-
+                    self.isCommentReplyPosting(true);
                     $.ajax({
                         url: '/api/Comment/PostCommentReply',
                         dataType: "json",
@@ -237,8 +254,10 @@
                         success: function (data) {
                             self.showCommentReply.push(new commentReply(data));
                             self.newCommentReply('');
+                            self.isCommentReplyPosting(false);
                         },
                         error: function () {
+                            self.isCommentReplyPosting(false);
                             toastr.error("failed to post comment reply", "Error!");
                         }
                     });

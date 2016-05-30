@@ -20,18 +20,17 @@ using Microsoft.Owin.Security.Facebook;
 using System.Security.Claims;
 using System.Net.Http;
 using System.Net;
+using Microsoft.Owin.Security.DataProtection;
 //using Microsoft.Owin.Security.DataProtection;
 namespace Inspinia_MVC5_SeedProject
 {
     public partial class Startup
     {
-        //internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
+        internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
 
-        // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            //DataProtectionProvider = app.GetDataProtectionProvider();
-            // Enable the application to use a cookie to store information for the signed in user
+            DataProtectionProvider = app.GetDataProtectionProvider();
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

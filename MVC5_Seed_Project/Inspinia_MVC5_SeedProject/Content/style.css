@@ -4,8 +4,8 @@
  *   version 2.4
  *
 */
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
+/*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700"); have included this in layout.cshtml head section*/
 @font-face { font-family: fontastique; src: url('/fonts/fontastique.ttf'); } 
 .navbar-brand{
     padding-top:20px;

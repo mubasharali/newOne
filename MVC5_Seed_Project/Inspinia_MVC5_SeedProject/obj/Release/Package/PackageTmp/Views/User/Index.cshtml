@@ -131,27 +131,7 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="ibox hidden-xs">
-                    <div class="ibox-content">
-                        <h3>Followers and friends</h3>
-                        <p class="small">
-                            If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't
-                            anything embarrassing
-                        </p>
-                        <div class="user-friends">
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a3.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a4.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a5.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a6.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a7.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a8.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a2.jpg"></a>
-                            <a href=""><img alt="image" class="img-circle" src="~/Images/a1.jpg"></a>
-                        </div>
-                    </div>
-                </div>*@
+                
                 <div class="ibox hidden-xs" data-bind="visible:loginUserId == id">
                     <div class="ibox-title"><h5>Manage Alerts</h5></div>
                     <div class="ibox-content">
@@ -175,11 +155,33 @@
                         <div style="color:red" data-bind="html:followSummary"></div>
                     </div>
                 </div>
-
-                
-
+                <div class="hidden-xs">
+                    @*<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>*@
+                    <!-- profile-page-left-side -->
+                    @*<ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-3540353581324370"
+                             data-ad-slot="4580436443"
+                             data-ad-format="auto"></ins>
+                        <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>*@
+                </div>
+                <div class="hidden-xs">
+                    <br />
+                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <!-- ad-detail-page -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3540353581324370"
+                         data-ad-slot="3103703247"
+                         data-ad-format="auto"></ins>
+                    <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
             </div>
-
+                
             <div class="col-lg-7 col-sm-9">
                 <h4>Active ads (<span data-bind="text:activeads().length"></span>)</h4><hr />
                 <div data-bind="foreach:activeads">
@@ -272,8 +274,6 @@
 @Styles.Render("~/plugins/slickThemeStyles")
 @Styles.Render("~/plugins/toastrStyles")
 }
-
-
 
 @section Scripts{
     

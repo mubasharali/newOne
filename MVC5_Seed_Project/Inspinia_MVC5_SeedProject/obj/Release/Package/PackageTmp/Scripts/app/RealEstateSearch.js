@@ -104,7 +104,7 @@ $("#ionrange_area").ionRangeSlider({
     min: 0,
     max: 5000,
     type: 'double',
-    prefix: "ft ",
+    prefix: "sq ft ",
     maxPostfix: "+",
     prettify: false,
     hasGrid: true,

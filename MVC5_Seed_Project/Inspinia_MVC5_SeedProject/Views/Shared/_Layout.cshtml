@@ -6,16 +6,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="orv0gPJPIeitRMIAGV_0VbMTx3DfWKJa32R4E9Vrr20" />
+    <meta name="google-site-verification" content="T7hZi6YPdzdd_bKbed1Hsq6xWxusKQNCGw0fshYoX4E" /> @*dealkar.pk*@
+    @*<meta name="google-site-verification" content="orv0gPJPIeitRMIAGV_0VbMTx3DfWKJa32R4E9Vrr20" />*@ @*newtemp*@
     <link rel="icon" href="~/Images/others/favicon.png" >
     <title>
          @if (ViewBag.Title != null)
         { @ViewBag.Title }
         else
-        { <text>Classified in mobiles, laptops, vehicles, RealEstate, Jobs, Services, Electronics, Animals, Study, Entertainment, Matrimonal, Home Appliances, Business  </text> }
+        { <text>Classified Website @*in mobiles, laptops, vehicles, RealEstate, Jobs, Services, Electronics, Animals, Study, Entertainment, Matrimonal, Home Appliances, Business*@  </text> }
     | dealkar.pk
     </title>
-    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,700' rel='stylesheet' type='text/css'>
+
+
     @RenderSection("Styles", required: false)
     @Styles.Render("~/Content/css")
 @Styles.Render("~/font-awesome/css")
@@ -23,6 +27,18 @@
   @Styles.Render("~/plugins/laddaStyles")
     <link href="~/Content/myStyles.css" rel="stylesheet" /> 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script>
+        //dealkar.pk-official
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-74635367-2', 'auto');
+        ga('send', 'pageview');
+    </script>
 </head>
 <body class="fixed-sidebar fixed-nav mini-navbar">
 
@@ -80,7 +96,7 @@
     <script src="~/Scripts/app/chat.js"></script>
     <script src="~/Scripts/UserLogin.js"></script>
     <script src="~/Scripts/app/GetLoginUserId.js"></script>
-    <script src="~/Scripts/app/GoogleAnalytics.js"></script>
+    @*<script src="~/Scripts/app/GoogleAnalytics.js"></script>*@
     <script>
         var isConnectionReady = ko.observable(false);
         $(function () {
@@ -93,9 +109,9 @@
     <script>
         $(function () {
             
-            $.cookie("AWSFolderName", "tempItems/", { path: '/' });
-            $.cookie("AWSUserFolder", "tempUsers/", { path: '/' });
-            $.cookie("AWSCompanyFolder", "tempCompanies/", { path: '/' });
+            $.cookie("AWSFolderName", "Items/", { path: '/' });
+            $.cookie("AWSUserFolder", "Users/", { path: '/' });
+            $.cookie("AWSCompanyFolder", "Companies/", { path: '/' });
             $.cookie("AWSURL", "https://s3.amazonaws.com/dealkar.pk/", { path: '/' });
             //  $("#side-menu").css({ "display": "block" });
             toastr.options = {
@@ -116,18 +132,7 @@
             }
         }
         
-        //ko.bindingHandlers.truncateLocation = {
-        //    update: function (element, valueAccessor, allBindingsAccessor) {
-        //        var originalText = ko.utils.unwrapObservable(valueAccessor()),
-        //            // 10 is a default maximum length
-        //            length = ko.utils.unwrapObservable(allBindingsAccessor().maxTextLength) || 12,
-        //            truncateLocation = originalText.length > length ? originalText.substring(0, length) + " ..." : originalText;
-        //        // updating text binding handler to show truncateLocation
-        //        ko.bindingHandlers.text.update(element, function () {
-        //            return truncateLocation;
-        //        });
-        //    }
-        //};
+        
     </script>
 </body>
 </html>

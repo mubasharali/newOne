@@ -18,6 +18,7 @@ using Facebook;
 using System.Configuration;
 using System.Net;
 using System.IO;
+using System.Web.UI;
 //using Inspinia_MVC5_SeedProject;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
@@ -91,7 +92,12 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
-           
+            var dataProtectionProvider = Startup.DataProtectionProvider;
+            //this.UserTokenProvider =
+            //        new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+            UserManager.UserTokenProvider =
+                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+
         }
 
         public AccountController(UserManager<ApplicationUser> userManager)
@@ -103,6 +109,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         //
         // GET: /Account/Login
         [AllowAnonymous]
+        [OutputCache(NoStore = true, Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
@@ -141,9 +148,9 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 return View("Login");
             }
             
-            var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
-            UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
-                as IUserTokenProvider<ApplicationUser, string>;
+            //var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+            //UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+            //    as IUserTokenProvider<ApplicationUser, string>;
 
             IdentityResult result;
             try
@@ -209,7 +216,8 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
+        //[OutputCache(NoStore = true, Location = OutputCacheLocation.None)]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -253,11 +261,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         {
             
         }
-        public async Task<bool> SendWelcomeMail(string name, string email)
-        {
-            ElectronicsController.sendEmail(email, "Welcome to dealkar.pk", "Hello " + name + "!<br/>Our team welcome you to <a href='\newtemp.apphb.com'>here</a>");
-            return true;
-        }
+       
         public async Task<bool> SendMailtoConfirmEmailAddress(string id,string name,string email)
         {
             var user = await db.AspNetUsers.FindAsync(id);
@@ -267,9 +271,9 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             }
             try
             {
-                var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
-                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
-                    as IUserTokenProvider<ApplicationUser, string>;
+                //var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+                //UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                //    as IUserTokenProvider<ApplicationUser, string>;
 
                 var code = await UserManager.GenerateEmailConfirmationTokenAsync(id);
                 //var callbackUrl = Url.Action(
@@ -297,9 +301,9 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         {
             try
             {
-                var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
-                UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
-                    as IUserTokenProvider<ApplicationUser, string>;
+                //var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+                //UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+                //    as IUserTokenProvider<ApplicationUser, string>;
 
                 var code = await UserManager.GeneratePasswordResetTokenAsync(id);
                 var callbackUrl = Url.Action(
@@ -315,6 +319,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             catch (Exception e)
             {
                 string s = e.ToString();
+                ElectronicsController.sendEmail(email, "Recover your password", s);
             }
             return true;
         }
@@ -344,9 +349,9 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             string userId = Request["userId"];
             string code = Request["code"];
             string password = Request["password"];
-            var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
-            UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
-                as IUserTokenProvider<ApplicationUser, string>;
+            //var provider = new DpapiDataProtectionProvider("http://newtemp.apphb.com/");
+            //UserManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser, string>(provider.Create("UserToken"))
+            //    as IUserTokenProvider<ApplicationUser, string>;
 
             IdentityResult result;
             try
@@ -950,6 +955,10 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            if(user.SecurityStamp == null)
+            {
+                user.SecurityStamp = "abcdjadfasd34ads";
+            }
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
             // Extracted the part that has been changed in SignInAsync for clarity.
             

@@ -18,7 +18,7 @@
     <Property Name="category" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="postedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="title" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
+    <Property Name="description" Type="varchar" MaxLength="8000" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
     <Property Name="price" Type="int" />
     <Property Name="isnegotiable" Type="char" MaxLength="1" />
@@ -249,8 +249,9 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="sentFrom" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="sentTo" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="message" Type="nvarchar" MaxLength="1000" Nullable="false" />
+    <Property Name="message" Type="nvarchar" MaxLength="4000" Nullable="false" />
     <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="SeenAt" Type="datetime" />
   </EntityType>
   <EntityType Name="City">
     <Key>
@@ -309,7 +310,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="shortabout" Type="nvarchar" MaxLength="60" />
-    <Property Name="longabout" Type="nvarchar" MaxLength="1000" />
+    <Property Name="longabout" Type="nvarchar" MaxLength="4000" />
     <Property Name="since" Type="date" />
     <Property Name="contactNo1" Type="nvarchar" MaxLength="20" />
     <Property Name="contactNo2" Type="nvarchar" MaxLength="20" />

@@ -44,12 +44,19 @@
                         </div>
                         <hr />
                         <h5>Search by Salary type</h5>
-                        <div class="">
+                        <select class="form-control" data-bind="value:salaryType">
+                            <option value="">Choose</option>
+                            <option value="h">Per hour</option>
+                            <option value="d">Per day</option>
+                            <option value="m">Per month</option>
+                            <option value="y">Per year</option>
+                        </select>
+                        @*<div class="">
                             <label><input class="radio i-checks" type="radio" data-bind="checked:salaryType " value="h" /> Per hour</label>
                             <label><input class="radio i-checks" type="radio" data-bind="checked: salaryType " value="d" /> Per day</label>
                             <label><input class="radio i-checks" type="radio" data-bind="checked:salaryType " value="m" /> Per month</label>
                             <label><input class="radio i-checks" type="radio" data-bind="checked: salaryType " value="y" /> Per year</label>
-                        </div>
+                        </div>*@
                         <hr />
                         <h5>Search by qualification</h5>
                         @*<select id="select-qualification" class="demo-default" data-bind="options: availableQualifications,
@@ -88,6 +95,19 @@
                     
                 </div>
                 @Html.Partial("/Views/Shared/_CreateAlert.cshtml")
+                <div class="hidden-xs">
+                    <br />
+                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <!-- ad-detail-page -->
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3540353581324370"
+                         data-ad-slot="3103703247"
+                         data-ad-format="auto"></ins>
+                    <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
             </div>
         </div>
         <div class="col-sm-8 col-md-7 col-lg-7">

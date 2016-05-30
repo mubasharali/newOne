@@ -23,7 +23,7 @@
           <Property Name="category" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="postedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="8000" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
           <Property Name="price" Type="int" />
           <Property Name="isnegotiable" Type="char" MaxLength="1" />
@@ -254,8 +254,9 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="sentFrom" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="sentTo" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="message" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="message" Type="nvarchar" MaxLength="4000" Nullable="false" />
           <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="SeenAt" Type="datetime" />
         </EntityType>
         <EntityType Name="City">
           <Key>
@@ -314,7 +315,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="shortabout" Type="nvarchar" MaxLength="60" />
-          <Property Name="longabout" Type="nvarchar" MaxLength="1000" />
+          <Property Name="longabout" Type="nvarchar" MaxLength="4000" />
           <Property Name="since" Type="date" />
           <Property Name="contactNo1" Type="nvarchar" MaxLength="20" />
           <Property Name="contactNo2" Type="nvarchar" MaxLength="20" />
@@ -3240,7 +3241,7 @@
           <Property Name="category" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="postedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" Nullable="false" MaxLength="8000" FixedLength="false" Unicode="false" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="price" Type="Int32" />
           <Property Name="isnegotiable" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
@@ -3395,10 +3396,11 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="sentFrom" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="sentTo" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="message" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="message" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Chat_ToTable" FromRole="Chat" ToRole="AspNetUser" />
           <NavigationProperty Name="AspNetUser1" Relationship="Model.FK_Chat_ToTable_1" FromRole="Chat" ToRole="AspNetUser" />
+          <Property Name="SeenAt" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Comment">
           <Key>
@@ -5039,7 +5041,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="shortabout" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
-          <Property Name="longabout" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="longabout" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="since" Type="DateTime" Precision="0" />
           <Property Name="contactNo1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="contactNo2" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -5758,6 +5760,7 @@
           <EntitySetMapping Name="Chats">
             <EntityTypeMapping TypeName="Model.Chat">
               <MappingFragment StoreEntitySet="Chat">
+                <ScalarProperty Name="SeenAt" ColumnName="SeenAt" />
                 <ScalarProperty Name="time" ColumnName="time" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="sentTo" ColumnName="sentTo" />

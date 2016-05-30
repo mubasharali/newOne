@@ -127,6 +127,14 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             return RedirectToAction("../not-found");
         }
+        public async Task<ActionResult> LatestAds()
+        {
+            if (isAdmin())
+            {
+                return View();
+            }
+            return RedirectToAction("../not-found");
+        }
         public async Task<ActionResult> Feedback()
         {
             if (isAdmin())

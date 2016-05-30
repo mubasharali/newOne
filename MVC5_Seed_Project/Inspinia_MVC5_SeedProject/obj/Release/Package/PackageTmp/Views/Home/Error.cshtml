@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Some error has occured";
+}
+
+
+<div class="middle-box text-center animated fadeInDown">
+    <h1>Error </h1>
+    @*<h3 class="font-bold">Error</h3>*@
+
+    <div class="error-desc">
+Oops! Some error has occured. Please refresh page and try again. If you are continuously seeing this page then tell us <a href="/Feedback-Contact"> here </a><br /><br /><br /><a href="/" class="btn btn-primary btn-lg">Go to Home page</a>
+        @*<form class="form-inline m-t" role="form">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search for page">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>*@
+    </div>
+</div>
+
+@*<h2>NotFound</h2>
+    The page you are looking for is not available. Do you have any problem? Feel free to contact us!*@
+@section styles{
+    @Styles.Render("~/plugins/toastrStyles")
+}
+@section Scripts{
+    <script>
+    function ViewModel() {
+        SearchingLocation();
+        AccountViewModel();
+        ChatViewModel();
+        var self = this;
+
+    }
+    $(document).ready(function () {
+        ko.applyBindings(new ViewModel);
+    });
+    </script>
+
+}

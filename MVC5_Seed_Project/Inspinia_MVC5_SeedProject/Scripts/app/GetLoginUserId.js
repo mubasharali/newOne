@@ -9,7 +9,7 @@ $.ajax({
         loginUserId( data);
     },
     error: function () {
-        toastr.error("failed to fetch data. Please refresh page and try again", "Error!");
+        //toastr.error("failed to fetch data. Please refresh page and try again", "Error!");
     }
 });
 createAd = function (link) {

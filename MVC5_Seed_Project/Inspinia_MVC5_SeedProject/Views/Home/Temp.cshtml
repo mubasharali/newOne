@@ -1,4 +1,7 @@
-﻿<div id="stuff" data-bind="foreach: stuff">
+﻿@{ 
+    Layout = null;
+}
+<div id="stuff" data-bind="foreach: stuff">
     <div data-bind="text: $data"></div>
 </div>
 <!-- ko scrollToEnd: stuff --><!-- /ko -->

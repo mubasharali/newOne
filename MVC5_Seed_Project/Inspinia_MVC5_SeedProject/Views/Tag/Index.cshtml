@@ -16,6 +16,9 @@
                     <input id="select-tag" data-bind="value:searchTag" class="repositories" placeholder="Search tags..." />
                 </div>
             </div>
+            <div class="hidden-xs">
+                @*adsbygoogle*@
+            </div>
         </div>
         <div class="col-md-9">
             <div class="row">
@@ -255,7 +258,7 @@
             self.editTag = function () {
                 if (self.loginUserId) {
                     if (self.updatedInfo() != null) {
-                        toastr.info("This tag previous info is pending admin aproval", "Please wait for sometime");
+                        toastr.info("This tag previous info is pending admin aproval", "Please wait!");
                     } else {
                         if (self.info()) {
                             self.info().trim();

@@ -40,7 +40,15 @@ namespace Inspinia_MVC5_SeedProject.Hubs
             }
             return base.OnConnected();
         }
-        
+        public async Task<bool> SeenAt(int id)
+        {
+            var msg =await db.Chats.FindAsync(id);
+            msg.SeenAt = DateTime.UtcNow;
+            await db.SaveChangesAsync();
+            Clients.Group(msg.sentTo).MessageSeen(id,msg.SeenAt);
+          //  Clients.Group(msg.sentFrom).MessageSeen(id, msg.SeenAt);
+            return true;
+        }
         //end
         public void AddMessage(Chat msg)
         {
@@ -69,6 +77,7 @@ namespace Inspinia_MVC5_SeedProject.Hubs
                               sentToName = chat.AspNetUser.Email,
                               message = chat.message,
                               time = chat.time,
+                              dpExtension = chat.AspNetUser.dpExtension
                           }).FirstOrDefault();
                // var ret = db.Chats.FirstOrDefault(x => x.Id == msg.Id);
                 Clients.Group(msg.sentFrom).loadNewMessage(ret);

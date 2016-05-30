@@ -17,8 +17,7 @@ using System.Security.Claims;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Inspinia_MVC5_SeedProject.Models;
-
-
+using Microsoft.Owin.Host.SystemWeb;
 //below are from stackoverflow
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -76,6 +75,114 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return BadRequest();
         }
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.Current.GetOwinContext().Authentication;
+            }
+        }
+        private async Task SignInAsync(ApplicationUser user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            if (user.SecurityStamp == null)
+            {
+                user.SecurityStamp = "abcdjadfasd34ads";
+            }
+            var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            // Extracted the part that has been changed in SignInAsync for clarity.
+
+            AuthenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = isPersistent }, identity);
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> RegisterUser(string email, string password = "aa")
+        {
+
+            var ab = email.Split('@');
+
+            var user = new ApplicationUser() { UserName = email };
+            user.Email = ab[0];
+            UserManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = -1
+            };
+            var result = await UserManager.CreateAsync(user, password);
+            if (result.Succeeded)
+            {
+                try
+                {
+                    await SignInAsync(user, isPersistent: true);
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                var id = user.Id;
+                var data = await db.AspNetUsers.FindAsync(id);
+                if (password == "aa")
+                {
+                    data.IsPasswordSaved = false;
+                }
+                else
+                {
+                    data.IsPasswordSaved = true;
+                }
+                data.hideEmail = true;
+                data.hidePhoneNumber = true;
+                data.hideDateOfBirth = true;
+                data.since = DateTime.UtcNow;
+                data.status = "active";
+                data.EmailConfirmed = false;
+                db.Entry(data).State = System.Data.Entity.EntityState.Modified;
+                await db.SaveChangesAsync();
+
+
+                return Ok("Done");
+            }
+            return BadRequest();
+        }
+        
+
+        [HttpPost]
+        public async Task<IHttpActionResult> login(string email,string password)
+        {
+            var data = db.AspNetUsers.First(x => x.UserName.Equals(email));
+            bool isSaved = true;
+            try
+            {
+                isSaved = (bool)data.IsPasswordSaved;
+            }
+            catch (Exception e)
+            {
+                isSaved = false;
+            }
+            if (!isSaved)
+            {
+                UserManager.PasswordValidator = new PasswordValidator
+                {
+                    RequiredLength = -1
+                };
+                IdentityResult result = await UserManager.ChangePasswordAsync(data.Id, "aa", password);
+                if (!result.Succeeded)
+                {
+                    return Ok("Error");
+                }
+                data.IsPasswordSaved = true;
+                await db.SaveChangesAsync();
+            }
+            var user = await UserManager.FindAsync(email, password);
+
+            if (user != null)
+            {
+                await SignInAsync(user, true);
+                return Ok("Done");
+            }
+            else
+            {
+                return BadRequest("Error");
+            }
+        }
+        
         [HttpPost]
         public async Task<IHttpActionResult> CheckEmail(string email){
             if (!User.Identity.IsAuthenticated)

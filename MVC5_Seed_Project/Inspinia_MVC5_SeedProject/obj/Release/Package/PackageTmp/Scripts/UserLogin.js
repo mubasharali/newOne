@@ -12,6 +12,7 @@ function AccountViewModel() {
     self.confirmPassword = ko.observable();
     self.loginError = ko.observable("");
     self.isPasswordSaved = ko.observable(true);
+    self.isRedirecting = ko.observable(false);
     self.checkEnterEmail = function (d, e) {
         self.loginError("");
         if (e.keyCode == 13) {
@@ -57,7 +58,8 @@ function AccountViewModel() {
             type: 'POST',
             success: function (data) {
                 if (data == "Done") {
-                    self.loginError("Done! Redirecting..");
+                    self.isRedirecting(true);
+                    //self.loginError("Done! Redirecting ...");
                     location.reload();
                 } else {
                     self.loginError("Some Error has occured.Please try again");
@@ -113,7 +115,8 @@ function AccountViewModel() {
             success: function (data) {
                 self.isUserLoginLoading(false);
                 if (data == "Done") {
-                    self.loginError("Done! Redirecting..");
+                    self.isRedirecting(true);
+                    //self.loginError("Done! Redirecting..");
                     location.reload();
                 } else {
                     
@@ -195,6 +198,7 @@ function AccountViewModel() {
         }
     }
     self.reloadPage = function () {
+        self.isRedirecting(true);
         location.reload();
     }
 }

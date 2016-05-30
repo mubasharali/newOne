@@ -7,12 +7,13 @@
         <div class="col-sm-6">
             <h2>Admins list</h2>
             <div data-bind="foreach:showAdmins">
-                <a data-bind="attr:{href:'/User/Index/' + id },text:name"></a>
+                <a data-bind="attr:{href:'/User/Index/' + id },text:name"></a><br />
             </div>
             <h2>Make admin</h2>
             <input type="email" data-bind="value:adminEmail" />
             <button class="btn btn-default" data-bind="click:makeAdminBtn">Submit</button>
         </div>
+        @*visit user profile on the basis of email*@
         <div class="col-sm-6">
             <h2>Block User</h2>
             <input type="email" data-bind="value:blockUserEmail" placeholder="email" />
@@ -22,6 +23,11 @@
             <h2>Block User</h2>
             <input type="email" data-bind="value:blockUserId" placeholder="id" />
             <button class="btn btn-default" data-bind="click:blockUserIdBtn">Submit</button>
+        </div>
+        <div class="col-sm-6">
+            <h2>Send Email</h2>
+            @*<input type="email" data-bind="value:blockUserId" placeholder="id" />*@
+            <button class="btn btn-default" data-bind="click:sendEmail">Submit</button>
         </div>
     </div>
     <hr /><hr />
@@ -70,6 +76,19 @@
                     },
                 });
             }
+            self.sendEmail = function () {
+                $.ajax({
+                    url: '/api/Admin/SendEmail',
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        toastr.info("done");
+                    },
+                    error: function () {
+                        toastr.info("Error! please refresh page and try again");
+                    },
+                });
+            }
             self.loginUserId = ko.observable( loginUserId());
             self.adminEmail = ko.observable();
             self.blockUserEmail = ko.observable();
@@ -89,6 +108,7 @@
                     },
                 });
             }
+            self.loadAdmins();
             self.makeAdminBtn = function () {
                 $.ajax({
                     url: '/api/Admin/MakeAdmin?email=' + self.adminEmail(),

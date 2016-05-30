@@ -1,14 +1,14 @@
 ﻿<input type="hidden" id="adId" name="Id" value="@Model.Id" />
 <input type="hidden" name="time" value="@Model.time" />
 <input type="hidden" id="category" name="category" value="@Model.category" />
-@if (Model.category == "Animals")
+@*@if (Model.category == "Animals")
 {
 
 }
 else
 {
     <input type="hidden" name="subcategory" value="@Model.subcategory" />
-}
+}*@
 
 <input type="hidden" name="postedBy" value="@Model.postedBy" />
 <div class="form-group">
@@ -17,6 +17,8 @@ else
         <input type="text" class="form-control" name="title" value="@Model.title" />
     </div>
 </div>
+@if (!(Model.subcategory == "vehicles-for-rent"))
+{
 <div class="form-group">
     <label class="col-sm-2 control-label">Type<span class="req">*</span></label>
     <div class="col-sm-10">
@@ -32,6 +34,7 @@ else
         </div>
     </div>
 </div>
+}
 <div class="form-group" data-bind="visible:conditionChecked() != 'z'">
     <div data-bind="visible:selectedCategory() != 'Classes' && selectedCategory() != 'Home tuitions' && selectedCategory() != 'other hobbies'">
         <label class="col-sm-2 control-label">Condition<span class="req">*</span> <span data-bind="tet=xt:conditionChecked()"></span> </label>

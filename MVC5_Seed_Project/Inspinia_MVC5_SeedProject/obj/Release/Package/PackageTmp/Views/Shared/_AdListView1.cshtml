@@ -20,17 +20,17 @@
                         <span class="product-price">
                             <span data-bind="if:!isBidingAllowed">
                                 <span data-bind="if:price">
-                                    <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                    <span data-bind="text:price"></span> <small style="font-size:13px">Rs. <span data-bind="html:isNegotiable"></span></small>
                                 </span>
                                 <span data-bind="if:!price"><span data-bind="if:category == 'Jobs'">Salary</span><span data-bind="if:category != 'Jobs'">Price</span> on contact</span>
                             </span>
                             <span data-bind="if:isBidingAllowed">
                                 <span data-bind="if:price">
                                     <span data-bind="if:highestBid() == '-Infinity'">
-                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                        <span data-bind="text:price"></span> <small style="font-size:13px">Rs. (Initial Bid) </small>
                                     </span>
                                     <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px">Rs. (current Bid) </small>
                                     </span>
                                 </span>
                                 <span data-bind="if:!price">
@@ -38,7 +38,7 @@
                                         No Bit yet
                                     </span>
                                     <span data-bind="ifnot:highestBid() == '-Infinity'">
-                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                        <span data-bind="text:highestBid"></span> <small style="font-size:13px">Rs. (current Bid) </small>
                                     </span>
                                 </span>
                             </span>

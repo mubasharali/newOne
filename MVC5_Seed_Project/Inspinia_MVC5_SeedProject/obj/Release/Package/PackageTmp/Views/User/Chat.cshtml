@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Chat";
+    ViewBag.Title = "Chat Room";
 }
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -39,9 +39,16 @@
 
                                         <div class="users-list" data-bind="foreach:allChatUsers">
                                             <div class="chat-user">
-                                                <img class="chat-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                                <img style="margin-top:10px" class="chat-avatar" data-bind="attr:{src:dpLink}" alt="">
                                                 <div class="chat-user-name">
-                                                    <a data-bind="click:openChat,text:name"></a>
+                                                    <div class="feed-element">
+
+
+                                                        <small data-bind="text:time" class="pull-right text-navy"></small>
+                                                        <strong><a data-bind="text:name,click:openChat"></a></strong>
+                                                        <div data-bind="text:message"></div>
+
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -51,8 +58,15 @@
                             </div>
                         <div data-bind="visible:(!isSmallScreen) || (isSmallScreen && isChating())">
                             <div data-bind="">
-                                <div class="col-sm-8 col-md-9">
-                                    <div class="chat-discussion">
+                                <div class="col-sm-8 col-md-9" style="display:none" id="FirstLoading">
+                                    <div class="chat-discussion" data-bind="visible:isFetchingChat()">
+                                        <div class="sk-spinner sk-spinner-three-bounce">
+                                            <div class="sk-bounce1"></div>
+                                            <div class="sk-bounce2"></div>
+                                            <div class="sk-bounce3"></div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-discussion" data-bind="visible:!isFetchingChat()">
                                         <div data-bind="visible:!isConnectionReady()">
                                             Connecting to server... (please wait)
                                         </div>
@@ -65,7 +79,7 @@
 
                                                 <div data-bind="if:message.length > 0">
                                                     <div data-bind="visible:sentFrom != loginUserId1" class="chat-message left">
-                                                        <img class="message-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                                        <img class="message-avatar " data-bind="attr:{src:dpLink}" alt="">
                                                         <div class="message">
                                                             <a class="message-author" data-bind="text:sentToName,attr:{href:'/User/Index/'+sentFrom}"> </a>
                                                             <span class="message-date" data-bind="text:timeAgo"> </span>
@@ -74,7 +88,7 @@
                                                         </div>
                                                     </div>
                                                     <div data-bind="visible: sentFrom == loginUserId1" class="chat-message right">
-                                                        <img class="message-avatar" data-bind="attr:{src:dpLink}" alt="">
+                                                        <img class="message-avatar " data-bind="attr:{src:dpLink}" alt="">
                                                         <div class="message">
                                                             <a class="message-author" data-bind="text:sentToName,attr:{href:'/User/Index/' + sentFrom}"> </a>
                                                             <span class="message-date" data-bind="text:timeAgo"></span>
@@ -85,9 +99,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -102,25 +114,13 @@
                                                 <div class="feed-element">
                                                     
                                                     
-                                                        <small data-bind="text:time" class="pull-right text-navy">1m ago</small>
-                                                    <strong><a data-bind="text:name,click:openChat">Monica Smith</a></strong>
-                                                        <div data-bind="text:message">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</div>
+                                                        <small data-bind="text:time" class="pull-right text-navy"></small>
+                                                    <strong><a data-bind="text:name,click:openChat"></a></strong>
+                                                        <div data-bind="text:message"></div>
                                                     
                                                 </div>
-                                                @*<a data-bind="click:openChat,text:name"></a>
-                                                <span data-bind="text:message"></span>
-                                                <span data-bind="text:time"></span>*@
                                             </div>
                                         </div>
-                                        @*
-                        <div class="chat-user">
-                            <span class="pull-right label label-primary">Online</span>
-                            <img class="chat-avatar" src="~/Images/a2.jpg" alt="">
-                            <div class="chat-user-name">
-                                <a href="#">Michael Smith</a>
-                            </div>
-                        </div>
-                                        *@
 
                                     </div>
                                 </div>
@@ -132,8 +132,8 @@
                         <div class="col-sm-8 col-md-9">
                             <div class="form-chat">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" placeholder="Enter message.." data-bind="value:newMessage,valueUpdate:'afterkeydown',event:{keyup:checkMsgEnter}" class="form-control"> <span class="input-group-btn">
-                                        <button class="btn btn-primary" data-bind="click: function(){ return sendMessage()} " type="button">
+                                    <input type="text" placeholder="Enter message.." data-bind="attr:{disabled:isSendingChatMessage()},value:newMessage,valueUpdate:'afterkeydown',event:{keyup:checkMsgEnter}" class="form-control"> <span class="input-group-btn">
+                                        <button class="btn btn-primary" data-bind="attr:{disabled:isSendingChatMessage()},click: function(){ return sendMessage()} " type="button">
                                             Send
                                         </button>
                                     </span>
@@ -226,16 +226,23 @@
                 $(".collapse-chat-box").click(function () {
                     $(".open-small-chat").trigger('click');
                 })
+                $("#chatViewModel").click(function () {
+                    self.notification(0);
+                })
                 var self = this;
                 self.hub = $.connection.chatHub;
                 self.onlineUsersHub = $.connection.onlineUsers;
+                self.isFetchingChat = ko.observable(false);
                 self.isChating = ko.observable(false);
+                self.seenAt = ko.observable();
                 if (!isSmallScreen) {
                     self.isChating(true);
                 }
                 self.backToChatList = function () {
                     self.isChating(false);
                 }
+                self.notification = ko.observable(0); 
+                self.errorMsg = ko.observable();
                 self.showChat = ko.observableArray();
                 self.newMessage = ko.observable();
                 self.loginUserId1 = "";
@@ -243,6 +250,7 @@
                 self.onlineUsers = ko.observableArray();
                 self.sendMessageTo = ko.observable();
                 self.sendMessgeToName = ko.observable();
+                self.isSendingChatMessage = ko.observable(false);
                 self.getAllChatUsers = function () {
                     $.ajax({
                         url: '/api/Chat/GetAllChatUsers',
@@ -253,10 +261,13 @@
                         success: function (data) {
                             var msg = $.map(data, function (item) { return new AllChatUsers(item) });
                             self.allChatUsers(msg);
+                            $("#FirstLoading").css({ "display": "block" });
                         },
                         error: function () {
+                            $("#FirstLoading").css({ "display": "block" });
                             toastr.error("failed to load data.", "Error!");
                             return null;
+
                         }
                     });
                 };
@@ -315,6 +326,7 @@
                         self.sendMessageTo(userId);  //test it
                         self.sendMessgeToName(name);
                     }
+                    self.isFetchingChat(true);
                     $.ajax({
                         url: '/api/Chat/GetChat?with=' + userId,
                         dataType: "json",
@@ -322,10 +334,12 @@
                         cache: false,
                         type: 'GET',
                         success: function (data) {
+                            self.isFetchingChat(false);
                             var msg = $.map(data, function (item) { return new Message(item, userId) });//self.sendMessageTo() replaced by userId
                             self.showChat(msg);
                         },
                         error: function () {
+                            self.isFetchingChat(false);
                             toastr.error("failed to load message. Please refresh page and try again", "Error!");
                             return null;
                         }
@@ -336,10 +350,13 @@
                         if (self.newMessage().length < 1000) {
                             if (e.keyCode == 13) {
                                 if (isConnectionReady()) {
-                                    self.sendMessage();
+                                    $.connection.hub.start().done(function () {
+                                        self.sendMessage();
+                                    });
+                                    //self.sendMessage();
                                 }
                                 else {
-                                    toastr.info("Connection not established to server");
+                                    toastr.info("If its taking too long then refresh page","Establishing Connection..");
                                 }
                             }
                         } else {
@@ -352,16 +369,26 @@
                 }
                 self.hub.client.loadNewMessage = function (data) {
                     self.newMessage('');
+                    self.isSendingChatMessage(false);
                     if (data != null) {
+                        if (data.sentFrom != loginUserId1) {
+                            if (data.seenAt == null || data.seenAt == "undefined") {
+                                self.notification(self.notification() + 1);
+                                if (self.sendMessageTo() != data.sentFrom) { //check this
+                                    // console.log(self.sendMessageTo());
+                                    var link = $('<a/>').text("Go to chat room").attr('href', '/User/Chat');
+                                    self.errorMsg(link[0].outerHTML + " to see message!");
+                                }
+                            }
+                        }
                         self.showChat.push(new Message(data, self.sendMessageTo()));
-                        
                     }
                 }
                 self.onlineUsersHub.client.showConnected = function (connectionId) {
                     var mape = $.map(connectionId, function (item) { return new OnlineUsers(item) });
                     self.onlineUsers(mape);
                     self.checkUserOnline();
-                    console.log(self.onlineUsers());
+                  //  console.log(self.onlineUsers());
                 }
                 self.getReceiverId = function (email) {
                     $.ajax({
@@ -379,6 +406,23 @@
                         }
                     });
                 }
+                self.sendMessageBtn = function () {
+                    if (self.loginUserId1) {
+                        if (self.newMessage().length < 1000) {
+                            if (isConnectionReady()) {
+                                self.sendMessage();
+                            }
+                            else {
+                                toastr.info("Connection not established to server", "Please wait");
+                            }
+                        } else {
+                            self.newMessage(self.newMessage().slice(0, -1));
+                            toastr.info("You reached the limit", "Message too long!");
+                        }
+                    } else {
+                        loginBtn();
+                    }
+                }
                 self.sendMessage = function () {
                     if (self.sendMessageTo()) {
                         var msg = new Message();
@@ -386,7 +430,9 @@
                         msg.message = self.newMessage();
                         msg.message = $.trim(msg.message);
                         if (msg.message != "") {
+                            self.isSendingChatMessage(true);
                             self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                            
                         } else {
                             toastr.info("You cannot send empty message");
                         }
@@ -401,7 +447,9 @@
                         msg.message = self.newMessage();
                         msg.message = $.trim(msg.message);
                         if (msg.message != "") {
+                            self.isSendingChatMessage(true);
                             self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                            self.isSendingChatMessage(false);
                         } else {
                             toastr.info("You cannot send empty message");
                         }

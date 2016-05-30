@@ -75,7 +75,11 @@
                                                             <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
                                                             <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
                                                             <span data-bind="if: postedById === $parent.loginUserId"><a data-bind="click:editQuestionReply">edit</a> <a data-bind="click:$parent.deleteQuestionReply">delete</a></span>
-
+                                                        <span data-bind="visible:postedById != $parent.loginUserId">
+                                                            <span data-bind="visible:isAdmin()">
+                                                                <a data-bind="click:$parent.deleteQuestionReply" class="btn btn-white btn-xs pull-right">Delete</a>
+                                                            </span>
+                                                        </span>
 </div>
                                                 </div>
                                             </div>
@@ -89,7 +93,7 @@
                                     </div>
                                     @*<a data-bind="click:toggleQuestionReply">Reply</a>*@
                                     <div style="margin-left:30px" data-bind="visible:isQuestionReplyVisible">
-                                        <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="hasFocus:isQuestionReplyFocused,value:newQuestionReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}"></textarea>
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="attr:{disabled:isSavingQuestionReply()},hasFocus:isQuestionReplyFocused,value:newQuestionReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup:checkEnter1}"></textarea>
                                         <span data-bind="visible:newQuestionReply().length > 400 && newQuestionReply().length < 500">
                                             You can Enter only <span data-bind="text:499 - newQuestionReply().length"></span> more characters.
                                         </span>
@@ -100,13 +104,19 @@
 
                             </div>
 
-                            
-                        <h2>Answers</h2>
+                            <br />
+                        <h2>Answers OR Discussions</h2>
+                        <br />
                         <div class="row m-t-sm">
                             <div data-bind="foreach:showAnswers">
                                 <div class="vote-item" data-bind="visible:!isAnswerEditing()">
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <span data-bind="visible:postedById != $parent.loginUserId">
+                                                <span data-bind="visible:isAdmin()">
+                                                    <a data-bind="click:$parent.deleteAnswer" class="btn btn-white btn-xs pull-right">Delete</a>
+                                                </span>
+                                            </span>
                                             <small data-bind="if: postedById === $parent.loginUserId" class="pull-right"><a data-bind="click:$parent.deleteAnswer" class="btn btn-white btn-xs pull-right">Delete</a><a data-bind="click:function(){return editAnswer($parent.id)}" class="btn btn-white btn-xs pull-right">Edit</a></small>
                                             <div class="vote-actions">
                                                 <a data-bind="click:function(){return voteAnswer(id,$parent.loginUserId,true)}">
@@ -143,8 +153,12 @@
                                                         </a>
                                                         <i class="fa fa-user"></i> <a data-bind="attr:{href:postedByLink},text:postedByName"></a>
                                                         <i class="fa fa-clock-o"></i> <a data-bind="text:time"></a>
-                                                        <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a>-<a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
-
+                                                        <span data-bind="if: postedById === $parents[1].loginUserId"><a data-bind="click:function(d,e){return editAnswerReply(id,d,e)}">edit</a><a data-bind="click:$parent.deleteAnswerReply">delete</a></span>
+                                                        <span data-bind="visible:postedById != $parents[1].loginUserId">
+                                                            <span data-bind="visible:isAdmin()">
+                                                                <a data-bind="click:$parent.deleteAnswerReply" class="btn btn-white btn-xs pull-right">Delete</a>
+                                                            </span>
+                                                        </span>
                                                     </div>
                                                 </div>
 
@@ -158,7 +172,7 @@
                                         </div>
                                     </div>
                                     <div style="margin-left:40px;" data-bind="visible:isAnswerReplyVisible()">
-                                        <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
+                                        <textarea class="msgTextArea form-control" placeholder="Write comment (Enter to post)" data-bind="attr:{disabled:isSavingAnswerReply()},hasFocus:isAnswerReplyFocused,value:newAnswerReply,valueUpdate:'afterkeydown', jqAutoresize: {},event:{keyup: function(data,event){ return checkEnter2($parent.loginUserId,id,data,event)}}"></textarea>
                                         <span data-bind="visible:newAnswerReply().length > 400 && newAnswerReply().length < 500">
                                             You can Enter only <span data-bind="text:499 - newAnswerReply().length"></span> more characters.
                                         </span>
@@ -370,6 +384,7 @@
                     self.isAnswerReplyVisible(false);
                 }
             }
+            self.isSavingAnswerReply = ko.observable(false);
             self.checkEnter2 = function (loginUserId,id,d, e) {
                 if (loginUserId) {
                     if (self.newAnswerReply().length < 500) {
@@ -444,6 +459,7 @@
                     reply.time = new Date($.now());
                     if (loginUserId) {
                         if (reply.description() != null && reply.description().trim() != "") {
+                            self.isSavingAnswerReply(true);
                             $.ajax({
                                 url: '/api/Forum/PostAnswerReply',
                                 dataType: "json",
@@ -452,10 +468,12 @@
                                 type: 'POST',
                                 data: ko.toJSON(reply),
                                 success: function (data) {
+                                    self.isSavingAnswerReply(false);
                                     self.showAnswerReplies.push(new AnswerReply(data));
                                     self.newAnswerReply('');
                                 },
                                 error: function () {
+                                    self.isSavingAnswerReply(false);
                                     toastr.error("failed to post comment", "Error!");
                                 }
                             })
@@ -699,6 +717,7 @@
                     self.isQuestionReplyVisible(false);
                 }
             }
+            self.isSavingQuestionReply = ko.observable(false);
             self.checkEnter1 = function (d, e) {
                 if (self.loginUserId) {
                     if (self.newQuestionReply().length < 500) {
@@ -782,6 +801,7 @@
                     reply.description (self.newQuestionReply());
                     reply.time = new Date($.now());
                     if (reply.description() != null && reply.description().trim() != "") {
+                        self.isSavingQuestionReply(true);
                         $.ajax({
                             url: '/api/Forum/PostQuestionReply',
                             dataType: "json",
@@ -790,10 +810,12 @@
                             type: 'POST',
                             data: ko.toJSON(reply),
                             success: function (data) {
+                                self.isSavingQuestionReply(false);
                                 self.showQuestionReplies.push(new QuestionReply(data));
                                 self.newQuestionReply('');
                             },
                             error: function () {
+                                self.isSavingQuestionReply(false);
                                 toastr.error("failed to post comment", "Error!");
                             }
                         })

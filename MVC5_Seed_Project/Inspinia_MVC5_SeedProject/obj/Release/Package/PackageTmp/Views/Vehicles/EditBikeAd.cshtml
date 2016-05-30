@@ -24,7 +24,7 @@
 
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-2">Select Brand</label>
+                                <label class="control-label col-md-2">Select Brand<span class="req">*</span></label>
                                 <div class="col-md-10">
                                     <select id="select-brand" required class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
@@ -34,7 +34,7 @@
                             </div>
                             <div data-bind="with:selectedBrand">
                                 <div class="form-group">
-                                    <label class="control-label col-md-2">Select Model</label>
+                                    <label class="control-label col-md-2">Select Model<span class="req">*</span></label>
                                     <div class="col-md-10">
                                         <select id="select-model" required class="demo-default" name="model" data-bind="options: $parent.availableModels,
                        value: $parent.selectedModel,
@@ -217,7 +217,7 @@
                         self.selectedYear(data.bikead.year);
                         $("#kmDriven").val(data.bikead.kmDriven);
                         $("#engineCapacity").val(data.bikead.engineCapacity);
-                        self.noOfOwners(data.bikead.noOfOwnwers);
+                        self.noOfOwners(data.bikead.noOfOwners);
                         self.selectedRegisteredCity(data.bikead.registeredCity);
 
                         var tags = data.adTags;
@@ -348,7 +348,7 @@
 
             self.loadBrands = function () {
                 $.ajax({
-                    url: '/api/Vehicle/GetBrands',
+                    url: '/api/Vehicle/GetBikeBrands',
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -365,7 +365,7 @@
             self.loadModels = function () {
                 self.availableModels.removeAll();
                 $.ajax({
-                    url: '/api/Vehicle/GetModels?brand=' + self.selectedBrand(),
+                    url: '/api/Vehicle/GetBikeModels?brand=' + self.selectedBrand(),
                     dataType: "json",
                     contentType: "application/json",
                     cache: false,
@@ -374,7 +374,7 @@
                         $.each((data), function (i, item) { self.availableModels.push(item) });
                         if (self.selectedBrandOriginal == self.selectedBrand()) {
                             self.selectedModel(self.selectedModelOriginal);
-                        }
+                       }
                         $('#select-model').selectize({
                             create: true,
                             plugins: ['inputMaxlength'],

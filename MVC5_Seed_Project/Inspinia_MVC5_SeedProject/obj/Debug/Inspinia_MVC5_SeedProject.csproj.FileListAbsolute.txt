@@ -665,3 +665,6 @@ C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProje
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Swashbuckle.Core.dll
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\System.Web.Http.Owin.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\System.Web.Http.Owin.xml
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\MinifierLibrary.dll

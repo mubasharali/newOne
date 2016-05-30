@@ -37,7 +37,19 @@
                 <div data-bind="visible:!isEmailConfirmed">
                     <div class="alert alert-success alert-dismissable">
                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                        <h3>Confirm your email address</h3><p>Click on the link we sent at <b data-bind="text:UserName"></b>. <a >I have not received any mail. I have checked Spam folder</a></p>
+                        <h3>Confirm your email address</h3>
+                        <span data-bind="visible:!isEmailSending()">
+                            <p>Click on the link we sent at <b data-bind="text:UserName"></b>. <a data-bind="click:sendEmailtoConfirmEmail">I have not received any mail. I have checked Spam folder</a></p>
+                        </span>
+                        <span data-bind="visible:isEmailSending()">
+                            <div class="sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -145,7 +157,7 @@
                                     <td data-bind="if:!isEmailConfirmed,visible:isNameEditing()">
                                         <input type="email" data-bind="value:UserName" class="form-control" />
                                     </td>
-
+                                    <td data-bind="visible:isEmailConfirmed && isNameEditing() ">You cannot edit your email once it is confirmed!</td>
                                     <td class="hidden-xs" data-bind="visible:!isNameEditing()"><small data-bind="text:selectedSeeEmail()"></small></td>
                                     <td class="hidden-xs" data-bind="visible:isNameEditing()">
                                         <small>
@@ -393,6 +405,26 @@
                 self.isGenderEditing(true);
                 self.selectedGender(self.gender());
             }
+            self.isEmailSending = ko.observable(false);
+            self.sendEmailtoConfirmEmail = function () {
+                self.isEmailSending(true);
+                $.ajax({
+                    url: '/Account/SendMailtoConfirmEmailAddress?id=' + self.id + '&name=' + self.email() + '&email=' + self.UserName(),
+                    dataType: "json",
+                    contentType: "application/json",
+                    cache: false,
+                    type: 'POST',
+                    success: function (data) {
+                        self.isEmailSending(false);
+                        toastr.info("Email is successfully sent at " + self.UserName());
+                    },
+                    error: function (jqXHR, status, thrownError) {
+                        //always 
+                        self.isEmailSending(false);
+                        toastr.info("Email is successfully sent at " + self.UserName());
+                    }
+                });
+            };
             self.availableCities = ko.observableArray();
             self.selectedCity = ko.observable();
             self.loadCities = function () {

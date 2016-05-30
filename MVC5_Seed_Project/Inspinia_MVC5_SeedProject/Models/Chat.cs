@@ -28,6 +28,8 @@ public partial class Chat
 
     public System.DateTime time { get; set; }
 
+    public Nullable<System.DateTime> SeenAt { get; set; }
+
 
 
     public virtual AspNetUser AspNetUser { get; set; }

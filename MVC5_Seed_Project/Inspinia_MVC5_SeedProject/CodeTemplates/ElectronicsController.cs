@@ -22,6 +22,7 @@ using System.Net.Mail;
 using System.IO;
 using System.Xml;
 using System.Data.Entity.Validation;
+using System.Drawing.Drawing2D;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
@@ -59,11 +60,11 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         //    }
         //}
         // GET: /Electronics/
-        public ActionResult Index()
-        {
-           /// var ads = db.Ads.Include(a => a.AspNetUser);
-            return View();
-        }
+        //public ActionResult Index()
+        //{
+        //   /// var ads = db.Ads.Include(a => a.AspNetUser);
+        //    return View();
+        //}
         public static bool checkCategory(string category, string subcategory = null)
         {
             if (category == "books-sports-hobbies")
@@ -116,32 +117,34 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public static void sendEmail(string to,string subject, string body){
             MailMessage mail = new MailMessage();
             mail.From = new System.Net.Mail.MailAddress("dealkar.pk@gmail.com");
-
+           // mail.From = new System.Net.Mail.MailAddress("notification@dealkar.pk");
             // The important part -- configuring the SMTP client
             SmtpClient smtp = new SmtpClient();
             smtp.Port = 587;   // [1] You can try with 465 also, I always used 587 and got success 587
-            smtp.EnableSsl = true;
+             smtp.EnableSsl = true; //commented for godaddy
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network; // [2] Added this
             smtp.UseDefaultCredentials = false; // [3] Changed this
             smtp.Credentials = new NetworkCredential("dealkar.pk@gmail.com", "birthdaywish");  // [4] Added this. Note, first parameter is NOT string.
-            smtp.Host = "smtp.gmail.com";
-
+                                                // smtp.Credentials = new NetworkCredential("notification@dealkar.pk", "birthdaywish");
+             smtp.Host = "smtp.gmail.com";
+           // smtp.Host = "relay-hosting.secureserver.net";
             //recipient address
             mail.To.Add(new MailAddress(to));
             mail.Subject = subject;
             //Formatted mail body
             mail.IsBodyHtml = true;
-           // string st = "Test";
+            // string st = "Test";
 
             mail.Body = body;
-            try
-            {
-                smtp.Send(mail);
-            }
-            catch (Exception e)
-            {
-                string s = e.ToString(); 
-            }
+            smtp.Send(mail);
+            //try
+            //{
+            //    smtp.Send(mail);
+            //}
+            //catch (Exception e)
+            //{
+            //    string s = e.ToString(); 
+            //}
         }
 
         [Route("Laptops-Computers")]
@@ -605,63 +608,89 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                             //    response.WriteResponseStreamToFile(dest);
                             //}
                             Image imgg = Image.FromFile(Server.MapPath(@"\Images\others\WaterMark.png"));
-                            float f = float.Parse("0.5");
+                            float f = float.Parse("1"); //0.5
                             Image img = SetImageOpacity(imgg, f);
 
                             HttpPostedFileBase file = Request.Files[i];
-                            using (Image image = Image.FromStream(file.InputStream, true, true))
-                          //  using (Image watermarkImage = Image.FromFile(Server.MapPath(@"\Images\others\WaterMark.png")))
-                            using (Image watermarkImage = img)
-                            using (Graphics imageGraphics = Graphics.FromImage(image))
-                            using (TextureBrush watermarkBrush = new TextureBrush(watermarkImage))
+                    using (Image image = Image.FromStream(file.InputStream, true, true))
+                    //  using (Image watermarkImage = Image.FromFile(Server.MapPath(@"\Images\others\WaterMark.png")))
+                    using (Image watermarkImage = img)
+                    {
+                       //Image  image = ResizeImage(image12, 600, 600);
+                        using (Graphics imageGraphics = Graphics.FromImage(image))
+                        using (TextureBrush watermarkBrush = new TextureBrush(watermarkImage))
+                        {
+                            // int x = (image.Width / 2 - watermarkImage.Width / 2);
+                            int x = 4;
+                            int y = image.Height - watermarkImage.Height-30;
+                         //   int y = (image.Height / 2 - watermarkImage.Height / 2);
+                            watermarkBrush.TranslateTransform(x, y);
+                            imageGraphics.FillRectangle(watermarkBrush, new Rectangle(new Point(x, y), new Size(watermarkImage.Width + 1, watermarkImage.Height)));
+                            
+                            //upload on aws
+                            string extension = System.IO.Path.GetExtension(file.FileName);
+                            filename = "temp" + DateTime.UtcNow.Ticks + extension;
+                            var i2 = new Bitmap(image);
+                            //  image.Save(Server.MapPath(@"~\Images\Ads\" + filename));
+                            System.IO.Directory.CreateDirectory(Server.MapPath(@"~\Images\Ads\"));
+
+                            i2.Save(Server.MapPath(@"~\Images\Ads\" + filename));
+                            if (file.ContentLength > 0) // accept the file
                             {
-                               // int x = (image.Width / 2 - watermarkImage.Width / 2);
-                                int x = 4;
-                                int y = image.Height - watermarkImage.Height;
-                                //int y = (image.Height / 2 - watermarkImage.Height / 2);
-                                watermarkBrush.TranslateTransform(x, y);
-                                imageGraphics.FillRectangle(watermarkBrush, new Rectangle(new Point(x, y), new Size(watermarkImage.Width + 1, watermarkImage.Height)));
-                            //    image.Save(file.FileName);
-                                
-                              //  image.Save(@"C:\Users\Irfan\Desktop\logo12.png");
+                                AmazonS3Config config = new AmazonS3Config();
+                                config.ServiceURL = "https://s3.amazonaws.com/";
+                                Amazon.S3.IAmazonS3 s3Client = AWSClientFactory.CreateAmazonS3Client(_awsAccessKey, _awsSecretKey, config);
 
-                                
-
-                                //upload on aws
-                                string extension = System.IO.Path.GetExtension(file.FileName);
-                                filename = "temp" + DateTime.UtcNow.Ticks + extension;
-                                image.Save(Server.MapPath(@"\Images\Ads\" + filename));
-                                if (file.ContentLength > 0) // accept the file
+                                var request2 = new PutObjectRequest()
                                 {
-                                    AmazonS3Config config = new AmazonS3Config();
-                                    config.ServiceURL = "https://s3.amazonaws.com/";
-                                    Amazon.S3.IAmazonS3 s3Client = AWSClientFactory.CreateAmazonS3Client(_awsAccessKey, _awsSecretKey, config);
-
-                                    var request2 = new PutObjectRequest()
-                                    {
-                                        BucketName = _bucketName,
-                                        CannedACL = S3CannedACL.PublicRead,//PERMISSION TO FILE PUBLIC ACCESIBLE
-                                        Key = _folderName + filename,
-                                        //InputStream = file.InputStream//SEND THE FILE STREAM
-                                        FilePath = Server.MapPath(@"\Images\Ads\" + filename)
-                                    };
-                                    s3Client.PutObject(request2);
-                                }
-                                if (System.IO.File.Exists(Server.MapPath(@"\Images\Ads\" + filename)))
-                                {
-                                    System.IO.File.Delete(Server.MapPath(@"\Images\Ads\" + filename));
-                                }
+                                    BucketName = _bucketName,
+                                    CannedACL = S3CannedACL.PublicRead,//PERMISSION TO FILE PUBLIC ACCESIBLE
+                                    Key = _folderName + filename,
+                                    //InputStream = file.InputStream//SEND THE FILE STREAM
+                                    FilePath = Server.MapPath(@"~\Images\Ads\" + filename)
+                                };
+                                s3Client.PutObject(request2);
                             }
-                      //  }
-                        fileNames[i] = filename;
+                            if (System.IO.File.Exists(Server.MapPath(@"~\Images\Ads\" + filename)))
+                            {
+                                System.IO.File.Delete(Server.MapPath(@"~\Images\Ads\" + filename));
+                            }
+                        }
+                    }
+                    //  }
+                    fileNames[i] = filename;
                     }
                // }
                 catch (Exception ex)
                 {
-                    return Json(new { Message = "Error in saving file" });
+                    return Json("Error");
                 }
             }
             return Json(fileNames);
+        }
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
         public static void UploadDPToAWS(string path, string filename)
         {
@@ -885,7 +914,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             {
                 ad.price = int.Parse(pp);
             }
-            ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
+            //ad.description = ad.description.Replace("'", "`");
+            //  ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
             ad.postedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
             if (SaveOrUpdate == "Save")
             {
@@ -1347,7 +1377,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.adId = id;
             Ad data = db.Ads.Find(id);
             if(data == null){
-                return HttpNotFound();
+                return RedirectToAction("notFound","Home");
             }
             ViewBag.title = data.title;
             return View();
@@ -1407,7 +1437,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             Coordinates co = new Coordinates();
             co.status = false;
             //string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace) + "&region=" + city + "&sensor=false";
-            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace)  + "&sensor=false&components=postalCode:54000";
+            string urlAddress = "https://maps.googleapis.com/maps/api/geocode/xml?key=AIzaSyBilH9FSqKqoahGM2ImsDB4XAMNiQASPsQ&address=" + HttpUtility.UrlEncode(famousPlace + " " +city)  + "&sensor=false";
             try
             {
                 XmlDocument objXmlDocument = new XmlDocument();

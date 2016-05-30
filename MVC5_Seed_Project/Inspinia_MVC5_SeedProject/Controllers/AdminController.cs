@@ -13,7 +13,7 @@ using Inspinia_MVC5_SeedProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using Inspinia_MVC5_SeedProject.Controllers;
+using Inspinia_MVC5_SeedProject.CodeTemplates;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class AdminController : ApiController
@@ -75,6 +75,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 }
             }
             return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IHttpActionResult> SendEmail()
+        {
+            ElectronicsController.sendEmail("irfanyusanif@gmail.com", "just for test review", "hi are you there");
+            return Ok("Done");
         }
         [HttpPost]
         public async Task<IHttpActionResult> GetAllAdmin()
@@ -363,7 +369,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             await db.SaveChangesAsync();
             return Ok("Done");
         }
-        public async Task<IHttpActionResult> GetAds(int limit)
+        public async Task<IHttpActionResult> GetItems(int limit)
         {
            // await AdViews(id);
             string islogin = "";
@@ -471,6 +477,115 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                                         }
                                      }
                        }).Take(limit)).AsEnumerable();
+            return Ok(ret);
+        }
+        public async Task<IHttpActionResult> GetLatestItems(int limit)
+        {
+            // await AdViews(id);
+            string islogin = "";
+            string loginUserProfileExtension = "";
+            if (User.Identity.IsAuthenticated)
+            {
+                islogin = User.Identity.GetUserId();
+                var ide = await db.AspNetUsers.FindAsync(islogin);
+                loginUserProfileExtension = ide.dpExtension;
+            }
+            var ret = ((from ad in db.Ads
+                        orderby ad.time descending
+                        select new
+                        {
+                            title = ad.title,
+                            postedById = ad.AspNetUser.Id,
+                            postedByName = ad.AspNetUser.Email,
+                            description = ad.description,
+                            id = ad.Id,
+                            time = ad.time,
+                            status = ad.status,
+                            islogin = islogin,
+                            loginUserProfileExtension = loginUserProfileExtension,
+                            isNegotiable = ad.isnegotiable,
+                            price = ad.price,
+                            reportedCount = ad.Reporteds.Count,
+                            isReported = ad.Reporteds.Any(x => x.reportedBy == islogin),
+                            //views = ad.AdViews.Count,
+                            views = ad.views,
+                            condition = ad.condition,
+                            type = ad.type,
+                            isSaved = ad.SaveAds.Any(x => x.savedBy == islogin),
+                            savedCount = ad.SaveAds.Count,
+                            mobilead = new
+                            {
+                                color = ad.MobileAd.color,
+                                sims = ad.MobileAd.sims,
+                                brand = ad.MobileAd.MobileModel.Mobile.brand,
+                                model = ad.MobileAd.MobileModel.model
+                            },
+                            laptopad = new
+                            {
+                                color = ad.LaptopAd.color,
+                                brand = ad.LaptopAd.LaptopModel.LaptopBrand.brand,
+                                model = ad.LaptopAd.LaptopModel.model,
+                            },
+                            location = new
+                            {
+                                cityName = ad.AdsLocation.City.cityName,
+                                cityId = ad.AdsLocation.cityId,
+                                popularPlaceId = ad.AdsLocation.popularPlaceId,
+                                popularPlace = ad.AdsLocation.popularPlace.name,
+                                exectLocation = ad.AdsLocation.exectLocation,
+                            },
+                            adTags = from tag in ad.AdTags.ToList()
+                                     select new
+                                     {
+                                         id = tag.tagId,
+                                         name = tag.Tag.name,
+                                         followers = tag.Tag.FollowTags.Count(x => x.tagId.Equals(tag.Id)),
+                                         //info = tag.Tag.info,
+                                     },
+                            bid = from biding in ad.Bids.ToList()
+                                  select new
+                                  {
+                                      postedByName = biding.AspNetUser.Email,
+                                      postedById = biding.AspNetUser.Id,
+                                      price = biding.price,
+                                      time = biding.time,
+                                      id = biding.Id,
+                                  },
+                            comment = from comment in ad.Comments.ToList()
+                                      orderby comment.time
+                                      select new
+                                      {
+                                          description = comment.description,
+                                          postedById = comment.postedBy,
+                                          postedByName = comment.AspNetUser.Email,
+                                          imageExtension = comment.AspNetUser.dpExtension,
+                                          time = comment.time,
+                                          id = comment.Id,
+                                          adId = comment.adId,
+                                          islogin = islogin,
+                                          loginUserProfileExtension = loginUserProfileExtension,
+                                          voteUpCount = comment.CommentVotes.Where(x => x.isup == true).Count(),
+                                          voteDownCount = comment.CommentVotes.Where(x => x.isup == false).Count(),
+                                          isUp = comment.CommentVotes.Any(x => x.votedBy == islogin && x.isup),
+                                          isDown = comment.CommentVotes.Any(x => x.votedBy == islogin && x.isup == false),
+                                          commentReply = from commentreply in comment.CommentReplies.ToList()
+                                                         orderby commentreply.time
+                                                         select new
+                                                         {
+                                                             id = commentreply.Id,
+                                                             description = commentreply.description,
+                                                             postedById = commentreply.postedBy,
+                                                             postedByName = commentreply.AspNetUser.Email,
+                                                             imageExtension = commentreply.AspNetUser.dpExtension,
+                                                             loginUserProfileExtension = loginUserProfileExtension,
+                                                             time = commentreply.time,
+                                                             voteUpCount = commentreply.CommentReplyVotes.Where(x => x.isup == true).Count(),
+                                                             voteDownCount = commentreply.CommentReplyVotes.Where(x => x.isup == false).Count(),
+                                                             isUp = commentreply.CommentReplyVotes.Any(x => x.votedBy == islogin && x.isup),
+                                                             isDown = commentreply.CommentReplyVotes.Any(x => x.votedBy == islogin && x.isup == false)
+                                                         }
+                                      }
+                        }).Take(limit)).AsEnumerable();
             return Ok(ret);
         }
         [HttpPost]

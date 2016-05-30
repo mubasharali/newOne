@@ -24,15 +24,25 @@
     <div class="row">
         <div class="col-sm-3 hidden-sm hidden-xs">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- newtemp1 -->
+            <!-- ad-detail-page -->
             <ins class="adsbygoogle"
                  style="display:block"
-                 data-ad-client="ca-pub-5427185622945199"
-                 data-ad-slot="8335470667"
+                 data-ad-client="ca-pub-3540353581324370"
+                 data-ad-slot="3103703247"
                  data-ad-format="auto"></ins>
             <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
+            @*<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>*@
+            <!-- ad-detail-page -->
+            @*<ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3540353581324370"
+                 data-ad-slot="3103703247"
+                 data-ad-format="auto"></ins>
+            <script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+            </script>*@
         </div>
         <div class="col-md-9">
             <div data-bind="visible:isLoading()">
@@ -95,16 +105,7 @@
                                                 </div>*@
                                                 <div data-bind="visible:images().length == 0">
                                                     Display your banner ad here
-                                                    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                                                    <!-- display instead of ad images -->
-                                                    <ins class="adsbygoogle"
-                                                         style="display:block"
-                                                         data-ad-client="ca-pub-5427185622945199"
-                                                         data-ad-slot="3765670269"
-                                                         data-ad-format="auto"></ins>
-                                                    <script>
-                                                        (adsbygoogle = window.adsbygoogle || []).push({});
-                                                    </script>
+                                                    @*adsbygoogle*@
                                                 </div>
                                             </div>
 
@@ -112,23 +113,13 @@
                                         </div>
                                         <div class="col-sm-5 hidden-lg hidden-md hidden-xs">
                                             Display your banner ad here
-                                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                                            <!-- display right to ad images in small devices -->
-                                            <ins class="adsbygoogle"
-                                                 style="display:block"
-                                                 data-ad-client="ca-pub-5427185622945199"
-                                                 data-ad-slot="7497865869"
-                                                 data-ad-format="auto"></ins>
-                                            <script>
-                                                (adsbygoogle = window.adsbygoogle || []).push({});
-                                            </script>
+                                            @*adsbygoogle*@
                                         </div>
                                     </div>
                                     <div class="col-md-7 col-sm-12">
                                         <span data-bind="visible:(loginUserId != postedById ) ">
                                             <span data-bind="visible:isAdmin()">
                                                 <a data-bind="click: function(){return deleteAd(id)}" class="btn btn-white btn-xs pull-right confirmDelete"> Delete</a>
-
                                             </span>
                                         </span>
                                         <span data-bind="visible:loginUserId == postedById">
@@ -139,11 +130,10 @@
                                             <li><a target="_blank" data-bind="attr:{href:tagLink}"><i class="fa fa-tag"></i>&nbsp; <span data-bind="text:name"></span> </a></li>
                                         </ul><br /><br />
                                         <hr>
+                                        <span data-bind="visible:loginUserId != postedById">
+                                            <button data-bind="click:function(){ return sendMessage(postedById,postedByName)}" class="btn btn-primary pull-right">Chat <span data-bind="visible:!showJob()"> with  seller</span></button>
+                                        </span>
                                         <span data-bind="visible:!showJob()">
-                                            @*remove this*@
-                                            <span data-bind="visible:loginUserId != postedById">
-                                                <button data-bind="click:function(){ return sendMessage(postedById,postedByName)}" class="btn btn-primary pull-right">Chat with seller</button>
-                                            </span>
                                             <h1 class="product-main-price">
                                                 <span data-bind="if:!isBidingAllowed">
                                                     <span data-bind="if:price">
@@ -203,12 +193,17 @@
                                                 <dd data-bind="visible:condition != 'z',text:condition"></dd>
                                             </dl>
                                         </div>
-
+                                        <div data-bind="visible:subcategory == 'vehicles-for-rent'">
+                                            <dl class="dl-horizontal m-t-md small">
+                                                <dt>Condition</dt>
+                                                <dd data-bind="text:condition"></dd>
+                                            </dl>
+                                        </div>
                                         <div data-bind="with:showMobileAd">
                                             <dl class="dl-horizontal m-t-md small">
                                                 <dt>condition:</dt>
                                                 <dd data-bind="text:$parent.condition"></dd>
-                                                <dt>Tye:</dt>
+                                                <dt>Type:</dt>
                                                 <dd data-bind="text:$parent.type"></dd>
                                                 <dt data-bind="with:brand">Brand:</dt>
                                                 <dd data-bind="text:brand"></dd>
@@ -322,18 +317,22 @@
                                                 <dt>Shift:</dt>
                                                 <dd data-bind="text:$parent.shift"></dd>
                                                 @*<dt>Year</dt>
-                            <dd data-bind="text:year"></dd>
-                            <dt>Year</dt>
-                            <dd data-bind="text:year"></dd>
-                            <dt>Year</dt>
-                            <dd data-bind="text:year"></dd>*@
+                    <dd data-bind="text:year"></dd>
+                    <dt>Year</dt>
+                    <dd data-bind="text:year"></dd>
+                    <dt>Year</dt>
+                    <dd data-bind="text:year"></dd>*@
                                             </dl>
                                         </div>
+                                        
                                         <h4>Details</h4>
-                                        <div data-bind="text:description" class="small text-muted">
-                                        </div>
-
-                                        <div data-bind="with:showLocation">
+                                        <div @*style="white-space:pre"*@ data-bind="text:description" class="small text-muted">
+                                            
+                                    </div><br />
+                                        
+                                        <p class="small text-muted">When you contact <span data-bind="visible:companyId,text:companyName"></span><span data-bind="visible:!companyId,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
+                                        
+                                        @*<div data-bind="with:showLocation">
                                             <h5 data-bind="with:cityName">Location</h5>
                                             <span data-bind="if:exectLocation">
                                                 <span data-bind="text:exectLocation"></span>,
@@ -342,6 +341,24 @@
                                                 <span data-bind="text:popularPlace"></span>,
                                             </span>
                                             <span data-bind="text:cityName"></span>
+                                        </div>*@
+                                        <div class="col-lg-12 ">
+                                            <div class="widget style1 lazur-bg">
+                                                <div class="row vertical-align">
+                                                        <i class="fa fa-phone fa-2x"></i>
+                                                    <span data-bind="if: phoneNumber == ''">Phone number is hidden <a data-bind="click:function(){ return sendMessage(postedById,postedByName)}"> send message</a></span> <span style="font-size:20px" class="font-bold"> <span data-bind="text:phoneNumber"></span> (<span data-bind="text:userName"></span>) </span>
+                                                    <div data-bind="with:showLocation">
+                                                        <span data-bind="with:cityName"><i class="fa fa-map-marker"></i></span>
+                                                        <span data-bind="if:exectLocation">
+                                                            <span data-bind="text:exectLocation"></span>,
+                                                        </span>
+                                                        <span data-bind="if:popularPlace">
+                                                            <span data-bind="text:popularPlace"></span>,
+                                                        </span>
+                                                        <span data-bind="text:cityName"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <br />
                                         <div class="text-right">
@@ -352,7 +369,6 @@
                                                 <a data-bind="visible:!companyId,attr:{href:sellerProfile}" class="btn btn-white btn-sm"><i class="fa fa-user"></i><span data-bind="if:category == 'Jobs' || category == 'Services'"> Posted by</span> <span data-bind="if:category != 'Jobs' && category != 'Services'"> Seller profile</span> (<span data-bind="text:postedByName"></span>)</a>
                                             </div>
                                         </div><br />
-                                        <p class="small text-muted"> when you contact <span data-bind="visible:companyId,text:companyName"></span><span data-bind="visible:!companyId,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
 
                                     </div>
                                 </div>
@@ -404,7 +420,7 @@
                                                         <div class="input-group m-b">
                                                             <span class="input-group-addon">Rs</span><input type="number" data-bind="value:price" class="form-control" pattern="[0-9]*" name="price" required />
                                                         </div>
-                                                        <button class="btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
+                                                        <button  data-style="zoom-out" id="updateBid" class="ladda-button btn btn-success" data-bind="click:function(){return updateBid($parent.id)}">Update</button>
                                                     </span>
                                                 </li>
                                             </ul>
@@ -499,8 +515,6 @@
 @Styles.Render("~/plugins/sweetAlertStyles")
 @*@Styles.Render("~/Content/plugins/blueimp/css/")*@
 }
-
-
 @section Scripts{
     @Scripts.Render("~/plugins/toastr")
     @Scripts.Render("~/plugins/timeago")
@@ -540,6 +554,8 @@
                 self.time = self.exectTime;
                 self.postedBy = self.postedById;
                 self.adId = adId;
+                var updateBidLoader = $('#updateBid').ladda();
+                updateBidLoader.ladda('start');
                 $.ajax({
                     url: '/api/Electronic/UpdateBid',
                     dataType: "json",
@@ -549,8 +565,10 @@
                     data: ko.toJSON(self),
                     success: function (data) {
                         self.isEditing(false);
+                        updateBidLoader.ladda('stop');
                     },
                     error: function () {
+                        updateBidLoader.ladda('stop');
                         toastr.error("failed to update Bid. Please refresh page and try again", "Error!");
                     }
                 });
@@ -743,7 +761,8 @@
             data = data || {};
        //     self.isAdmin = data.isAdmin;
             self.title = data.title;
-
+            self.phoneNumber = data.phoneNumber || "";
+            self.userName = data.userName ;
             self.showRealEstateAd = ko.observable();
             self.showCamera = ko.observable();
             if (data.category == "RealEstate") {
@@ -1124,6 +1143,7 @@
             //    self.newComment('');
             //}
             self.newComment = ko.observable();
+            self.isCommentPosting = ko.observable(false);
             self.addcomment = function () {
                 if (self.loginUserId) {
                     var com = new comment();
@@ -1132,7 +1152,8 @@
                     //com.description(com.description().slice(0, -1));
                     if (com.description() != null && com.description().trim() != "") {
                         com.time = new Date($.now());
-                        com.description = com.description().slice(0, - 1);
+                        com.description = com.description().slice(0, -1);
+                        self.isCommentPosting(true);
                         //self.commentsHub.server.addComment(com).fail(function (err) { toastr.error("failed to post comment ", "Error!"); });
                         $.ajax({
                             url: '/api/Comment/PostComment',
@@ -1144,9 +1165,11 @@
                             success: function (data) {
                                 self.showComment.push(new comment(data));
                                 self.newComment('');
+                                self.isCommentPosting(false);
                             },
                             error: function (jqXHR, status, thrownError) {
                                 toastr.error("failed to post comment", "Error");
+                                self.isCommentPosting(false);
                             }
                         });
                     }

@@ -1,0 +1,7 @@
+﻿<p><b>Note:</b> Fields with <span class="req">*</span> are mandatory</p>
+<form id="my-awesome-dropzone" data-bind="dropzone: { url: '/Electronics/FileUploadHandler' }" @*action="@Url.Action("FileUploadHandler", "Electronics")"*@ method="post" enctype="multipart/form-data">
+    <div id="dropzonePreview" class="dz-default dz-message">
+        <div class="dz-message" data-dz-message><span><h2>Drop images to upload<br /> OR <br />tap here to choose images</h2></span></div>
+    </div>
+</form>
+<br />

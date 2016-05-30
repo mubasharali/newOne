@@ -14,7 +14,6 @@
                         <select id="searching-city" class="demo-default" data-bind="options: searchingCities,
                        value: searchingCity,
                        optionsCaption: 'Select City...'"></select>
-
                     </div>
                     <div class="col-md-10" data-bind="visible:_isSearchCityLoading()">
                         <div class="sk-spinner sk-spinner-wave">
@@ -25,6 +24,7 @@
                             <div class="sk-rect5"></div>
                         </div>
                     </div>
+                    <span>&nbsp;</span>
                 </div>
                 <div data-bind="with:searchingCity">
                     <div class="form-group">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div> 
-                <span data-bind="visible:searchingCity"> Set location to: <b> <span data-bind="text:searchingPP"></span> <span data-bind="visible:searchingPP">,</span> </span><span data-bind="text:searchingCity"></span></b>
+                <span data-bind="visible:searchingCity"> Set location to: <b> <span data-bind="text:searchingPP"></span><span data-bind="visible:searchingPP">,</span> </span><span data-bind="text:searchingCity"></span></b>
             </div>
 
             <div class="modal-footer">

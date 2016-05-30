@@ -425,6 +425,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 data1.info = info;
                 data1.updatedInfo = null;
                 data1.updatedBy = updatedBy;
+                data1.updatedTime = DateTime.UtcNow;
                 if (updatedBy == "null")
                 {
                     data1.updatedBy = User.Identity.GetUserId();

@@ -193,6 +193,8 @@
                     },
                     error: function () {
                         self.isLoading(false);
+                        $("#FirstLoading").css({ "display": "block" });
+                        $("#FirstLoader").css({ "display": "none" });
                         toastr.error("Unable to load Discussions. Please refresh page and try again", "Error");
                     },
                 });

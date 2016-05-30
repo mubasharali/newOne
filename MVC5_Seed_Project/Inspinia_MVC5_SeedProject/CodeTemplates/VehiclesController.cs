@@ -162,6 +162,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public IdStatus SaveCarsBrandModel( Ad ad)
         {
            IdStatus adStatus = new IdStatus();
+            adStatus.status = "a";
             var company = System.Web.HttpContext.Current.Request["brand"];
             var model = System.Web.HttpContext.Current.Request["model"];
             if (company != null && company != "")
@@ -171,17 +172,9 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             if (true) //company != null
             {
-
-                var allBrands = (db.CarBrands.Select(x => x.brand)).AsEnumerable(); //getBrands
-                bool isNewBrand = true;
-                foreach (var brand in allBrands)
-                {
-                    if (brand == company)
-                    {
-                        isNewBrand = false;
-                    }
-                }
-                if (isNewBrand)
+                bool isOldBrand = db.CarBrands.Any(x => x.brand.Equals(company));
+                
+                if (!isOldBrand)
                 {
                     CarBrand mob = new  CarBrand();
                     mob.brand = company;
@@ -218,16 +211,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 else
                 {
-                    var allModels = db.CarModels.Where(x => x.CarBrand.brand == company).Select(x => x.model);
-                    bool isNewModel = true;
-                    foreach (var myModel in allModels)
-                    {
-                        if (myModel == model)
-                        {
-                            isNewModel = false;
-                        }
-                    }
-                    if (isNewModel)
+                    bool isOldModel = db.CarModels.Any(x => x.model.Equals(model));
+                    if (!isOldModel)
                     {
                         adStatus.status = "p";
                      //   ad.status = "p";
@@ -263,8 +248,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         }
         public IdStatus SaveBikesBrandModel(Ad ad)
         {
-            //   ad.status = "a";
             IdStatus idStatus = new IdStatus();
+            idStatus.status = "a";
             var company = System.Web.HttpContext.Current.Request["brand"];
             var model = System.Web.HttpContext.Current.Request["model"];
             if (company != null && company != "")
@@ -275,16 +260,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             if (true) //company != null
             {
 
-                var allBrands = (db.BikeBrands.Select(x => x.brand)).AsEnumerable(); //getBrands
-                bool isNewBrand = true;
-                foreach (var brand in allBrands)
-                {
-                    if (brand == company)
-                    {
-                        isNewBrand = false;
-                    }
-                }
-                if (isNewBrand)
+                bool isOldBrand = db.BikeBrands.Any(x => x.brand.Equals(company));
+                if (!isOldBrand)
                 {
                     BikeBrand mob = new  BikeBrand();
                     mob.brand = company;
@@ -321,16 +298,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 else
                 {
-                    var allModels = db.BikeModels.Where(x => x.BikeBrand.brand == company).Select(x => x.model);
-                    bool isNewModel = true;
-                    foreach (var myModel in allModels)
-                    {
-                        if (myModel == model)
-                        {
-                            isNewModel = false;
-                        }
-                    }
-                    if (isNewModel)
+                    bool isOldModel = db.BikeModels.Any(x => x.model.Equals(model));
+                    if (!isOldModel)
                     {
                         idStatus.status = "p";
                         //ad.status = "p";

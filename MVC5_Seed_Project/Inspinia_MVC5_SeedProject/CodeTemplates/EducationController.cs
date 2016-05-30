@@ -30,6 +30,12 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             return View();
            // return RedirectToAction("notFound","Home");
         }
+        [Route("Electronics")]
+        public ActionResult Categories1()
+        {
+            ViewBag.category = "Electronics";
+            return View("Categories");
+        }
         [Route("Home-LifeStyle")]
         public ActionResult homeL()
         {

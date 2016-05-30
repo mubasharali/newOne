@@ -78,6 +78,7 @@
                     <h4 class="modal-title">Thank You for joining <span class="brand-style">dealkar.pk</span> !</h4>
                 </div>
                 <div class="modal-body">
+                    
                     <div class="form-group"><label>Your good name please</label> <input type="text" data-bind="value:UserName,valueUpdate:'afterkeydown',event:{keyup:checkEnterName}" placeholder="Enter your Name" class="form-control"></div>
                     <p class="req" data-bind="text:loginError"></p>
                 </div>
@@ -108,6 +109,9 @@
                     <h5 class="modal-title">Welcome Back <span data-bind="text:UserName"></span>!</h5>
                 </div>
                 <div class="modal-body">
+                    <div data-bind="visible:isRedirecting()" class="alert alert-success">
+                        <strong>Done! Refreshing page..</strong>
+                    </div>
                     <div class="form-group"><label><span data-bind="visible:!isPasswordSaved()">Create </span> <span data-bind="visible:isPasswordSaved()">Enter </span>  password</label> <input type="password" data-bind="value:password,valueUpdate:'afterkeydown',event:{keyup:checkEnterPassword}" placeholder="Password" class="form-control"></div>
                   <p class="req" data-bind="html:loginError"></p> 
                 </div>
@@ -138,7 +142,10 @@
                     <h4 class="modal-title">Confirm your Email Address!</h4>
                 </div>
                 <div class="modal-body">
-                    <p>An Email is sent at your email address. Click on the link in that email.</p>
+                    <div data-bind="visible:isRedirecting()" class="alert alert-success">
+                        <strong>Done! Refreshing page..</strong>
+                    </div>
+                    <p>An Email is sent at your email address. Click on the button in that email.</p>
                 </div>
                 <div class="modal-footer">
                     <div data-bind="visible:!isUserLoginLoading()">

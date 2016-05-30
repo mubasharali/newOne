@@ -180,8 +180,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ad.condition = System.Web.HttpContext.Current.Request["shift"];
             jobAd.salaryType = System.Web.HttpContext.Current.Request["salaryType"];
             
-
-            ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
+           // ad.description = System.Web.HttpUtility.HtmlEncode(ad.description);
             ad.postedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
 

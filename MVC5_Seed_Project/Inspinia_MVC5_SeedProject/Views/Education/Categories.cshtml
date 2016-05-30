@@ -69,6 +69,9 @@
         } else if (category == "Vehicles") {
             availableCategories = ["Cars", "Bikes", "Commerical Vehicles", "Vehicles for rent", "other vehicles", "Vehicles Spare parts"];
         }
+        else if (category == "Electronics") {
+            availableCategories = ["Laptops Computers", "Cameras", "Tv DVD Multimedia", "Games", "Home Appliances", "other electronics"];
+        }
         var selectedCategory = ko.observable();
 
         subCategoryClicked = function (category1) {

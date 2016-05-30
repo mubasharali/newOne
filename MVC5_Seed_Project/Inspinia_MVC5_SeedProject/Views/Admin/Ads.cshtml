@@ -218,7 +218,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                @Html.Partial("~/Views/Shared/_Comments.cshtml")
+                                @*@Html.Partial("~/Views/Shared/_Comments.cshtml")*@
                             </div>
                         </div>
                     </div>
@@ -622,7 +622,7 @@
         self.showAds = ko.observableArray();
         self.loadad = function () {
             var adId = myAdId;
-            url_address = '/api/Admin/GetAds?limit=' + 50;
+            url_address = '/api/Admin/GetItems?limit=' + 50;
             $.ajax({
                 url: url_address,
                 dataType: "json",

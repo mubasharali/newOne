@@ -40,15 +40,22 @@ function ChatViewModel() {
     $(".collapse-chat-box").click(function () {
         $(".open-small-chat").trigger('click');
     })
+    $("#chatViewModel").click(function () {
+        self.notification(0);   
+    })
     var self = this;
     self.hub = $.connection.chatHub;
     self.onlineUsersHub = $.connection.onlineUsers;
     self.showChat = ko.observableArray();
-    self.newMessage = ko.observable();
+    self.newMessage = ko.observable('');
+    self.errorMsg = ko.observable();
     self.loginUserId1 = "";
     self.onlineUsers = ko.observableArray();
     self.sendMessageTo = ko.observable();
     self.sendMessgeToName = ko.observable();
+    self.isSendingChatMessage = ko.observable(false);
+    self.seenAt = ko.observable();
+    self.notification = ko.observable(0);
     self.sendTo = function (data) {
         if (self.loginUserId1) {
             self.sendMessageTo(data.id);
@@ -115,7 +122,12 @@ function ChatViewModel() {
         if (self.loginUserId1) {
             if (self.newMessage().length < 1000) {
                 if (e.keyCode == 13) {
-                    self.sendMessage();
+                    if (isConnectionReady()) {
+                        self.sendMessage();
+                    }
+                    else {
+                        toastr.info("Connection not established to server", "Please wait");
+                    }
                 }
             } else {
                 self.newMessage(self.newMessage().slice(0, -1));
@@ -125,9 +137,28 @@ function ChatViewModel() {
             loginBtn();
         }
     }
+    self.hub.client.MessageSeen = function(id, time){
+        $.each((self.showChat()), function (i, item) {
+            if (item.id == id) {
+                item.seenAt (time);
+            }
+        });
+    }
+    
     self.hub.client.loadNewMessage = function (data) {
         self.newMessage('');
+        self.isSendingChatMessage(false);
         if (data != null) {
+            if (data.sentFrom != loginUserId1) {
+                if (data.seenAt == null || data.seenAt == "undefined") {
+                    self.notification(self.notification() + 1);
+                    if (self.sendMessageTo() != data.sentFrom) { //check this
+                       // console.log(self.sendMessageTo());
+                        var link = $('<a/>').text("Go to chat room").attr('href', '/User/Chat');
+                        self.errorMsg(link[0].outerHTML + " to see message!");
+                    }
+                }
+            }
             self.showChat.push(new Message(data,self.sendMessageTo()));
         }
     }
@@ -153,6 +184,23 @@ function ChatViewModel() {
             }
         });
     }
+    self.sendMessageBtn = function () {
+        if (self.loginUserId1) {
+            if (self.newMessage().length < 1000) {
+                if (isConnectionReady()) {
+                    self.sendMessage();
+                }
+                else {
+                    toastr.info("Connection not established to server", "Please wait");
+                }
+            } else {
+                self.newMessage(self.newMessage().slice(0, -1));
+                toastr.info("You reached the limit", "Message too long!");
+            }
+        } else {
+            loginBtn();
+        }
+    }
     self.sendMessage = function () {
         if (self.sendMessageTo()) {
             var msg = new Message();
@@ -160,7 +208,11 @@ function ChatViewModel() {
             msg.message = self.newMessage();
             msg.message = $.trim(msg.message);
             if (msg.message != "") {
-                self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                $.connection.hub.start().done(function () {
+                    self.isSendingChatMessage(true);
+                    self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                });
+                
             } else {
                 toastr.info("You cannot send empty message");
             }

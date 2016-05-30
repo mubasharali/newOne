@@ -39,6 +39,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               time = user.time
                           };
                var users1 = users.GroupBy(x => x.id).AsEnumerable().Select(x => x.LastOrDefault());
+                users1 = users1.OrderByDescending(x => x.time);
                 return Ok(users1);
             }
             return BadRequest();

@@ -141,6 +141,7 @@
     <EntitySetMapping Name="Chats">
       <EntityTypeMapping TypeName="Model.Chat">
         <MappingFragment StoreEntitySet="Chat">
+          <ScalarProperty Name="SeenAt" ColumnName="SeenAt" />
           <ScalarProperty Name="time" ColumnName="time" />
           <ScalarProperty Name="message" ColumnName="message" />
           <ScalarProperty Name="sentTo" ColumnName="sentTo" />

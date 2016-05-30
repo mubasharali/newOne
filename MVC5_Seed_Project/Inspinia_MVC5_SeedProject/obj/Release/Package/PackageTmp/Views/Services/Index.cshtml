@@ -46,7 +46,7 @@
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
-                <a href="/ServiceConsumers" data-style="expand-left" class="  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
+                <a href="/ServiceConsumers" data-style="expand-left" class="col-lg-offset-1  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
                 <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>&nbsp; &nbsp;
                 <span class="hidden-xs"> <span data-bind="text:showAds().length"> </span> results found<br /></span>
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity()  || tags() )"> all </span> ads
@@ -91,9 +91,9 @@
                     <div class="col-sm-10">
                         <input type="text" data-bind="value:needAServiceTitle" class="form-control" name="title" value="" />
                     </div>
-                <br />
+                    <span class="hidden-xs"> <br /></span>
                 </div>            @*<p class="req" data-bind="text:loginError"></p>*@
-                <div class="form-group"> <br />
+                <div class="form-group"> <span class="hidden-xs"> <br /></span>
                     <small class="control-label col-sm-2" for="select-repo">Tags @*<br /><small class="text-navy">optional</small>*@</small>
                     <div class="col-sm-10">
                         <input id="select-tag1" data-bind="value:needAServiceTags" name="tags" class="repositories" placeholder="Pick tags..." />
@@ -111,7 +111,7 @@
                 </div>
                 
                 <div data-bind="with:selectedCity">
-                    <br /><br /><br />
+                    <div class="hidden-xs"> <br /><br /><br /></div>
                     <div class="form-group">
                         <small class="control-label col-sm-2">Famous Place</small>
                         <div class="col-sm-10">
@@ -122,9 +122,9 @@
                     </div>
                 </div>
                 <div data-bind="with:selectedPopularPlace">
-                    <br /><br /><br />
+                    <div class="hidden-xs"> <br /><br /><br /></div>
                     <div class="form-group">
-                        <small class="control-label col-sm-2">Exect location<br /><small class="text-navy">optional</small></small>
+                        <small class="control-label col-sm-2">Exect location <span class="hidden-xs"> <br /></span><small class="text-navy"> optional</small></small>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" data-bind="value:exectLocation" name="exectLocation" />
                         </div>

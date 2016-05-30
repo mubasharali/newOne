@@ -1126,6 +1126,9 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                        where ad.Id == id
                        select new
                        {
+                           userName = ad.AspNetUser.Email,
+                           phoneNumber = ad.AspNetUser.hidePhoneNumber==null ? "" : ad.AspNetUser.hidePhoneNumber == false ? ad.AspNetUser.PhoneNumber : "",
+                     //      phoneNumber = phoneNumber1 == "" ? ad.AspNetUser.PhoneNumber : "",
                            companyId = companyId,
                            companyName = companyName,
                            isAdmin = isAdmin,
