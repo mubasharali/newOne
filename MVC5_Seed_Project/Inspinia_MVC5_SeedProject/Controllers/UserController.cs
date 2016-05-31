@@ -52,7 +52,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return Ok(User.Identity.GetUserId());
+                return Ok(System.Web.HttpContext.Current.User.Identity.GetUserId());
             }
             return Ok("Visitor");
         }

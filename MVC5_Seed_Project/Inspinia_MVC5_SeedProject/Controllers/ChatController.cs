@@ -71,7 +71,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         }
         public async Task<IHttpActionResult> GetLoginUserId()
         {
-            return Ok( User.Identity.GetUserId());
+            return Ok(System.Web.HttpContext.Current.User.Identity.GetUserId());
         }
         public async Task<IHttpActionResult> SearchUser(int id)
         {

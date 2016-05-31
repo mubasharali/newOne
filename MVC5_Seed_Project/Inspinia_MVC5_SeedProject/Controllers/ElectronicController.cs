@@ -421,6 +421,38 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return BadRequest();
         }
         [HttpPost]
+        public async Task<IHttpActionResult> SaveMobileAd(Ad ad)
+        {
+            if (HttpContext.Current.Request.IsAuthenticated)
+            {
+                ad.postedBy = HttpContext.Current.User.Identity.GetUserId();
+                ad.time = DateTime.UtcNow;
+                ad.status = "a";
+
+                MobileAd mobad = new MobileAd();
+                mobad.color = ad.MobileAd.color;  /*HttpContext.Current.Request["color"];*/
+                mobad.sims = ad.MobileAd.sims;
+
+                mobad.mobileId = 1;
+                db.MobileAds.Add(mobad);
+                db.SaveChanges();
+                db.Ads.Add(ad);
+                await db.SaveChangesAsync();
+                return Ok(ad.Id);
+                //Mobile mob = new Mobile();
+                //mob.brand = HttpContext.Current.Request["brand"];
+                //mob.addedBy = HttpContext.Current.User.Identity.GetUserId();
+                //mob.time = DateTime.UtcNow;
+                //mob.status = "a";
+                //MobileModel model = new MobileModel();
+                //model.model = HttpContext.Current.Request["model"];
+                //model.time = DateTime.UtcNow;
+                //model.status = "a";
+                //db.MobileModels.Add()
+            }
+            return BadRequest();
+        }
+        [HttpPost]
         public async Task<IHttpActionResult> DeleteMobileModel(int id)
         {
             if (HttpContext.Current.Request.IsAuthenticated)
