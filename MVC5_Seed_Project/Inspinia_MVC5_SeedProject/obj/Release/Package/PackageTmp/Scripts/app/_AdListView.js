@@ -40,6 +40,8 @@ function Ad(data) {
     data = data || {};
     self.title = data.title;
     self.category = data.category;
+    self.subcategory = data.subcategory;
+    self.subsubcategory = data.subsubcategory;
     self.description = ko.observable(data.description);
     self.postedByName = data.postedByName;
     self.postedById = data.postedById;
@@ -54,6 +56,17 @@ function Ad(data) {
     self.price = data.price || "";
     self.link = "/Details/" + data.id + "/" + convertToSlug( data.title);
     var loginUserId1 = getLoginUserId(self.loginUserId); //to access self.loginUserId outside this function
+
+    self.brand = data.brand;
+    self.model = data.model;
+
+    self.floor = data.floor;
+    self.bedroom = data.bedroom;
+    self.area = data.area;
+    
+    self.exprience = data.exprience;
+    self.qualification = data.qualification;
+
     //biding
     self.highestBid = ko.observable();
     self.showBidings = ko.observableArray();

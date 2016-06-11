@@ -190,6 +190,7 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
+                        $("#FirstLoading").css({ "display": "block" });
                         var tags = data.adTags;
                         $.each((tags), function (i, item) { self.selectedTags.push(item.name) });
                         self.exectLocation = data.location.exectLocation;
@@ -355,6 +356,7 @@
 
             $("#form").validate({
                 ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+               
                 rules: {
                     title: {
                         required: true,

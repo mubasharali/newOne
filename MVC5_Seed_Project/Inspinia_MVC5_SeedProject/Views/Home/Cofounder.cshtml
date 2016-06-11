@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "become co-founder";
+}
+
+<div class="row wrapper wrapper-content animated fadeInRight">
+    <div class="col-sm-7  col-sm-offset-2">
+        <ul class=" sortable-list connectList agile-list ui-sortable">
+            <li class="success-element">
+                <h1>Become a co-founder</h1>
+                <p>
+                    <b>Teamwork makes the dream work!</b><br />
+                    Are you a talented, curious and passionate Engineer? Asp.Net has no secrets for you and you have used it with relational as well as NoSQL databases?
+                    Do you see potential for optimization at every corner? Interested in being part of this startup? And most important if you think like <strong>me ne job ni krne apna business start krna hy!</strong>
+                    Then you are one of us! Send your details (including CV) with subject "Become co-founder" at dealkar.pk@gmail.com
+                    <br />Are you android developer or marketing person? Send your details at dealkar.pk@gmail.com
+                    <br />Have a question? Ask at dealkar.pk@gmail.com
+                    @*Continuous integration, auto-scaled rolling releases and cross-service communication are all part of the daily gig.
+                        Our Software Engineers write and maintain clean, high-caliber code. They are the engineering brain behind our product that is reliable, user-friendly, responsive and loved by its many users. If all the above describes you and you enjoy to be part of a multicultural team within our office but also within our global group, apply for this job.</p>*@
+            </li>
+        </ul>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/plugins/toastrStyles")
+    @Styles.Render("~/Scripts/plugins/jquery-ui/jqueryuiStyles")
+    @Styles.Render("~/bundles/myStyles")
+    @Styles.Render("~/plugins/sweetAlertStyles")
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/plugins/validate")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/sweetAlert")
+    <script type="text/javascript">
+
+        function ViewModel() {
+            SearchingLocation();
+            AccountViewModel();
+            ChatViewModel();
+        }
+        $(".sortable-list").sortable({
+            connectWith: ".connectList"
+        }).disableSelection();
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        Selectize.define('inputMaxlength', function (options) {
+            var self = this;
+            this.setup = (function () {
+                var original = self.setup;
+                return function () {
+                    original.apply(this, arguments);
+                    this.$control_input.attr('maxlength', this.settings.inputMaxlength);
+                };
+            })();
+        });
+        $(document).ready(function () {
+            ko.applyBindings(new ViewModel);
+
+          
+        });
+    </script>
+}
+

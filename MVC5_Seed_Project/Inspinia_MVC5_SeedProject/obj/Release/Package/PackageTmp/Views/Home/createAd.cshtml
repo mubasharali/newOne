@@ -42,7 +42,7 @@ create electronic ad:
                                     <li data-bind="click:laptops" class="info-element">
                                         Laptops / Computers
                                     </li>
-                                    <li data-bind="click:cameraClicked" class="info-element">Camera</li>
+                                    <li data-bind="click:cameras" class="info-element">Camera</li>
                                     <li data-bind="click:TVDVDMultimediaClicked" class="info-element">TV-DVD-Multimedia</li>
                                     <li data-bind="click:gamesClicked" class="info-element">Games</li>
                                     <li data-bind="click:homeAppliancesClicked" class="info-element">Home Appliances</li>
@@ -67,6 +67,10 @@ create electronic ad:
                                 <span data-bind="if:subcategory() == 'laptops'">
                                     <li class="success-element" data-bind="click:laptopsClicked">Laptops / Computers</li>
                                     <li class="success-element" data-bind="click:laptopAccessoriesClicked">Laptops / Computers Accessories</li>
+                                </span>
+                                <span data-bind="if:subcategory() == 'cameras'">
+                                    <li class="success-element" data-bind="click:cameraClicked">Sell Camera</li>
+                                    <li class="success-element" data-bind="click:cameraAccessoriesClicked">Sell Camera Accessories</li>
                                 </span>
                             </ul>
                             <button class="btn" data-bind="click:backButtonUnderSubcategory">Back</button>
@@ -144,9 +148,16 @@ create electronic ad:
                 self.laptops = function () {
                     self.subcategory("laptops");
                 }
+                self.cameras = function () {
+                    self.subcategory("cameras");
+                }
                 self.cameraClicked = function () {
                     self.loading(true);
                     window.location.href = '/Electronics/CreateCameraAd';
+                }
+                self.cameraAccessoriesClicked = function () {
+                    self.loading(true);
+                    window.location.href = '/Electronics/CreateCameraAccessoriesAd';
                 }
                 self.TVDVDMultimediaClicked = function () {
                     self.loading(true);

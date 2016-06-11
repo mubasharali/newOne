@@ -420,25 +420,52 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             }
             return BadRequest();
         }
-        [HttpPost]
-        public async Task<IHttpActionResult> SaveMobileAd(Ad ad)
+        [HttpGet]
+        public async Task<IHttpActionResult> SaveImage(int adid ,string ext)
         {
-            if (HttpContext.Current.Request.IsAuthenticated)
-            {
-                ad.postedBy = HttpContext.Current.User.Identity.GetUserId();
+            AdImage adimg = new AdImage();
+            adimg.adId = adid;
+            adimg.imageExtension = ext;
+            db.AdImages.Add(adimg);
+            db.SaveChanges();
+            return Ok("Done");
+        }
+       [HttpGet]
+        public async Task<IHttpActionResult> SaveMobileAd(string title,string description,string price,string category,string postedby)
+        {
+           try { 
+                Ad ad = new Ad();
+                ad.isnegotiable = "n";
+                ad.condition = "u";
+                ad.type = true;
+                ad.title = title;
+                ad.description = description;
+                ad.postedBy = postedby;
+                ad.price = int.Parse(price);
+                ad.category = category;
+                ad.views = 0;
+             //   ad.postedBy = HttpContext.Current.User.Identity.GetUserId();
                 ad.time = DateTime.UtcNow;
                 ad.status = "a";
 
                 MobileAd mobad = new MobileAd();
-                mobad.color = ad.MobileAd.color;  /*HttpContext.Current.Request["color"];*/
-                mobad.sims = ad.MobileAd.sims;
-
+                mobad.color ="red";  /*HttpContext.Current.Request["color"];*/
+                mobad.sims = "1";
                 mobad.mobileId = 1;
-                db.MobileAds.Add(mobad);
-                db.SaveChanges();
                 db.Ads.Add(ad);
                 await db.SaveChangesAsync();
+                mobad.Id = ad.Id;
+                db.MobileAds.Add(mobad);
+            db.SaveChanges();
+
+               
                 return Ok(ad.Id);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
                 //Mobile mob = new Mobile();
                 //mob.brand = HttpContext.Current.Request["brand"];
                 //mob.addedBy = HttpContext.Current.User.Identity.GetUserId();
@@ -449,8 +476,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 //model.time = DateTime.UtcNow;
                 //model.status = "a";
                 //db.MobileModels.Add()
-            }
-            return BadRequest();
+
         }
         [HttpPost]
         public async Task<IHttpActionResult> DeleteMobileModel(int id)
@@ -691,6 +717,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                id = ad.Ad.Id,
                                time = ad.Ad.time,
                                islogin = islogin,
+                               category = ad.Ad.category,
+                               subcategory = ad.Ad.subcategory,
                                isNegotiable = ad.Ad.isnegotiable,
                                price = ad.Ad.price,
                                reportedCount = ad.Ad.Reporteds.Count,
@@ -751,6 +779,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                id = ad.Ad.Id,
                                time = ad.Ad.time,
                                islogin = islogin,
+                               category = ad.Ad.category,
+                               subcategory = ad.Ad.subcategory,
                                isNegotiable = ad.Ad.isnegotiable,
                                price = ad.Ad.price,
                                reportedCount = ad.Ad.Reporteds.Count,
@@ -817,6 +847,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 islogin = islogin,
                                 isNegotiable = ad.Ad.isnegotiable,
                                 price = ad.Ad.price,
+                                category = ad.Ad.category,
+                                subcategory = ad.Ad.subcategory,
                                 reportedCount = ad.Ad.Reporteds.Count,
                                 isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
                                 // views = ad.Ad.AdViews.Count,
@@ -877,6 +909,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            islogin = islogin,
                            isNegotiable = ad.Ad.isnegotiable,
                            price = ad.Ad.price,
+                           category = ad.Ad.category,
+                           subcategory = ad.Ad.subcategory,
                            reportedCount = ad.Ad.Reporteds.Count,
                            isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
                            // views = ad.Ad.AdViews.Count,
@@ -940,13 +974,15 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 islogin = islogin,
                                 isNegotiable = ad.Ad.isnegotiable,
                                 price = ad.Ad.price,
+                                category = ad.Ad.category,
+                                subcategory = ad.Ad.subcategory,
                                 reportedCount = ad.Ad.Reporteds.Count,
                                 isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
                                 // views = ad.Ad.AdViews.Count,
                                 views = ad.Ad.views,
                                 condition = ad.Ad.condition,
                                 savedCount = ad.Ad.SaveAds.Count,
-                                category = ad.category, //this is category of camera not ad
+                                subsubcategory = ad.category, //this is category of camera not ad
                                 brand = ad.brand,
                                 adTags = from tag1 in ad.Ad.AdTags.ToList()
                                          select new
@@ -998,6 +1034,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 description = ad.Ad.description,
                                 id = ad.Ad.Id,
                                 time = ad.Ad.time,
+                                category = ad.Ad.category,
+                                subcategory = ad.Ad.subcategory,
                                 islogin = islogin,
                                 isNegotiable = ad.Ad.isnegotiable,
                                 price = ad.Ad.price,
@@ -1007,7 +1045,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 views = ad.Ad.views,
                                 condition = ad.Ad.condition,
                                 savedCount = ad.Ad.SaveAds.Count,
-                                category = ad.category, //this is category of camera not ad
+                                cameraCategory = ad.category, //this is category of camera not ad
                                 brand = ad.brand,
                                 adTags = from tag1 in ad.Ad.AdTags.ToList()
                                          select new

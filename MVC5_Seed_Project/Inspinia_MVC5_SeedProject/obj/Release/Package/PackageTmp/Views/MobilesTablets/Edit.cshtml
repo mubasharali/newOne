@@ -8,7 +8,10 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -22,7 +25,7 @@
                         <input type="hidden" name="files" id="fileNames" />
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true)
-                            
+
                             <div class="form-group">
                                 <label class="control-label col-md-2">Select Brand <span class="req">*</span></label>
                                 <div class="col-md-10">
@@ -44,14 +47,14 @@
                                 </div>
                             </div>
 
-                                <div class="form-group">
-                                    <label class="control-label col-md-2" >Color<span class="req">*</span></label>
-                                    <div class="col-md-10">
-                                        <select id="select-color" required class="demo-default" name="color" data-bind="options: availableColors,
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Color<span class="req">*</span></label>
+                                <div class="col-md-10">
+                                    <select id="select-color" required class="demo-default" name="color" data-bind="options: availableColors,
                        value: selectedColor,
                        optionsCaption: 'Choose color...'"></select>
-                                    </div>
                                 </div>
+                            </div>
 
                             <div class="form-group">
                                 <label class="control-label col-md-2">Number of sims<span class="req">*</span></label>
@@ -65,7 +68,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit"  data-bind="click:submitClicked" value="Update"  data-style="expand-left" class="ladda-button btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Update" data-style="expand-left" class="ladda-button btn btn-primary" />
                                     <a href="/Details/@Model.Id/@ElectronicsController.URLFriendly( @Model.title )" class="btn btn-white">Cancel</a>
                                 </div>
                             </div>
@@ -172,7 +175,7 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
-
+                        $("#FirstLoading").css({ "display": "block" });
                         //for company
                         if (data.companyName) {
                             var comid = $("#" + data.companyName);
@@ -526,6 +529,7 @@
             
             $("#form").validate({
                 ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+              
                 rules: {
                     title: {
                         required: true,
@@ -561,7 +565,7 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-
+            
         });
     </script>
 }

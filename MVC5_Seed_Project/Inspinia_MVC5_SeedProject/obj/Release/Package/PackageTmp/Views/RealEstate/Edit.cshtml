@@ -5,7 +5,10 @@
     ViewBag.Title = "Edit Real Estate Ad";
 }
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -65,7 +68,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" data-bind="click:submitClicked" value="Update"  data-style="expand-left" class="ladda-button btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Update" data-style="expand-left" class="ladda-button btn btn-primary" />
                                     @Html.ActionLink("Cancel", "Details", "Electronics", new { id = Model.Id, title = ElectronicsController.URLFriendly(Model.title) }, new { @class = "btn btn-white" })
                                     @*<a href="/Details/@Model.Id/@ElectronicsController.URLFriendly(@Model.title) " class="btn btn-white">Cancel</a>*@
                                 </div>
@@ -164,7 +167,7 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
-
+                        $("#FirstLoading").css({ "display": "block" });
 
                         //for company
                         if (data.companyName) {

@@ -1,12 +1,14 @@
 ﻿@{ 
     Layout = null;
 }
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.2.0/knockout-min.js"></script>
 <div id="stuff" data-bind="foreach: stuff">
     <div data-bind="text: $data"></div>
 </div>
 <!-- ko scrollToEnd: stuff --><!-- /ko -->
-<input type="text" data-bind="value:newMsg" />
-<button data-bind="click:addMsg">add</button>
+<input type="text" data-bind="value:msg" />
+<button type="button" data-bind="click:addMsg" >add</button>
 <style>
     #stuff {
         height: 100px;
@@ -14,17 +16,15 @@
         overflow: scroll;
     }
 </style>
-@section Scripts{
-@Scripts.Render("~/plugins/knockout")
+
 <script>
     function ViewModel(id, name) {
         var self = this;
-        self.stuff = ko.observableArray([]);
-        self.onlineUsers = ko.observableArray([]);
-        self.newMsg = ko.observable();
+        self.msg = ko.observable();
         self.addMsg = function () {
-            self.stuff.push(self.newMsg());
+            self.stuff.push(self.msg());
         }
+        self.stuff = ko.observableArray([]);
     }
     var vm = new ViewModel();
 
@@ -46,6 +46,7 @@
     //    var newData = (Math.random() * 100000 + 10000).toString(36); // just random gibberish
     //    vm.stuff.push(newData);
     //}
+
 </script>
 
-    }
+    

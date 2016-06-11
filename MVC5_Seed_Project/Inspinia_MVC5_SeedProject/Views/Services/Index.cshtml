@@ -94,14 +94,14 @@
                     <span class="hidden-xs"> <br /></span>
                 </div>            @*<p class="req" data-bind="text:loginError"></p>*@
                 <div class="form-group"> <span class="hidden-xs"> <br /></span>
-                    <small class="control-label col-sm-2" for="select-repo">Tags @*<br /><small class="text-navy">optional</small>*@</small>
+                    <small class="control-label col-sm-2" for="select-repo">Tags <span class="req">*</span></small>
                     <div class="col-sm-10">
                         <input id="select-tag1" data-bind="value:needAServiceTags" name="tags" class="repositories" placeholder="Pick tags..." />
                     </div>
                 </div>
                 <small>Where you need</small>
                 <div class="form-group">
-                    <small class="control-label col-sm-2">City</small>
+                    <small class="control-label col-sm-2">City<span class="req">*</span></small>
                     <div class="col-sm-10">
                         <select id="select-city" class="demo-default" name="city" data-bind="options: availableCities,
                        value: selectedCity,
@@ -113,7 +113,7 @@
                 <div data-bind="with:selectedCity">
                     <div class="hidden-xs"> <br /><br /><br /></div>
                     <div class="form-group">
-                        <small class="control-label col-sm-2">Famous Place</small>
+                        <small class="control-label col-sm-2">Famous Place<span class="req">*</span></small>
                         <div class="col-sm-10">
                             <select id="select-popularPlace" class="demo-default" name="popularPlace" data-bind="options:availablePopularPlaces,
                        value: selectedPopularPlace,

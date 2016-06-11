@@ -8,7 +8,10 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -128,6 +131,7 @@
             AccountViewModel();
             ChatViewModel();
             var self = this;
+            $("#FirstLoading").css({ "display": "block" });
             self.submitClicked = function () {
                 if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
                 window.btn_clicked = true;

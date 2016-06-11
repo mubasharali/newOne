@@ -50,7 +50,14 @@
                         <div class="small m-t-xs" data-bind="foreach:showTags">
                             <a target="_blank" data-bind="attr:{href:link},text:name" class="btn btn-xs btn-white"> </a>
                         </div><br />
-                        <div data-bind="truncatedText: description, maxTextLength: 150"></div><br />
+                       <span data-bind="text:category"></span> <span data-bind="visible:subcategory">> <span data-bind="text:subcategory"></span> </span> 
+                        <span data-bind="visible:subsubcategory"> > <span data-bind="text:subsubcategory"></span> </span> 
+                        <span data-bind="visible:brand"> > <span data-bind="text:brand"></span></span> <span data-bind="visible:model"> > <span data-bind="text:model"></span></span>
+                        
+                        <span data-bind="visible:area"><b> Area:</b> <span data-bind="text:area"> </span>sq ft </span> <span data-bind="visible:bedroom"><b> Bedroom: </b><span data-bind="text:bedroom"></span></span>
+                        <span data-bind="visible:exprience"><b>Experience:</b><span data-bind="if:exprience  == 'f'">Fresh Graduate</span><span data-bind="if:exprience  == 'n'">Not required</span><span data-bind="if:exprience != 'f' && exprience !='n' && exprience != ''"> <span data-bind="text:exprience"></span> year</span></span>
+                        <span data-bind="visible:qualification"><b>Qualification: </b><span data-bind="text:qualification"></span></span><br /><br />
+                        <div data-bind="truncatedText: description, maxTextLength: 150"></div>
                         <div class="pull-right"><i class="fa fa-clock-o"></i> <span data-bind="text:time"></span></div>
                         <div class="" data-bind="with:adLocation">
                             <span data-bind="with:cityName">@*<i class="fa fa-ballon"></i>*@ <b>From:</b></span>
@@ -60,10 +67,10 @@
                             <span data-bind="text:cityName"></span>
                         </div>
 
-                        <div class="m-t text-righ">
+                        @*<div class="m-t text-righ">
 
                             <a data-bind="attr:{href:link}" class="btn btn-xs btn-outline btn-primary">Open <i class="fa fa-long-arrow-right"></i> </a>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>

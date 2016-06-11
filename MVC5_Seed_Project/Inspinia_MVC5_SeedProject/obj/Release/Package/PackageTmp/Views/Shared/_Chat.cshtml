@@ -1,7 +1,7 @@
 ﻿<style>
     #showChat {
-        height: 100px;
-       // border: 1px solid black;
+        height: 234px;
+       
         overflow: scroll;
     }
 </style>
@@ -17,8 +17,8 @@
             </small>
         </div>
 
-        <div id="showChat" class="content" >
-            <div data-bind="foreach:showChat">
+        <div @*id="showChat"*@ style="overflow:scroll" class="content" >
+            <div  data-bind="foreach:showChat">
                 <div data-bind="if:message.length > 0">
                     <div data-bind="visible:sentFrom != loginUserId1">
                         <div class="left">
@@ -54,6 +54,7 @@
                     </div>
                 </div>
             </div>
+            
             <div data-bind="html:errorMsg"></div>
         </div>
         <!-- ko scrollToEnd: showChat --><!-- /ko -->

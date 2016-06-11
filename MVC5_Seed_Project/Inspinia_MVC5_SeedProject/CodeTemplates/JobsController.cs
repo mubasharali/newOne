@@ -165,6 +165,10 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             } 
             jobAd.qualification = System.Web.HttpContext.Current.Request["qualification"];
             jobAd.exprience = System.Web.HttpContext.Current.Request["exprience"];
+            if(jobAd.exprience != "" && jobAd.exprience != null)
+            {
+                jobAd.exprience = jobAd.exprience.Trim();
+            }
             if(System.Web.HttpContext.Current.Request["salary"] != null && System.Web.HttpContext.Current.Request["salary"] != "")
             {
                 ad.price = int.Parse(System.Web.HttpContext.Current.Request["salary"]);

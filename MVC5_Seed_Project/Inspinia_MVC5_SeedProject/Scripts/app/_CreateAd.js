@@ -1,4 +1,5 @@
-﻿var isFilesUploading = false;
+﻿
+var isFilesUploading = false;
 function UserCompanies_CreateAd(self) {
 
     self.postAdUsing = ko.observable();

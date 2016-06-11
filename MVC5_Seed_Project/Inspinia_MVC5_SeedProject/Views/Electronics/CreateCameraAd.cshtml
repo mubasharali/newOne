@@ -5,7 +5,10 @@
 }
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -24,7 +27,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2">Select Category</label>
                                 <div class="col-md-10">
-                                    <select id="select-category"  class="demo-default" name="cameraCategory" data-bind="options: availableCategories,
+                                    <select id="select-category" class="demo-default" name="cameraCategory" data-bind="options: availableCategories,
                        value: selectedCategory,
                        optionsCaption: 'Choose category...'"></select>
                                 </div>
@@ -32,17 +35,17 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2">Select Brand</label>
                                 <div class="col-md-10">
-                                    <select id="select-brand"  class="demo-default" name="brand" data-bind="options: availableBrands,
+                                    <select id="select-brand" class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
                        optionsCaption: 'Choose brand...'"></select>
                                 </div>
                             </div>
-                          
+
                             @Html.Partial("~/Views/Shared/_CreateAd.cshtml")
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" data-bind="click:submitClicked" value="Create"  data-style="expand-left" class="ladda-button btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Create" data-style="expand-left" class="ladda-button btn btn-primary" />
                                     @Html.ActionLink("Cancel", "Cameras", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -91,7 +94,7 @@
             self.selectedCategory = ko.observable();
             self.availableBrands = ["Sony", "Canon", "Kodak", "Nikon", "Olympus", "Panasonic", "Anex", "AT", "Aurge Technologies", "CyberTele", "Dahua", "Casio", "EverFocus", "Fujifilm", "Genius", "Giftsmine", "Go-Pro", "Hikvision", "iVision", "N Tel", "HP", "Kingstion", "Leica", "Pentax", "Super", "Velbon", "Videoline USA", "Samsung", "Sharp", "others"];
             self.selectedBrand = ko.observable();
-
+            $("#FirstLoading").css({ "display": "block" });
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
                 if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));

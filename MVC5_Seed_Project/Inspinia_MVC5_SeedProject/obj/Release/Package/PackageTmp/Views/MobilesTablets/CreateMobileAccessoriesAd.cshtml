@@ -8,7 +8,10 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -27,7 +30,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-2">Select Brand <small class="text-navy required">optional</small></label>
                                 <div class="col-md-10">
-                                    <select id="select-brand"  class="demo-default" name="brand" data-bind="options: availableBrands,
+                                    <select id="select-brand" class="demo-default" name="brand" data-bind="options: availableBrands,
                        value: selectedBrand,
                        optionsCaption: 'Choose brand...'"></select>
                                     <span class="help-block">If your accessory is related to a particular brand then add brand else leave it empty</span>
@@ -37,7 +40,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-md-2">Select Model</label>
                                     <div class="col-md-10">
-                                        <select id="select-model"  class="demo-default" name="model" data-bind="options: $parent.availableModels,
+                                        <select id="select-model" class="demo-default" name="model" data-bind="options: $parent.availableModels,
                        value: $parent.selectedModel,
                        optionsCaption: 'Choose model...'"></select>
                                     </div>
@@ -68,7 +71,7 @@
                             <br />
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" data-bind="click:submitClicked" value="Post"  data-style="expand-left" class="ladda-button btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Post" data-style="expand-left" class="ladda-button btn btn-primary" />
                                     @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -80,7 +83,7 @@
             </div>
         </div>
         <div class="col-sm-6">
-           
+
         </div>
     </div>
 </div>
@@ -117,6 +120,7 @@
             AccountViewModel();
             ChatViewModel();
             var self = this;
+            $("#FirstLoading").css({ "display": "block" });
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
                 if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));

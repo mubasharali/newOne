@@ -16,8 +16,19 @@
             </div>
         </div>
     </div>*@
-    <div class="row">
-        <div class="col-lg-12">
+    <style>
+        #stuff {
+            height: 400px;
+            /*border: 1px solid black;*/
+            overflow: scroll;
+        }
+    </style>
+    
+    <div class="row" >
+        <div data-bind="visible:!allChatUsers()">
+            @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+        </div>
+        <div class="col-lg-12"  style="display:none" id="FirstLoading">
 
             <div class="ibox chat-view">
 
@@ -36,7 +47,9 @@
                             <div data-bind="visible:!isChating()">
                                 <div class="col-sm-4 col-md-3 hidden-sm hidden-md hidden-lg">
                                     <div class="chat-users">
-
+                                        <div data-bind="if:allChatUsers().length == 0">
+                                            <h2>Your chat room is empty :( </h2>
+                                        </div>
                                         <div class="users-list" data-bind="foreach:allChatUsers">
                                             <div class="chat-user">
                                                 <img style="margin-top:10px" class="chat-avatar" data-bind="attr:{src:dpLink}" alt="">
@@ -46,7 +59,7 @@
 
                                                         <small data-bind="text:time" class="pull-right text-navy"></small>
                                                         <strong><a data-bind="text:name,click:openChat"></a></strong>
-                                                        <div data-bind="text:message"></div>
+                                                        <div data-bind="truncatedText: message, maxTextLength: 20"></div>
 
                                                     </div>
                                                 </div>
@@ -58,7 +71,7 @@
                             </div>
                         <div data-bind="visible:(!isSmallScreen) || (isSmallScreen && isChating())">
                             <div data-bind="">
-                                <div class="col-sm-8 col-md-9" style="display:none" id="FirstLoading">
+                                <div class="col-sm-8 col-md-9">
                                     <div class="chat-discussion" data-bind="visible:isFetchingChat()">
                                         <div class="sk-spinner sk-spinner-three-bounce">
                                             <div class="sk-bounce1"></div>
@@ -66,7 +79,7 @@
                                             <div class="sk-bounce3"></div>
                                         </div>
                                     </div>
-                                    <div class="chat-discussion" data-bind="visible:!isFetchingChat()">
+                                    <div id="stuff" class="chat-discussion" data-bind="visible:!isFetchingChat()">
                                         <div data-bind="visible:!isConnectionReady()">
                                             Connecting to server... (please wait)
                                         </div>
@@ -75,7 +88,7 @@
                                                 <h2>Your chat room is empty :( </h2>
                                             </div>
 
-                                            <div data-bind="foreach:showChat">
+                                            <div  data-bind="foreach:showChat">
 
                                                 <div data-bind="if:message.length > 0">
                                                     <div data-bind="visible:sentFrom != loginUserId1" class="chat-message left">
@@ -98,8 +111,10 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                         </div>
                                     </div>
+                                    <!-- ko scrollToEnd: showChat --><!-- /ko -->
                                 </div>
                             </div>
                         </div>
@@ -116,7 +131,7 @@
                                                     
                                                         <small data-bind="text:time" class="pull-right text-navy"></small>
                                                     <strong><a data-bind="text:name,click:openChat"></a></strong>
-                                                        <div data-bind="text:message"></div>
+                                                        <div data-bind="truncatedText: message, maxTextLength: 20"></div>
                                                     
                                                 </div>
                                             </div>
@@ -159,6 +174,7 @@
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/sweetAlert")
+    <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
     <script src="~/Scripts/app/GetLoginUserId.js"></script>
     <script>
         function ViewModel() {
@@ -209,6 +225,15 @@
                 if (!data.dpExtension) {
                     self.dpLink = '/Images/Users/default.jpg';
                 }
+                var offset = new Date().getTimezoneOffset();
+                //if (data.time != undefined) {
+                ////    var abc = data.time.getTimezoneOffset();
+                //    var tzDifference = timeZoneFromDB * 60 + targetTime.getTimezoneOffset();
+                //    //convert the offset to milliseconds, add to targetTime, and make a new Date
+                //    var offsetTime = new Date(targetTime.getTime() + tzDifference * 60 * 1000);
+                //    self.time = data.time + new Date().getTimezoneOffset();
+                //    self.timeAgo = data.time + new Date().getTimezoneOffset();
+                //}
                 self.time = (data.time);
                 self.timeAgo = getTimeAgo(data.time);
                 self.loginUserId = data.loginUserId;
@@ -261,6 +286,9 @@
                         success: function (data) {
                             var msg = $.map(data, function (item) { return new AllChatUsers(item) });
                             self.allChatUsers(msg);
+                            if (data.length != 0){
+                                loadMessages(self.allChatUsers()[0].id, self.allChatUsers()[0].name);
+                            }
                             $("#FirstLoading").css({ "display": "block" });
                         },
                         error: function () {
@@ -319,7 +347,7 @@
                 self.checkUserOnline();
                 self.loadMessages = function (userId,name) {
                     self.isChating(true);
-                    if (userId == "undefined") {
+                    if (userId == undefined) {
                         userId = self.sendMessageTo();
                     }
                     if (userId != undefined) {
@@ -327,6 +355,9 @@
                         self.sendMessgeToName(name);
                     }
                     self.isFetchingChat(true);
+                    if (userId == undefined) {
+                        return;
+                    }
                     $.ajax({
                         url: '/api/Chat/GetChat?with=' + userId,
                         dataType: "json",
@@ -401,7 +432,7 @@
                             return data;
                         },
                         error: function () {
-                            toastr.error("failed to send message", "Error!");
+                            toastr.error("Please refresh page and try again", "Error!");
                             return null;
                         }
                     });
@@ -431,7 +462,7 @@
                         msg.message = $.trim(msg.message);
                         if (msg.message != "") {
                             self.isSendingChatMessage(true);
-                            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); self.isSendingChatMessage(false); });
                             
                         } else {
                             toastr.info("You cannot send empty message");
@@ -448,7 +479,7 @@
                         msg.message = $.trim(msg.message);
                         if (msg.message != "") {
                             self.isSendingChatMessage(true);
-                            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                            self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); self.isSendingChatMessage(false); });
                             self.isSendingChatMessage(false);
                         } else {
                             toastr.info("You cannot send empty message");
@@ -471,6 +502,14 @@
                 return '';
             }
         }
+        ko.bindingHandlers.scrollToEnd = {
+            update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+                ko.utils.unwrapObservable(valueAccessor());
+                var scroller = element.previousSibling.previousSibling;
+                scroller.scrollTop = scroller.scrollHeight;
+            }
+        };
+        ko.virtualElements.allowedBindings.scrollToEnd = true;
         ko.bindingHandlers.jqAutoresize = {
             init: function (element, valueAccessor, aBA, vm) {
                 if (!$(element).hasClass('msgTextArea')) {

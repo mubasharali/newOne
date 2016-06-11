@@ -55,10 +55,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 var temp1 = from ad in db.JobAds
                             where ((gender == null || gender == "undefined" || ad.Ad.isnegotiable == gender) && ad.Ad.status.Equals("a") && (salaryType == null || salaryType == "undefined" || ad.salaryType == salaryType) && (category == null || category == "undefined" || ad.category1 == category) && (title == null || title == "undefined" || ad.Ad.title == title) && (qualification == null || qualification == "undefined" || ad.qualification == qualification)
-                            && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType))  && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
-                            && ( lastDateToApply == null  || ad.lastDateToApply == lastDateToApply) 
-                            && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city) ) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
-                             && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats) )
+                            && (exprience == null || exprience == "undefined" || ad.exprience == exprience) && (careerLevel == null || careerLevel == "undefined" || ad.careerLevel.Equals(careerLevel)) && (jobType == null || jobType == "undefined" || ad.Ad.subcategory.Equals(jobType)) && (shift == null || shift == "undefined" || ad.Ad.condition.Equals(shift))
+                            && (lastDateToApply == null || ad.lastDateToApply == lastDateToApply)
+                            && (minPrice == 0 || ad.Ad.price > minPrice) && (maxPrice == 500000 || ad.Ad.price < maxPrice) && (city == null || city == "undefined" || ad.Ad.AdsLocation.City.cityName.Equals(city)) && (pp == null || pp == "undefined" || ad.Ad.AdsLocation.popularPlace.name.Equals(pp))
+                             && (minSeats == 0 || ad.seats > minSeats) && (maxSeats == 1000 || ad.seats < maxSeats))
                             orderby ad.Ad.time descending
                             select new
                             {
@@ -75,8 +75,12 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                 isReported = ad.Ad.Reporteds.Any(x => x.reportedBy == islogin),
                                 views = ad.Ad.views,
                                 category = ad.Ad.category,
+                                subcategory = ad.Ad.subcategory,
+                                subsubcategory = ad.category1,
                                 condition = ad.Ad.condition,
                                 savedCount = ad.Ad.SaveAds.Count,
+                                exprience = ad.exprience,
+                                qualification = ad.qualification,
                                 adTags = from tag1 in ad.Ad.AdTags.ToList()
                                          select new
                                          {
@@ -137,7 +141,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                category = ad.Ad.category,
                                views = ad.Ad.views,
                                condition = ad.Ad.condition,
+                               subcategory = ad.Ad.subcategory,
                                savedCount = ad.Ad.SaveAds.Count,
+                               exprience = ad.exprience,
+                               qualification = ad.qualification,
                                adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {
@@ -196,7 +203,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                category = ad.Ad.category,
                                views = ad.Ad.views,
                                condition = ad.Ad.condition,
+                               subcategory = ad.Ad.subcategory,
                                savedCount = ad.Ad.SaveAds.Count,
+                               exprience = ad.exprience,
+                               qualification = ad.qualification,
                                adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {
@@ -255,7 +265,10 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                                category = ad.Ad.category,
                                views = ad.Ad.views,
                                condition = ad.Ad.condition,
+                               subcategory = ad.Ad.subcategory,
                                savedCount = ad.Ad.SaveAds.Count,
+                               exprience = ad.exprience,
+                               qualification = ad.qualification,
                                adTags = from tag1 in ad.Ad.AdTags.ToList()
                                         select new
                                         {

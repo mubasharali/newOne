@@ -79,86 +79,50 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             }
             if (true) //company != null
             {
-
-                var allBrands = (db.Mobiles.Select(x => x.brand)).AsEnumerable(); //getBrands
-                bool isNewBrand = true;
-                foreach (var brand in allBrands)
+                bool isOldBrand = db.Mobiles.Any(x => x.brand.Equals(company));
+                
+                if (!isOldBrand)
                 {
-                    if (brand == company)
+                    if(company != null && company != "" && company != "undefined")
                     {
-                        isNewBrand = false;
-                    }
-                }
-                if (isNewBrand)
-                {
-                    Mobile mob = new Mobile();
-                    mob.brand = company;
-                    mob.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                    mob.time = DateTime.UtcNow;
-                    if (company == null || company == "")
-                    {
-                        mob.status = "a";
-                    }
-                    else
-                    {
+                        adStatus = "p";
+                        Mobile mob = new Mobile();
+                        mob.brand = company;
+                        mob.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                        mob.time = DateTime.UtcNow;
                         mob.status = "p";
-                    }
-                    db.Mobiles.Add(mob);
-                    db.SaveChanges();
-
-                    MobileModel mod = new MobileModel();
-                    mod.model = model;
-                    mod.brandId = mob.Id;
-                    mod.time = DateTime.UtcNow;
-                    if (model == null || model == "")
-                    {
-                        mod.status = "a";
-                    }
-                    else
-                    {
-                        mod.status = "p";
-                    }
-                    mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                    db.MobileModels.Add(mod);
-                    db.SaveChanges();
-                    adStatus = "p";
+                        db.Mobiles.Add(mob);
+                        db.SaveChanges();
+                        if(model != null && model != "" && model != "undefined")
+                        {
+                            MobileModel mod = new MobileModel();
+                            mod.model = model;
+                            mod.brandId = mob.Id;
+                            mod.time = DateTime.UtcNow;
+                            mod.status = "p";
+                            mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                            db.MobileModels.Add(mod);
+                            db.SaveChanges();
+                        }
+                    } 
                 }
                 else
                 {
-                    var allModels = db.MobileModels.Where(x => x.Mobile.brand == company).Select(x => x.model);
-                    bool isNewModel = true;
-                    foreach (var myModel in allModels)
+                    bool isOldModel = db.MobileModels.Any(x => x.model.Equals(model));
+                    if (!isOldModel)
                     {
-                        if (myModel == model)
+                        if(model != "" && model != null && model != "undefined")
                         {
-                            isNewModel = false;
-                        }
-                    }
-                    if (isNewModel)
-                    {
-                        adStatus = "p";
-                        var brandId = db.Mobiles.FirstOrDefault(x => x.brand.Equals(company));
-                        MobileModel mod = new MobileModel();
-                        mod.brandId = brandId.Id;
-                        mod.model = model;
-                        if (model == null || model == "")
-                        {
-                            mod.status = "a";
-                        }
-                        else
-                        {
+                            adStatus = "p";
+                            var brandId = db.Mobiles.FirstOrDefault(x => x.brand.Equals(company));
+                            MobileModel mod = new MobileModel();
+                            mod.brandId = brandId.Id;
+                            mod.model = model;
                             mod.status = "p";
-                        }
-                        mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
-                        mod.time = DateTime.UtcNow;
-                        db.MobileModels.Add(mod);
-                        try
-                        {
+                            mod.addedBy = System.Web.HttpContext.Current.User.Identity.GetUserId();
+                            mod.time = DateTime.UtcNow;
+                            db.MobileModels.Add(mod);
                             db.SaveChanges();
-                        }
-                        catch (Exception e)
-                        {
-                            string s = e.ToString();
                         }
                     }
                 }
@@ -248,6 +212,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
 
                     mobileAd.Id = ad.Id;
                     db.MobileAds.Add(mobileAd);
+                    db.SaveChanges();
                    electronicController.ReplaceAdImages( ad, fileNames);
                     //location
                    electronicController.MyAdLocation(Request["city"], Request["popularPlace"], Request["exectLocation"], ad, "Save");

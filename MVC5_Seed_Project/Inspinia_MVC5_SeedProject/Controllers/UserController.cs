@@ -57,11 +57,31 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Ok("Visitor");
         }
         [HttpGet]
-        public async Task<IHttpActionResult> GetSimpleUser()
+        public async Task<IHttpActionResult> GetLoginUserId12(string email)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var id = User.Identity.GetUserId();
+            var ret = db.AspNetUsers.FirstOrDefault(x => x.UserName.Equals(email)).Id;
+            return Ok(ret);
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> Getuser1(string id)
+        {
+                var ret = await (from u in db.AspNetUsers
+                                 where (u.Id.Equals(id))
+                                 select new
+                                 {
+                                     id = u.Id,
+                                     name = u.Email,
+                                     email = u.UserName,
+                                     dpExtension = u.dpExtension,
+                                 }).FirstOrDefaultAsync();
+                return Ok(ret);
+       
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSimpleUser(string id)
+        {
                 var ret =await (from u in db.AspNetUsers
                           where (u.Id.Equals(id))
                           select new
@@ -72,8 +92,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                               dpExtension = u.dpExtension,
                           }).FirstOrDefaultAsync();
                 return Ok(ret);
-            }
-            return BadRequest();
+           
         }
         private IAuthenticationManager AuthenticationManager
         {

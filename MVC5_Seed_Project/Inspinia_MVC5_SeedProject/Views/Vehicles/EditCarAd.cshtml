@@ -5,7 +5,10 @@
     ViewBag.Title = "Edit Car Ad";
 }
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -180,6 +183,7 @@
             AccountViewModel();
             ChatViewModel();
             var self = this;
+            
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
                 if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
@@ -254,7 +258,7 @@
                     //type: 'POST',
                     success: function (data) {
 
-
+                        $("#FirstLoading").css({ "display": "block" });
                         //for company
                         if (data.companyName) {
                             var comid = $("#" + data.companyName);

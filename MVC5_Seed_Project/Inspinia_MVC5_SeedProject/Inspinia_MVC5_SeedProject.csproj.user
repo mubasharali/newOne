@@ -12,6 +12,8 @@
     <WebStackScaffolding_IsAsyncSelected>True</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_ViewDialogWidth>1025</WebStackScaffolding_ViewDialogWidth>
     <WebStackScaffolding_ControllerDialogWidth>600</WebStackScaffolding_ControllerDialogWidth>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

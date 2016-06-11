@@ -9,7 +9,10 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -68,7 +71,7 @@
                             <br />
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" data-bind="click:submitClicked" value="Create"  data-style="expand-left" class="ladda-button btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Create" data-style="expand-left" class="ladda-button btn btn-primary" />
                                     @Html.ActionLink("Cancel", "ComputersLaptops", null, new { @class = "btn btn-white" })
                                 </div>
                             </div>
@@ -117,6 +120,7 @@
             AccountViewModel();
             ChatViewModel();
             var self = this;
+            $("#FirstLoading").css({ "display": "block" });
             UserCompanies_CreateAd(self);
             self.submitClicked = function () {
                 if (isFilesUploading) {toastr.info("Please wait until images are uploaded");return;}$("input[id*='fileNames']").val(JSON.stringify(fileList));
@@ -360,7 +364,7 @@
             });
             $("#form").validate({
                 ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
-                rules: {
+               rules: {
                     title: {
                         required: true,
                         maxlength: 50,
@@ -368,7 +372,7 @@
                     },
 
                     description: {
-                        required: true,
+                        required:true,
                         minlength: 25,
                         maxlength: 1000
                     },

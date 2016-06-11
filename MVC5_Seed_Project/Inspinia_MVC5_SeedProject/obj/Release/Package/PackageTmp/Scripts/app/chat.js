@@ -179,7 +179,7 @@ function ChatViewModel() {
                 return data;
             },
             error: function () {
-                toastr.error("failed to send message", "Error!");
+                toastr.error("Please refresh page and try again", "Error!");
                 return null;
             }
         });
@@ -210,7 +210,7 @@ function ChatViewModel() {
             if (msg.message != "") {
                 $.connection.hub.start().done(function () {
                     self.isSendingChatMessage(true);
-                    self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); });
+                    self.hub.server.addMessage(msg).fail(function (err) { toastr.error("failed to send message", "Error!"); self.isSendingChatMessage(false); });
                 });
                 
             } else {
@@ -223,3 +223,11 @@ function ChatViewModel() {
 
 }
 
+ko.bindingHandlers.scrollToEnd = {
+    update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+        ko.utils.unwrapObservable(valueAccessor());
+        var scroller = element.previousSibling.previousSibling;
+        scroller.scrollTop = scroller.scrollHeight;
+    }
+};
+ko.virtualElements.allowedBindings.scrollToEnd = true;

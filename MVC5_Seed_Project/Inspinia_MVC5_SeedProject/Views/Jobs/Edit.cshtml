@@ -9,7 +9,10 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -17,190 +20,190 @@
                 </div>
                 <div class="ibox-content">
 
-				@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "post" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-                    <div class="">
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "post" }))
+                    {
+                        @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
                         <div class="">
-                            <p class="text-navy">Fields with <span class="req">*</span> are mendatory</p>
+                            @Html.ValidationSummary(true)
+                            <div class="">
+                                <p class="text-navy">Fields with <span class="req">*</span> are mendatory</p>
 
-                            <div class="form-group">
-                                <label>Job Category</label>
+                                <div class="form-group">
+                                    <label>Job Category</label>
 
-                                <select id="select-category1" name="category" class="demo-default" data-bind="options: availableCategories,
+                                    <select id="select-category1" name="category" class="demo-default" data-bind="options: availableCategories,
                        value: selectedCategory,
                        optionsCaption: 'Select category...'"></select>
-                            </div>
-                            <div class="form-group">
-                                <label>Total seats </label>
-                                <input type="number" id="seats" name="seats" class="form-control">
-                            </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Total seats </label>
+                                    <input type="number" id="seats" name="seats" class="form-control">
+                                </div>
 
-                            <div class="form-group">
-                                <label>Qualification </label>
-                                <input id="select-qualification" @*data-bind="value:selectedQualification"*@ name="qualification" class="repositories" placeholder="e.g, BS Software Engineering" />
-                            </div>
+                                <div class="form-group">
+                                    <label>Qualification </label>
+                                    <input id="select-qualification" @*data-bind="value:selectedQualification"*@ name="qualification" class="repositories" placeholder="e.g, BS Software Engineering" />
+                                </div>
 
 
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Experience</label>
-                                        <div class="">
-
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Experience</label>
                                             <div class="">
-                                                <select name="exprience" id="exprience" class="form-control" form="post">
-                                                    <option value="">
-                                                        Choose
-                                                    </option>
-                                                    <option value="n">
-                                                        Not required
-                                                    </option>
-                                                    <option value="f">
-                                                        Fresh graduate
-                                                    </option>
-                                                    <option value="1">
-                                                        1 year
-                                                    </option>
-                                                    <option value="2">
-                                                        2 year
-                                                    </option>
-                                                    <option value="3">
-                                                        3 year
-                                                    </option>
-                                                    <option value="4r">
-                                                        4 year
-                                                    </option>
-                                                    <option value="5">
-                                                        5 year
-                                                    </option>
-                                                </select>
+
+                                                <div class="">
+                                                    <select name="exprience" id="exprience" class="form-control" form="post">
+                                                        <option value="">
+                                                            Choose
+                                                        </option>
+                                                        <option value="n">
+                                                            Not required
+                                                        </option>
+                                                        <option value="f">
+                                                            Fresh graduate
+                                                        </option>
+                                                        <option value="1">
+                                                            1 year
+                                                        </option>
+                                                        <option value="2">
+                                                            2 year
+                                                        </option>
+                                                        <option value="3">
+                                                            3 year
+                                                        </option>
+                                                        <option value="4r">
+                                                            4 year
+                                                        </option>
+                                                        <option value="5">
+                                                            5 year
+                                                        </option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div><label>Gender</label></div>
-                                        <select name="gender" id="gender" class="form-control" form="post">
-                                            <option value="d">
-                                                Does not matter
-                                            </option>
-                                            <option value="m">
-                                                Male
-                                            </option>
-                                            <option value="f">
-                                                Female
-                                            </option>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div><label>Gender</label></div>
+                                            <select name="gender" id="gender" class="form-control" form="post">
+                                                <option value="d">
+                                                    Does not matter
+                                                </option>
+                                                <option value="m">
+                                                    Male
+                                                </option>
+                                                <option value="f">
+                                                    Female
+                                                </option>
 
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label>Skills required</label>
-                                <input id="select-skills" name="skills" class="repositories" placeholder="Pick skills..." />
-                            </div>
-                            <div>
-                                <label>Career Level</label>
-                            </div>
-                            <div class="form-group">
-                                <select name="careerLevel" id="careerLevel" class="form-control" form="post">
-                                    <option value="">
-                                        Choose
-                                    </option>
-                                    <option value="Entry Level">Entry Level</option>
-                                    <option value="Student/Internship">Student/Internship</option>
-                                    <option value="Mid Career">Mid Career</option>
-                                    <option value="Management">Management</option>
-                                    <option value="Executive/Director">Executive/Director</option>
-                                    <option value="Senior Executive(President,CEO)">Senior Executive(President,CEO)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Apply before  </label>
-                                <input type="date" id="lastDateToApply" name="lastDateToApply" class="form-control">
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div><label>Job type</label></div>
-
-                                        <select name="subcategory" id="subcategory" class="form-control" form="post">
-                                            <option value="">Choose</option>
-                                            <option value="Full time">Full time</option>
-                                            <option value="Permanent">Permanent</option>
-                                            <option value="Contract">Contract</option>
-                                            <option value="Internship">Internship</option>
-                                            <option value="Part time">Part time</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div><label>Shift timing</label></div>
-
-                                        <select name="shift" id="shift" class="form-control" form="post">
-                                            <option value="m">Morning shift</option>
-                                            <option value="e">Evening shift</option>
-                                            <option value="n">Not confirmed</option>
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label>salary </label>
-                                <div class="row">
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <input type="number" id="salary" name="salary" class="form-control">
-                                            <span class="input-group-addon">Rs</span>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                </div>
 
-                                        <select name="salaryType" id="salaryType" class="form-control" form="post">
-                                            <option value="m">
-                                                per month
-                                            </option>
-                                            <option value="h">
-                                                per hour
-                                            </option>
-                                            <option value="d">
-                                                per day
-                                            </option>
-                                            <option value="y">
-                                                per year
-                                            </option>
-                                        </select>
+
+                                <div class="form-group">
+                                    <label>Skills required</label>
+                                    <input id="select-skills" name="skills" class="repositories" placeholder="Pick skills..." />
+                                </div>
+                                <div>
+                                    <label>Career Level</label>
+                                </div>
+                                <div class="form-group">
+                                    <select name="careerLevel" id="careerLevel" class="form-control" form="post">
+                                        <option value="">
+                                            Choose
+                                        </option>
+                                        <option value="Entry Level">Entry Level</option>
+                                        <option value="Student/Internship">Student/Internship</option>
+                                        <option value="Mid Career">Mid Career</option>
+                                        <option value="Management">Management</option>
+                                        <option value="Executive/Director">Executive/Director</option>
+                                        <option value="Senior Executive(President,CEO)">Senior Executive(President,CEO)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Apply before  </label>
+                                    <input type="date" id="lastDateToApply" name="lastDateToApply" class="form-control">
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div><label>Job type</label></div>
+
+                                            <select name="subcategory" id="subcategory" class="form-control" form="post">
+                                                <option value="">Choose</option>
+                                                <option value="Full time">Full time</option>
+                                                <option value="Permanent">Permanent</option>
+                                                <option value="Contract">Contract</option>
+                                                <option value="Internship">Internship</option>
+                                                <option value="Part time">Part time</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div><label>Shift timing</label></div>
+
+                                            <select name="shift" id="shift" class="form-control" form="post">
+                                                <option value="m">Morning shift</option>
+                                                <option value="e">Evening shift</option>
+                                                <option value="n">Not confirmed</option>
+                                            </select>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            @Html.Partial("~/Views/Shared/_EditAd_Jobs.cshtml")
-                            
-                            <br /><br /><br /><br />
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <button type="submit" data-bind="click:submitClicked"  data-style="expand-left" class="ladda-button btn btn-primary">Submit</button>
-                                    @Html.ActionLink("Cancel", "Details", "Electronics", new { id = Model.Id, title = ElectronicsController.URLFriendly( @Model.title) }, new { @class= "btn btn-white" })
+                                <div class="form-group">
+                                    <label>salary </label>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <input type="number" id="salary" name="salary" class="form-control">
+                                                <span class="input-group-addon">Rs</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+
+                                            <select name="salaryType" id="salaryType" class="form-control" form="post">
+                                                <option value="m">
+                                                    per month
+                                                </option>
+                                                <option value="h">
+                                                    per hour
+                                                </option>
+                                                <option value="d">
+                                                    per day
+                                                </option>
+                                                <option value="y">
+                                                    per year
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                @Html.Partial("~/Views/Shared/_EditAd_Jobs.cshtml")
+
+                                <br /><br /><br /><br />
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <button type="submit" data-bind="click:submitClicked" data-style="expand-left" class="ladda-button btn btn-primary">Submit</button>
+                                        @Html.ActionLink("Cancel", "Details", "Electronics", new { id = Model.Id, title = ElectronicsController.URLFriendly(@Model.title) }, new { @class = "btn btn-white" })
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
 
 
                 </div>
@@ -337,6 +340,7 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
+                        $("#FirstLoading").css({ "display": "block" });
                         //for company
                         if (data.companyName) {
                             var comid = $("#" + data.companyName);
@@ -660,7 +664,7 @@
                         maxlength: 20
                     },
                     description: {
-                        required: true,
+                        required:true,
                         minlength: 25,
                         maxlength: 1000
                     },

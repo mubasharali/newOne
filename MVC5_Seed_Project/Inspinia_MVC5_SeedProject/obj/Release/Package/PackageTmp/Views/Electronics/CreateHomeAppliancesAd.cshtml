@@ -379,7 +379,7 @@
                 },
             });
             $("#form").validate({
-                ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
+               ignore: ':hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input',
                 rules: {
                     title: {
                         required: true,
@@ -395,7 +395,7 @@
                         maxlength: 20
                     },
                     description: {
-                        required: true,
+                        required:true,
                         minlength: 25,
                         maxlength: 1000
                     },

@@ -5,14 +5,17 @@
     ViewBag.Title = "Edit Camera Ad";
 }
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableCities()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Edit camera Ad</h5>
                 </div>
                 <div class="ibox-content">
-                   @Html.Partial("~/Views/Shared/_Dropzone.cshtml")
+                    @Html.Partial("~/Views/Shared/_Dropzone.cshtml")
                     @using (Html.BeginForm("EditCameraAd", "Electronics", FormMethod.Post, new { id = "form" }))
                     {
                         @Html.AntiForgeryToken()
@@ -46,7 +49,7 @@
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" data-bind="click:submitClicked" value="Update"  data-style="expand-left" class="ladda-button btn btn-primary" />
+                                    <input type="submit" data-bind="click:submitClicked" value="Update" data-style="expand-left" class="ladda-button btn btn-primary" />
                                     <a href="/Details/@Model.Id/@ElectronicsController.URLFriendly( @Model.title )" class="btn btn-white">Cancel</a>
                                 </div>
                             </div>
@@ -143,7 +146,7 @@
                     cache: false,
                     //type: 'POST',
                     success: function (data) {
-
+                        $("#FirstLoading").css({ "display": "block" });
 
                         //for company
                         if (data.companyName) {
@@ -426,8 +429,7 @@
                         required: true,
                         maxlength: 20
                     },
-                    description: {
-                        required: true,
+                    description: true,
                         minlength: 25,
                         maxlength: 1000
                     },

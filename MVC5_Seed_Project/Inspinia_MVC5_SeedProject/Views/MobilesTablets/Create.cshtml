@@ -8,7 +8,10 @@
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+    <div data-bind="visible:!availableBrands()">
+        @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+    </div>
+    <div id="FirstLoading" style="display:none" class="row">
         <div class="col-md-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -116,6 +119,8 @@
     @Scripts.Render("~/plugins/iCheck")
     @Scripts.Render("~/plugins/autosize")
 @Scripts.Render("~/plugins/dropZone")
+
+
 <script src="~/Scripts/app/dropzone-knockout-binding.js"> </script>
 <script src="~/Scripts/app/_CreateAd.js"></script>
     <script type="text/javascript">
@@ -136,7 +141,7 @@
                     toastr.info("Fields with * are mandatory!");
                 }
             }
-
+            $("#FirstLoading").css({ "display": "block" });
             UserCompanies_CreateAd(self);
             
             self.conditionChecked = ko.observable(false);
@@ -169,6 +174,7 @@
                     cache: false,
                     type: 'GET',
                     success: function (data) {
+                        $("#FirstLoading").css({ "display": "block" });
                         $.each((data), function (i, item) { self.availableBrands.push(item) });
                         $('#select-brand').selectize({
                             create: true,
@@ -275,6 +281,7 @@
                 self.loadPopularPlaces();
             })
         }
+        
         ko.bindingHandlers.jqAutoresize = {
             init: function (element, valueAccessor, aBA, vm) {
                 if (!$(element).hasClass('msgTextArea')) {
@@ -370,7 +377,8 @@
                 },
             });
             $("#form").validate({
-                ignore: '.ignoreit, :hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input ',
+                ignore: '.ignoreit,input:hidden:not(input:hidden.required), :hidden:not([class~=selectized]),:hidden > .selectized, .selectize-control .selectize-input input ',
+              //  ignore: [],
                 rules: {
                     title: {
                         required: true,
@@ -406,7 +414,7 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
-
+            
         });
     </script>
 }
