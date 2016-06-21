@@ -157,6 +157,22 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return BadRequest();
         }
         [HttpPost]
+        public async Task<IHttpActionResult> openUser(string email) //block on the basis of email
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    var id = db.AspNetUsers.FirstOrDefault(x => x.UserName.Equals(email)).Id;
+                    return Ok(id);
+                    return NotFound();
+                }
+            }
+            return BadRequest();
+        }
+        [HttpPost]
         public async Task<bool> addNewBrandModel(string brand, string model, string category)
         {
             if (brand != null)

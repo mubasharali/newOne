@@ -505,6 +505,8 @@
 
 
                                 </div>
+                                <br />
+                                <span class="text-muted"> views(<span data-bind="text:views"></span>) - created <span data-bind="text:friendlyTime"></span> - managed by : <a data-bind="attr:{href:'/User/Index/' + createdBy},text:createdByName"></a> </span>
                             </div>
 
                             <div class="row">
@@ -1061,7 +1063,7 @@
             self.isSaved = ko.observable(data.isSaved);
             self.reportedCount = ko.observable(data.reportedCount);
            // self.showImages = ko.observable();
-            self.views = data.views;
+            self.views = data.views || 0;
             self.savedCount = ko.observable(data.savedCount);
             self.statusError = "";
             self.isVisible = true;

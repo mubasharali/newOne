@@ -46,9 +46,11 @@
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
-                <a href="/ServiceConsumers" data-style="expand-left" class="col-lg-offset-1  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
-                <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>&nbsp; &nbsp;
-                <span class="hidden-xs"> <span data-bind="text:showAds().length"> </span> results found<br /></span>
+                    <a href="/ServiceConsumers" data-style="expand-left" class="col-lg-offset-1  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
+                    <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>&nbsp; &nbsp;
+                    <span class="hidden-xs"> <span data-bind="text:showAds().length"> </span> results found</span>
+                    <span class="" data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
+                
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity()  || tags() )"> all </span> ads
     <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>*@
 
@@ -59,7 +61,6 @@
                     <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
                     <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
                 </span>*@
-                <span data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
                 @*<div data-bind="foreach:showAds">
                     @Html.Partial("/Views/Shared/_AdListView.cshtml")
                 </div>*@

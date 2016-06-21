@@ -308,7 +308,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 loginUserProfileExtension = db.AspNetUsers.Find(loginUserId).dpExtension; 
             }
-            
+            var comp = db.Companies.Find(id);
+            if(comp.views == null)
+            {
+                comp.views = 0;
+            }
+            comp.views = comp.views + 1;
+           // db.Entry(comp).State = EntityState.Modified;
+            await db.SaveChangesAsync();
             var ret = from company in db.Companies
                       where company.Id.Equals(id)
                       select new
@@ -393,6 +400,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                           logoExtension = company.logoextension,
                           owner = company.owner,
                           status = company.status,
+                          views = company.views,
                           category = company.category,
                           twlink = company.twlink,
                           fblink = company.fblink,

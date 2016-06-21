@@ -124,7 +124,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
              smtp.EnableSsl = true; //commented for godaddy
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network; // [2] Added this
             smtp.UseDefaultCredentials = false; // [3] Changed this
-            smtp.Credentials = new NetworkCredential("dealkar.pk@gmail.com", "birthdaywish");  // [4] Added this. Note, first parameter is NOT string.
+            smtp.Credentials = new NetworkCredential("dealkar.pk@gmail.com", "birthday2Wishirfan");  // [4] Added this. Note, first parameter is NOT string.
                                                 // smtp.Credentials = new NetworkCredential("notification@dealkar.pk", "birthdaywish");
              smtp.Host = "smtp.gmail.com";
            // smtp.Host = "relay-hosting.secureserver.net";

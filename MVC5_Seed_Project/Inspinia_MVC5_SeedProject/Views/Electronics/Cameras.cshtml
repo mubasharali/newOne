@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Buy and sell Cameras|Buy second Hand Cameras";
+    ViewBag.Title = "Buy and sell Cameras-Buy second Hand Cameras";
 }
 
 
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <label> <input data-bind="checked:laptopAccessories" type="checkbox">Camera Accessories</label>
+                        <label> <input data-bind="checked:laptopAccessories" type="checkbox"> Camera Accessories</label>
                         <hr />
                         <h5>Search by Category</h5>
                         <select id="select-category" class="demo-default" data-bind="options: availableCategories,
@@ -83,7 +83,7 @@
                 <span data-bind="text:showAds().length"> </span> results found<br />
                 <b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity() || selectedBrand()  || tags() )"> all </span> <b> <span data-bind="visible:laptopAccessories()"> Cameras Accessories </span> <span data-bind="visible:!laptopAccessories()">Cameras</span> </b><span data-bind="visible:selectedBrand "> of </span> <b> <span data-bind="text:selectedBrand"></span> </b>
                 <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>
-
+                <span data-bind="visible:selectedCategory()"> with category <b> '<span data-bind="text:selectedCategory()"></span>' </b></span>
                 <span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
                     with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
                 </span>

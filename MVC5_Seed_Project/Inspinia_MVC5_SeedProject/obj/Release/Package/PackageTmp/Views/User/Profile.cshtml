@@ -131,10 +131,99 @@
                 </div>
                 <div class="ibox-content">
                     <div class="project-list">
-
+                        <div class="row">
+                            <div class="col-sm-3">
+                                Name
+                            </div>
+                            <div class="col-sm-3" data-bind="visible: !isEmailEditing()">
+                                <span ><span data-bind="text:email"></span></span>
+                            </div>
+                            <div class="col-sm-3" data-bind="visible:isEmailEditing()">
+                                <span >
+                                    <input type="text" data-bind="value:email" class="form-control" />
+                                </span>
+                            </div>
+                            <span class="col-sm-3">
+                                <span class="hidden-xs"><small>Everyone can see</small></span>
+                            </span>
+                            <div class="col-sm-3">
+                                <span class="project-actions">
+                                    <a data-bind="visible:isEmailEditing(),click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
+                                    <a data-bind="visible:!isEmailEditing(),click:editEmail" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                </span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <span class="col-sm-3 col-xs-6">
+                                Email
+                            </span>
+                            <span class="col-sm-3 col-xs-6"  data-bind="visible:!isNameEditing()">
+                                <span class="project-title">
+                                    <a data-bind="text:UserName"></a>
+                                    <br>
+                                </span>
+                            </span>
+                            <span class="col-sm-3"  data-bind="if:!isEmailConfirmed,visible:isNameEditing()">
+                                <span>
+                                    <input type="email" data-bind="value:UserName" class="form-control" />
+                                </span>
+                            </span>
+                            <span class="col-sm-3 col-xs-6" data-bind="visible:isEmailConfirmed && isNameEditing() ">
+                                <span >You cannot edit your email once it is confirmed!</span>
+                            </span>
+                            <span class="col-xs-6 visible-xs">
+                                Who can see
+                            </span>
+                            <span  data-bind="visible:!isNameEditing()" class="col-sm-3 col-xs-6">
+                                <span><small data-bind="text:selectedSeeEmail()"></small></span>
+                            </span>
+                            <span class="col-sm-3 col-xs-6" data-bind="visible:isNameEditing()">
+                                <small>
+                                    <select class="form-control" data-bind="options: seeEmailOptions,
+                       value: selectedSeeEmail,
+                       "></select>
+                                </small>
+                            </span>
+                            <span class="col-sm-3 col-xs-6">
+                                <span class="project-actions">
+                                    <a data-bind="click:updateProfile,visible:isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
+                                    <a data-bind="click:editName,visible:!isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                </span>
+                            </span>
+                        </div><hr />
+                        <div class="row">
+                            <span class="col-sm-3 col-xs-6">
+                                Phone Number
+                            </span>
+                            <span class="col-sm-3 col-xs-6" data-bind="visible:!isPhoneEditing(),text:phoneNumber">
+                            </span>
+                            <span class="col-sm-3" data-bind="visible:isPhoneEditing()">
+                                <input type="text" data-bind="value:phoneNumber" class="form-control" />
+                            </span>
+                            <span class="col-sm-3 col-xs-6" data-bind="visible:!isPhoneEditing()">
+                                <small data-bind="text:selectedSeePhone()"></small>
+                            </span>
+                            <span class="col-xs-6 visible-xs">
+                                Who can see
+                            </span>
+                            <span class="col-sm-3 col-xs-6" data-bind="visible:isPhoneEditing()">
+                                <small>
+                                    <select class="form-control" data-bind="options: seePhoneOptions,
+                       value: selectedSeePhone,
+                       "></select>
+                                </small>
+                            </span>
+                            <span class="col-sm-3 col-xs-6">
+                                <span class="project-actions">
+                                    <a data-bind="visible:isPhoneEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
+                                    <a data-bind="visible:!isPhoneEditing(), click:editPhone" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                </span>
+                            </span>
+                        </div><hr />
                         <table class="table ">
                             <tbody>
-                                <tr>
+                                @*<tr>
                                     <td>
                                         Name
                                     </td>
@@ -171,9 +260,9 @@
                                         <a data-bind="click:updateProfile,visible:isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-save"></i> save </a>
                                         <a data-bind="click:editName,visible:!isNameEditing()" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                     </td>
-                                </tr>
+                                </tr>*@
 
-                                <tr>
+                                @*<tr>
                                     <td class="project-title">
                                         phone number
                                     </td>
@@ -196,7 +285,8 @@
                                         <a data-bind="visible:isPhoneEditing(), click:updateProfile" class="btn btn-white btn-sm"><i class="fa fa-save"></i> Save </a>
                                         <a data-bind="visible:!isPhoneEditing(), click:editPhone" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                     </td>
-                                </tr>
+                                </tr>*@
+                                
                                 <tr>
                                     <td class="project-title">
                                         City
@@ -319,6 +409,7 @@
 <script src="~/signalr/hubs"></script>
 <script src="~/Scripts/app/chat.js"></script>
 <script src="~/Scripts/UserLogin.js"></script>
+
     <script>
         function User(data) {
             var self = this;

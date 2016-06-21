@@ -20,6 +20,11 @@
             <button class="btn btn-default" data-bind="click:blockUserEmailBtn">Submit</button>
         </div>
         <div class="col-sm-6">
+            <h2>Open User</h2>
+            <input type="email" data-bind="value:openUserEmail" placeholder="email" />
+            <button class="btn btn-default" data-bind="click:openUserProfileBtn">Submit</button>
+        </div>
+        <div class="col-sm-6">
             <h2>Block User</h2>
             <input type="email" data-bind="value:blockUserId" placeholder="id" />
             <button class="btn btn-default" data-bind="click:blockUserIdBtn">Submit</button>
@@ -93,6 +98,7 @@
             self.adminEmail = ko.observable();
             self.blockUserEmail = ko.observable();
             self.blockUserId = ko.observable();
+            self.openUserEmail = ko.observable();
             self.showAdmins = ko.observableArray();
             self.loadAdmins = function () {
                 $.ajax({
@@ -129,6 +135,7 @@
                     type: 'POST',
                     success: function (data) {
                         toastr.error("Successfully blocked!");
+
                     },
                     error: function () {
                         toastr.error("Error! please refresh page and try again");
@@ -142,6 +149,21 @@
                     type: 'POST',
                     success: function (data) {
                         toastr.error("Successfully blocked!");
+                        
+                    },
+                    error: function () {
+                        toastr.error("Error! please refresh page and try again");
+                    },
+                });
+            }
+            self.openUserProfileBtn = function () {
+                $.ajax({
+                    url: '/api/Admin/openUser?email=' + self.openUserEmail(),
+                    dataType: "json",
+                    type: 'POST',
+                    success: function (data) {
+                        toastr.info("Done! redirecting");
+                        window.location.href = "/User/Index/" + data;
                     },
                     error: function () {
                         toastr.error("Error! please refresh page and try again");

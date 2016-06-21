@@ -957,6 +957,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 islogin = User.Identity.GetUserId();
             }
+            if(category == "DSLR ")
+            {
+                category = "DSLR & Hybrid Cameras";
+            }
+            else if(category == "Security ")
+            {
+                category = "Security & Surveillance";
+            }
             if (tags == null)
             {
                 var temp1 = from ad in db.Cameras
@@ -1532,68 +1540,80 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> DeleteAd(int id)
         {
-            Ad ad = await db.Ads.FindAsync(id);
-            if (ad == null)
-            {
-                return NotFound();
-            }
-            
-            IAmazonS3 client;
-
-
-            DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest();
-            multiObjectDeleteRequest.BucketName = _bucketName;
-            var adImages = ad.AdImages.ToList();
-            int count = 1;
-            foreach (var image in adImages)
-            {
-                multiObjectDeleteRequest.AddKey(_folderName + ad.Id + "_" + count + image.imageExtension.Trim(), null);
-                count++;
-            }
-            var userId = User.Identity.GetUserId();
-            var email = ad.AspNetUser.UserName;
-            var status = db.AspNetUsers.Find(userId).status;
-            if (status == "admin")
-            {
-                if(userId != ad.postedBy){
-                    string Body = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("/Views/Admin/Email/DeleteAdAlert.html"));
-                    Body = Body.Replace("#AdTitle#", ad.title);
-                    ElectronicsController.sendEmail(email, "Your item is deleted by admin!", Body);
-                }
-            }
-            
             try
             {
-                AmazonS3Config config = new AmazonS3Config();
-                config.ServiceURL = "https://s3.amazonaws.com/";
-                using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(
-                     _awsAccessKey, _awsSecretKey, config))
-                {
-                    client.DeleteObjects(multiObjectDeleteRequest);
-                }
-            }
-            catch (Exception e)
-            {
-                string s = e.ToString();
-            }
-            try
-            {
-                try { 
-                var companyads = ad.CompanyAd;
-            db.CompanyAds.Remove(companyads);
-                }catch(Exception e)
-                {
 
+                Ad ad = await db.Ads.FindAsync(id);
+                if (ad == null)
+                {
+                    return NotFound();
                 }
-            db.Ads.Remove(ad);
-            
-                await db.SaveChangesAsync();
+
+                IAmazonS3 client;
+
+
+                DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest();
+                multiObjectDeleteRequest.BucketName = _bucketName;
+                var adImages = ad.AdImages.ToList();
+                int count = 1;
+                foreach (var image in adImages)
+                {
+                    multiObjectDeleteRequest.AddKey(_folderName + ad.Id + "_" + count + image.imageExtension.Trim(), null);
+                    count++;
+                }
+                var userId = User.Identity.GetUserId();
+                var email = ad.AspNetUser.UserName;
+                var status = db.AspNetUsers.Find(userId).status;
+                if (status == "admin")
+                {
+                    if (userId != ad.postedBy)
+                    {
+                        string Body = System.IO.File.ReadAllText(HttpContext.Current.Server.MapPath("/Views/Admin/Email/DeleteAdAlert.html"));
+                        Body = Body.Replace("#AdTitle#", ad.title);
+                        ElectronicsController.sendEmail(email, "Your item is deleted by admin!", Body);
+                    }
+                }
+
+                try
+                {
+                    AmazonS3Config config = new AmazonS3Config();
+                    config.ServiceURL = "https://s3.amazonaws.com/";
+                    using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(
+                         _awsAccessKey, _awsSecretKey, config))
+                    {
+                        client.DeleteObjects(multiObjectDeleteRequest);
+                    }
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                try
+                {
+                    try
+                    {
+                        var companyads = ad.CompanyAd;
+                        db.CompanyAds.Remove(companyads);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    db.Ads.Remove(ad);
+
+                    await db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    string s = e.ToString();
+                }
+                return Ok(ad);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                string s = e.ToString();
+                return BadRequest(e.ToString());
             }
-            return Ok(ad);
+            
         }
         protected string GetIPAddress()
         {

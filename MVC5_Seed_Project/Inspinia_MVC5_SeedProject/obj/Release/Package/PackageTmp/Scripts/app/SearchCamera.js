@@ -1,18 +1,42 @@
-﻿
-var laptopAccessories = ko.observable(false);
+﻿var laptopAccessories = ko.observable(false);
 var title = ko.observable($("#search").val());
 var tags = ko.observable("");
 var minPrice = ko.observable(0);
 var maxPrice = ko.observable(50000);
-var availableCategories = ["Security & Surveillance", "DSLR & Hybrid Cameras", "Compact Cameras", "Camcorders"];
+if (!laptopAccessories()) {
+    var availableCategories = ["Security & Surveillance", "DSLR & Hybrid Cameras", "Compact Cameras", "Camcorders"];
+} else {
+    var availableCategories = ["Lens Cap", "Batteries", "Battery Chargers", "Camera Bags", "Lenses", "Memory Card", "Camera Remote Controls", "Filters", "Flashes", "Lens Cleaner", "Lens Hoods", "Straps", "Camera Tripods", "Camera Monopods", "Studio accessories", "Others"];
+}
 var selectedCategory = ko.observable();
 var availableBrands = ["Sony", "Canon", "Kodak", "Nikon", "Olympus", "Panasonic", "Anex", "AT", "Aurge Technologies", "CyberTele", "Dahua", "Casio", "EverFocus", "Fujifilm", "Genius", "Giftsmine", "Go-Pro", "Hikvision", "iVision", "N Tel", "HP", "Kingstion", "Leica", "Pentax", "Super", "Velbon", "Videoline USA", "Samsung", "Sharp", "others"];
 var selectedBrand = ko.observable();
 laptopAccessories.subscribe(function () {
     RefreshSearch();
+    if (!laptopAccessories()) {
+        var availableCategories = ["Security & Surveillance", "DSLR & Hybrid Cameras", "Compact Cameras", "Camcorders"];
+    } else {
+        var availableCategories = ["Lens Cap", "Batteries", "Battery Chargers", "Camera Bags", "Lenses", "Memory Card", "Camera Remote Controls", "Filters", "Flashes", "Lens Cleaner", "Lens Hoods", "Straps", "Camera Tripods", "Camera Monopods", "Studio accessories", "Others"];
+    }
+    var cate = [];
+    $.each(availableCategories, function (index, data) {
+        cate.push({
+            text: data,
+            value: data
+        });
+    });
+    availableCategories = cate;
+    var selectize = $("#select-category")[0].selectize;
+    selectize.clear();
+    selectize.clearOptions();
+    selectize.load(function (callback) {
+        callback(availableCategories);
+    });
+  //  $('#select-category').selectize();
 })
 minPrice.subscribe(function () {
     RefreshSearch();
+    
 });
 maxPrice.subscribe(function () {
     RefreshSearch();
