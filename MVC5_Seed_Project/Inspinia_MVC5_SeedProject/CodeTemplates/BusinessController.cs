@@ -8,9 +8,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Inspinia_MVC5_SeedProject.Models;
+using BundlingAndMinifyingInlineCssJs.ResponseFilters;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    [BundleMinifyInlineCssJs]
     public class BusinessController : Controller
     {
         private Entities db = new Entities();

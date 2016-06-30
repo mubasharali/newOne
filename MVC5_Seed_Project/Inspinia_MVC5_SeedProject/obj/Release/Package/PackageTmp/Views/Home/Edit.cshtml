@@ -5,7 +5,7 @@
     ViewBag.Title = "Edit Ad";
 }
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div data-bind="visible:selectedVal()">
+    <div data-bind="visible:!availableCities()">
         @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
     </div>
     <div id="FirstLoading" style="display:none" class="row">

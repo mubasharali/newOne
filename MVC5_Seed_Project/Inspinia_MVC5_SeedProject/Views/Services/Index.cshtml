@@ -18,52 +18,52 @@
 
         </div>
         @*<div class="col-lg-12">
-            <div class="ibox">
-                <div class="">
-                   <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content">
-                    <div class="row">
-                        <div data-bind="foreach: rows">
-                            <div class="col-sm-offset-1 col-sm-3">
-                                <ul  class="sortable-list connectList agile-list" data-bind="foreach: $data">
-                                    <li  style="padding:20px" data-bind="text:$data,click:subCategoryClicked" class="success-element"   ></li>
-                                </ul>
-                            </div>
+                <div class="ibox">
+                    <div class="">
+                       <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
                         </div>
                     </div>
-                   
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div data-bind="foreach: rows">
+                                <div class="col-sm-offset-1 col-sm-3">
+                                    <ul  class="sortable-list connectList agile-list" data-bind="foreach: $data">
+                                        <li  style="padding:20px" data-bind="text:$data,click:subCategoryClicked" class="success-element"   ></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-            adss
-        </div>*@
-        <div class="col-lg-12">
+                adss
+            </div>*@
+             <div class="col-lg-12">
             <div data-bind="visible:isLoading()">
                 @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
             </div>
             <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
-                    <a href="/ServiceConsumers" data-style="expand-left" class="col-lg-offset-1  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
-                    <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>&nbsp; &nbsp;
-                    <span class="hidden-xs"> <span data-bind="text:showAds().length"> </span> results found</span>
-                    <span class="" data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
-                
+                <a href="/ServiceConsumers" data-style="expand-left" class="col-lg-offset-1  btn btn-danger">I'm Service Provider</a>&nbsp; &nbsp;
+                <a data-bind="click:needAServiceBtn" data-style="expand-left" class=" pull-right btn btn-danger">I need a service </a>&nbsp; &nbsp;
+                <span class="hidden-xs"> <span data-bind="text:showAds().length"> </span> results found</span>
+                <span class="" data-bind="visible:searchingCity"> from <b> <span data-bind="visible:searchingPP"><span data-bind="text:searchingPP"></span>,</span> <span data-bind="text:searchingCity"></span> </b> </span>
+
                 @*<b>Summary:</b> Showing <span data-bind="visible: !( minPrice() != 0 || maxPrice() != 50000 || searchingCity()  || tags() )"> all </span> ads
-    <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>*@
+                    <span data-bind="visible:tags()"> with tags <b> '<span data-bind="text:tags"></span>' </b></span>*@
 
                 @*<span data-bind="visible:minPrice()!= 0 && maxPrice()!= 50000">
-                    with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
-                </span>
-                <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
-                    <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
-                    <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
-                </span>*@
+                        with price from <b> <span data-bind="text:minPrice"></span> </b> to <b> <span data-bind="text:maxPrice"></span></b>
+                    </span>
+                    <span data-bind="visible:! (minPrice()!= 0 && maxPrice()!= 50000)">
+                        <span data-bind="visible:minPrice() != 0"> with min price <b> <span data-bind="text:minPrice"></span> </b> </span>
+                        <span data-bind="visible:maxPrice()!= 50000">with max price <b> <span data-bind="text:maxPrice"></span> </b> </span>
+                    </span>*@
                 @*<div data-bind="foreach:showAds">
-                    @Html.Partial("/Views/Shared/_AdListView.cshtml")
-                </div>*@
+                        @Html.Partial("/Views/Shared/_AdListView.cshtml")
+                    </div>*@
                 <div class="row">
                     <br /> <br /><br />
                     <div class="col-lg-offset-1 col-sm-6 col-lg-5" data-bind="foreach: showAds.slice(0,showAds().length / 2) ">
@@ -139,10 +139,10 @@
                 </div>
                 <div data-bind="visible:isNeedAServiceSubmitting()">
                     <div class="sk-spinner sk-spinner-wave">
-                        <div class="sk-rect1"></div>
-                        <div class="sk-rect2"></div>
-                        <div class="sk-rect3"></div>
-                        <div class="sk-rect4"></div>
+                        <div class="sk-rect1"></div>&nbsp;
+                        <div class="sk-rect2"></div>&nbsp;
+                        <div class="sk-rect3"></div>&nbsp;
+                        <div class="sk-rect4"></div>&nbsp;
                         <div class="sk-rect5"></div>
                     </div>
                 </div>

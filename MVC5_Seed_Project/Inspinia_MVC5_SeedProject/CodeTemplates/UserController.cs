@@ -15,6 +15,7 @@ using Amazon.S3.Model;
 using System.Configuration;
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    
     public class UserController : Controller
     {
         private Entities db = new Entities();

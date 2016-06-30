@@ -7,6 +7,7 @@ using System.Web.Mvc.Html;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Web.Routing;
+using Microsoft.Ajax.Utilities;
 namespace Inspinia_MVC5_SeedProject
 {
     public static class UrlHelperExtensions
@@ -76,6 +77,20 @@ namespace Inspinia_MVC5_SeedProject
 
             return controller == currentController && action == currentAction ?
                 cssClass : String.Empty;
+        }
+        public static MvcHtmlString JsMinify(
+            this HtmlHelper helper, Func<object, object> markup)
+        {
+            string notMinifiedJs =
+             (markup.DynamicInvoke(helper.ViewContext) ?? "").ToString();
+
+            var minifier = new Minifier();
+            var minifiedJs = minifier.MinifyJavaScript(notMinifiedJs, new CodeSettings
+            {
+                EvalTreatment = EvalTreatment.MakeImmediateSafe,
+                PreserveImportantComments = false
+            });
+            return new MvcHtmlString(minifiedJs);
         }
     }
 }

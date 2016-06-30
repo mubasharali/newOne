@@ -1,10 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Web;
-using Microsoft.AspNet.SignalR;
-//using Microsoft.AspNet.Identity;
-//using Inspinia_MVC5_SeedProject.Models;
+﻿using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Data;

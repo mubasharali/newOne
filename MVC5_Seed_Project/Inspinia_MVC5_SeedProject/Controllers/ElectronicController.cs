@@ -1210,6 +1210,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                            companyId = companyId,
                            companyName = companyName,
                            isAdmin = isAdmin,
+                           name = ad.name,
+                           phoneNumberLocal = ad.phoneNumber,
                            title = ad.title,
                            postedById = ad.AspNetUser.Id,
                            postedByName = ad.AspNetUser.Email,

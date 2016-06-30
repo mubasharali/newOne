@@ -22,21 +22,7 @@ using System.Web.UI;
 //using Inspinia_MVC5_SeedProject;
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
-    //   public class ApplicationUserManager : UserManager<ApplicationUser>
-    //{
-    //        public ApplicationUserManager(): base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
-    //        {
-    //              PasswordValidator = new MinimumLengthValidator (0);
-    //        }
-    //}
-    //public class MyUserManager : UserManager<ApplicationUser>
-    //{
-    //    public MyUserManager() :
-    //        base(new UserStore<ApplicationUser>(new ApplicationDbContext()))
-    //    {
-    //        PasswordValidator = new MinimumLengthValidator(0);
-    //    }
-    //}
+    
     //following code is for email verification
  
     public class AppUserManager : UserManager<ApplicationUser>
@@ -671,7 +657,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
             var user = await UserManager.FindAsync(loginInfo.Login);
             if (user != null)  //User already exists. just update dp
             {
-                await SignInAsync(user, isPersistent: false);
+                await SignInAsync(user, isPersistent: true);
                 if (pictureUrl != null && pictureUrl != "")
                 {
                     WebClient wc = new WebClient();

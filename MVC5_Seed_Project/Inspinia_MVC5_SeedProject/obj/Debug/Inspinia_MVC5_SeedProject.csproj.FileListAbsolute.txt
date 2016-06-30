@@ -802,3 +802,5 @@ D:\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\zh-Hant\System.Spatial.resour
 D:\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.csprojResolveAssemblyReference.cache
 D:\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.dll
 D:\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\obj\Debug\Inspinia_MVC5_SeedProject.pdb
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\Meleze.Web.dll
+C:\Users\Irfan\Documents\GitHub\newOne\MVC5_Seed_Project\Inspinia_MVC5_SeedProject\bin\BundleMinifyInlineJsCss.dll

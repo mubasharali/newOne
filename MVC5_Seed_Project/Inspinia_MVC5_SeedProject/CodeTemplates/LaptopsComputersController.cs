@@ -10,6 +10,7 @@ using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    [BundleMinifyInlineCssJs]
     public class LaptopsComputersController : Controller
     {
         private Entities db = new Entities();

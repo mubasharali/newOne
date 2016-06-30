@@ -13,6 +13,7 @@ using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    [BundleMinifyInlineCssJs]
     public class ForumController : Controller
     {
         private Entities db = new Entities();

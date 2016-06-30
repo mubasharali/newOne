@@ -32,6 +32,8 @@
           <Property Name="condition" Type="char" MaxLength="1" />
           <Property Name="status" Type="char" MaxLength="1" />
           <Property Name="views" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="phoneNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -3267,6 +3269,8 @@
           <NavigationProperty Name="House" Relationship="Model.FK_House_ToTable" FromRole="Ad" ToRole="House" />
           <NavigationProperty Name="Camera" Relationship="Model.FK_Camera_ToTable" FromRole="Ad" ToRole="Camera" />
           <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AdImage">
           <Key>
@@ -5633,6 +5637,8 @@
           <EntitySetMapping Name="Ads">
             <EntityTypeMapping TypeName="Model.Ad">
               <MappingFragment StoreEntitySet="Ad">
+                <ScalarProperty Name="phoneNumber" ColumnName="phoneNumber" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="views" ColumnName="views" />
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="condition" ColumnName="condition" />

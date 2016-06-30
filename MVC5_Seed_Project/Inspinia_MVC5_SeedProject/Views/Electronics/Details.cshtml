@@ -23,16 +23,7 @@
 
     <div class="row">
         <div class="col-sm-3 hidden-sm hidden-xs">
-            @*<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-3540353581324370"
-                 data-ad-slot="3103703247"
-                 data-ad-format="auto"></ins>
-            <script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-            </script>*@
         </div>
         <div class="col-md-9">
             <div data-bind="visible:isLoading()">
@@ -322,7 +313,7 @@
                                             
                                     </div><br />
                                         
-                                        <p class="small text-muted">When you contact <span data-bind="visible:companyId,text:companyName"></span><span data-bind="visible:!companyId,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
+                                        <p class="small text-muted">When you contact <span data-bind="visible:name != null,text:name"></span> <span data-bind="visible:companyId && name == null,text:companyName"></span><span data-bind="visible:(!companyId) && name == null,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
                                         
                                         @*<div data-bind="with:showLocation">
                                             <h5 data-bind="with:cityName">Location</h5>
@@ -337,17 +328,21 @@
                                         <div class="col-lg-12 ">
                                             <div class="widget style1 lazur-bg">
                                                 <div class="row vertical-align">
-                                                        <i class="fa fa-phone fa-2x"></i>
-                                                    <span data-bind="if: phoneNumber == ''">Phone number is hidden <a data-bind="click:function(){ return sendMessage(postedById,postedByName)}"> send message</a></span> <span style="font-size:20px" class="font-bold"> <span data-bind="text:phoneNumber"></span> (<span data-bind="text:userName"></span>) </span>
-                                                    <div data-bind="with:showLocation">
-                                                        <span data-bind="with:cityName"><i class="fa fa-map-marker"></i></span>
-                                                        <span data-bind="if:exectLocation">
-                                                            <span data-bind="text:exectLocation"></span>,
-                                                        </span>
-                                                        <span data-bind="if:popularPlace">
-                                                            <span data-bind="text:popularPlace"></span>,
-                                                        </span>
-                                                        <span data-bind="text:cityName"></span>
+                                                    <i class="fa fa-phone fa-2x"></i>
+                                                    <span data-bind="if:phoneNumberLocal == null">
+                                                        <span data-bind="if: phoneNumber == ''">Phone number is hidden <a data-bind="click:function(){ return sendMessage(postedById,postedByName)}"> send message</a></span> <span style="font-size:20px" class="font-bold"> <span data-bind="text:phoneNumber"></span> (<span data-bind="text:userName"></span>) </span>
+                                                    </span>
+                                                    <span data-bind="if:phoneNumberLocal != null">
+                                                        <span data-bind="if: phoneNumberLocal == ''">Phone number is hidden <a data-bind="click:function(){ return sendMessage(postedById,postedByName)}"> send message</a></span> <span style="font-size:20px" class="font-bold"> <span data-bind="text:phoneNumberLocal"></span> (<span data-bind="text:name"></span>) </span>                                                    <div data-bind="with:showLocation">
+                                                    </span>
+                                                    <span data-bind="with:cityName"><i class="fa fa-map-marker"></i></span>
+                                                    <span data-bind="if:exectLocation">
+                                                        <span data-bind="text:exectLocation"></span>,
+                                                    </span>
+                                                    <span data-bind="if:popularPlace">
+                                                        <span data-bind="text:popularPlace"></span>,
+                                                    </span>
+                                                    <span data-bind="text:cityName"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -751,7 +746,9 @@
                 }
             }
             data = data || {};
-       //     self.isAdmin = data.isAdmin;
+            //     self.isAdmin = data.isAdmin;
+            self.name = data.name;
+            self.phoneNumberLocal = data.phoneNumberLocal;
             self.title = data.title;
             self.phoneNumber = data.phoneNumber || "";
             self.userName = data.userName ;
@@ -1170,6 +1167,23 @@
                 }
             }
             
+        }
+        function SimilarData() {
+            $.ajax({
+                url: '/api/Electronic/SimilarData',
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                type: 'POST',
+                data: ko.toJSON(data),
+                success: function (data) {
+                   
+                },
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    toastr.info(err.Message);
+                }
+            })
         }
         function Report() {
             var self = this;

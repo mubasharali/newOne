@@ -12,10 +12,10 @@
 namespace Inspinia_MVC5_SeedProject.Models
 {
 
-    using System;
+using System;
     using System.Collections.Generic;
-    using System.Web.Mvc;
-    public partial class Ad
+    
+public partial class Ad
 {
 
     public Ad()
@@ -46,7 +46,7 @@ namespace Inspinia_MVC5_SeedProject.Models
 
     public string title { get; set; }
 
-        public string description { get; set; }
+    public string description { get; set; }
 
     public System.DateTime time { get; set; }
 
@@ -63,6 +63,10 @@ namespace Inspinia_MVC5_SeedProject.Models
     public string status { get; set; }
 
     public int views { get; set; }
+
+    public string name { get; set; }
+
+    public string phoneNumber { get; set; }
 
 
 

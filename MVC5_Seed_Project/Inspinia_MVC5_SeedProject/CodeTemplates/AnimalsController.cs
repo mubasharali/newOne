@@ -8,9 +8,17 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Inspinia_MVC5_SeedProject.Models;
+using BundlingAndMinifyingInlineCssJs.ResponseFilters;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    public class BundleMinifyInlineCssJsAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            filterContext.HttpContext.Response.Filter = new BundleAndMinifyResponseFilter(filterContext.HttpContext.Response.Filter);
+        }
+    }
     public class AnimalsController : Controller
     {
         private Entities db = new Entities();

@@ -37,12 +37,21 @@ namespace Inspinia_MVC5_SeedProject
             //GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
         }
         protected void Application_BeginRequest()
-
         {
+            if (HttpContext.Current.Request.Url.ToString().ToLower().Contains(
+    "http://dealkar.pk"))
+            {
+                HttpContext.Current.Response.Status = "301 Moved Permanently";
+                HttpContext.Current.Response.AddHeader("Location",
+                    Request.Url.ToString().ToLower().Replace(
+                        "http://dealkar.pk",
+                        "http://www.dealkar.pk"));
+            }
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-1));
             Response.Cache.SetNoStore();
         }
+
         //private static SimpleMembershipInitializer _initializer;
         //private static object _initializerLock = new object();
         //private static bool _isInitialized;
@@ -54,7 +63,7 @@ namespace Inspinia_MVC5_SeedProject
 
         //        try
         //        {
-                    
+
 
         //            WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
         //        }

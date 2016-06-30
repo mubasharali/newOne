@@ -43,6 +43,10 @@
     <Reference Include="AWSSDK">
       <HintPath>..\packages\AWSSDK.2.3.54.2\lib\net45\AWSSDK.dll</HintPath>
     </Reference>
+    <Reference Include="BundleMinifyInlineJsCss, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BundleMinifyInlineJsCss.1.0.1\lib\40\BundleMinifyInlineJsCss.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ChatJs.Lib">
       <HintPath>..\packages\ChatJS.2.0.22\lib\net45\ChatJs.Lib.dll</HintPath>
     </Reference>
@@ -64,6 +68,10 @@
     </Reference>
     <Reference Include="Facebook">
       <HintPath>..\packages\Facebook.7.0.6\lib\net45\Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Meleze.Web, Version=1.4.0.6, Culture=neutral, PublicKeyToken=0a868b5321967eda, processorArchitecture=MSIL">
+      <HintPath>..\packages\Meleze.Web.1.4.6\lib\NET40\Meleze.Web.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Facebook">
       <HintPath>..\packages\Microsoft.AspNet.Facebook.1.1.0\lib\net45\Microsoft.AspNet.Facebook.dll</HintPath>

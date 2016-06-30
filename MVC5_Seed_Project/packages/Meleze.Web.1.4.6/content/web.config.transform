@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="meleze-minifier:Aggressive" value="true"/>
+    <add key="meleze-minifier:Comments" value="true"/>
+    <add key="meleze-minifier:Javascript" value="true"/>
+    <add key="meleze-minifier:CSS" value="true"/>
+  </appSettings>
+</configuration>

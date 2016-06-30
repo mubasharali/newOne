@@ -84,15 +84,15 @@
                     });
                 }
             }, null, 'arrayChange');
-        } // if observable array
-    }
+        }; // if observable array
+    };
 
     //update the control when the view model changes
     var update = function (element, valueAccessor) {
         var images = ko.unwrap(valueAccessor());
         // Do something to update the content
         console.log('update');
-    }
+    };
 
     return { init: init, update: update };
 })();

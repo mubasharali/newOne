@@ -16,6 +16,7 @@ using Inspinia_MVC5_SeedProject.Models;
 
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+   
     public class VehiclesController : Controller
     {
         private Entities db = new Entities();

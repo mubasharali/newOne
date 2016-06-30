@@ -27,6 +27,8 @@
     <Property Name="condition" Type="char" MaxLength="1" />
     <Property Name="status" Type="char" MaxLength="1" />
     <Property Name="views" Type="int" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="phoneNumber" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>

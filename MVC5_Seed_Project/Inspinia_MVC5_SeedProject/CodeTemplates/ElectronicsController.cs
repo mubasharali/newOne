@@ -36,6 +36,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         public int id;
         public string status;
     }
+    
     public class ElectronicsController : Controller
     {
        
@@ -821,6 +822,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         }
         public Ad MyAd( Ad ad,string SaveOrUpdate,string cateogry = null,string subcategory = null)
         {
+            ad.name = System.Web.HttpContext.Current.Request["name"];
+            ad.phoneNumber = System.Web.HttpContext.Current.Request["phoneNumber"];
             if (ad.status == null || ad.status == "")
             {
                 ad.status = "a";

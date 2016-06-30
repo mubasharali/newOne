@@ -14,6 +14,8 @@
     <EntitySetMapping Name="Ads">
       <EntityTypeMapping TypeName="Model.Ad">
         <MappingFragment StoreEntitySet="Ad">
+          <ScalarProperty Name="phoneNumber" ColumnName="phoneNumber" />
+          <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="views" ColumnName="views" />
           <ScalarProperty Name="status" ColumnName="status" />
           <ScalarProperty Name="condition" ColumnName="condition" />

@@ -566,6 +566,8 @@
     <NavigationProperty Name="House" Relationship="Model.FK_House_ToTable" FromRole="Ad" ToRole="House" />
     <NavigationProperty Name="Camera" Relationship="Model.FK_Camera_ToTable" FromRole="Ad" ToRole="Camera" />
     <NavigationProperty Name="JobSkills" Relationship="Model.FK_JobSkill_ToTable" FromRole="Ad" ToRole="JobSkill" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="phoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="AdImage">
     <Key>

@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Inspinia_MVC5_SeedProject.Models;
 namespace Inspinia_MVC5_SeedProject.CodeTemplates
 {
+    
     public class MobilesTabletsController : Controller
     {
         private Entities db = new Entities();
@@ -21,21 +22,7 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
         {
             return View();
         }
-        //public ActionResult Details(int? id)
-        //{
-        //    //if (id == null)
-        //    //{
-        //    //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    //}
-        //    //Ad ad = db.Ads.Find(id);
-        //    //if (ad == null)
-        //    //{
-        //    //    return HttpNotFound();
-        //    //}
-        //    ViewBag.title = db.Ads.Find(id).title;
-        //    ViewBag.adId = id;
-        //    return View("../Electronics/Details");
-        //}
+       
         public ActionResult Create()
         {
             if (Request.IsAuthenticated)

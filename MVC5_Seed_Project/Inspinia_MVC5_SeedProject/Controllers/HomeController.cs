@@ -16,10 +16,21 @@ using Inspinia_MVC5_SeedProject.Models;
 using Inspinia_MVC5_SeedProject.CodeTemplates;
 using MvcSiteMapProvider.Web.Mvc;
 using MinifierLibrary.Minifiers;
+using BundlingAndMinifyingInlineCssJs.ResponseFilters;
 
 namespace Inspinia_MVC5_SeedProject.Controllers
 {
-   // [InitializeSimpleMembership]
+    // [InitializeSimpleMembership]
+    
+    public class BundleMinifyInlineCssJsAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            filterContext.HttpContext.Response.Filter = new BundleAndMinifyResponseFilter(filterContext.HttpContext.Response.Filter);
+        }
+    }
+   // [BundleMinifyInlineCssJs]
+  
     public class HomeController : Controller
     {
         public Entities db = new Entities();
