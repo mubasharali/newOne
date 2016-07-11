@@ -535,6 +535,17 @@
     <Property Name="addedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="status" Type="char" MaxLength="1" />
   </EntityType>
+  <EntityType Name="Notification">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="1000" Nullable="false" />
+    <Property Name="link" Type="nvarchar" MaxLength="1000" />
+    <Property Name="time" Type="datetime" Nullable="false" />
+    <Property Name="isSeen" Type="bit" Nullable="false" />
+    <Property Name="userId" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
   <EntityType Name="popularPlace">
     <Key>
       <PropertyRef Name="Id" />
@@ -1821,6 +1832,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Notification_ToTable">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_popularPlace_ToTable">
     <End Role="City" Type="Self.City" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -2226,6 +2251,7 @@
     <EntitySet Name="Mobile" EntityType="Self.Mobile" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MobileAds" EntityType="Self.MobileAds" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MobileModel" EntityType="Self.MobileModel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="popularPlace" EntityType="Self.popularPlace" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QuestionReply" EntityType="Self.QuestionReply" Schema="dbo" store:Type="Tables" />
@@ -2584,6 +2610,10 @@
     <AssociationSet Name="FK_MobileModel_ToTable_1" Association="Self.FK_MobileModel_ToTable_1">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="MobileModel" EntitySet="MobileModel" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Notification_ToTable" Association="Self.FK_Notification_ToTable">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Notification" EntitySet="Notification" />
     </AssociationSet>
     <AssociationSet Name="FK_popularPlace_ToTable" Association="Self.FK_popularPlace_ToTable">
       <End Role="City" EntitySet="City" />

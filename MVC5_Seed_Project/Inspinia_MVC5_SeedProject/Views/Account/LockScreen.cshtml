@@ -35,11 +35,16 @@
             @using (Html.BeginForm("CallBackFromLockScreen", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
             {
                 @Html.AntiForgeryToken()
+                <input type="hidden" name="name" value="@ViewBag.name" />
+                <input type="hidden" name="city" value="@ViewBag.city" />
+                <input type="hidden" name="gender" value="@ViewBag.gender" />
+                <input type="hidden" name="dateOfBirth" value="@ViewBag.dateOfBirth" />
+                <input type="hidden" name="pictureUrl" value="@ViewBag.pictureUrl" />
+                <input type="hidden" name="Login" value="@ViewBag.Login" />
                 <div class="form-group">
                     <input type="email" class="form-control" name="email" placeholder="Enter email" required>
                 </div>
                 <button type="submit" class="btn btn-primary block full-width">Submit</button>
-                
             }
             
         </div>
@@ -57,7 +62,6 @@
         @Scripts.Render("~/bundles/inspinia")
         @Scripts.Render("~/plugins/knockout")
         @Scripts.Render("~/plugins/toastr")
-        <script src="~/Scripts/app/GoogleAnalytics.js"></script>
         <script src="~/Scripts/jquery.cookie.js"></script>
         <script>
             function Profile(data) {

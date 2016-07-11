@@ -32,6 +32,15 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
             ViewBag.id = id;
             return View(data);
         }
+        public ActionResult Payments()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return View();
+            }
+            string path = Request.Url.AbsolutePath;
+            return RedirectToAction("Login", "Account", new { ReturnUrl = path });
+        }
         public ActionResult Profile(string id)
         {
             if (Request.IsAuthenticated)
@@ -43,7 +52,8 @@ namespace Inspinia_MVC5_SeedProject.CodeTemplates
                 }
                 return RedirectToAction("../User/Profile", new { id = User.Identity.GetUserId() });
             }
-            return RedirectToAction("../Home/Index");
+            string path = Request.Url.AbsolutePath;
+            return RedirectToAction("Login", "Account", new { ReturnUrl = path });
         }
         public ActionResult Chat()
         {

@@ -521,6 +521,11 @@
       <End Role="AspNetUser" EntitySet="AspNetUsers" />
       <End Role="Feedback" EntitySet="Feedbacks" />
     </AssociationSet>
+    <EntitySet Name="Notifications" EntityType="Model.Notification" />
+    <AssociationSet Name="FK_Notification_ToTable" Association="Model.FK_Notification_ToTable">
+      <End Role="AspNetUser" EntitySet="AspNetUsers" />
+      <End Role="Notification" EntitySet="Notifications" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C__MigrationHistory">
     <Key>
@@ -1744,6 +1749,7 @@
     <NavigationProperty Name="BikeModels" Relationship="Model.FK_BikeModel_ToTable" FromRole="AspNetUser" ToRole="BikeModel" />
     <NavigationProperty Name="Feedbacks" Relationship="Model.FK_Feedback_ToTable" FromRole="AspNetUser" ToRole="Feedback" />
     <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Notifications" Relationship="Model.FK_Notification_ToTable" FromRole="AspNetUser" ToRole="Notification" />
   </EntityType>
   <Association Name="FK_Ad_ToTable">
     <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -2912,6 +2918,32 @@
       </Principal>
       <Dependent Role="Feedback">
         <PropertyRef Name="givenBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Notification">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="description" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="link" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="isSeen" Type="Boolean" Nullable="false" />
+    <Property Name="userId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="AspNetUser" Relationship="Model.FK_Notification_ToTable" FromRole="Notification" ToRole="AspNetUser" />
+  </EntityType>
+  <Association Name="FK_Notification_ToTable">
+    <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.Notification" Role="Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="userId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

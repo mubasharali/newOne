@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "Payments";
+}
+
+@*<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-12">
+        
+    </div>
+</div>*@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-4 col-md-3 col-lg-3">
+            
+        </div>
+        <div class="col-sm-8 col-md-9 col-lg-7">
+            <div data-bind="visible:isLoading()">
+                @Html.Partial("/Views/Shared/_LoadingBoxes.cshtml")
+            </div>
+            <div id="FirstLoading" style="display:none" data-bind="visible:!isLoading()">
+                <div data-bind="with:showPayments">
+                    <div class="profile-image">
+                        <a target="_blank" data-bind="attr:{href:dpLink}">
+                            <img data-bind="attr:{src:dpLink}" class="img-circle circle-border m-b-md" alt="profile">
+                        </a>
+                    </div>
+                    <div class="profile-info">
+                        <div class="">
+                            <div>
+                                <h2 class="no-margins" data-bind="text:name"></h2>
+                                <br />
+                                <small>
+
+                        <a class="btn btn-sm btn-default" data-bind="attr:{href:'/User/Index/'+ id}" style="margin-bottom:1px">Profile</a>
+
+                                    <a class="btn btn-sm btn-default" data-bind="attr:{href:'/User/Profile/'+ id}" style="margin-bottom:1px">Edit Profile</a>
+                    </small>
+                </div>
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 hidden-md hidden-sm hidden-xs"> </div>
+    </div>
+</div>
+@section Styles {
+    @Styles.Render("~/plugins/slickStyles")
+    @Styles.Render("~/plugins/slickThemeStyles")
+    @Styles.Render("~/plugins/toastrStyles")
+    <link href="~/Content/plugins/jsTree/style.css" rel="stylesheet" />
+    @Styles.Render("~/bundles/tagStyles")
+    @Styles.Render("~/Content/plugins/ionRangeSlider/ionRangeStyles")
+}
+
+@section Scripts{
+    @Scripts.Render("~/plugins/timeago")
+    @Scripts.Render("~/plugins/autosize")
+    @Scripts.Render("~/plugins/slick")
+    @Scripts.Render("~/plugins/jsTree")
+    @Scripts.Render("~/plugins/ionRange")
+    <script src="~/Scripts/app/slick-knockout-binding.js"></script>
+    <script src="~/Scripts/app/CreateAlert.js"></script>
+    <script src="~/Scripts/app/_AdListView.js"></script>
+    <script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+    <script src="~/Scripts/app/GetLoginUserId.js"></script>
+    <script>
+        function User(data) {
+            var self = this;
+            data = data || {};
+            self.id = data.id;
+            self.name = data.name;
+            self.phoneNumber = data.phoneNumber;
+            self.dpLink = $.cookie("AWSURL") + $.cookie("AWSUserFolder") + 'p' + self.id + data.dpExtension;
+            if (!data.dpExtension) {
+                self.dpLink = '/Images/Users/default.jpg';
+            }
+        }
+        function viewModel() {
+            SearchingLocation();
+           
+            ChatViewModel();
+            AccountViewModel();
+            var self = this;
+            self.showPayments = ko.observable();
+            self.isLoading = ko.observable(true);
+            $.ajax({
+                url: '/api/User/GetPayments',
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                type: 'GET',
+                success: function (data) {
+                    self.showPayments(new User(data));
+                    self.isLoading(false);
+                },
+                error: function (xhr, status, error) {
+                    self.isLoading(false);
+                    var err = eval("(" + xhr.responseText + ")");
+                    toastr.info(err.Message);
+                }
+            })
+            return self;
+        }
+        //tree
+
+        function getTimeAgo(varDate) {
+            if (varDate) {
+                return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
+            }
+            else {
+                return '';
+            }
+        }
+        ko.bindingHandlers.jqAutoresize = {
+            init: function (element, valueAccessor, aBA, vm) {
+                if (!$(element).hasClass('msgTextArea')) {
+                    $(element).css('height', '1em');
+                }
+                $(element).autosize();
+            }
+        };
+        $("#ionrange_1").ionRangeSlider({
+            min: 0,
+            max: 50000,
+            type: 'double',
+            prefix: "Rs",
+            maxPostfix: "+",
+            prettify: false,
+            hasGrid: true
+        });
+        $('#select-tag').selectize({
+            valueField: 'name',
+            labelField: 'name',
+            searchField: 'name',
+            options: [],
+            maxItems: 4,
+            render: {
+                option: function (item, escape) {
+                    return '<div>' +
+                        '<span class="title">' +
+                            '<span class="name">' + escape(item.name) + '</span>' +
+
+                        '</span>' +
+                        '<span class="description">' + escape(item.info) + '</span>' +
+                        '<ul class="meta">' +
+                            '<li class="watchers"><span>' + escape(item.followers) + '</span> followers</li>' +
+                            '<li class="forks"><span>' + escape(item.questions) + '</span> times used</li>' +
+                        '</ul>' +
+                    '</div>';
+                }
+            },
+            load: function (query, callback) {
+                if (!query.length) return callback();
+                $.ajax({
+                    url: '/api/Tag/SearchTags?s=' + encodeURIComponent(query),
+                    type: 'GET',
+                    error: function () {
+                        callback();
+                    },
+                    success: function (res) {
+                        callback(res.slice(0, 10));
+                    }
+                });
+            }
+        });
+        $(function () {
+            $('.ladda-button').ladda('bind', { timeout: 200000 });
+
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                preventDuplicates: true,
+                positionClass: 'toast-top-right',
+                onclick: null
+            };
+            $('.product-images').slick({
+                dots: true
+            });
+            // ko.applyBindings(new viewModel, (document.getElementById('ads')));
+
+            // ko.applyBindings(new treeModel, document.getElementById('navigation'));
+            ko.applyBindings(new viewModel);
+            //window.onload = function () {
+            //    ko.applyBindings(new viewModel);
+            //};
+            var length = $(window).width();
+            if (length < 786) { //770
+                $(".collapse-link").click();
+            }
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

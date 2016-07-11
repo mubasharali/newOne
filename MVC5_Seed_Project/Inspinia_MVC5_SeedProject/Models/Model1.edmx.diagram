@@ -183,6 +183,8 @@
         <AssociationConnector Association="Model.FK_JobSkill_ToTable_1" />
         <EntityTypeShape EntityType="Model.Feedback" Width="1.5" PointX="0.5" PointY="1.875" IsExpanded="false" />
         <AssociationConnector Association="Model.FK_Feedback_ToTable" />
+        <EntityTypeShape EntityType="Model.Notification" Width="1.5" PointX="0.75" PointY="10.75" />
+        <AssociationConnector Association="Model.FK_Notification_ToTable" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

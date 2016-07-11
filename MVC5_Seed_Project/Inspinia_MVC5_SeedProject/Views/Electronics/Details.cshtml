@@ -419,6 +419,8 @@
                                     </div>
                                 </div>
                             </div>
+                        <h3>Similar ads</h3>
+                        
                             <div class="modal inmodal fade" id="report" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content animated ">
@@ -472,8 +474,12 @@
                                 </div>
                             </div>
                         </div>
+                    
                     </div>
                 </div>
+            <div data-bind="foreach:showAds">
+                @Html.Partial("/Views/Shared/_AdListView.cshtml")
+            </div>
             </div>
         </div>
 
@@ -517,6 +523,7 @@
 <script src="~/Scripts/UserLogin.js"></script>
 <script src="~/Scripts/app/chat.js"></script>
 <script src="~/Scripts/app/slick-knockout-binding-for-detail-page.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
 <script src="~/Scripts/_Comments.js"></script>
 <script src="~/Scripts/app/IsAdmin.js"></script>
     <script>
@@ -1168,16 +1175,37 @@
             }
             
         }
-        function SimilarData() {
+        function SimilarData(self, tags, category, subcategory, city, pp) {
+            //$.ajax({
+            //    url: '/api/Search/SearchAds?tags=' + tags() + '&title=' + title() + '&minPrice=' + minPrice() + '&maxPrice=' + maxPrice() + '&city=' + searchingCity() + '&pp=' + searchingPP() + '&category=' + category() + '&subcategory=' + subcategory(),
+            //    dataType: "json",
+            //    contentType: "application/json",
+            //    cache: false,
+            //    type: 'POST',
+            //    success: function (data) {
+            //        self.isLoading(false);
+            //        var mappedads = $.map(data, function (item) { return new Ad(item); });
+            //        self.showAds(mappedads);
+            //        $("#FirstLoading").css({ "display": "block" });
+            //    },
+            //    error: function () {
+            //        self.isLoading(false);
+            //        toastr.error("failed to search. Please refresh page and try again", "Error!");
+            //        $("#FirstLoading").css({ "display": "block" });
+            //    }
+            //});
+           // var self = this;
+            self.showAds = ko.observableArray();
             $.ajax({
-                url: '/api/Electronic/SimilarData',
+                url: '/api/Search/SimilarData?tags=' + tags + '&city=' + city + '&pp=' + pp + '&category=' + category + '&subcategory=' + subcategory,
                 dataType: "json",
                 contentType: "application/json",
                 cache: false,
                 type: 'POST',
-                data: ko.toJSON(data),
+               // data: ko.toJSON(data),
                 success: function (data) {
-                   
+                    var mappedads = $.map(data, function (item) { return new Ad(item); });
+                    self.showAds(mappedads);
                 },
                 error: function (xhr, status, error) {
                     var err = eval("(" + xhr.responseText + ")");
@@ -1206,6 +1234,7 @@
                         success: function (data) {
                             $("#report").modal('hide');
                             toastr.info("Our team can contact you for details", "Thanks for feedback!");
+                           
                         },
                         error: function (xhr, status, error) {
                             var err = eval("(" + xhr.responseText + ")");
@@ -1232,6 +1261,7 @@
             self.commentsHub = $.connection.adComments;
             self.showItem = ko.observable();
             self.error = ko.observable();
+            self.showAds = ko.observableArray();
             self.loadItem = function () {
                 self.isLoading(true);
                 var adId = myAdId;
@@ -1252,7 +1282,7 @@
                     }).disableSelection();
 
                     loadAdmin();
-
+                    SimilarData(self,null,data.category);
 
                 })
                 .fail(function () {

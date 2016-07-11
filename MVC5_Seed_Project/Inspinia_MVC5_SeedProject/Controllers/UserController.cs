@@ -57,6 +57,26 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Ok("Visitor");
         }
         [HttpGet]
+        public async Task<IHttpActionResult> GetPayments()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                var ret = from user in db.AspNetUsers
+                          where user.Id.Equals(userId)
+                          select new
+                          {
+                              id = user.Id,
+                              name = user.Email,
+                              email = user.UserName,
+                              phoneNumber = user.PhoneNumber,
+                              phoneNumberConfirmed = user.PhoneNumberConfirmed
+                          };
+                return Ok(ret);
+            }
+            return BadRequest();
+        }
+        [HttpGet]
         public async Task<IHttpActionResult> GetLoginUserId12(string email)
         {
             var ret = db.AspNetUsers.FirstOrDefault(x => x.UserName.Equals(email)).Id;

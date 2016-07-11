@@ -160,6 +160,8 @@ public partial class Entities : DbContext
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
+    public virtual DbSet<Notification> Notifications { get; set; }
+
 }
 
 }

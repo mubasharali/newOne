@@ -1085,7 +1085,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                             };
             return Ok(temp);
         }
-
+        
         public async Task<IHttpActionResult> GetMobileTrends()
         {
             string islogin = "";

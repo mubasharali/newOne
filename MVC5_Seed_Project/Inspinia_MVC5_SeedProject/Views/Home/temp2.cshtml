@@ -96,7 +96,79 @@
    
 </div>*@
 
+<div class="row" >
+    <div class="col-lg-10 col-lg-offset-1">
 
+        <div class="slick_demo_2" data-bind="foreach:showAds">
+            
+            <div>
+                    <div class="ibox">
+                        <div class="ibox-content product-box">
+
+                            <div class="product-imitation">
+                                <div class="carouselContainer">
+                                    @*<span id="gallery" data-gallery=""
+                                          data-bind="slick: images,
+    slickOptions: { slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,},
+    slickIndex: imageIndex">
+                                    </span>*@
+                                    <div data-bind="visible:images().length == 0"><h2><br /><br /><br /><br /> No Images<br /><br /><br /><br /><br /></h2></div>
+                                </div>
+                            </div>
+                            <div class="product-desc">
+                                <span class="product-price">
+                                    <span data-bind="if:!isBidingAllowed">
+                                        <span data-bind="if:price">
+                                            <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                        </span>
+                                        <span data-bind="if:!price">Price on contact</span>
+                                    </span>
+                                    <span data-bind="if:isBidingAllowed">
+                                        <span data-bind="if:price">
+                                            <span data-bind="if:highestBid() == '-Infinity'">
+                                                <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                            </span>
+                                            <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                            </span>
+                                        </span>
+                                        <span data-bind="if:!price">
+                                            <span data-bind="if:highestBid() == '-Infinity'">
+                                                No Bit yet
+                                            </span>
+                                            <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                                <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                            </span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <small class="text-muted">Mobile</small>
+                                <a href="#" class="product-name" data-bind="text:title,attr:{href:link}"> </a>
+
+
+
+                                <div class="small m-t-xs" data-bind="foreach:showTags">
+                                    <a target="_blank" data-bind="attr:{href:'/Tag/'+name}"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></a>
+                                </div>
+                                <div class="m-t text-righ">
+
+                                    <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<style>
+    .slick_demo_2 .ibox-content {
+        margin: 0 10px;
+    }
+</style>
 
 <div class="row">
     <div class="col-sm-10">
@@ -233,11 +305,42 @@
             TreeViewModel();
             RefreshSearch();
             ChatViewModel();
-            AccountViewModel();
-            
-
+            AccountViewModel();   
         }
-
+        function slick1() {
+            $('.slick_demo_2').slick({
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                centerMode: true,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3,
+                            infinite: true,
+                            dots: true
+                        }
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        }
+     //   slick1();
         function getTimeAgo(varDate) {
             if (varDate) {
                 return $.timeago(varDate.toString().slice(-1) == 'Z' ? varDate : varDate + 'Z');
@@ -266,6 +369,7 @@
             };
             ko.applyBindings(new viewModel);
         });
+        
     </script>
 }
 

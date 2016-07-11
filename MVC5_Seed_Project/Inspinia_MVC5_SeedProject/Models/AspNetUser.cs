@@ -123,6 +123,8 @@ public partial class AspNetUser
 
         this.Feedbacks = new HashSet<Feedback>();
 
+        this.Notifications = new HashSet<Notification>();
+
     }
 
 
@@ -279,6 +281,8 @@ public partial class AspNetUser
     public virtual ICollection<BikeModel> BikeModels { get; set; }
 
     public virtual ICollection<Feedback> Feedbacks { get; set; }
+
+    public virtual ICollection<Notification> Notifications { get; set; }
 
 }
 

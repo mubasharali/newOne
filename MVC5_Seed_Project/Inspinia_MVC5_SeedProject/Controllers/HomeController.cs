@@ -68,11 +68,11 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             return View();
         }
-        [Route("CoFounder")]
-        public ActionResult Cofounder()
-        {
-            return View();
-        }
+        //[Route("CoFounder")]
+        //public ActionResult Cofounder()
+        //{
+        //    return View();
+        //}
         public ActionResult Create(string category, string subcategory = null)
         {
             if (Request.IsAuthenticated)

@@ -26,7 +26,7 @@
             <ul class="nav navbar-top-links  pull-left">@*navbar-right*@
                 <li  style="margin-right:0px" class="fa fa-map-marker"></li>
                 <li style="margin-right:0px;margin-left:0px;padding-left:0px"> <a style="padding-left:0" data-toggle="modal" data-target="#setLocation"> 
-                    <span>&nbsp;</span><span data-bind="visible:searchingPP && searchingCity,text:searchingPP"></span>
+                    @*<span>&nbsp;</span>*@<span data-bind="visible:searchingPP && searchingCity,text:searchingPP"></span>
                     <span data-bind="visible:!searchingPP()">
                         <span data-bind="if:searchingCity">
                             <span data-bind="text:searchingCity"></span>

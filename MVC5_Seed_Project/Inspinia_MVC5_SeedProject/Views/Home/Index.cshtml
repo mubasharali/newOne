@@ -290,8 +290,8 @@
                 
             </div>
         </div>
-    </div>
-    <div class="row">
+    </div>*@
+    @*<div class="row">
         <div class="col-lg-10 col-lg-offset-1">
 
 
@@ -349,74 +349,120 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-10 col-lg-offset-1">
+    </div>*@
+    
+@*</section>*@
+<div class="row">
+    <br /><br /><br /><br />
+</div>
+
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+
+        <div class="slick_demo_2 showAds" data-bind="foreach:showAds">
+
+            <div>
+                <div class="ibox">
+                    <div class="ibox-content product-box">
+
+                        <div class="product-imitation">
+                            <div class="carouselContainer">
+                                <span id="gallery" data-gallery=""
+                                                                            data-bind="slick: images,
+                                      slickOptions: { slidesToShow: 3,
+                                    slidesToScroll: 1,
+                                    autoplay: true,
+                                    autoplaySpeed: 2000,},
+                                      slickIndex: imageIndex">
+                                                                      </span>
+                                <div data-bind="visible:images().length == 0"><h2><br /><br /><br /><br /> No Images<br /><br /><br /><br /><br /></h2></div>
+                            </div>
+                        </div>
+                        <div class="product-desc">
+                            <span class="product-price">
+                                <span data-bind="if:!isBidingAllowed">
+                                    <span data-bind="if:price">
+                                        <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted">Rs. <span data-bind="html:isNegotiable"></span></small>
+                                    </span>
+                                    <span data-bind="if:!price">Price on contact</span>
+                                </span>
+                                <span data-bind="if:isBidingAllowed">
+                                    <span data-bind="if:price">
+                                        <span data-bind="if:highestBid() == '-Infinity'">
+                                            <span data-bind="text:price"></span> <small style="font-size:13px" class="text-muted ">Rs. (Initial Bid) </small>
+                                        </span>
+                                        <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                            <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                        </span>
+                                    </span>
+                                    <span data-bind="if:!price">
+                                        <span data-bind="if:highestBid() == '-Infinity'">
+                                            No Bit yet
+                                        </span>
+                                        <span data-bind="ifnot:highestBid() == '-Infinity'">
+                                            <span data-bind="text:highestBid"></span> <small style="font-size:13px" class="text-muted ">Rs. (current Bid) </small>
+                                        </span>
+                                    </span>
+                                </span>
+                            </span>
+                            <small class="text-muted">Mobile</small>
+                            <a href="#" class="product-name" data-bind="text:title,attr:{href:link}"> </a>
 
 
-            <h4 class="text-center m">
-                Jobs
-            </h4>
 
+                            <div class="small m-t-xs" data-bind="foreach:showTags">
+                                <a target="_blank" data-bind="attr:{href:'/Tag/'+name}"> <span class="btn btn-xs btn-white" data-bind="text:name"></span></a>
+                            </div>
+                            <div class="m-t text-righ">
 
-
-            <div class="slick_demo_2">
-
-                <div>
-                    <div class="ibox-content">
-                        <h2>Slide 1</h2>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                            Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown printer took a galley of type and scrambled it to make a type specimen
-                            book. It has survived not only five centuries, but also the leap.
-                        </p>
-                    </div>
-                </div>
-                <div>
-                    <div class="ibox-content">
-                        <h2>Slide 2</h2>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                            Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown printer took a galley of type and scrambled it to make a type specimen
-                            book. It has survived not only five centuries, but also the leap.
-                        </p>
-                    </div>
-                </div>
-                <div>
-                    <div class="ibox-content">
-                        <h2>Slide 3</h2>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                            Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown printer took a galley of type and scrambled it to make a type specimen
-                            book. It has survived not only five centuries, but also the leap.
-                        </p>
-                    </div>
-                </div>
-                <div>
-                    <div class="ibox-content">
-                        <h2>Slide 4</h2>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                            Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                            unknown printer took a galley of type and scrambled it to make a type specimen
-                            book. It has survived not only five centuries, but also the leap.
-                        </p>
+                                <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>*@
+</div>
 <style>
     .slick_demo_2 .ibox-content {
         margin: 0 10px;
     }
-    
 </style>
-@*<section id="contact" class="gray-section contact">
+<style>
+    .carouselContainer {
+        overflow: hidden;
+        //height:350px;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #gallery {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .product-imitation {
+        margin: 0px;
+        padding: 0px;
+      //   width:250px !important;
+        /apply max-padding or default image;
+    }
+
+    .carouselContainer img {
+        // height: 350px;
+        width: 250px;
+        height: 250px;
+       // overflow:hidden;
+    }
+
+    .showAds .ibox {
+      //  height: 350px;
+      //  width:259px;
+    }
+</style>
+
+<section id="contact" class="gray-section contact">
     <div class="container">
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
@@ -465,7 +511,7 @@
             </div>
         </div>
     </div>
-</section>*@
+</section>
 
 @section Styles {
     @Styles.Render("~/plugins/slickStyles")
@@ -479,119 +525,59 @@
     @Scripts.Render("~/plugins/timeago")
     @Scripts.Render("~/plugins/autosize")
     @Scripts.Render("~/plugins/slick")
-
+<script src="~/Scripts/app/slick-knockout-binding.js"></script>
+<script src="~/Scripts/app/CreateAlert.js"></script>
+<script src="~/Scripts/app/_AdListView.js"></script>
+<script src="~/Scripts/app/_Truncate-knockout-binding.js"></script>
+<script src="~/Scripts/app/GetLoginUserId.js"></script>
     <script>
-       
-        function Tag(data) {
-            var self = this;
-            data = data || {};
-            self.id = data.id;
-            self.name = data.name;
-        }
-        function Bid(data) {
-            var self = this;
-            data = data || {};
-            self.price = data.price;
-        }
-        var imageUrls = [];
-        function adImages(data, adId, imagesCount) {
-            //var self = this;
-            //data = data || {};
-            //self.link = "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;// also loop after _
-            //imageUrls.push(self.link);
-            return "/Images/Ads/" + adId + '_' + imagesCount + data.imageExtension;
-
-        }
-        var imageIndex = ko.observable(1);
-        function ad(data) {
-            var self = this;
-
-            //slick
-            // self.images = ko.observableArray(imageUrls);
-            self.images = ko.observable();
-            self.options = {};
-            self.imageIndex = ko.observable(1);
-
-            data = data || {};
-
-            self.title = data.title;
-            self.description = ko.observable(data.description);
-            self.postedByName = data.postedByName;
-            self.postedById = data.postedById;
-            self.id = data.id;
-            self.time = getTimeAgo(data.time);
-            self.loginUserId = data.islogin || "";
-            self.showMobileAd = ko.observableArray();
-            self.isReported = ko.observable(data.isReported);
-            self.reportedCount = ko.observable(data.reportedCount);
-            self.showImages = ko.observable();
-            self.views = data.views;
-            self.price = data.price || "";
-            self.link = "/MobilesTablets/Details/" + data.id;
-
-            //biding
-            self.highestBid = ko.observable();
-            self.showBidings = ko.observableArray();
-            self.isBidingAllowed = false;
-            self.placeBid = ko.observable(false);
-            self.bidAmount = ko.observable();
-
-            self.showTags = ko.observableArray();
-
-            self.sellerProfile = function () {
-                window.location.href = "/User/Index/" + self.postedById;
-            }
-
-            if (data.isNegotiable == "b") {
-                self.isBidingAllowed = true;
-            } else if (data.isNegotiable == "y") {
-                self.isNegotiable = 'Negotiable';
-            } else if (data.isNegotiable == "n") {
-                self.isNegotiable = '<strike>Negotiable</strike>';
-            }
-            if (self.price == "") {
-                self.isNegotiable = "";
-            }
-            if (data.bid != null) {
-                var biding = $.map(data.bid, function (item) { return new Bid(item); });
-                self.highestBid(Math.max.apply(Math, data.bid.map(function (o) { return o.price; })));
-                //self.showBidings(biding);
-            }
-            if (data.adTags != null) {
-                var tags = $.map(data.adTags, function (item) { return new Tag(item); });
-                self.showTags(tags);
-            }
-            if (data.adImages) {
-                var imagesCount = 1;
-                var img = $.map(data.adImages, function (item, ia) { return adImages(item, data.id, imagesCount++); });
-                self.showImages(img);
-                self.images(img);
-            }
-            self.report = function (id, loginUserId) {
-                if (loginUserId) {
-                    $.ajax({
-                        url: '/api/Electronic/reportAd?id=' + id,
-                        dataType: "json",
-                        contentType: "application/json",
-                        cache: false,
-                        type: 'POST',
-                        success: function (data) {
-                            self.isReported(true);
-                            self.reportedCount(data);
-                        },
-                        error: function (xhr, status, error) {
-                            var err = eval("(" + xhr.responseText + ")");
-                            toastr.info(err.Message);
+        function slick1() {
+            $('.slick_demo_2').slick({
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                centerMode: true,
+                focus: false,
+                responsive: [
+                    {
+                        breakpoint: 1624, //1024
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 3,
+                            infinite: true,
+                            // dots: true
                         }
-                    })
-                } else {
-                    toastr.info("You must be login to report this ad", "Na na!");
-                }
-            }
+                    },
+                    {
+                        breakpoint: 1024, //1024
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3,
+                            infinite: true,
+                           // dots: true
+                        }
+                    },
+                    {
+                        breakpoint: 680, //600
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 440, //480
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
         }
+        
         function ViewModel() {
             
-        ingLocation();
+        SearchingLocation();
             AccountViewModel();
             ChatViewModel();
             var self = this;
@@ -604,7 +590,7 @@
                 window.location.href = "/Search";
             })
             self.loadad = function () {
-                url_address = '/api/Electronic/GetMobileTrends';
+                url_address = '/api/Search/GetTrendingAds';
                 $.ajax({
                     url: url_address,
                     dataType: "json",
@@ -612,9 +598,23 @@
                     cache: false,
                     type: 'GET',
                     success: function (data) {
-                        var mappedads = $.map(data, function (item) { return new ad(item); });
+                        var mappedads = $.map(data, function (item) { return new Ad(item); });
                         self.showAds(mappedads);
-
+                        //remove from this
+                        $.ajax({
+                            url : url_address,
+                            dataType: "json",
+                            contentType: "application/json",
+                            cache: false,
+                            type: 'GET',
+                            success: function (data) {
+                                slick1();
+                            },
+                            error: function () {
+                                toastr.error("failed to search. Please refresh page and try again", "Error!");
+                            }
+                        });
+                        //to this
                     },
                     error: function () {
                         toastr.error("Unable to load data. Please try again", "Error");
@@ -631,103 +631,103 @@
                 return '';
             }
         }
-        ko.bindingHandlers.slick = (function () {
-            var createImageDiv = function (imgUrl) {
+        //ko.bindingHandlers.slick = (function () {
+        //    var createImageDiv = function (imgUrl) {
 
-                $a = $('<a>');
-                $a.attr('href', imgUrl);
-                //$a.attr('data-gallery', '#blueimp-gallery');
-                $a.attr('target', '_blank');
-                $div = $('<div>');
-                $image = $('<img>');
-                $image.attr('src', imgUrl);
-                // $div.append($image);
-                $a.append($image);
-                $div.append($a);
-                return $div;
-            };
+        //        $a = $('<a>');
+        //        $a.attr('href', imgUrl);
+        //        //$a.attr('data-gallery', '#blueimp-gallery');
+        //        $a.attr('target', '_blank');
+        //        $div = $('<div>');
+        //        $image = $('<img>');
+        //        $image.attr('src', imgUrl);
+        //        // $div.append($image);
+        //        $a.append($image);
+        //        $div.append($a);
+        //        return $div;
+        //    };
 
-            // Initializes the carousel
-            var init = function (element, valueAccessor, allBindingsAccessor) {
-                // Clears the div
-                $(element).empty();
-                // Creates the inner divs with images
-                var images = ko.unwrap(valueAccessor());
-                if (images) {
-                    images.forEach(function (imgUrl) {
-                        $(element).append(createImageDiv(imgUrl));
-                    });
-                }
+        //    // Initializes the carousel
+        //    var init = function (element, valueAccessor, allBindingsAccessor) {
+        //        // Clears the div
+        //        $(element).empty();
+        //        // Creates the inner divs with images
+        //        var images = ko.unwrap(valueAccessor());
+        //        if (images) {
+        //            images.forEach(function (imgUrl) {
+        //                $(element).append(createImageDiv(imgUrl));
+        //            });
+        //        }
 
-                // try to recover slickOptions
-                var options = allBindingsAccessor().slickOptions || {};
+        //        // try to recover slickOptions
+        //        var options = allBindingsAccessor().slickOptions || {};
 
-                // Initialize slick on the div, with provided options
-                $(element).slick(options);
+        //        // Initialize slick on the div, with provided options
+        //        $(element).slick(options);
 
-                //handle disposal, if KO removes the element
-                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                    $(element).slick('unslick');
-                });
+        //        //handle disposal, if KO removes the element
+        //        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+        //            $(element).slick('unslick');
+        //        });
 
-                // check if there is slickIndex
-                var slickIndex = allBindingsAccessor().slickIndex;
-                if (slickIndex) {
-                    $(element).slick('slickGoTo', ko.unwrap(slickIndex));
-                }
-                // If it's obervable, subscribe to its changes
-                if (ko.isObservable(slickIndex)) {
-                    slickIndex.subscribe(function (idx) {
-                        $(element).slick('slickGoTo', idx);
-                    });
-                }
-                // It if's writable observable, update when slick current index changes
-                if (ko.isWritableObservable(slickIndex)) {
-                    $(element).on('afterChange', function (evt, slick, pos) {
-                        slickIndex(pos);
-                    })
-                }
+        //        // check if there is slickIndex
+        //        var slickIndex = allBindingsAccessor().slickIndex;
+        //        if (slickIndex) {
+        //            $(element).slick('slickGoTo', ko.unwrap(slickIndex));
+        //        }
+        //        // If it's obervable, subscribe to its changes
+        //        if (ko.isObservable(slickIndex)) {
+        //            slickIndex.subscribe(function (idx) {
+        //                $(element).slick('slickGoTo', idx);
+        //            });
+        //        }
+        //        // It if's writable observable, update when slick current index changes
+        //        if (ko.isWritableObservable(slickIndex)) {
+        //            $(element).on('afterChange', function (evt, slick, pos) {
+        //                slickIndex(pos);
+        //            })
+        //        }
 
-                // Check if the array of images is an observable array
-                var imagesArray = valueAccessor();
-                // If it's observable array, subscribe to changes
-                if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
-                    imagesArray.subscribe(function (changes) {
-                        console.log(changes);
-                        if (changes) {
-                            changes.forEach(function (change) {
-                                if (change.status == 'added') {
-                                    // Add new img div at index
-                                    var imgDiv = createImageDiv(change.value)[0];
-                                    var index = change.index;
-                                    var slideCount = $(element).slick('getSlick').slideCount;
-                                    // if the index is out of range (which can happen
-                                    // with push, and splice), include at the end
-                                    var addBefore = true;
-                                    if (index >= slideCount) {
-                                        index = slideCount - 1;
-                                        addBefore = false;
-                                    }
-                                    $(element).slick('slickAdd', imgDiv, index, addBefore);
-                                } else if (change.status == 'deleted') {
-                                    // delete img div at index
-                                    $(element).slick('slickRemove', change.index);
-                                }
-                            });
-                        }
-                    }, null, 'arrayChange');
-                } // if observable array
-            }
+        //        // Check if the array of images is an observable array
+        //        var imagesArray = valueAccessor();
+        //        // If it's observable array, subscribe to changes
+        //        if (ko.isObservable(imagesArray) && 'destroyAll' in imagesArray) {
+        //            imagesArray.subscribe(function (changes) {
+        //                console.log(changes);
+        //                if (changes) {
+        //                    changes.forEach(function (change) {
+        //                        if (change.status == 'added') {
+        //                            // Add new img div at index
+        //                            var imgDiv = createImageDiv(change.value)[0];
+        //                            var index = change.index;
+        //                            var slideCount = $(element).slick('getSlick').slideCount;
+        //                            // if the index is out of range (which can happen
+        //                            // with push, and splice), include at the end
+        //                            var addBefore = true;
+        //                            if (index >= slideCount) {
+        //                                index = slideCount - 1;
+        //                                addBefore = false;
+        //                            }
+        //                            $(element).slick('slickAdd', imgDiv, index, addBefore);
+        //                        } else if (change.status == 'deleted') {
+        //                            // delete img div at index
+        //                            $(element).slick('slickRemove', change.index);
+        //                        }
+        //                    });
+        //                }
+        //            }, null, 'arrayChange');
+        //        } // if observable array
+        //    }
 
-            //update the control when the view model changes
-            var update = function (element, valueAccessor) {
-                var images = ko.unwrap(valueAccessor());
-                // Do something to update the content
-                console.log('update');
-            }
+        //    //update the control when the view model changes
+        //    var update = function (element, valueAccessor) {
+        //        var images = ko.unwrap(valueAccessor());
+        //        // Do something to update the content
+        //        console.log('update');
+        //    }
 
-            return { init: init, update: update };
-        })();
+        //    return { init: init, update: update };
+        //})();
         $('#select-tag').selectize({
             valueField: 'name',
             labelField: 'name',
@@ -775,37 +775,7 @@
             };
             ko.applyBindings(new ViewModel);
             $.connection.hub.start().done();
-            $('.slick_demo_2').slick({
-                infinite: true,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                centerMode: true,
-                responsive: [
-                    {
-                        breakpoint: 1024,
-                        settings: {
-                            slidesToShow: 3,
-                            slidesToScroll: 3,
-                            infinite: true,
-                            dots: true
-                        }
-                    },
-                    {
-                        breakpoint: 600,
-                        settings: {
-                            slidesToShow: 2,
-                            slidesToScroll: 2
-                        }
-                    },
-                    {
-                        breakpoint: 480,
-                        settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1
-                        }
-                    }
-                ]
-            });
+            
         })
 
     </script>

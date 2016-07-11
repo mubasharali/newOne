@@ -313,7 +313,7 @@
                                             
                                     </div><br />
                                         
-                                        <p class="small text-muted">When you contact <span data-bind="visible:companyId,text:companyName"></span><span data-bind="visible:!companyId,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
+                                        <p class="small text-muted">When you contact <span data-bind="visible:name != null,text:name"></span> <span data-bind="visible:companyId && name == null,text:companyName"></span><span data-bind="visible:(!companyId) && name == null,text:postedByName"></span>, don't forget to mention that you found this ad on dealkar.pk</p>
                                         
                                         @*<div data-bind="with:showLocation">
                                             <h5 data-bind="with:cityName">Location</h5>
@@ -1167,6 +1167,23 @@
                 }
             }
             
+        }
+        function SimilarData() {
+            $.ajax({
+                url: '/api/Electronic/SimilarData',
+                dataType: "json",
+                contentType: "application/json",
+                cache: false,
+                type: 'POST',
+                data: ko.toJSON(data),
+                success: function (data) {
+                   
+                },
+                error: function (xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    toastr.info(err.Message);
+                }
+            })
         }
         function Report() {
             var self = this;

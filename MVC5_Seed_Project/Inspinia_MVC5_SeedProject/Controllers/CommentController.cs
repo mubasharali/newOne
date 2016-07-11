@@ -44,7 +44,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             {
                 return NotFound();
             }
-
+            
             return Ok(comment);
         }
 
@@ -106,8 +106,14 @@ namespace Inspinia_MVC5_SeedProject.Controllers
                 imageExtension = x.AspNetUser.dpExtension,
                 islogin = x.postedBy
             }).FirstOrDefault();
-
-            
+            Notification noti = new Notification();
+            noti.description = ret.postedByName + " commented on your ad ";  //add comment starting 15 characters
+            noti.isSeen = false;
+            noti.time = DateTime.UtcNow;
+            noti.link = "Details/" + ret.adId;
+            noti.userId = db.Ads.Find(ret.adId).postedBy;
+            db.Notifications.Add(noti);
+            await db.SaveChangesAsync();
             return Ok(ret);
            // return CreatedAtRoute("DefaultApi", new { id = comment.Id }, comment);
         }

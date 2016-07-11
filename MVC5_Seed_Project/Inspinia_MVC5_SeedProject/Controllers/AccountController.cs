@@ -624,7 +624,7 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         [AllowAnonymous]
         public async Task<object> ExternalLoginCallback(string returnUrl)
         {
-
+            
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
@@ -726,48 +726,15 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                     return View("Login");
                    // return "An account already exists by this email address"; //go to login page and TempData["LError"]
                 }
-                var newUser1 = new ApplicationUser() { Email = loginInfo.Email,UserName = "temp" + DateTime.UtcNow.Ticks + "@gmail.com" };
-                var result1 = await UserManager.CreateAsync(newUser1);
-                if (result1.Succeeded)
-                {
-                    result1 = await UserManager.AddLoginAsync(newUser1.Id, loginInfo.Login);
-                    if (result1.Succeeded)
-                    {
-                        await SignInAsync(newUser1, isPersistent: true);
-                        if (pictureUrl != null && pictureUrl != "")
-                        {
-                            WebClient wc = new WebClient();
-                            byte[] bytes = wc.DownloadData(pictureUrl);
-                            MemoryStream ms = new MemoryStream(bytes);
-                            System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
-                            string fileName = @"\Images\Users\p" + DateTime.UtcNow.Ticks + ".jpg";
-                            img.Save(Server.MapPath(fileName));
-                            ElectronicsController.UploadDPToAWS(Server.MapPath(fileName), "p" + newUser1.Id + ".jpg");
-                            if (System.IO.File.Exists(Server.MapPath(fileName)))
-                            {
-                                System.IO.File.Delete(Server.MapPath(fileName));
-                            }
-                        }
-                        string id = newUser1.Id;
-                        AspNetUser aspNetUser = await db.AspNetUsers.FindAsync(id);
-                        aspNetUser.Email = name;
-                        aspNetUser.EmailConfirmed = false;
-                        aspNetUser.hideDateOfBirth = true;
-                        aspNetUser.hideEmail = true;
-                        aspNetUser.hidePhoneNumber = true;
-                        aspNetUser.hideFriends = true;
-                        aspNetUser.gender = gender;
-                        aspNetUser.city = city;
-                        aspNetUser.dateOfBirth = dateOfBirth;
-                        aspNetUser.dpExtension = ".jpg";
-                        aspNetUser.since = DateTime.UtcNow;
-                        aspNetUser.status = "active";
-                        db.Entry(aspNetUser).State = System.Data.Entity.EntityState.Modified;
-                        await db.SaveChangesAsync();
-                        //return RedirectToLocal(returnUrl);
-                        return RedirectToAction("ExternalLoginInfo", new { returnUrl = returnUrl });
-                    }
-                }
+                ViewBag.pictureUrl = pictureUrl;
+                ViewBag.name = name;
+                ViewBag.dateOfBirth = dateOfBirth;
+                ViewBag.city = city;
+                ViewBag.gender = gender;
+                ViewBag.Login = loginInfo.Login;
+
+                return RedirectToAction("ExternalLoginInfo", new { returnUrl = returnUrl });
+
                 return "Error";
                 //GetExternalProperties(); //remove
                 // If the user does not have an account, then prompt the user to create an account
@@ -776,8 +743,9 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
                 //return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
             }
         }
-        public ActionResult ExternalLoginInfo(string returnUrl)
+        public ActionResult ExternalLoginInfo(string returnUrl,string errorMsg = null)
         {
+            TempData["errorMsg"] = errorMsg;
             ViewBag.ReturnUrl = returnUrl;
             return View("LockScreen");
         }
@@ -790,16 +758,83 @@ public AppUserManager(IUserStore<ApplicationUser> store) : base(store) { }
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CallBackFromLockScreen(string email, string ReturnUrl)   //if user login using facebook and fb api does not return email 
         {
-            var userId = User.Identity.GetUserId();
-            var user = UserManager.FindById(userId);
-            user.UserName = email;
-
-            var updateResult = await UserManager.UpdateAsync(user);
-            if (updateResult.Succeeded)
+              var LoginString = Request["Login"];
+              var name = Request["name"];
+            var city = Request["city"];
+            var gender = Request["gender"];
+            var dateOfBirth1 = Request["dateOfBirth"];
+            var pictureUrl = Request["pictureUrl"];
+            System.DateTime dateofBirth = (System.DateTime)Convert.ChangeType(dateOfBirth1, typeof(System.DateTime));
+            Microsoft.AspNet.Identity.UserLoginInfo Login = (Microsoft.AspNet.Identity.UserLoginInfo) Convert.ChangeType(LoginString, typeof(Microsoft.AspNet.Identity.UserLoginInfo));
+            bool isOldUser = db.AspNetUsers.Any(x => x.UserName.Equals(email));
+            if (isOldUser)
             {
-                await SendMailtoConfirmEmailAddress(user.Id, user.Email, user.UserName);
-                return RedirectToLocal(ReturnUrl);
+                TempData["errorMsg"] = "This Email is already in use.";
+                ViewBag.ReturnUrl = ReturnUrl;
+                return View("LockScreen");
             }
+            var newUser1 = new ApplicationUser() { Email = name, UserName = email };
+            var result1 = await UserManager.CreateAsync(newUser1);
+            if (result1.Succeeded)
+            {
+                result1 = await UserManager.AddLoginAsync(newUser1.Id, Login);
+                if (result1.Succeeded)
+                {
+                    await SignInAsync(newUser1, isPersistent: true);
+                    if (pictureUrl != null && pictureUrl != "")
+                    {
+                        WebClient wc = new WebClient();
+                        byte[] bytes = wc.DownloadData(pictureUrl);
+                        MemoryStream ms = new MemoryStream(bytes);
+                        System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
+                        string fileName = @"\Images\Users\p" + DateTime.UtcNow.Ticks + ".jpg";
+                        img.Save(Server.MapPath(fileName));
+                        ElectronicsController.UploadDPToAWS(Server.MapPath(fileName), "p" + newUser1.Id + ".jpg");
+                        if (System.IO.File.Exists(Server.MapPath(fileName)))
+                        {
+                            System.IO.File.Delete(Server.MapPath(fileName));
+                        }
+                    }
+                    string id = newUser1.Id;
+                    AspNetUser aspNetUser = await db.AspNetUsers.FindAsync(id);
+                    aspNetUser.Email = name;
+                    aspNetUser.EmailConfirmed = false;
+                    aspNetUser.hideDateOfBirth = true;
+                    aspNetUser.hideEmail = true;
+                    aspNetUser.hidePhoneNumber = true;
+                    aspNetUser.hideFriends = true;
+                    aspNetUser.gender = gender;
+                    aspNetUser.city = city;
+                    aspNetUser.dateOfBirth = dateofBirth;
+                    aspNetUser.dpExtension = ".jpg";
+                    aspNetUser.since = DateTime.UtcNow;
+                    aspNetUser.status = "active";
+                    db.Entry(aspNetUser).State = System.Data.Entity.EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    await SendMailtoConfirmEmailAddress(aspNetUser.Id, aspNetUser.Email, aspNetUser.UserName);
+                    return RedirectToLocal(ReturnUrl);
+                  //  return RedirectToAction("ExternalLoginInfo", new { returnUrl = ReturnUrl });
+                }
+            }
+
+
+
+
+
+
+
+
+            //var userId = User.Identity.GetUserId();
+            //var user = UserManager.FindById(userId);
+            //user.UserName = email;
+
+            //var updateResult = await UserManager.UpdateAsync(user);
+            //if (updateResult.Succeeded)
+            //{
+            //    await SendMailtoConfirmEmailAddress(user.Id, user.Email, user.UserName);
+            //    return RedirectToLocal(ReturnUrl);
+            //}
+            TempData["errorMsg"] = "Some error hs occured. Please enter your email again and continue.";
             ViewBag.ReturnUrl = ReturnUrl;
             return View("LockScreen");
         }

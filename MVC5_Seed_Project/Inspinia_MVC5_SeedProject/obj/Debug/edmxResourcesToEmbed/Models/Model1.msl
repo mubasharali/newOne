@@ -747,5 +747,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Notifications">
+      <EntityTypeMapping TypeName="Model.Notification">
+        <MappingFragment StoreEntitySet="Notification">
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="isSeen" ColumnName="isSeen" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="link" ColumnName="link" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>
